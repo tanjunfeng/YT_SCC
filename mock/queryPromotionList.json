@@ -1,21 +1,21 @@
 {
-    "timestamp": 1513072463339,
+    "timestamp": 1513670683064,
     "code": 200,
     "message": "请求成功",
     "exception": null,
     "data": {
         "pageNum": 1,
         "pageSize": 15,
-        "total": 106,
+        "total": 206,
         "data": [
             {
-                "id": "HD349",
+                "id": "HD527",
                 "status": "unreleased",
                 "promotionType": "order_promo",
-                "promotionName": "asdfasdf",
+                "promotionName": "   asdfasdfsafad     ",
                 "promotionDiscription": null,
-                "startDate": 1512119576000,
-                "endDate": 1516266776000,
+                "startDate": 1512113232000,
+                "endDate": 1516174032000,
                 "discountType": "percentage",
                 "quanifyAmount": null,
                 "discount": null,
@@ -23,7 +23,7 @@
                 "type": 0,
                 "isSuperposeUserDiscount": 0,
                 "isSuperposeProOrCouDiscount": 0,
-                "createDate": 1513070043000,
+                "createDate": 1513668896000,
                 "createUserId": "10027",
                 "publishDate": null,
                 "publishUserId": null,
@@ -32,53 +32,28 @@
                 "companiesPoList": [],
                 "recordsPoList": [],
                 "promotionRule": {
-                    "useConditionRule": true,
-                    "ruleName": "REWARDLIST",
-                    "orderRule": null,
-                    "purchaseConditionsRule": null,
-                    "rewardListRule": {
-                        "conditions": [
-                            {
-                                "key": "1513069998684",
-                                "purchaseType": "ALL",
-                                "promoCategories": null,
-                                "promoProduct": null,
-                                "conditionType": "AMOUNT",
-                                "conditionValue": 3
-                            }
-                        ],
-                        "purchaseConditionsRule": {
-                            "condition": {
-                                "key": null,
-                                "purchaseType": "PRODUCT",
-                                "promoCategories": null,
-                                "promoProduct": {
-                                    "productId": "xprod341869",
-                                    "productName": "欧鸟王男士休闲皮凉鞋"
-                                },
-                                "conditionType": "AMOUNT",
-                                "conditionValue": 2
-                            },
-                            "rule": {
-                                "preferentialWay": "PERCENTAGE",
-                                "preferentialValue": 95
-                            }
-                        }
+                    "useConditionRule": false,
+                    "ruleName": null,
+                    "orderRule": {
+                        "preferentialWay": "PERCENTAGE",
+                        "preferentialValue": 0.95
                     },
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
                     "totalPurchaseListRule": null
                 },
                 "priority": 1,
                 "simpleDescription": "简易描述",
-                "detailDescription": "详细描述"
+                "detailDescription": "细描述"
             },
             {
-                "id": "HD348",
+                "id": "HD526",
                 "status": "unreleased",
                 "promotionType": "order_promo",
-                "promotionName": "asdfasdf",
+                "promotionName": "asdfasfsdf",
                 "promotionDiscription": null,
-                "startDate": 1512119576000,
-                "endDate": 1516266776000,
+                "startDate": 1512112426000,
+                "endDate": 1516950826000,
                 "discountType": "percentage",
                 "quanifyAmount": null,
                 "discount": null,
@@ -86,7 +61,7 @@
                 "type": 0,
                 "isSuperposeUserDiscount": 0,
                 "isSuperposeProOrCouDiscount": 0,
-                "createDate": 1513070037000,
+                "createDate": 1513667780000,
                 "createUserId": "10027",
                 "publishDate": null,
                 "publishUserId": null,
@@ -95,55 +70,28 @@
                 "companiesPoList": [],
                 "recordsPoList": [],
                 "promotionRule": {
-                    "useConditionRule": true,
-                    "ruleName": "REWARDLIST",
-                    "orderRule": null,
-                    "purchaseConditionsRule": null,
-                    "rewardListRule": {
-                        "conditions": [
-                            {
-                                "key": "1513069998684",
-                                "purchaseType": "ALL",
-                                "promoCategories": null,
-                                "promoProduct": null,
-                                "conditionType": "AMOUNT",
-                                "conditionValue": 3
-                            }
-                        ],
-                        "purchaseConditionsRule": {
-                            "condition": {
-                                "key": null,
-                                "purchaseType": "CATEGORY",
-                                "promoCategories": {
-                                    "promoId": null,
-                                    "categoryId": "xcate6",
-                                    "categoryName": "日杂",
-                                    "categoryLevel": 1
-                                },
-                                "promoProduct": null,
-                                "conditionType": "AMOUNT",
-                                "conditionValue": 2
-                            },
-                            "rule": {
-                                "preferentialWay": "PERCENTAGE",
-                                "preferentialValue": 95
-                            }
-                        }
+                    "useConditionRule": false,
+                    "ruleName": null,
+                    "orderRule": {
+                        "preferentialWay": "PERCENTAGE",
+                        "preferentialValue": 0.95
                     },
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
                     "totalPurchaseListRule": null
                 },
                 "priority": 1,
-                "simpleDescription": "简易描述",
-                "detailDescription": "详细描述"
+                "simpleDescription": " ",
+                "detailDescription": " "
             },
             {
-                "id": "HD347",
-                "status": "unreleased",
+                "id": "HD525",
+                "status": "released",
                 "promotionType": "order_promo",
-                "promotionName": "asdfasdf",
+                "promotionName": "000427购买条件121904",
                 "promotionDiscription": null,
-                "startDate": 1512119576000,
-                "endDate": 1516266776000,
+                "startDate": 1513666966000,
+                "endDate": 1513839766000,
                 "discountType": "percentage",
                 "quanifyAmount": null,
                 "discount": null,
@@ -151,59 +99,111 @@
                 "type": 0,
                 "isSuperposeUserDiscount": 0,
                 "isSuperposeProOrCouDiscount": 0,
-                "createDate": 1513070023000,
+                "createDate": 1513667460000,
                 "createUserId": "10027",
-                "publishDate": null,
+                "publishDate": 1513667464000,
                 "publishUserId": null,
-                "stores": null,
+                "stores": {
+                    "promoId": "HD525",
+                    "storeId": "A000427"
+                },
                 "promoCategoriesPo": null,
                 "companiesPoList": [],
                 "recordsPoList": [],
                 "promotionRule": {
                     "useConditionRule": true,
-                    "ruleName": "REWARDLIST",
+                    "ruleName": "PURCHASECONDITION",
                     "orderRule": null,
-                    "purchaseConditionsRule": null,
-                    "rewardListRule": {
-                        "conditions": [
-                            {
-                                "key": "1513069998684",
-                                "purchaseType": "ALL",
-                                "promoCategories": null,
-                                "promoProduct": null,
-                                "conditionType": "AMOUNT",
-                                "conditionValue": 3
-                            }
-                        ],
-                        "purchaseConditionsRule": {
-                            "condition": {
-                                "key": null,
-                                "purchaseType": "ALL",
-                                "promoCategories": null,
-                                "promoProduct": null,
-                                "conditionType": "AMOUNT",
-                                "conditionValue": 2
+                    "purchaseConditionsRule": {
+                        "condition": {
+                            "key": null,
+                            "purchaseType": "CATEGORY",
+                            "promoCategories": {
+                                "promoId": null,
+                                "categoryId": "xcate11",
+                                "categoryName": "冲调保健1",
+                                "categoryLevel": 2
                             },
-                            "rule": {
-                                "preferentialWay": "PERCENTAGE",
-                                "preferentialValue": 95
-                            }
+                            "promoProduct": null,
+                            "conditionType": "AMOUNT",
+                            "conditionValue": 500
+                        },
+                        "rule": {
+                            "preferentialWay": "DISCOUNTAMOUNT",
+                            "preferentialValue": 501
                         }
                     },
+                    "rewardListRule": null,
                     "totalPurchaseListRule": null
                 },
                 "priority": 1,
-                "simpleDescription": "简易描述",
-                "detailDescription": "详细描述"
+                "simpleDescription": "000427购买条件121904",
+                "detailDescription": "000427购买条件121904"
             },
             {
-                "id": "HD346",
-                "status": "unreleased",
+                "id": "HD524",
+                "status": "ended",
                 "promotionType": "order_promo",
-                "promotionName": "asdfasdf",
+                "promotionName": "测试门店的活动",
                 "promotionDiscription": null,
-                "startDate": 1512119576000,
-                "endDate": 1516266776000,
+                "startDate": 1504499995000,
+                "endDate": 1505581202000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": "备注",
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 1,
+                "createDate": 1513666741000,
+                "createUserId": "10086",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD524",
+                    "storeId": "A000992,A000902,A000993"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "PURCHASECONDITION",
+                    "orderRule": null,
+                    "purchaseConditionsRule": {
+                        "condition": {
+                            "key": "1504499995000",
+                            "purchaseType": "CATEGORY",
+                            "promoCategories": {
+                                "promoId": null,
+                                "categoryId": "xxx8",
+                                "categoryName": "酒水",
+                                "categoryLevel": 3
+                            },
+                            "promoProduct": null,
+                            "conditionType": "QUANTITY",
+                            "conditionValue": 50
+                        },
+                        "rule": {
+                            "preferentialWay": "PERCENTAGE",
+                            "preferentialValue": 0.95
+                        }
+                    },
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "简易描述，限填20字",
+                "detailDescription": "详细描述，限填100字"
+            },
+            {
+                "id": "HD523",
+                "status": "released",
+                "promotionType": "order_promo",
+                "promotionName": "测试1219两个商品条件",
+                "promotionDiscription": null,
+                "startDate": 1513565700000,
+                "endDate": 1513738500000,
                 "discountType": "percentage",
                 "quanifyAmount": null,
                 "discount": null,
@@ -211,11 +211,14 @@
                 "type": 0,
                 "isSuperposeUserDiscount": 0,
                 "isSuperposeProOrCouDiscount": 0,
-                "createDate": 1513070001000,
+                "createDate": 1513666443000,
                 "createUserId": "10027",
-                "publishDate": null,
+                "publishDate": 1513666453000,
                 "publishUserId": null,
-                "stores": null,
+                "stores": {
+                    "promoId": "HD523",
+                    "storeId": "A002916"
+                },
                 "promoCategoriesPo": null,
                 "companiesPoList": [],
                 "recordsPoList": [],
@@ -228,422 +231,48 @@
                     "totalPurchaseListRule": {
                         "conditions": [
                             {
-                                "key": "1513069998684",
-                                "purchaseType": "ALL",
+                                "key": "1513655002461",
+                                "purchaseType": "PRODUCT",
                                 "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "xprod347938",
+                                    "productName": "桃李吉士排面包(110g)"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 5
+                            },
+                            {
+                                "key": "1513666303212",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate26",
+                                    "categoryName": "面包主食",
+                                    "categoryLevel": 2
+                                },
                                 "promoProduct": null,
                                 "conditionType": "AMOUNT",
-                                "conditionValue": 3
+                                "conditionValue": 500
                             }
                         ],
                         "rule": {
                             "preferentialWay": "PERCENTAGE",
-                            "preferentialValue": 95
+                            "preferentialValue": 20
                         }
                     }
                 },
                 "priority": 1,
-                "simpleDescription": "简易描述",
-                "detailDescription": "详细描述"
+                "simpleDescription": "测试商品数量达到基准是否能生效",
+                "detailDescription": "测试商品数量达到基准是否能生效"
             },
             {
-                "id": "HD342",
-                "status": "unreleased",
+                "id": "HD522",
+                "status": "closed",
                 "promotionType": "order_promo",
-                "promotionName": "test  不限制",
+                "promotionName": "测试1219两个商品条件",
                 "promotionDiscription": null,
-                "startDate": 1512113910000,
-                "endDate": 1516088310000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": null,
-                "note": "1005014",
-                "type": 0,
-                "isSuperposeUserDiscount": 0,
-                "isSuperposeProOrCouDiscount": 0,
-                "createDate": 1513064371000,
-                "createUserId": "10027",
-                "publishDate": null,
-                "publishUserId": null,
-                "stores": null,
-                "promoCategoriesPo": null,
-                "companiesPoList": [],
-                "recordsPoList": [],
-                "promotionRule": {
-                    "useConditionRule": true,
-                    "ruleName": "PURCHASECONDITION",
-                    "orderRule": null,
-                    "purchaseConditionsRule": {
-                        "condition": {
-                            "key": null,
-                            "purchaseType": "ALL",
-                            "promoCategories": null,
-                            "promoProduct": null,
-                            "conditionType": "AMOUNT",
-                            "conditionValue": 100
-                        },
-                        "rule": {
-                            "preferentialWay": "PERCENTAGE",
-                            "preferentialValue": 0.5
-                        }
-                    },
-                    "rewardListRule": null,
-                    "totalPurchaseListRule": null
-                },
-                "priority": 1,
-                "simpleDescription": "1005014",
-                "detailDescription": "1005014"
-            },
-            {
-                "id": "HD327",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "活动名称",
-                "promotionDiscription": null,
-                "startDate": 1512100256000,
-                "endDate": 1515556256000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": null,
-                "note": "备注",
-                "type": 0,
-                "isSuperposeUserDiscount": 0,
-                "isSuperposeProOrCouDiscount": 1,
-                "createDate": 1512705406000,
-                "createUserId": "10027",
-                "publishDate": null,
-                "publishUserId": null,
-                "stores": null,
-                "promoCategoriesPo": null,
-                "companiesPoList": [
-                    {
-                        "promoId": "HD327",
-                        "companyId": "10000",
-                        "companyName": "成都子公司"
-                    },
-                    {
-                        "promoId": "HD327",
-                        "companyId": "10004",
-                        "companyName": "湖南子公司"
-                    }
-                ],
-                "recordsPoList": [],
-                "promotionRule": {
-                    "useConditionRule": true,
-                    "ruleName": "PURCHASECONDITION",
-                    "orderRule": null,
-                    "purchaseConditionsRule": {
-                        "condition": {
-                            "key": null,
-                            "purchaseType": "PRODUCT",
-                            "promoCategories": null,
-                            "promoProduct": {
-                                "productId": "89191",
-                                "productName": "麒麟直火拿铁烘焙咖啡４４０ｍｌ"
-                            },
-                            "conditionType": "AMOUNT",
-                            "conditionValue": 4.52
-                        },
-                        "rule": {
-                            "preferentialWay": "GIVESAMEPRODUCT",
-                            "preferentialValue": 5
-                        }
-                    },
-                    "rewardListRule": null,
-                    "totalPurchaseListRule": null
-                },
-                "priority": 1,
-                "simpleDescription": "简易描述",
-                "detailDescription": "详细描述"
-            },
-            {
-                "id": "HD326",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "活动名称",
-                "promotionDiscription": null,
-                "startDate": 1512100256000,
-                "endDate": 1515556256000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": null,
-                "note": "备注",
-                "type": 0,
-                "isSuperposeUserDiscount": 0,
-                "isSuperposeProOrCouDiscount": 1,
-                "createDate": 1512705218000,
-                "createUserId": "10027",
-                "publishDate": null,
-                "publishUserId": null,
-                "stores": null,
-                "promoCategoriesPo": null,
-                "companiesPoList": [],
-                "recordsPoList": [],
-                "promotionRule": {
-                    "useConditionRule": true,
-                    "ruleName": "PURCHASECONDITION",
-                    "orderRule": null,
-                    "purchaseConditionsRule": {
-                        "condition": {
-                            "key": null,
-                            "purchaseType": "PRODUCT",
-                            "promoCategories": null,
-                            "promoProduct": {
-                                "productId": "89191",
-                                "productName": "麒麟直火拿铁烘焙咖啡４４０ｍｌ"
-                            },
-                            "conditionType": "AMOUNT",
-                            "conditionValue": 4.52
-                        },
-                        "rule": {
-                            "preferentialWay": "GIVESAMEPRODUCT",
-                            "preferentialValue": 5
-                        }
-                    },
-                    "rewardListRule": null,
-                    "totalPurchaseListRule": null
-                },
-                "priority": 1,
-                "simpleDescription": "简易描述",
-                "detailDescription": "详细描述"
-            },
-            {
-                "id": "HD325",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "活动名称",
-                "promotionDiscription": null,
-                "startDate": 1512100256000,
-                "endDate": 1515556256000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": null,
-                "note": "备注",
-                "type": 0,
-                "isSuperposeUserDiscount": 0,
-                "isSuperposeProOrCouDiscount": 1,
-                "createDate": 1512705207000,
-                "createUserId": "10027",
-                "publishDate": null,
-                "publishUserId": null,
-                "stores": null,
-                "promoCategoriesPo": null,
-                "companiesPoList": [],
-                "recordsPoList": [],
-                "promotionRule": {
-                    "useConditionRule": true,
-                    "ruleName": "PURCHASECONDITION",
-                    "orderRule": null,
-                    "purchaseConditionsRule": {
-                        "condition": {
-                            "key": null,
-                            "purchaseType": "PRODUCT",
-                            "promoCategories": null,
-                            "promoProduct": {
-                                "productId": "89191",
-                                "productName": "麒麟直火拿铁烘焙咖啡４４０ｍｌ"
-                            },
-                            "conditionType": "QUANTITY",
-                            "conditionValue": 3
-                        },
-                        "rule": {
-                            "preferentialWay": "GIVESAMEPRODUCT",
-                            "preferentialValue": 5
-                        }
-                    },
-                    "rewardListRule": null,
-                    "totalPurchaseListRule": null
-                },
-                "priority": 1,
-                "simpleDescription": "简易描述",
-                "detailDescription": "详细描述"
-            },
-            {
-                "id": "HD324",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "活动名称",
-                "promotionDiscription": null,
-                "startDate": 1512100256000,
-                "endDate": 1515556256000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": null,
-                "note": "备注",
-                "type": 0,
-                "isSuperposeUserDiscount": 0,
-                "isSuperposeProOrCouDiscount": 1,
-                "createDate": 1512705197000,
-                "createUserId": "10027",
-                "publishDate": null,
-                "publishUserId": null,
-                "stores": null,
-                "promoCategoriesPo": null,
-                "companiesPoList": [],
-                "recordsPoList": [],
-                "promotionRule": {
-                    "useConditionRule": true,
-                    "ruleName": "PURCHASECONDITION",
-                    "orderRule": null,
-                    "purchaseConditionsRule": {
-                        "condition": {
-                            "key": null,
-                            "purchaseType": "PRODUCT",
-                            "promoCategories": null,
-                            "promoProduct": {
-                                "productId": "89191",
-                                "productName": "麒麟直火拿铁烘焙咖啡４４０ｍｌ"
-                            },
-                            "conditionType": "QUANTITY",
-                            "conditionValue": 3
-                        },
-                        "rule": {
-                            "preferentialWay": "FIXEDPRICE",
-                            "preferentialValue": 4
-                        }
-                    },
-                    "rewardListRule": null,
-                    "totalPurchaseListRule": null
-                },
-                "priority": 1,
-                "simpleDescription": "简易描述",
-                "detailDescription": "详细描述"
-            },
-            {
-                "id": "HD323",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "活动名称",
-                "promotionDiscription": null,
-                "startDate": 1512100256000,
-                "endDate": 1515556256000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": null,
-                "note": "备注",
-                "type": 0,
-                "isSuperposeUserDiscount": 0,
-                "isSuperposeProOrCouDiscount": 1,
-                "createDate": 1512705176000,
-                "createUserId": "10027",
-                "publishDate": null,
-                "publishUserId": null,
-                "stores": null,
-                "promoCategoriesPo": null,
-                "companiesPoList": [],
-                "recordsPoList": [],
-                "promotionRule": {
-                    "useConditionRule": true,
-                    "ruleName": "PURCHASECONDITION",
-                    "orderRule": null,
-                    "purchaseConditionsRule": {
-                        "condition": {
-                            "key": null,
-                            "purchaseType": "PRODUCT",
-                            "promoCategories": null,
-                            "promoProduct": {
-                                "productId": "89191",
-                                "productName": "麒麟直火拿铁烘焙咖啡４４０ｍｌ"
-                            },
-                            "conditionType": "QUANTITY",
-                            "conditionValue": 3
-                        },
-                        "rule": {
-                            "preferentialWay": "PERCENTAGE",
-                            "preferentialValue": 0.95
-                        }
-                    },
-                    "rewardListRule": null,
-                    "totalPurchaseListRule": null
-                },
-                "priority": 1,
-                "simpleDescription": "简易描述",
-                "detailDescription": "详细描述"
-            },
-            {
-                "id": "HD322",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "活动名称",
-                "promotionDiscription": null,
-                "startDate": 1512100256000,
-                "endDate": 1515556256000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": null,
-                "note": "备注",
-                "type": 0,
-                "isSuperposeUserDiscount": 1,
-                "isSuperposeProOrCouDiscount": 0,
-                "createDate": 1512705110000,
-                "createUserId": "10027",
-                "publishDate": null,
-                "publishUserId": null,
-                "stores": null,
-                "promoCategoriesPo": null,
-                "companiesPoList": [],
-                "recordsPoList": [],
-                "promotionRule": {
-                    "useConditionRule": false,
-                    "ruleName": "REWARDLIST",
-                    "orderRule": {
-                        "preferentialWay": "PERCENTAGE",
-                        "preferentialValue": 0.95
-                    },
-                    "purchaseConditionsRule": null,
-                    "rewardListRule": null,
-                    "totalPurchaseListRule": null
-                },
-                "priority": 1,
-                "simpleDescription": "简易描述",
-                "detailDescription": "详细描述"
-            },
-            {
-                "id": "HD321",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "sadfasdfdaf",
-                "promotionDiscription": null,
-                "startDate": 1512099995000,
-                "endDate": 1515987995000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": null,
-                "note": "备注",
-                "type": 0,
-                "isSuperposeUserDiscount": 1,
-                "isSuperposeProOrCouDiscount": 0,
-                "createDate": 1512704833000,
-                "createUserId": "10027",
-                "publishDate": null,
-                "publishUserId": null,
-                "stores": null,
-                "promoCategoriesPo": null,
-                "companiesPoList": [],
-                "recordsPoList": [],
-                "promotionRule": {
-                    "useConditionRule": false,
-                    "ruleName": "REWARDLIST",
-                    "orderRule": {
-                        "preferentialWay": "PERCENTAGE",
-                        "preferentialValue": 0.95
-                    },
-                    "purchaseConditionsRule": null,
-                    "rewardListRule": null,
-                    "totalPurchaseListRule": null
-                },
-                "priority": 1,
-                "simpleDescription": null,
-                "detailDescription": null
-            },
-            {
-                "id": "HD320",
-                "status": "ended",
-                "promotionType": "order_promo",
-                "promotionName": "asdfasfasdf",
-                "promotionDiscription": null,
-                "startDate": 1512095343000,
-                "endDate": 1512872943000,
+                "startDate": 1513565700000,
+                "endDate": 1513738500000,
                 "discountType": "percentage",
                 "quanifyAmount": null,
                 "discount": null,
@@ -651,53 +280,68 @@
                 "type": 0,
                 "isSuperposeUserDiscount": 0,
                 "isSuperposeProOrCouDiscount": 0,
-                "createDate": 1512700431000,
+                "createDate": 1513666335000,
                 "createUserId": "10027",
-                "publishDate": null,
+                "publishDate": 1513666447000,
                 "publishUserId": null,
-                "stores": null,
+                "stores": {
+                    "promoId": "HD522",
+                    "storeId": "A002916"
+                },
                 "promoCategoriesPo": null,
-                "companiesPoList": [
-                    {
-                        "promoId": "HD320",
-                        "companyId": "10000",
-                        "companyName": "成都子公司"
-                    },
-                    {
-                        "promoId": "HD320",
-                        "companyId": "10003",
-                        "companyName": "四川雅堂小超总部"
-                    },
-                    {
-                        "promoId": "HD320",
-                        "companyId": "10007",
-                        "companyName": "山东子公司"
-                    }
-                ],
+                "companiesPoList": [],
                 "recordsPoList": [],
                 "promotionRule": {
-                    "useConditionRule": false,
-                    "ruleName": "REWARDLIST",
-                    "orderRule": {
-                        "preferentialWay": "PERCENTAGE",
-                        "preferentialValue": 0.95
-                    },
+                    "useConditionRule": true,
+                    "ruleName": "TOTALPUCHASELIST",
+                    "orderRule": null,
                     "purchaseConditionsRule": null,
                     "rewardListRule": null,
-                    "totalPurchaseListRule": null
+                    "totalPurchaseListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513655002461",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "xprod347938",
+                                    "productName": "桃李吉士排面包(110g)"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 5
+                            },
+                            {
+                                "key": "1513666303212",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate26",
+                                    "categoryName": "面包主食",
+                                    "categoryLevel": 2
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "rule": {
+                            "preferentialWay": "PERCENTAGE",
+                            "preferentialValue": 10
+                        }
+                    }
                 },
                 "priority": 1,
-                "simpleDescription": null,
-                "detailDescription": null
+                "simpleDescription": "测试商品数量达到基准是否能生效",
+                "detailDescription": "测试商品数量达到基准是否能生效"
             },
             {
-                "id": "HD319",
-                "status": "ended",
+                "id": "HD521",
+                "status": "unreleased",
                 "promotionType": "order_promo",
-                "promotionName": "asdfasfasdf",
+                "promotionName": "测试1219两个商品条件",
                 "promotionDiscription": null,
-                "startDate": 1512095343000,
-                "endDate": 1512872943000,
+                "startDate": 1513565700000,
+                "endDate": 1513738500000,
                 "discountType": "percentage",
                 "quanifyAmount": null,
                 "discount": null,
@@ -705,33 +349,89 @@
                 "type": 0,
                 "isSuperposeUserDiscount": 0,
                 "isSuperposeProOrCouDiscount": 0,
-                "createDate": 1512700266000,
+                "createDate": 1513666334000,
                 "createUserId": "10027",
                 "publishDate": null,
                 "publishUserId": null,
-                "stores": null,
+                "stores": {
+                    "promoId": "HD521",
+                    "storeId": "A002916"
+                },
                 "promoCategoriesPo": null,
-                "companiesPoList": [
-                    {
-                        "promoId": "HD319",
-                        "companyId": "10000",
-                        "companyName": "成都子公司"
-                    },
-                    {
-                        "promoId": "HD319",
-                        "companyId": "10003",
-                        "companyName": "四川雅堂小超总部"
-                    },
-                    {
-                        "promoId": "HD319",
-                        "companyId": "10007",
-                        "companyName": "山东子公司"
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "TOTALPUCHASELIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513655002461",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "xprod347938",
+                                    "productName": "桃李吉士排面包(110g)"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 5
+                            },
+                            {
+                                "key": "1513666303212",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate26",
+                                    "categoryName": "面包主食",
+                                    "categoryLevel": 2
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "rule": {
+                            "preferentialWay": "PERCENTAGE",
+                            "preferentialValue": 10
+                        }
                     }
-                ],
+                },
+                "priority": 1,
+                "simpleDescription": "测试商品数量达到基准是否能生效",
+                "detailDescription": "测试商品数量达到基准是否能生效"
+            },
+            {
+                "id": "HD520",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "测试使用区域 所选门店",
+                "promotionDiscription": null,
+                "startDate": 1514875748000,
+                "endDate": 1517035748000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513666178000,
+                "createUserId": "10027",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD520",
+                    "storeId": "A000999, A000900, A000991"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
                 "recordsPoList": [],
                 "promotionRule": {
                     "useConditionRule": false,
-                    "ruleName": "REWARDLIST",
+                    "ruleName": null,
                     "orderRule": {
                         "preferentialWay": "PERCENTAGE",
                         "preferentialValue": 0.95
@@ -741,8 +441,515 @@
                     "totalPurchaseListRule": null
                 },
                 "priority": 1,
-                "simpleDescription": null,
-                "detailDescription": null
+                "simpleDescription": "简易描述",
+                "detailDescription": "详细描述"
+            },
+            {
+                "id": "HD519",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "测试使用区域 所选门店",
+                "promotionDiscription": null,
+                "startDate": 1514875748000,
+                "endDate": 1517035748000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513666174000,
+                "createUserId": "10027",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD519",
+                    "storeId": "A000999, A000900, A000991"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": false,
+                    "ruleName": null,
+                    "orderRule": {
+                        "preferentialWay": "PERCENTAGE",
+                        "preferentialValue": 0.95
+                    },
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "简易描述",
+                "detailDescription": "详细描述"
+            },
+            {
+                "id": "HD518",
+                "status": "closed",
+                "promotionType": "order_promo",
+                "promotionName": "测试使用区域 taoqy",
+                "promotionDiscription": null,
+                "startDate": 1512110826000,
+                "endDate": 1516690026000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513666064000,
+                "createUserId": "10027",
+                "publishDate": 1513666667000,
+                "publishUserId": null,
+                "stores": null,
+                "promoCategoriesPo": null,
+                "companiesPoList": [
+                    {
+                        "promoId": "HD518",
+                        "companyId": "10000",
+                        "companyName": "成都子公司"
+                    },
+                    {
+                        "promoId": "HD518",
+                        "companyId": "100028",
+                        "companyName": "雅堂小超"
+                    }
+                ],
+                "recordsPoList": [
+                    {
+                        "id": 315,
+                        "promoId": "HD518",
+                        "orderId": "100002017121900038",
+                        "discount": 7.13
+                    }
+                ],
+                "promotionRule": {
+                    "useConditionRule": false,
+                    "ruleName": null,
+                    "orderRule": {
+                        "preferentialWay": "PERCENTAGE",
+                        "preferentialValue": 0.95
+                    },
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "简易描述",
+                "detailDescription": "详细描述"
+            },
+            {
+                "id": "HD517",
+                "status": "closed",
+                "promotionType": "order_promo",
+                "promotionName": "测试1219两个商品条件",
+                "promotionDiscription": null,
+                "startDate": 1513565700000,
+                "endDate": 1513738500000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513666054000,
+                "createUserId": "10027",
+                "publishDate": 1513666350000,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD517",
+                    "storeId": "A002916"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "TOTALPUCHASELIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513655002461",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "xprod347938",
+                                    "productName": "桃李吉士排面包(110g)"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 5
+                            },
+                            {
+                                "key": "1513665359768",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "xprod347927",
+                                    "productName": "桃李"
+                                },
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 600
+                            }
+                        ],
+                        "rule": {
+                            "preferentialWay": "PERCENTAGE",
+                            "preferentialValue": 10
+                        }
+                    }
+                },
+                "priority": 1,
+                "simpleDescription": "测试商品数量达到基准是否能生效",
+                "detailDescription": "测试商品数量达到基准是否能生效"
+            },
+            {
+                "id": "HD516",
+                "status": "closed",
+                "promotionType": "order_promo",
+                "promotionName": "奖励列表-折扣blff",
+                "promotionDiscription": null,
+                "startDate": 1513665634000,
+                "endDate": 1514702434000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 1,
+                "isSuperposeProOrCouDiscount": 1,
+                "createDate": 1513665993000,
+                "createUserId": "10027",
+                "publishDate": 1513666683000,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD516",
+                    "storeId": "A000521"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [
+                    {
+                        "id": 316,
+                        "promoId": "HD516",
+                        "orderId": "100042017121900039",
+                        "discount": 1782
+                    }
+                ],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "REWARDLIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513665735807",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "60000117016",
+                                    "productName": "金龙鱼清香稻5KG"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            {
+                                "key": "1513665754783",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "purchaseConditionsRule": {
+                            "condition": {
+                                "key": null,
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            "rule": {
+                                "preferentialWay": "PERCENTAGE",
+                                "preferentialValue": 54
+                            }
+                        }
+                    },
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "奖励列表-折扣金额-fxh",
+                "detailDescription": "奖励列表-折扣金额-fxh"
+            },
+            {
+                "id": "HD515",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "奖励列表-折扣金额",
+                "promotionDiscription": null,
+                "startDate": 1513665634000,
+                "endDate": 1514702434000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 1,
+                "isSuperposeProOrCouDiscount": 1,
+                "createDate": 1513665934000,
+                "createUserId": "10018",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD515",
+                    "storeId": "A000521"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "REWARDLIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513665735807",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "60000117016",
+                                    "productName": "金龙鱼清香稻5KG"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            {
+                                "key": "1513665754783",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "purchaseConditionsRule": {
+                            "condition": {
+                                "key": null,
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            "rule": {
+                                "preferentialWay": "PERCENTAGE",
+                                "preferentialValue": 54
+                            }
+                        }
+                    },
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "奖励列表-折扣金额-fxh",
+                "detailDescription": "奖励列表-折扣金额-fxh"
+            },
+            {
+                "id": "HD514",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "奖励列表-折扣金额",
+                "promotionDiscription": null,
+                "startDate": 1513665634000,
+                "endDate": 1514702434000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 1,
+                "isSuperposeProOrCouDiscount": 1,
+                "createDate": 1513665921000,
+                "createUserId": "10018",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD514",
+                    "storeId": "A000521"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "REWARDLIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513665735807",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "60000117016",
+                                    "productName": "金龙鱼清香稻5KG"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            {
+                                "key": "1513665754783",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "purchaseConditionsRule": {
+                            "condition": {
+                                "key": null,
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            "rule": {
+                                "preferentialWay": "DISCOUNTAMOUNT",
+                                "preferentialValue": 126
+                            }
+                        }
+                    },
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "奖励列表-折扣金额-fxh",
+                "detailDescription": "奖励列表-折扣金额-fxh"
+            },
+            {
+                "id": "HD513",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "奖励列表-折扣金额",
+                "promotionDiscription": null,
+                "startDate": 1513665634000,
+                "endDate": 1514702434000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 1,
+                "isSuperposeProOrCouDiscount": 1,
+                "createDate": 1513665906000,
+                "createUserId": "10018",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD513",
+                    "storeId": "A000521"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "REWARDLIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513665735807",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "60000117016",
+                                    "productName": "金龙鱼清香稻5KG"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            {
+                                "key": "1513665754783",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "purchaseConditionsRule": {
+                            "condition": {
+                                "key": null,
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 1000
+                            },
+                            "rule": {
+                                "preferentialWay": "DISCOUNTAMOUNT",
+                                "preferentialValue": 126
+                            }
+                        }
+                    },
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "奖励列表-折扣金额-fxh",
+                "detailDescription": "奖励列表-折扣金额-fxh"
             }
         ]
     },

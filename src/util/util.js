@@ -316,6 +316,16 @@ class Utils {
         callback();
     }
 
+    /**
+     * 限制输入两位小数校验且不能为零
+     */
+    static limitTwoDecimalPlacesAndNotZero = (rule, value, callback) => {
+        if (value === 0) {
+            callback('不能为零');
+        }
+        Utils.limitTwoDecimalPlaces(rule, value, callback);
+    }
+
     static validatePhone = (rule, value, callback) => {
         if (!/^1[34578]\d{9}$/.test(value)) {
             callback('手机号码有误');
@@ -331,6 +341,16 @@ class Utils {
             callback('请输入正整数');
         }
         callback();
+    }
+
+    /**
+     * 判断是否正整数或者不填写
+     */
+    static validatePositiveIntegerOrBlank = (rule, value, callback) => {
+        if (Utils.trim(value) === '') {
+            callback();
+        }
+        Utils.validatePositiveInteger(rule, value, callback);
     }
 
     /**

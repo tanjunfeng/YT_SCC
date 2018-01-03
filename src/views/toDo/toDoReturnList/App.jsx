@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-13 15:52:46
+ * @Last Modified time: 2017-12-28 17:47:30
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -43,6 +43,7 @@ import {
     queryProcessMsgInfo,
     queryHighChart,
     clearHighChart,
+    returnAuditInfo,
 } from '../../../actions/process';
 import {
     getWarehouseAddressMap,
@@ -50,9 +51,8 @@ import {
     getSupplierMap,
     getSupplierLocMap
 } from '../../../actions';
-import ApproModal from './approModal';
+import ApproModal from '../../../components/approModal'
 import FlowImage from '../../../components/flowImage';
-import {auditInfo} from '../../../service';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -76,6 +76,7 @@ const { TextArea } = Input;
     queryProcessDefinitions,
     queryHighChart,
     clearHighChart,
+    returnAuditInfo,
 }, dispatch))
 
 class toDoReturnList extends PureComponent {
@@ -111,7 +112,7 @@ class toDoReturnList extends PureComponent {
             spAdrNo: '', // 供应商地点编码
             status: 0, // 流程状态，默认进行中
             spName: null, // 供应商名
-            apAdrName: null, // 供应商地点名
+            spAdrName: null, // 供应商地点名
             refundAdrName: null, // 地点
         };
         // 初始页号
@@ -122,7 +123,7 @@ class toDoReturnList extends PureComponent {
                 dataIndex: 'refundNo',
                 key: 'refundNo',
                 render: (text, record) => (
-                    <Link target="_blank" to={`po/detail/${record.refundNo}`} onClick={this.toPurDetail}>{text}</Link>
+                    <Link target="_blank" to={`/returnManagementList/returnManagementDetail/${record.id}`}>{text}</Link>
                 )
             }, {
                 title: '地点类型',
@@ -288,7 +289,7 @@ class toDoReturnList extends PureComponent {
                     reject();
                 } else {
                     Object.assign(dist, {
-                        outcome
+                        outcome: outcome.toString() === '0' ? 'reject' : 'pass'
                     });
                 }
                 if (outcome === '0') {
@@ -343,6 +344,9 @@ class toDoReturnList extends PureComponent {
         this.handleSupplyClear();
         this.handleSupplierAddressClear();
         this.handleAddressClear();
+        this.setState({
+            status: 0
+        })
     }
 
     /**
@@ -370,7 +374,7 @@ class toDoReturnList extends PureComponent {
         const storeCode = '1';
         let locationTypeParam = '';
         if (adrType === libraryCode) {
-            locationTypeParam = 'getWarehouseInfo1';
+            locationTypeParam = 'getWarehouseLogic';
             this.setState({
                 locationData: {
                     code: 'warehouseCode',
@@ -400,7 +404,7 @@ class toDoReturnList extends PureComponent {
     handleSupplierAddressChoose = ({ record }) => {
         this.setState({
             spAdrId: record.spId,
-            apAdrName: record.providerName
+            spAdrName: record.providerName
         });
     }
 
@@ -410,7 +414,7 @@ class toDoReturnList extends PureComponent {
     handleSupplierAddressClear = () => {
         this.setState({
             spAdrId: '',
-            apAdrName: ''
+            spAdrName: ''
         });
         this.joiningAdressMind.reset();
     }
@@ -522,7 +526,7 @@ class toDoReturnList extends PureComponent {
     handleApprovalOk = () => {
         const { refundNo, taskId } = this.examinationAppData;
         this.getFormData().then((param) => {
-            auditInfo({ ...param, orderNo: refundNo, taskId, type: 1 })
+            this.props.returnAuditInfo({ ...param, orderNo: refundNo, taskId, type: 1 })
                 .then((res) => {
                     if (res.code === 200) {
                         message.success(res.message);
@@ -532,7 +536,7 @@ class toDoReturnList extends PureComponent {
 
                         this.queryReturnMngList(this.current);
                     }
-                });
+                })
         });
     }
 
@@ -577,20 +581,19 @@ class toDoReturnList extends PureComponent {
             purchaseOrderNo,
             outcome,
             purchaseOrderType,
-            adrType,
-            auditStatus
+            adrType
         } = this.props.form.getFieldsValue();
         // 供应商编号
         const spName = this.state.spName;
 
         // 供应商地点编号
-        const apAdrName = this.state.apAdrName;
+        const spAdrName = this.state.spAdrName;
 
         // 地点
         const refundAdrName = this.state.refundAdrName;
 
         // 流程状态
-        const status = auditStatus === '进行中' ? 0 : 1;
+        const status = parseInt(this.state.status, 10);
         const searchParams = {
             refundNo: purchaseRefundNo,
             purchaseOrderNo,
@@ -598,7 +601,7 @@ class toDoReturnList extends PureComponent {
             purchaseOrderType,
             adrType,
             spName,
-            apAdrName,
+            spAdrName,
             refundAdrName,
             status
         };
@@ -609,23 +612,23 @@ class toDoReturnList extends PureComponent {
     // 流程状态切换
     statusChange = (value) => {
         this.setState({
-            status: value
+            status: parseInt(value, 10)
         })
     }
 
     renderActions(text, record, index) {
-        const { taskId } = record;
+        const { id } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/returnManagementDetail/${taskId}`}>退货单详情</Link>
+                    <Link to={`${pathname}/returnManagementDetail/${id}`}>退货单详情</Link>
                 </Menu.Item>
-                <Menu.Item key="examinationApproval">
+                {this.state.status === 0 && <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
                     </a>
-                </Menu.Item>
+                </Menu.Item>}
                 <Menu.Item key="viewApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         查看审批意见
@@ -918,7 +921,8 @@ toDoReturnList.propTypes = {
     deleteBatchRefundOrder: PropTypes.func,
     queryHighChart: PropTypes.func,
     clearHighChart: PropTypes.func,
-    highChartData: PropTypes.string
+    highChartData: PropTypes.string,
+    returnAuditInfo: PropTypes.func,
 };
 
 export default withRouter(Form.create()(toDoReturnList));

@@ -1,5 +1,5 @@
-$promotionAddLabelWidth: 80px;
-$promotionAddBorderCorder: #d9d9d9;
+$promotionFormLabelWidth: 80px;
+$promotionFormBorderCorder: #d9d9d9;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -21,9 +21,9 @@ $promotionAddBorderCorder: #d9d9d9;
     }
 }
 
-.promotion-create {
+.promotion-form {
     padding-top: 60px;
-    margin: 0 auto;
+    margin: 0 auto 24px;
     width: 1012px;
     form .default {
         width: 78px;
@@ -50,20 +50,23 @@ $promotionAddBorderCorder: #d9d9d9;
         padding-right: 60px;
     }
     ul.list-panel {
-        margin: 12px 0;
-        border: 1px solid $promotionAddBorderCorder;
+        // margin: 12px 0;
+        // border-bottom: 1px solid $promotionFormBorderCorder;
         li {
             line-height: 48px;
             &:first-child {
                 h2 {
                     padding: 0 20px;
-                    font-size: 14px;
+                    font-size: 12px;
+                    font-weight: bold;
                     display: inline-block;
                 }
                 line-height: 34px;
-                border-bottom: 1px solid $promotionAddBorderCorder;
             }
         }
+    }
+    .whole-field .ant-form-item-control-wrapper {
+        width: 288px;
     }
     .product .ywc-smind {
         top: 4px;
@@ -76,11 +79,20 @@ $promotionAddBorderCorder: #d9d9d9;
         text-align: center;
     }
     .store {
-        margin-left: $promotionAddLabelWidth;
+        margin-left: $promotionFormLabelWidth;
+    }
+    .store-ids {
+        margin-bottom: 0 !important;
     }
     .ant-form-item-label label {
-        width: $promotionAddLabelWidth;
+        width: $promotionFormLabelWidth;
         display: inline-block;
+    }
+    .ant-form-item.wd-83 {
+        .ant-form-item-label,
+        .ant-form-item-label label {
+            width: 83px;
+        }
     }
     &.few-line {
         .ant-form-item-label {
@@ -127,7 +139,7 @@ $promotionAddBorderCorder: #d9d9d9;
         width: 140px;
     }
     .tips .ant-col-16 {
-        margin-left: $promotionAddLabelWidth;
+        margin-left: $promotionFormLabelWidth;
     }
     .condition {
         margin-right: 0;
@@ -141,7 +153,7 @@ $promotionAddBorderCorder: #d9d9d9;
     .promotion-add-license {
         .ant-form-item-label,
         .ant-form-item-label label {
-            width: $promotionAddLabelWidth;
+            width: $promotionFormLabelWidth;
         }
     }
 }

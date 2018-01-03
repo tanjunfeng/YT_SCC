@@ -5,11 +5,13 @@
  * 促销活动列表
  */
 import React from 'react';
-import { promotionStatus, promotionRuleName, preferentialWayStatus } from './constants';
+import {
+    promotionStatus, promotionRuleStatus
+} from './constants';
 import Util from '../../util/util';
 
 // 供应商列表
-const managementList = [{
+export const managementList = [{
     title: '活动ID',
     dataIndex: 'id'
 }, {
@@ -22,19 +24,23 @@ const managementList = [{
 }, {
     title: '优惠方式',
     dataIndex: 'promotionRule.ruleName',
-    key: 'promotionRule.ruleName',
-    render: ruleName => promotionRuleName[ruleName]
+    render: ruleName => promotionRuleStatus[ruleName] || '-'
 }, {
     title: '使用区域',
     dataIndex: 'companiesPoList',
-    render: list => {
-        if (!list || list.length === 0) {
+    render: (text, record) => {
+        const { stores = null, companiesPoList = [] } = record;
+        if (stores === null && companiesPoList.length === 0) {
             return '全部区域';
         }
-        const areas = list.map(company => company.companyName).join(',');
-        return (
-            <span title={areas} alt={areas}>所选区域</span>
-        );
+        if (companiesPoList.length > 0) {
+            const hover = companiesPoList.map(c => c.companyName).join(', ');
+            return (<span title={hover} alt={hover}>指定区域</span>);
+        }
+        if (stores && stores.storeId) {
+            return (<span title={stores.storeId} alt={stores.storeId}>指定门店</span>);
+        }
+        return null;
     }
 }, {
     title: '开始时间',
@@ -61,12 +67,13 @@ const managementList = [{
     dataIndex: 'operation'
 }];
 
-const participateList = [{
+export const participateList = [{
     title: '订单号',
     dataIndex: 'orderId'
 }, {
     title: '订单时间',
-    dataIndex: 'submitTime'
+    dataIndex: 'submitTime',
+    render: timestamp => Util.getTime(timestamp)
 }, {
     title: '订单状态',
     dataIndex: 'orderStateDesc'
@@ -93,7 +100,10 @@ const participateList = [{
     dataIndex: 'branchCompanyName'
 }];
 
-const detail = [{
+/**
+ * 下单打折详情基础字段 前部分
+ */
+export const basicDetailBefore = [{
     title: '活动ID',
     dataIndex: 'id'
 }, {
@@ -113,37 +123,14 @@ const detail = [{
     render: timestamp => Util.getTime(timestamp)
 }, {
     title: '使用条件',
-    dataIndex: 'promotionRule.useConditionRule',
-    render: rule => (rule ? '指定条件' : '不限制')
-}, {
-    title: '优惠方式',
-    dataIndex: 'promotionWay',
-    render: (text, record) => {
-        if (record.id) {
-            const { preferentialWay, preferentialValue } = record.promotionRule.orderRule;
-            return `${preferentialWayStatus[preferentialWay]} ${preferentialValue}`;
-        }
-        return null
-    }
-}, {
-    title: '使用区域',
-    dataIndex: 'companiesPoList',
-    render: list => {
-        if (!list || list.length === 0) {
-            return '全部区域';
-        }
-        return list.map(company => company.companyName).join(',');
-    }
-}, {
-    title: '指定门店',
-    dataIndex: 'stores',
-    render: stores => {
-        if (!stores) {
-            return '未指定门店';
-        }
-        return stores.storeId;
-    }
-}, {
+    dataIndex: 'promotionRule',
+    render: rule => (rule && rule.useConditionRule ? '指定条件' : '不限制')
+}];
+
+/**
+ * 下单打折详情基础字段 后部分
+ */
+export const basicDetailAfter = [{
     title: '活动叠加',
     dataIndex: 'overlay',
     render: (text, record) => {
@@ -154,6 +141,9 @@ const detail = [{
             }
             if (record.isSuperposeProOrCouDiscount === 1) {
                 arr.push('优惠券');
+            }
+            if (arr.length === 0) {
+                return '无叠加';
             }
             return arr.join(', ');
         }
@@ -175,5 +165,3 @@ const detail = [{
     dataIndex: 'note',
     render: note => note || '无'
 }];
-
-export { managementList, participateList, detail };

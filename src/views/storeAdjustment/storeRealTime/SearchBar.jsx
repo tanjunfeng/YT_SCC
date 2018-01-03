@@ -67,7 +67,6 @@ class Search extends Component {
                     pageSize: PAGE_SIZE,
                     ...searchData
                 }
-                this.props.saveParams(searchData);
                 this.props.getListData(params)
                     .then(() => {
                         this.props.setCurrentPage();
@@ -78,9 +77,9 @@ class Search extends Component {
 
     // 重置
     handleReset() {
-        this.WarehouseSearch.reset();
+        this.warehouseSearch.reset();
+        this.handleWarehouseEmpty();
         this.props.form.resetFields();
-        this.props.saveParams();
         this.props.form.setFieldsValue({
             branchCompany: { reset: true }
         });
@@ -98,9 +97,9 @@ class Search extends Component {
                 // 搜索参数
                 const searchData = Util.removeInvalid({
                     productCode: value.productCode,
+                    branchCompanyId: value.branchCompany.id,
                     ...this.state
                 });
-                this.props.saveParams(searchData);
                 if (JSON.stringify(searchData) === '{}') {
                     Modal.confirm({
                         title: '导出全部数据，可能比较耗时！',
@@ -152,11 +151,11 @@ class Search extends Component {
                         <FormItem label="所属仓库">
                             <SearchMind
                                 compKey="search-mind-sub-company"
-                                ref={ref => { this.WarehouseSearch = ref }}
+                                ref={ref => { this.warehouseSearch = ref }}
                                 fetch={(params) =>
                                     this.props.pubFetchValueList({
                                         param: params.value ? params.value : ''
-                                    }, 'getWarehouseInfo1')
+                                    }, 'getWarehouseLogic')
                                 }
                                 onChoosed={this.handleWarehouseChoose}
                                 onClear={this.handleWarehouseEmpty}
@@ -205,7 +204,6 @@ Search.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.objectOf(PropTypes.any),
     getListData: PropTypes.objectOf(PropTypes.any),
-    saveParams: PropTypes.func,
     setCurrentPage: PropTypes.func
 }
 

@@ -294,8 +294,26 @@ export const initiateModeOptions = {
     }]
 }
 
+// 最新售价状态
+export const latestPriceStateOption = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '已提交'
+    }, {
+        key: '1',
+        value: '已审核'
+    }, {
+        key: '2',
+        value: '已拒绝'
+    }]
+}
+
 // 采购模式
-export const preHarvestPinStatus = {
+export const preHarvestPinStatusOption = {
     defaultValue: '0',
     data: [{
         key: '0',
@@ -303,6 +321,18 @@ export const preHarvestPinStatus = {
     }, {
         key: '1',
         value: '先采后销'
+    }]
+}
+
+// 采购退货
+export const supportReturnOption = {
+    defaultValue: 0,
+    data: [{
+        key: 0,
+        value: '否'
+    }, {
+        key: 1,
+        value: '是'
     }]
 }
 
@@ -344,6 +374,24 @@ export const mainSupplierOptions = {
     }, {
         key: '1',
         value: '是'
+    }]
+}
+
+// 最新采购价状态
+export const auditStatusOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '1',
+        value: '已提交'
+    }, {
+        key: '2',
+        value: '已审核'
+    }, {
+        key: '3',
+        value: '已拒绝'
     }]
 }
 
@@ -466,6 +514,9 @@ export const orderTypeOptions = {
     }, {
         key: 'DSXS',
         value: '电商销售'
+    }, {
+        key: 'XCC',
+        value: '小超C端'
     }]
 }
 

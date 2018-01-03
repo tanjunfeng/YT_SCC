@@ -21,7 +21,7 @@ import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
 import {
     getChooseButton, getRules, getRulesColumn,
-    getPromotion, getRewardList, getTotalPurchaseList
+    getPromotion, getRewardList, getTotalPurchaseList, getEachConditionGivenOne
 } from './domHelper';
 import { getFormData } from './dataHelper';
 
@@ -41,10 +41,11 @@ class PromotionCreate extends PureComponent {
     state = {
         areaSelectorVisible: false,
         storeSelectorVisible: false,
+        submitDisabled: false,
         companies: [], // 所选区域子公司
         conditions: [], // 购买条件列表
         categoryPC: null, // 购买条件品类, PC = PURCHASECONDITION
-        categoryRL: null, // 奖励列表品类，RL = REWARDLIST
+        categoryRL: null // 奖励列表品类，RL = REWARDLIST
     }
 
     handleSelectorOk = (companies) => {
@@ -126,27 +127,50 @@ class PromotionCreate extends PureComponent {
         });
     }
 
+    /**
+     * 选择优惠种类的回调函数
+     */
+    handleCategoryChange = () => {
+        this.setState({ conditions: [] });
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
-        getFormData({ state: this.state, form: this.props.form }, data => {
-            this.props.createPromotion(data).then(res => {
-                if (res.code === 200) {
-                    message.success(res.message);
-                }
-            });
-        });
+        this.setState({ submitDisabled: true });
+        getFormData(
+            {
+                state: this.state,
+                form: this.props.form
+            },
+            data => {
+                this.props.createPromotion(data).then(res => {
+                    if (res.code === 200) {
+                        this.setState({ submitDisabled: true });
+                        message.success(res.message);
+                    } else {
+                        this.setState({ submitDisabled: false });
+                    }
+                }).catch(() => {
+                    this.setState({ submitDisabled: false });
+                });
+            },
+            () => {
+                this.setState({ submitDisabled: false });
+            }
+        );
     }
 
     render() {
         const { form } = this.props;
         const { getFieldDecorator, getFieldValue } = form;
         const {
-            companies, areaSelectorVisible, storeSelectorVisible, conditions
+            companies, areaSelectorVisible, storeSelectorVisible,
+            conditions, submitDisabled
         } = this.state;
         return (
-            <Form className="promotion-create" layout="inline" onSubmit={this.handleSubmit}>
+            <Form className="promotion-form" layout="inline" onSubmit={this.handleSubmit}>
                 <Row>
-                    <FormItem label="活动名称" >
+                    <FormItem label="活动名称" className="whole-field">
                         {getFieldDecorator('promotionName', {
                             rules: [
                                 { required: true, message: '请输入促销活动名称!' },
@@ -189,10 +213,15 @@ class PromotionCreate extends PureComponent {
                         <FormItem label="优惠种类">
                             {getFieldDecorator('category', {
                                 initialValue: 'PURCHASECONDITION'
-                            })(<Select size="default" className="wd-110">
+                            })(<Select
+                                size="default"
+                                className="wd-110"
+                                onChange={this.handleCategoryChange}
+                            >
                                 <Option key={'PURCHASECONDITION'} value="PURCHASECONDITION">购买条件</Option>
                                 <Option key={'REWARDLIST'} value="REWARDLIST">奖励列表</Option>
                                 <Option key={'TOTALPUCHASELIST'} value="TOTALPUCHASELIST">整个购买列表</Option>
+                                <Option key={'EACHCONDITIONGIVEONCE'} value="EACHCONDITIONGIVEONCE">每满</Option>
                             </Select>)}
                         </FormItem>
                     }
@@ -227,6 +256,17 @@ class PromotionCreate extends PureComponent {
                             conditions,
                             handleBuyConditionsChange: this.handleBuyConditionsChange
                         }) : null}
+                {/* 指定条件——每满 */}
+                {getFieldValue('condition') === 1 && getFieldValue('category') === 'EACHCONDITIONGIVEONCE' ?
+                    getEachConditionGivenOne(
+                        {
+                            form,
+                            licence: 'eachConditionGivenOne',
+                            conditions,
+                            handleBuyConditionsChange: this.handleBuyConditionsChange
+                        }
+                    ) : null
+                }
                 <Row>
                     <FormItem label="使用区域">
                         {getFieldDecorator('area', {
@@ -257,7 +297,7 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 <Row>
                     {storeSelectorVisible ?
-                        <FormItem className="store">
+                        <FormItem className="store whole-field">
                             {getFieldDecorator('storeId', {
                                 initialValue: '',
                                 rules: [{ required: true, message: '请输入指定门店' }]
@@ -278,12 +318,11 @@ class PromotionCreate extends PureComponent {
                 <Row>
                     <FormItem label="活动优先级">
                         {getFieldDecorator('priority', {
-                            initialValue: 1,
+                            initialValue: '',
                             rules: [
-                                { validator: Util.validatePositiveInteger },
-                                { required: true, message: '请输入活动优先级' }
+                                { validator: Util.validatePositiveIntegerOrBlank }
                             ]
-                        })(<InputNumber min={1} step={1} max={9999} className="wd-90" />)}
+                        })(<InputNumber max={99999} />)}
                     </FormItem>
                 </Row>
                 <Row>
@@ -296,7 +335,7 @@ class PromotionCreate extends PureComponent {
                     </FormItem>
                 </Row>
                 <Row>
-                    <FormItem label="简易描述">
+                    <FormItem label="简易描述" className="whole-field">
                         {getFieldDecorator('simpleDescription', {
                             initialValue: '',
                             rules: [
@@ -307,7 +346,7 @@ class PromotionCreate extends PureComponent {
                     </FormItem>
                 </Row>
                 <Row>
-                    <FormItem label="详细描述">
+                    <FormItem label="详细描述" className="whole-field">
                         {getFieldDecorator('detailDescription', {
                             initialValue: '',
                             rules: [
@@ -318,7 +357,7 @@ class PromotionCreate extends PureComponent {
                     </FormItem>
                 </Row>
                 <Row>
-                    <FormItem label="备注">
+                    <FormItem label="备注" className="whole-field">
                         {getFieldDecorator('note', {
                             initialValue: '',
                             rules: [{ max: 200, message: '限填200字' }]
@@ -326,7 +365,12 @@ class PromotionCreate extends PureComponent {
                     </FormItem>
                 </Row>
                 <Row className="center" >
-                    <Button type="primary" size="default" htmlType="submit">保存</Button>
+                    <Button
+                        type="primary"
+                        size="default"
+                        htmlType="submit"
+                        disabled={submitDisabled}
+                    >保存</Button>
                 </Row>
             </Form>
         );

@@ -19,3 +19,19 @@
         color: red;
     }
 }
+.giftsTip {
+    border-top: 30px solid #fd9f2e;
+    border-right: 30px solid transparent;
+    position: relative;
+    top: -50px;
+    left: 52px;
+    width: 30px;
+    height: 30px;
+    span{
+        position: absolute;
+        top: -30px;
+        left: 2px;
+        color: #fff;
+        font-size: 12px;
+    }
+}

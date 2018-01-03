@@ -17,7 +17,9 @@ import {
 import {
     pubFetchValueList,
 } from '../../../actions/pub';
-
+import {
+    supportReturnOption
+} from '../../../constant/searchParams';
 import {
     AddProdPurchase,
     UpdateProdPurchase,
@@ -31,7 +33,7 @@ const { Option } = Select;
 @connect(
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
-        getProductById: state.toJS().commodity.getProductById,
+        getProductByIds: state.toJS().commodity.getProductById,
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
         updateProdPurchase: state.toJS().commodity.updateProdPurchase,
@@ -163,11 +165,25 @@ class ProdModal extends Component {
     }
 
     /**
+    * 获取表单数据
+    */
+    getFormData = () => {
+        const {
+            supportReturn,
+            newestPrice
+        } = this.props.form.getFieldsValue();
+        return Util.removeInvalid({
+            supportReturn,
+            newestPrice
+        });
+    }
+
+    /**
      * 创建弹框OK事件 (当没有改变时)
      */
     handleOk() {
         const { validateFields } = this.props.form;
-        const { initValue, isEdit } = this.props;
+        const { initValue, isEdit, getProductByIds } = this.props;
         const subPost = isEdit ? this.props.ChangeUpdateProd : this.props.AddProdPurchase;
         const { spId, supplierAddressId, warehouseId } = this.ids;
         if (!spId) {
@@ -200,14 +216,15 @@ class ProdModal extends Component {
                 // 商品id
                 productId: isEdit ? initValue.productId : initValue.id,
                 // 子公司id
-                branchCompanyId: this.ids.childCompanyId,
                 // 供应商类型:0：一般供应商,1:主供应商
                 supplierType: this.state.checked ? 1 : 0,
                 purchaseInsideNumber: values.purchaseInsideNumber,
-                purchasePrice: parseFloat(values.purchasePrice),
                 internationalCode: values.internationalCode,
                 // 仓库ID
                 distributeWarehouseId: this.ids.warehouseId,
+                supportReturn: this.getFormData().supportReturn,
+                newestPrice: isEdit ? this.getFormData().newestPrice : values.newestPrice,
+                productCode: getProductByIds.productCode
             })
             subPost(subData).then((res) => {
                 message.success(res.message)
@@ -244,20 +261,48 @@ class ProdModal extends Component {
         })
     }
 
+    catchAuditstate = () => {
+        const { userNames } = this.props;
+        switch (userNames.auditStatus) {
+            case 1:
+                return '已提交';
+            case 2:
+                return '已审核';
+            case 3:
+                return '已拒绝';
+            default:
+                return null;
+        }
+    }
+
     render() {
-        const { prefixCls, form, initValue = {}, isEdit, data, hasMainSupplier } = this.props;
+        const {
+            prefixCls, form, initValue = {}, userNames,
+            isEdit, data, hasMainSupplier, getProductByIds
+        } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
         const { warehouseCode, warehouseName } = this.state.supplyChoose;
         const { spNo, companyName } = this.state;
         const { internationalCodes = [] } = data;
+        const { internationalCode } = getProductByIds.internationalCodes[0];
+        const firstCreated = () => {
+            switch (userNames.firstCreated) {
+                case 0:
+                    return userNames.createUserName;
+                case 1:
+                    return userNames.modifyUserName;
+                default:
+                    return null;
+            }
+        }
         return (
             <Modal
                 title={isEdit ? '修改采购价格' : '新增采购价格'}
                 visible
-                className={prefixCls}
+                className={isEdit ? prefixCls : 'creat-prod'}
                 onOk={this.handleOk}
-                width={'500px'}
+                width={'480px'}
                 onCancel={this.handleCancel}
                 maskClosable={false}
             >
@@ -265,37 +310,68 @@ class ProdModal extends Component {
                     <Form layout="inline" onSubmit={this.handleSubmit}>
                         <div className={`${prefixCls}-item`}>
                             <div className={`${prefixCls}-item-title`}>货运条件</div>
-                            <div className={`${prefixCls}-item-content`}>
+                            <div>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*采购内装数：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchaseInsideNumber', {
                                             rules: [{ required: true, message: '采购内装数' }],
-                                            initialValue: initValue.purchaseInsideNumber
+                                            initialValue: getProductByIds.purchaseInsideNumber
                                         })(
                                             <InputNumber min={0} placeholder="内装数" />
                                             )}
                                     </span>
                                 </FormItem>
-                                <FormItem>
-                                    <span className={`${prefixCls}-label`}>*采购价(元)：</span>
-                                    <span className={`${prefixCls}-barcode-input`}>
-                                        {getFieldDecorator('purchasePrice', {
-                                            rules: [{ required: true, message: '请输入采购价!' }],
-                                            initialValue: initValue.purchasePrice
-                                        })(
-                                            <InputNumber min={0} step={0.01} placeholder="采购价" />
-                                            )}
-                                    </span>
-                                </FormItem>
+                                {
+                                    isEdit ?
+                                        <FormItem>
+                                            <span className={`${prefixCls}-label`}>*当前采购价(元)：</span>
+                                            <span className={`${prefixCls}-barcode-input`}>
+                                                {getFieldDecorator('purchasePrice', {
+                                                    rules: [{ required: true, message: '请输入当前采购价!' }],
+                                                    initialValue: getProductByIds.purchasePrice
+                                                })(
+                                                    <InputNumber min={0} step={0.01} placeholder="当前采购价" />
+                                                    )}
+                                            </span>
+                                        </FormItem>
+                                        : <FormItem>
+                                            <span className={`${prefixCls}-label`}>*采购价(元)：</span>
+                                            <span className={`${prefixCls}-barcode-input`}>
+                                                {getFieldDecorator('newestPrice', {
+                                                    rules: [{ required: true, message: '请输入采购价!' }],
+                                                    initialValue: getProductByIds.newestPrice
+                                                })(
+                                                    <InputNumber min={0} step={0.01} placeholder="采购价" />
+                                                    )}
+                                            </span>
+                                        </FormItem>
+                                }
+                                {
+                                    isEdit ?
+                                        <FormItem>
+                                            <span className={`${prefixCls}-label`}>*最新采购价(元)：</span>
+                                            <span className={`${prefixCls}-barcode-input`}>
+                                                {getFieldDecorator('newestPrice', {
+                                                    rules: [{ required: true, message: '请输入最新采购价!' }],
+                                                    initialValue: initValue.newestPrice
+                                                })(
+                                                    <InputNumber min={0} step={0.01} placeholder="最新采购价" />
+                                                    )}
+                                            </span>
+                                            <span className={`${prefixCls}-adjustment`}>
+                                                调价百分比：{initValue.percentage}%
+                                            </span>
+                                        </FormItem>
+                                        : null
+                                }
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*条  码：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('internationalCode', {
                                             rules: [{ required: true, message: '输入商品条码!' }],
-                                            initialValue: isEdit ?
-                                                initValue.internationalCode :
-                                                internationalCodes[0].internationalCode
+                                            initialValue: isEdit ? internationalCode :
+                                            internationalCodes[0].internationalCode
                                         })(
                                             <Select
                                                 placeholder="请选择商品条码"
@@ -316,10 +392,54 @@ class ProdModal extends Component {
                                             )}
                                     </span>
                                 </FormItem>
+                                {/* 是否支持退货 */}
+                                <FormItem>
+                                    <span className={`${prefixCls}-label`}>*是否支持退货：</span>
+                                    <span className={`${prefixCls}-barcode-input`}>
+                                        {getFieldDecorator('supportReturn', {
+                                            rules: [{ required: true, message: '请选择是否支持退货!' }],
+                                            initialValue: supportReturnOption.defaultValue
+                                        })(
+                                            <Select
+                                                className="sc-form-item-select"
+                                                style={{ width: '150px' }}
+                                                onChange={this.handleSelectChange}
+                                            >
+                                                {
+                                                    supportReturnOption.data.map((item) =>
+                                                        (<Option key={item.key} value={item.key}>
+                                                            {item.value}
+                                                        </Option>)
+                                                    )
+                                                }
+                                            </Select>
+                                            )}
+                                    </span>
+                                </FormItem>
+                                {
+                                    isEdit &&
+                                    <div className={`${prefixCls}-sub-state`}>
+                                        <FormItem>
+                                            <span className={`${prefixCls}-label`}>最新采购价格状态：</span>
+                                            <span>
+                                                <i className={`new-price-state-${userNames.auditStatus}`} />
+                                                {this.catchAuditstate() || '-'}
+                                            </span>
+                                        </FormItem>
+                                        <FormItem>
+                                            <span className={`${prefixCls}-label`}>提交人：</span>
+                                            <span className="submit-user">{firstCreated() || '-'}</span>
+                                        </FormItem>
+                                        <FormItem>
+                                            <span className={`${prefixCls}-label`}>审核人：</span>
+                                            <span>{userNames.auditUserName || '-'}</span>
+                                        </FormItem>
+                                    </div>
+                                }
                             </div>
                         </div>
                         <div className={`${prefixCls}-item`}>
-                            <div className={`${prefixCls}-item-content`}>
+                            <div>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*供应商：</span>
                                     <span className={`${prefixCls}-data-pic`}>
@@ -421,7 +541,7 @@ class ProdModal extends Component {
                                                     condition: params.value,
                                                     pageSize: params.pagination.pageSize,
                                                     pageNum: params.pagination.current || 1
-                                                }), 'getWarehouseInfo1').then((res) => {
+                                                }), 'getWarehouseLogic').then((res) => {
                                                     const row = res.data.data;
                                                     if (row.length === 0) {
                                                         message.warning('没有可用的数据');
@@ -488,6 +608,8 @@ ProdModal.propTypes = {
     pubFetchValueList: PropTypes.func,
     ChangeUpdateProd: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    getProductByIds: PropTypes.objectOf(PropTypes.any),
+    userNames: PropTypes.objectOf(PropTypes.any),
     handleClose: PropTypes.func,
     prodPurchase: PropTypes.objectOf(PropTypes.any),
     initValue: PropTypes.objectOf(PropTypes.any),
@@ -498,7 +620,7 @@ ProdModal.propTypes = {
 };
 
 ProdModal.defaultProps = {
-    prefixCls: 'prod-modal',
+    prefixCls: 'purchase-modal',
     goto: () => { },
     data: {}
 }

@@ -1,0 +1,84 @@
+.purchase-Price-list {
+    padding: 20px 0;
+    margin: 10px 0;
+    .ant-form {
+        padding-top: 20px;
+        margin: 10px 0;
+        border: 1px solid #c4c5c9;
+    }
+    .ant-form-item-label {
+        width: 100px;
+        .sc-form-item-label {
+            text-align: right;
+        }
+    }
+    .product-search{
+        margin-left: 100px;
+        top: -2px;
+    }
+    .ant-form-item-control-wrapper{
+        display: inline-block;
+    }
+    .label-top label{
+        top: -7px;
+    }
+    .ant-form-item {
+        float: left;
+        display: block;
+        height: 42px;
+        .ywc-smind {
+            top: 4px;
+        }
+        @media screen and (min-width: 0px) and (max-width: 1400px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 220px;
+            }
+        }
+        @media screen and (min-width: 1401px) and (max-width: 1600px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 230px;
+            }
+        }
+        @media screen and (min-width: 1601px) and (max-width: 1920px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 200px;
+            }
+        }
+        @media screen and (min-width: 1921px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 260px;
+            }
+        }
+    }
+    .ant-btn {
+        margin: 6px 10px;
+    }
+    .ant-upload-list{
+        display: none
+    }
+    .priceResult {
+        display: flex;
+    }
+    .errorResult , .sucResult {
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        margin-right: 5px;
+        display: inline-block;
+        margin-top: 4px;
+    }
+    .errorResult {
+        background-color: red;
+    }
+    .sucResult {
+        background-color: green;
+    }
+}

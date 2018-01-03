@@ -19,7 +19,7 @@ import { BranchCompany } from '../../../container/search';
 import { fetchAction, receiveData, } from '../../../actions/classifiedList';
 import { QueryProdPurchaseExtByCondition } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
-import { initiateModeOptions, mainSupplierOptions } from '../../../constant/searchParams';
+import { initiateModeOptions, mainSupplierOptions, auditStatusOptions } from '../../../constant/searchParams';
 import { pubFetchValueList } from '../../../actions/pub';
 
 const FormItem = Form.Item;
@@ -87,6 +87,10 @@ class SearchForm extends Component {
      * 搜索
      */
     handleGetValue() {
+        this.handleSearch()
+    }
+
+    handleSearch = () => {
         const { validateFields } = this.props.form;
         validateFields((err, values) => {
             const status = values.initiateModeOptions === '-1'
@@ -95,12 +99,16 @@ class SearchForm extends Component {
             const supplierType = values.mainSupplierOptions === '-1'
                 ? null
                 : values.mainSupplierOptions;
+            const auditStatus = values.auditStatusOptions === '-1'
+                ? null
+                : values.auditStatusOptions;
             this.props.onSearch(Utils.removeInvalid({
                 spId: this.state.supplyChoose.spId,
                 spAdrId: this.state.supplyChoose1.spAdrid,
                 branchCompanyId: values.branchCompany.id,
                 supplierType,
-                status
+                status,
+                auditStatus
             }))
         })
     }
@@ -226,156 +234,169 @@ class SearchForm extends Component {
         })
     }
 
+    handlePurchasing = () => {
+        window.open('/orderList/orderDetails')
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;
         return (
-            <div className={`${prefixCls}-content manage-form`}>
+            <div className={`${prefixCls}-manage-form`}>
                 <div style={{ fontSize: 16, fontWeight: 900 }}>
                     <Icon type="desktop" className="css-appstore" />&nbsp;价格明细
                 </div>
-                <Form layout="inline" className={`${prefixCls}-content`}>
-                    <Row type="flex" justify="start" className={`${prefixCls}-flex`}>
+                <Form
+                    layout="inline"
+                    className={`${prefixCls}-form`}
+                    onSubmit={this.handleSearch}
+                >
+                    <Row>
                         {/* 供应商 */}
                         <Col>
                             <FormItem label="供应商">
-                                <span className="value-list-input">
-                                    <SearchMind
-                                        compKey="search-mind-supply1"
-                                        ref={ref => { this.supplySearchMind = ref }}
-                                        fetch={(params) => this.props.pubFetchValueList({
-                                            condition: params.value,
-                                            pageSize: params.pagination.pageSize,
-                                            pageNum: params.pagination.current || 1
-                                        }, 'supplierSearchBox')}
-                                        onChoosed={this.handleSupplyChoose}
-                                        onClear={this.handleSupplyClear}
-                                        renderChoosedInputRaw={(data) => (
-                                            <div>{data.spNo} - {data.companyName}</div>
-                                        )}
-                                        pageSize={6}
-                                        columns={[
-                                            {
-                                                title: '供应商编码',
-                                                dataIndex: 'spNo',
-                                                width: 68
-                                            }, {
-                                                title: '供应商名称',
-                                                dataIndex: 'companyName'
-                                            }
-                                        ]}
-                                    />
-                                </span>
+                                <SearchMind
+                                    compKey="search-mind-supply1"
+                                    ref={ref => { this.supplySearchMind = ref }}
+                                    fetch={(params) => this.props.pubFetchValueList({
+                                        condition: params.value,
+                                        pageSize: params.pagination.pageSize,
+                                        pageNum: params.pagination.current || 1
+                                    }, 'supplierSearchBox')}
+                                    onChoosed={this.handleSupplyChoose}
+                                    onClear={this.handleSupplyClear}
+                                    renderChoosedInputRaw={(data) => (
+                                        <div>{data.spNo} - {data.companyName}</div>
+                                    )}
+                                    pageSize={6}
+                                    columns={[
+                                        {
+                                            title: '供应商编码',
+                                            dataIndex: 'spNo',
+                                            width: 68
+                                        }, {
+                                            title: '供应商名称',
+                                            dataIndex: 'companyName'
+                                        }
+                                    ]}
+                                />
                             </FormItem>
                         </Col>
                         {/* 地点 */}
                         <Col>
                             <FormItem label="地点">
-                                <span className="value-list-input">
-                                    <SearchMind
-                                        compKey="search-mind-supply2"
-                                        ref={ref => { this.addressSearchMind = ref }}
-                                        fetch={(params) => this.props.pubFetchValueList({
-                                            condition: params.value,
-                                            pageSize: params.pagination.pageSize,
-                                            pageNum: params.pagination.current || 1
-                                        }, 'supplierAdrSearchBox')}
-                                        onChoosed={this.handleAdressChoose}
-                                        onClear={this.handleAdressClear}
-                                        renderChoosedInputRaw={(data) => (
-                                            <div>{data.providerNo} - {data.providerName}</div>
-                                        )}
-                                        pageSize={6}
-                                        columns={[
-                                            {
-                                                title: '供应商地点编码',
-                                                dataIndex: 'providerNo',
-                                                width: 68
-                                            }, {
-                                                title: '供应商地点名称',
-                                                dataIndex: 'providerName'
-                                            }
-                                        ]}
-                                    />
-                                </span>
+                                <SearchMind
+                                    compKey="search-mind-supply2"
+                                    ref={ref => { this.addressSearchMind = ref }}
+                                    fetch={(params) => this.props.pubFetchValueList({
+                                        condition: params.value,
+                                        pageSize: params.pagination.pageSize,
+                                        pageNum: params.pagination.current || 1
+                                    }, 'supplierAdrSearchBox')}
+                                    onChoosed={this.handleAdressChoose}
+                                    onClear={this.handleAdressClear}
+                                    renderChoosedInputRaw={(data) => (
+                                        <div>{data.providerNo} - {data.providerName}</div>
+                                    )}
+                                    pageSize={6}
+                                    columns={[
+                                        {
+                                            title: '供应商地点编码',
+                                            dataIndex: 'providerNo',
+                                            width: 68
+                                        }, {
+                                            title: '供应商地点名称',
+                                            dataIndex: 'providerName'
+                                        }
+                                    ]}
+                                />
                             </FormItem>
                         </Col>
                         {/* 子公司 */}
-                        <Col span={8}>
+                        <Col>
                             <FormItem label="所属公司">
                                 {getFieldDecorator('branchCompany', {
                                     initialValue: { id: '', name: '' }
                                 })(<BranchCompany />)}
                             </FormItem>
                         </Col>
+                        <Col>
+                            {/* 是否启用 */}
+                            <FormItem label="启用">
+                                {getFieldDecorator('initiateModeOptions', {
+                                    initialValue: initiateModeOptions.defaultValue
+                                })(
+                                    <Select
+                                        style={{ width: 90 }}
+                                        className="sc-form-item-select"
+                                        size="default"
+                                        disabled={this.state.supplierType === '-1'}
+                                    >
+                                        {
+                                            initiateModeOptions.data.map((item) =>
+                                                (<Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>
+                                    )}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 是否为主供应商 */}
+                            <FormItem label="主供应商">
+                                {getFieldDecorator('mainSupplierOptions', {
+                                    initialValue: mainSupplierOptions.defaultValue
+                                })(
+                                    <Select
+                                        style={{ width: 90 }}
+                                        className="sc-form-item-select"
+                                        size="default"
+                                        disabled={this.state.supplierType === '-1'}
+                                    >
+                                        {
+                                            mainSupplierOptions.data.map((item) =>
+                                                (<Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>
+                                    )}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 最新采购价状态 */}
+                            <FormItem label="最新采购价状态：">
+                                {getFieldDecorator('auditStatusOptions', {
+                                    initialValue: auditStatusOptions.defaultValue
+                                })(
+                                    <Select
+                                        style={{ width: 90 }}
+                                        className="sc-form-item-select"
+                                        size="default"
+                                        disabled={this.state.supplierType === '-1'}
+                                    >
+                                        {
+                                            auditStatusOptions.data.map((item) =>
+                                                (<Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>
+                                    )}
+                            </FormItem>
+                        </Col>
                     </Row>
-                    <Row>
-                        {/* 是否启用 */}
-                        <FormItem className="sc-form-item">
-                            <span className={`${prefixCls}-select`}>启用</span>
-                            {getFieldDecorator('initiateModeOptions', {
-                                initialValue: initiateModeOptions.defaultValue
-                            })(
-                                <Select
-                                    style={{ width: 90 }}
-                                    className="sc-form-item-select"
-                                    size="default"
-                                    disabled={this.state.supplierType === '-1'}
-                                >
-                                    {
-                                        initiateModeOptions.data.map((item) =>
-                                            (<Option key={item.key} value={item.key}>
-                                                {item.value}
-                                            </Option>)
-                                        )
-                                    }
-                                </Select>
-                                )}
-                        </FormItem>
-                        {/* 是否为主供应商 */}
-                        <FormItem className="sc-form-item">
-                            <span className={`${prefixCls}-select`}>主供应商</span>
-                            {getFieldDecorator('mainSupplierOptions', {
-                                initialValue: mainSupplierOptions.defaultValue
-                            })(
-                                <Select
-                                    style={{ width: 90 }}
-                                    className="sc-form-item-select"
-                                    size="default"
-                                    disabled={this.state.supplierType === '-1'}
-                                >
-                                    {
-                                        mainSupplierOptions.data.map((item) =>
-                                            (<Option key={item.key} value={item.key}>
-                                                {item.value}
-                                            </Option>)
-                                        )
-                                    }
-                                </Select>
-                                )}
-                        </FormItem>
-                        <FormItem>
-                            <Button
-                                type="primary"
-                                onClick={this.handleGetValue}
-                                size="default"
-                            >
-                                搜索
-                            </Button>
-                        </FormItem>
-                        <FormItem>
-                            <Button
-                                size="default"
-                                onClick={this.props.handleAdd}
-                            >
-                                创建
-                            </Button>
-                        </FormItem>
-                        <FormItem>
-                            <Button size="default" onClick={this.handleResetValue}>
-                                重置
-                            </Button>
-                        </FormItem>
+                    <Row type="flex" justify="end">
+                        <Col>
+                            <a type="primary" onClick={this.handlePurchasing} size="default">采购进价批量导入</a>
+                            <Button type="primary" onClick={this.handleGetValue} size="default">搜索</Button>
+                            <Button size="default" onClick={this.props.handleAdd}>创建</Button>
+                            <Button size="default" onClick={this.handleResetValue}>重置</Button>
+                        </Col>
                     </Row>
                 </Form>
             </div>

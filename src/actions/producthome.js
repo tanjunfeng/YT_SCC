@@ -15,7 +15,7 @@ import {
     purchasePriceDetail,
     addPurchasement,
     updateOffShelfProducts,
-    addSellPrice,
+    toAddSellPrice as toAddSellPriceAction,
     getPurchasePrice,
     queryAllSupplier,
     toUpdateSellPrice,
@@ -29,7 +29,7 @@ import {
     fetchChangeSupType,
     updateProdPurchase,
     changeProPurchaseStatus,
-    getWarehouseInfo1
+    getWarehouseLogic
 } from '../service';
 import ActionType from './ActionType';
 
@@ -208,9 +208,9 @@ const receiveAddSellPrice = (data) => ({
     payload: data,
 });
 
-export const AddSellPrice = (params) => dispatch => (
+export const toAddSellPrice = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        addSellPrice(params)
+        toAddSellPriceAction(params)
             .then(res => {
                 dispatch(receiveAddSellPrice(res.data));
                 resolve(res);
@@ -464,7 +464,7 @@ const receiveGetWarehouseInfo1 = (data) => ({
 
 export const GetWarehouseInfo1 = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        getWarehouseInfo1(params)
+        getWarehouseLogic(params)
             .then(res => {
                 dispatch(receiveGetWarehouseInfo1(res.data));
                 resolve(res);

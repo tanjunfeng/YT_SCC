@@ -22,6 +22,7 @@ import { modifyConfirmPayment, fetchPaymentDetailInfo, fetchOrderDetailInfo } fr
 @connect(
     state => ({
         paymentDetailData: state.toJS().order.paymentDetailData,
+        RIGHTS: state.toJS().user.rights,
     }),
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
@@ -116,21 +117,28 @@ class PayInformation extends PureComponent {
             dataIndex: 'state',
             key: 'state',
             render: (text, record) => {
+                const { RIGHTS = [] } = this.props;
                 switch (text) {
                     case 'pending_audit':
-                        return (<a
-                            onClick={() => {
-                                this.handleAuditRefund(record);
-                            }}
-                        >审核退款</a>)
+                        if (RIGHTS.indexOf('auditRefund') > -1) {
+                            return (<a
+                                onClick={() => {
+                                    this.handleAuditRefund(record);
+                                }}
+                            >审核退款</a>)
+                        }
+                        return null;
                     case 'approved':
-                        return (<a
-                            onClick={() => {
-                                this.handleRefundOk(record);
-                            }}
-                        >确认退款</a>)
+                        if (RIGHTS.indexOf('confirmRefund') > -1) {
+                            return (<a
+                                onClick={() => {
+                                    this.handleRefundOk(record);
+                                }}
+                            >确认退款</a>)
+                        }
+                        return null;
                     default:
-                        if (record.shouldConfirm) {
+                        if (record.shouldConfirm && RIGHTS.indexOf('confirmPayment') > -1) {
                             return (<a
                                 onClick={() => {
                                     this.handlePayOk(record);
@@ -259,7 +267,8 @@ PayInformation.propTypes = {
     modifyPayModalVisible: PropTypes.func,
     fetchPaymentDetailInfo: PropTypes.func,
     fetchOrderDetailInfo: PropTypes.func,
-    match: PropTypes.objectOf(PropTypes.any)
+    match: PropTypes.objectOf(PropTypes.any),
+    RIGHTS: PropTypes.arrayOf(PropTypes.string)
 }
 
 export default withRouter(Form.create()(PayInformation));

@@ -69,6 +69,7 @@ class SearchForm extends Component {
             providerType,
             status,
             grade,
+            gradeAdr
         } = this.props.form.getFieldsValue();
         const searchData = {
             providerName,
@@ -77,6 +78,7 @@ class SearchForm extends Component {
             providerType: providerType === '0' ? null : providerType,
             status: status === '0' ? null : status,
             grade: grade === '0' ? null : grade,
+            gradeAdr: gradeAdr === '0' ? null : gradeAdr,
             settledDate: this.state.settledDate
         };
         this.searchData = Utils.removeInvalid(searchData);
@@ -303,7 +305,7 @@ class SearchForm extends Component {
                         supplierType === '2' &&
                         <FormItem className="sc-form-item">
                             <span className="sc-form-item-label">供应商地点等级</span>
-                            {getFieldDecorator('grade', {
+                            {getFieldDecorator('gradeAdr', {
                                 initialValue: supplierPlaceLevelOptions.defaultValue
                             })(
                                 <Select
