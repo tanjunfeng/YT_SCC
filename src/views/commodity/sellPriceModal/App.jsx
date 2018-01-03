@@ -134,10 +134,12 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            if (isEdit) {
+            if (isEdit && this.newDatas.auditStatus !== 1) {
                 this.props.handlePostAdd(editData, isEdit);
-            } else {
+            } else if (!isEdit && this.newDatas.auditStatus !== 1) {
                 this.props.handlePostAdd(createData, isEdit);
+            } else {
+                this.props.handleClose()
             }
             return null;
         })
@@ -234,6 +236,8 @@ class SellPriceModal extends Component {
     }
 
     handleOnFreConditChange = (data) => {
+        // const { newDatas ={} } = this.props;
+        // console.log(newDatas)
         this.setState({
             freCondit: data
         })
@@ -246,7 +250,7 @@ class SellPriceModal extends Component {
     }
 
     render() {
-        const { prefixCls, isEdit, values, costPrice } = this.props;
+        const { prefixCls, isEdit, values } = this.props;
         const isAfter = this.isAfter === true;
         const isReadOnly = true;
         const { freCondit, cretFreConditObj } = this.state;

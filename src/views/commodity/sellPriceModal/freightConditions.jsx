@@ -274,6 +274,13 @@ class FreightConditions extends Component {
                                     >{newDatas.sellPricesInReview.minNumber}</span>
                                 </FormItem>
                                 <FormItem>
+                                    <span>*最大销售数量：</span>
+                                    <span className={
+                                        newDatas.sellPricesInReview.maxNumber !== newDatas.maxNumber ?
+                                            'sell-modal-border' : null}
+                                    >{newDatas.sellPricesInReview.maxNumber}</span>
+                                </FormItem>
+                                <FormItem>
                                     <span>*承诺发货时间：下单后</span>
                                     <span className={
                                         newDatas.sellPricesInReview.deliveryDay !== newDatas.deliveryDay ?
