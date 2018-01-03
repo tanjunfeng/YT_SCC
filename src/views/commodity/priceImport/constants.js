@@ -4,7 +4,6 @@
  * @author liujinyu
  */
 
-// 下单打折活动状态
 export const priceResult = {
     defaultValue: '',
     data: [{

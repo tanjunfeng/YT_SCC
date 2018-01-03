@@ -235,7 +235,7 @@ class SearchForm extends Component {
     }
 
     handlePurchasing = () => {
-        window.open('/orderList/orderDetails')
+        window.open('/purchaseExamination')
     }
 
     render() {

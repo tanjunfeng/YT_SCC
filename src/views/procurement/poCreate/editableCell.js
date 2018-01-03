@@ -18,16 +18,24 @@ export default class EditableCell extends PureComponent {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillMount() {
+        const props = this.props;
         let max = MAXGOODS;
-        if (typeof nextProps.max !== 'undefined') {
-            max = nextProps.max
+        if (typeof props.max !== 'undefined') {
+            max = props.max
         }
         this.setState({
-            value: nextProps.value,
+            value: props.value,
             max,
-            step: nextProps.step,
-            purchaseInsideNumber: nextProps.purchaseInsideNumber,
+            step: props.step,
+            purchaseInsideNumber: props.purchaseInsideNumber,
+            editable: props.editable,
+        });
+        this.validate(props.value);
+    }
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            value: nextProps.value,
             editable: nextProps.editable,
         });
         this.validate(nextProps.value);
@@ -110,9 +118,6 @@ export default class EditableCell extends PureComponent {
 
 EditableCell.propTypes = {
     value: PropTypes.number,
-    max: PropTypes.number,
-    step: PropTypes.number,
-    purchaseInsideNumber: PropTypes.number,
     editable: PropTypes.bool,
     onChange: PropTypes.func,
     type: PropTypes.string,

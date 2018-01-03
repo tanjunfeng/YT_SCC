@@ -9,7 +9,6 @@ import ActionType from './ActionType';
 
 import {
     sellPriceChangeList,
-    isSellVaild,
     createSell
 } from '../service';
 
@@ -30,30 +29,6 @@ export const getPriceImportList = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     receivePriceImportList(res.data)
-                );
-                resolve(res);
-            })
-            .catch(err => reject(err))
-    })
-)
-
-/**
- * 创建变价单是否可用action
- */
-const receiveIsSellVaild = (data) => ({
-    type: ActionType.RECEIVE_PRICE_IMPORT_SELL_VAILD,
-    payload: data,
-})
-
-/**
- * 创建变价单是否可用请求
- */
-export const getIsSellVaild = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        isSellVaild(params)
-            .then(res => {
-                dispatch(
-                    receiveIsSellVaild(res)
                 );
                 resolve(res);
             })

@@ -26,7 +26,6 @@ import {
     ChangeUpdateProd,
     GetWarehouseInfo1
 } from '../../../actions/producthome';
-import { getProductById } from '../../../service';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -231,9 +230,11 @@ class ProdModal extends Component {
                 productCode: getProductByIds.productCode
             })
             subPost(subData).then((res) => {
-                message.success(res.message)
-                this.handleCancel();
-                this.props.goto()
+                if (res.code === 200) {
+                    message.success(res.message)
+                    this.handleCancel();
+                    this.props.goto()
+                }
             }).catch(() => {
                 message.error('操作失败')
             })
@@ -281,7 +282,7 @@ class ProdModal extends Component {
 
     handleNewsPricChange = (newestPrice) => {
         if (newestPrice) {
-            const result = (newestPrice - this.getFormData().purchasePrice) / this.getFormData().purchasePrice
+            const result = ((newestPrice - this.getFormData().purchasePrice) / this.getFormData().purchasePrice) * 100
             return result.toFixed(2)
         }
     }
@@ -300,9 +301,9 @@ class ProdModal extends Component {
         const firstCreated = () => {
             switch (userNames.firstCreated) {
                 case 0:
-                    return userNames.createUserName;
-                case 1:
                     return userNames.modifyUserName;
+                case 1:
+                    return userNames.createUserName;
                 default:
                     return null;
             }
@@ -329,8 +330,7 @@ class ProdModal extends Component {
                                             rules: [{ required: true, message: '采购内装数' }],
                                             initialValue: getProductByIds.purchaseInsideNumber
                                         })(
-                                            <InputNumber min={0} placeholder="内装数" />
-                                            )}
+                                            <InputNumber min={0} placeholder="内装数" />)}
                                     </span>
                                 </FormItem>
                                 {
@@ -342,8 +342,7 @@ class ProdModal extends Component {
                                                     rules: [{ required: true, message: '请输入当前采购价!' }],
                                                     initialValue: getProductByIds.purchasePrice
                                                 })(
-                                                    <InputNumber min={0} step={0.01} placeholder="当前采购价" />
-                                                    )}
+                                                    <InputNumber min={0} step={0.01} placeholder="当前采购价" />)}
                                             </span>
                                         </FormItem>
                                         : <FormItem>
@@ -351,10 +350,9 @@ class ProdModal extends Component {
                                             <span className={`${prefixCls}-barcode-input`}>
                                                 {getFieldDecorator('newestPrice', {
                                                     rules: [{ required: true, message: '请输入采购价!' }],
-                                                    initialValue: getProductByIds.newestPrice
+                                                    initialValue: getProductByIds.purchasePrice
                                                 })(
-                                                    <InputNumber min={0} step={0.01} placeholder="采购价" />
-                                                    )}
+                                                    <InputNumber min={0} step={0.01} placeholder="采购价" />)}
                                             </span>
                                         </FormItem>
                                 }
@@ -366,14 +364,12 @@ class ProdModal extends Component {
                                                 {getFieldDecorator('newestPrice', {
                                                     rules: [{ required: true, message: '请输入最新采购价!' }],
                                                     initialValue: initValue.newestPrice
-                                                })(
-                                                    <InputNumber
-                                                        min={0}
-                                                        step={0.01}
-                                                        placeholder="最新采购价"
-                                                        onChange={this.handleNewsPricChange}
-                                                    />
-                                                    )}
+                                                })(<InputNumber
+                                                    min={0}
+                                                    step={0.01}
+                                                    placeholder="最新采购价"
+                                                    onChange={this.handleNewsPricChange}
+                                                />)}
                                             </span>
                                             <span className={`${prefixCls}-adjustment`}>
                                                 调价百分比：
@@ -388,7 +384,7 @@ class ProdModal extends Component {
                                         {getFieldDecorator('internationalCode', {
                                             rules: [{ required: true, message: '输入商品条码!' }],
                                             initialValue: isEdit ? internationalCode :
-                                            internationalCodes[0].internationalCode
+                                                internationalCodes[0].internationalCode
                                         })(
                                             <Select
                                                 placeholder="请选择商品条码"
@@ -405,8 +401,7 @@ class ProdModal extends Component {
                                                     )
                                                     )
                                                 }
-                                            </Select>
-                                            )}
+                                            </Select>)}
                                     </span>
                                 </FormItem>
                                 {/* 是否支持退货 */}
@@ -499,25 +494,25 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
                                             defaultValue={
-                                            initValue.spAdrId &&
-                                            `${initValue.spAdrId} - ${initValue.spAdrName}`
+                                                initValue.spAdrId &&
+                                                `${initValue.spAdrId} - ${initValue.spAdrName}`
                                             }
                                             style={{ zIndex: 8 }}
                                             compKey="search-mind-key2"
                                             ref={ref => { this.searchMind2 = ref }}
                                             fetch={(params) =>
-                                            this.props.pubFetchValueList(Util.removeInvalid({
-                                                pId: this.ids.spId,
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }), 'supplierAdrSearchBox').then((res) => {
-                                                const dataArr = res.data.data || [];
-                                                if (!dataArr || dataArr.length === 0) {
-                                                    message.warning('没有可用的数据');
-                                                }
-                                                return res;
-                                            })}
+                                                this.props.pubFetchValueList(Util.removeInvalid({
+                                                    pId: this.ids.spId,
+                                                    condition: params.value,
+                                                    pageSize: params.pagination.pageSize,
+                                                    pageNum: params.pagination.current || 1
+                                                }), 'supplierAdrSearchBox').then((res) => {
+                                                    const dataArr = res.data.data || [];
+                                                    if (!dataArr || dataArr.length === 0) {
+                                                        message.warning('没有可用的数据');
+                                                    }
+                                                    return res;
+                                                })}
                                             onChoosed={this.handleAdressChoose}
                                             onClear={this.handleAdressClear}
                                             renderChoosedInputRaw={(res) => (
@@ -544,7 +539,7 @@ class ProdModal extends Component {
                                             className={`${prefixCls}-data-disable`}
                                             defaultValue={
                                                 (warehouseCode ||
-                                                initValue.distributeWarehouseId) &&
+                                                    initValue.distributeWarehouseId) &&
                                                 `${warehouseCode ||
                                                 initValue.distributeWarehouseId} - ${warehouseName ||
                                                 initValue.distributeWarehouseName}`}
@@ -596,8 +591,7 @@ class ProdModal extends Component {
                                             <Checkbox
                                                 checked={this.state.checked}
                                                 onChange={this.handleCheckBox}
-                                            />
-                                            )}
+                                            />)}
                                     </span>
                                 </FormItem>
                                 {
