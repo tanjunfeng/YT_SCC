@@ -40,9 +40,10 @@ class SellPriceModal extends Component {
             suggestPrice: null,
             branchCompanyId: null,
             branchCompanyName: null,
-            isContinue: true,
+            editIsContinue: true,
             cretFreConditObj: {},
-            freCondit: {}
+            freCondit: {},
+            sellSectionPrices: []
         }
         this.isSub = false; // 判断是否为已提交状态(true为已提交)
         this.isDisabled = false;
@@ -86,8 +87,8 @@ class SellPriceModal extends Component {
 
     handleOk = () => {
         const { datas, isEdit, values = {} } = this.props;
-        const { validateFields, setFields } = this.props.form;
-        const { branchCompanyId, branchCompanyName, cretFreConditObj, freCondit, isContinue } = this.state;
+        const { validateFields } = this.props.form;
+        const { branchCompanyId, branchCompanyName, cretFreConditObj, freCondit, editIsContinue, sellSectionPrices } = this.state;
         const newDatas = datas.data;
         const createData = {};
         const editData = {};
@@ -96,6 +97,7 @@ class SellPriceModal extends Component {
             branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
             suggestPrice: this.state.suggestPrice || values.suggestPrice,
             productId: values.id,
+            sellSectionPrices,
             ...cretFreConditObj,
             ...freCondit
         })
@@ -105,6 +107,7 @@ class SellPriceModal extends Component {
             suggestPrice: this.state.suggestPrice || values.suggestPrice,
             productId: this.newDatas.productId,
             auditStatus: this.newDatas.auditStatus,
+            sellSectionPrices,
             id: this.newDatas.id,
             ...cretFreConditObj,
             ...freCondit
@@ -125,7 +128,7 @@ class SellPriceModal extends Component {
                 message.error('请输入最大销售数量！');
                 return null;
             }
-            if (!isContinue) {
+            if (!editIsContinue) {
                 message.error('阶梯价格不连续!');
                 return null;
             }
@@ -135,7 +138,11 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            this.props.handlePostAdd(editData, isEdit);
+            if (isEdit) {
+                this.props.handlePostAdd(editData, isEdit);
+            } else {
+                this.props.handlePostAdd(createData, isEdit);
+            }
             return null;
         })
     }
@@ -176,9 +183,23 @@ class SellPriceModal extends Component {
         }
     }
 
-    handleEditSteps = (num, record, data) => {
+    handleEditSteps = (num) => {
         this.setState({
             suggestPrice: num
+        })
+    }
+
+    handleEditPriceChange = (prices, isContinue) => {
+        this.setState({
+            sellSectionPrices: prices,
+            editIsContinue: isContinue
+        })
+    }
+
+    handleCreatPriceChange = (prices, isContinue) => {
+        this.setState({
+            sellSectionPrices: prices,
+            editIsContinue: isContinue
         })
     }
 
@@ -233,6 +254,7 @@ class SellPriceModal extends Component {
                                         isEdit={isEdit}
                                         startNumber={freCondit.minNumber || this.newDatas.minNumber}
                                         onEditChange={this.handleEditSteps}
+                                        onEditPriceChange={this.handleEditPriceChange}
                                     />
                                 </div>
                             </div>
@@ -284,6 +306,7 @@ class SellPriceModal extends Component {
                                         startNumber={cretFreConditObj.minNumber || values.minNumber}
                                         onCreateChange={this.handleCreatPrice}
                                         onCreateComChange={this.handleCompyChange}
+                                        onCreatPriceChange={this.handleCreatPriceChange}
                                         values={values}
                                     />
                                 </div>

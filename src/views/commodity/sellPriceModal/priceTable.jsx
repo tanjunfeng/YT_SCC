@@ -11,13 +11,20 @@ import { Table, Popconfirm, Button } from 'antd';
 import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
 
+function getNewData(old) {
+    return JSON.parse(JSON.stringify(old));
+}
+
 class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
+        const newData = getNewData(props.value.list)
+
         this.state = {
-            prices: [...props.value.list]
+            prices: newData
         }
-        this.cacheData = props.value.list.map(item => ({ ...item }));
+
+        this.cacheData = newData.map(item => ({ ...item }));
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, 'startNumber', index)
         columns[1].render = (text, record) => this.renderColumnsNum(text, record, 'endNumber')
         columns[2].render = (text, record) => this.renderColumnsPrice(text, record, 'price')
