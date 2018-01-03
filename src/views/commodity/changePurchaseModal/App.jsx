@@ -85,6 +85,22 @@ class ProdModal extends Component {
     }
 
     /**
+    * 获取表单数据
+    */
+    getFormData = () => {
+        const {
+            supportReturn,
+            newestPrice,
+            purchasePrice
+        } = this.props.form.getFieldsValue();
+        return Util.removeInvalid({
+            supportReturn,
+            newestPrice,
+            purchasePrice
+        });
+    }
+
+    /**
      * 仓库-值清单
      */
     handleHouseChoose = ({ record }) => {
@@ -166,20 +182,6 @@ class ProdModal extends Component {
     }
 
     /**
-    * 获取表单数据
-    */
-    getFormData = () => {
-        const {
-            supportReturn,
-            newestPrice
-        } = this.props.form.getFieldsValue();
-        return Util.removeInvalid({
-            supportReturn,
-            newestPrice
-        });
-    }
-
-    /**
      * 创建弹框OK事件 (当没有改变时)
      */
     handleOk() {
@@ -224,6 +226,7 @@ class ProdModal extends Component {
                 // 仓库ID
                 distributeWarehouseId: this.ids.warehouseId,
                 supportReturn: this.getFormData().supportReturn,
+                purchasePrice: this.getFormData().purchasePrice,
                 newestPrice: isEdit ? this.getFormData().newestPrice : values.newestPrice,
                 productCode: getProductByIds.productCode
             })
@@ -277,9 +280,10 @@ class ProdModal extends Component {
     }
 
     handleNewsPricChange = (newestPrice) => {
-        const { getProductByIds } = this.props;
-        const result = (newestPrice - getProductByIds.purchasePrice) / getProductByIds.purchasePrice
-        return result.toFixed(2)
+        if (newestPrice) {
+            const result = (newestPrice - this.getFormData().purchasePrice) / this.getFormData().purchasePrice
+            return result.toFixed(2)
+        }
     }
 
     render() {
@@ -373,7 +377,7 @@ class ProdModal extends Component {
                                             </span>
                                             <span className={`${prefixCls}-adjustment`}>
                                                 调价百分比：
-                                                <span>{this.handleNewsPricChange(initValue.newestPrice) || initValue.percentage}%</span>
+                                                <span>{this.handleNewsPricChange(this.getFormData().newestPrice) || initValue.percentage}%</span>
                                             </span>
                                         </FormItem>
                                         : null
