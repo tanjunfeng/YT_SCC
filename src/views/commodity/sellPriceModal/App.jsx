@@ -252,6 +252,7 @@ class SellPriceModal extends Component {
                                     <EditSteps
                                         newDatas={this.newDatas}
                                         isEdit={isEdit}
+                                        isSub={this.newDatas.auditStatus === 1}
                                         startNumber={freCondit.minNumber || this.newDatas.minNumber}
                                         onEditChange={this.handleEditSteps}
                                         onEditPriceChange={this.handleEditPriceChange}

@@ -26,6 +26,7 @@ import {
     ChangeUpdateProd,
     GetWarehouseInfo1
 } from '../../../actions/producthome';
+import { getProductById } from '../../../service';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -275,6 +276,12 @@ class ProdModal extends Component {
         }
     }
 
+    handleNewsPricChange = (newestPrice) => {
+        const { getProductByIds } = this.props;
+        const result = (newestPrice - getProductByIds.purchasePrice) / getProductByIds.purchasePrice
+        return result.toFixed(2)
+    }
+
     render() {
         const {
             prefixCls, form, initValue = {}, userNames,
@@ -356,11 +363,17 @@ class ProdModal extends Component {
                                                     rules: [{ required: true, message: '请输入最新采购价!' }],
                                                     initialValue: initValue.newestPrice
                                                 })(
-                                                    <InputNumber min={0} step={0.01} placeholder="最新采购价" />
+                                                    <InputNumber
+                                                        min={0}
+                                                        step={0.01}
+                                                        placeholder="最新采购价"
+                                                        onChange={this.handleNewsPricChange}
+                                                    />
                                                     )}
                                             </span>
                                             <span className={`${prefixCls}-adjustment`}>
-                                                调价百分比：{initValue.percentage}%
+                                                调价百分比：
+                                                <span>{this.handleNewsPricChange(initValue.newestPrice) || initValue.percentage}%</span>
                                             </span>
                                         </FormItem>
                                         : null

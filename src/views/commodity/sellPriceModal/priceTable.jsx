@@ -189,6 +189,7 @@ class PriceTable extends PureComponent {
 
     renderOptions = (text, record, index) => {
         const { editable } = record;
+        const { isSub } = this.props.value;
         return (
             <div className="editable-row-operations">
                 {
@@ -205,7 +206,7 @@ class PriceTable extends PureComponent {
                         </span>
                         :
                         <span>
-                            <a onClick={() => this.edit(record.id)}>编辑</a>
+                            <a disabled={isSub} onClick={() => this.edit(record.id)}>编辑</a>
                             &nbsp;
                             {index > 0 ? <Popconfirm
                                 title="确定删除?"
@@ -221,12 +222,12 @@ class PriceTable extends PureComponent {
 
     render() {
         const { prices } = this.state;
-        const { isReadOnly } = this.props.value;
+        const { isReadOnly, isSub } = this.props.value;
         return (
             <div>
                 {
                     !isReadOnly &&
-                    <Button onClick={this.handleAdd}>添加阶梯价格</Button>
+                    <Button disabled={isSub} onClick={this.handleAdd}>添加阶梯价格</Button>
                 }
                 <Table
                     rowKey="id"
@@ -242,6 +243,7 @@ class PriceTable extends PureComponent {
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     onChange: PropTypes.func,
+    isSub: PropTypes.bool,
     isReadOnly: PropTypes.bool
 };
 
