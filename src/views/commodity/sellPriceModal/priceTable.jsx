@@ -8,6 +8,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Table, Popconfirm, Button } from 'antd';
 import { connect } from 'react-redux';
+import Immutable from 'immutable';
 import { bindActionCreators } from 'redux';
 
 import {
@@ -17,7 +18,7 @@ import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
 
 function getNewData(old) {
-    return JSON.parse(JSON.stringify(old));
+    return Immutable.fromJS(old).toJS();
 }
 
 @connect(
