@@ -174,12 +174,6 @@ const getEachGiveOncePreferentialValue = values => {
 
 const getProductOfECGO = (condition, values) => {
     const { eachConditionGivenOne, eachConditionGivenOneProduct } = values;
-    // console.log(eachConditionGivenOneProduct.record);
-    // if (!eachConditionGivenOneProduct.record) {
-    //     eachConditionGivenOneProduct.record = {};
-    //     message.error('请选商品');
-    //     return;
-    // }
     switch (eachConditionGivenOne) {
         case 'PRODUCT':
             Object.assign(condition, {
