@@ -112,11 +112,24 @@ class PriceTable extends PureComponent {
         }
     }
 
+    /**
+     * 格式化数据
+     */
+    formatData = (record) => {
+        const { startNumber, endNumber, price } = record;
+        Object.assign(record, {
+            startNumber: Math.ceil(startNumber),
+            endNumber: Math.ceil(endNumber),
+            price: Number(price).toFixed(2)
+        })
+    }
+
     save = (id) => {
         const prices = [...this.state.prices];
         const target = prices.filter(item => id === item.id)[0];
         if (target) {
             delete target.editable;
+            this.formatData(target); // 保存时，数据格式化
             this.setState({ prices });
             this.cacheData = prices.map(item => ({ ...item }));
             this.notify(prices);
@@ -192,7 +205,7 @@ class PriceTable extends PureComponent {
             />);
     }
 
-    renderColumnsPrice = (text = 0, record, column) => (
+    renderColumnsPrice = (text, record, column) => (
         <EditableCell
             editable={record.editable}
             value={text}
