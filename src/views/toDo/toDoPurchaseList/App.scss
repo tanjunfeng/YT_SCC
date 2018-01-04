@@ -1,87 +1,72 @@
-$poRcvMngListColWidth: 250px;
-.search {
-    &-box {
-        background: #ffffff;
-        border: 1px solid #c4c5c9;
+.to-do-purchase-list {
+    .search-box {
+        padding: 40px 0 20px;
         margin: 10px 0;
-        padding: 5px 18px;
-        display: flex;
-        flex-direction: column;
-        .small {
-            .ywc-smind {
+        border: 1px solid #c4c5c9;
+    }
+    .ant-form-item-label {
+        width: 110px;
+        .sc-form-item-label {
+            text-align: right;
+        }
+    }
+    .ant-form-item-control-wrapper{
+        display: inline-block;
+    }
+    .labelTop {
+        .ant-form-item-label{
+            margin-top: -17px;
+        }
+    }
+    .ant-form-item {
+        float: left;
+        display: block;
+        height: 42px;
+        margin-bottom: 24px;
+        @media screen and (min-width: 0px) and (max-width: 1400px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
+                width: 220px;
+            }
+        }
+        @media screen and (min-width: 1401px) and (max-width: 1600px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
+                width: 230px;
+            }
+        }
+        @media screen and (min-width: 1601px) and (max-width: 1920px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
                 width: 200px;
             }
         }
-        .middle {
-            .ywc-smind {
-                width: $poRcvMngListColWidth;
-            }
-        }
-        .row {
-            display: flex;
-            line-height: 46px;
-            justify-content: space-between;
-            .item-box {
-                display: flex;
-                flex-direction: row;
-            }
-            .label {
-                margin-right: 8px;
-                display: inline-block;
-            }
-        }
-        .ant-form-item-label label {
-            min-width: 80px;
-            display: inline-block;
-        }
-        .date-range-picker {
-            width: $poRcvMngListColWidth;
-            padding: 2px 0;
-        }
-        .search-mind-label {
-            min-width: 80px;
-            display: inline-block;
-            &::after {
-                content: ":";
-                margin: 0 8px 0 2px;
-                position: relative;
-                top: -0.5px;
+        @media screen and (min-width: 1921px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
+                width: 260px;
             }
         }
     }
-}
-.start-circle{
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 1px solid;
-}
-.start-arrow{
-    width: 0px;
-    height: 0px;
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-    border-left: 15px solid black;
-    font-size: 0px;
-    line-height: 0px;
-    margin-top: 18px;
-}
-.start-line{
-    width: 50px;
-    height: 3px;
-    margin-top: 21px;
-    background: black;
-    border: 1px solid
-}
-textarea{
-    width: 300px;
-    height: 150px;
-    resize: none;
-    border: 1px solid #d9d9d9;
-}
-.comment {
-    margin-top: 20px;
-    span{
-        vertical-align: top;
+    .ant-btn {
+        margin: 6px 10px;
+    }
+    .ant-upload-list{
+        display: none
+    }
+    .ant-btn {
+        margin-right: 20px;
     }
 }
