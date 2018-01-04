@@ -39,7 +39,7 @@ class GoodsInfo extends PureComponent {
                     message = '赠';
                     const tipClassName = 'arrowTip giftColor';
                     arrowTip = <p className={tipClassName}><span>{message}</span></p>;
-                } else if (record.type === 'bundle') {
+                } else if (record.type === 'subItem') {
                     message = '套';
                     const tipClassName = 'arrowTip packageColor';
                     arrowTip = <p className={tipClassName}><span>{message}</span></p>;

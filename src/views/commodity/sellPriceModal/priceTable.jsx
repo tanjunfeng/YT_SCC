@@ -52,7 +52,7 @@ class PriceTable extends PureComponent {
         const { startNumber } = nextProps.value;
         const prices = [...this.state.prices];
         if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
-            prices[0].startNumber = startNumber;
+            prices[0].startNumber = startNumber === undefined ? 0 : startNumber;
             this.setState({ prices });
             this.notify(prices);
         }
