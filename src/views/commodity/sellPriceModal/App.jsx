@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, message, Select, Button, Input, Row, Col } from 'antd';
+import { Modal, Form, message, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-    pubFetchValueList
-} from '../../../actions/pub';
-import { productAddPriceVisible, toAddSellPrice } from '../../../actions/producthome';
-import { fetchAddProdPurchase } from '../../../actions';
 import {
 } from '../../../constant/searchParams';
 import {
@@ -36,7 +31,7 @@ class SellPriceModal extends Component {
             suggestPrice: null,
             branchCompanyId: null,
             branchCompanyName: null,
-            editIsContinue: false,
+            editIsContinue: true,
             cretFreConditObj: {},
             freCondit: {},
             sellSectionPrices: []
@@ -88,6 +83,7 @@ class SellPriceModal extends Component {
         const newDatas = datas.data;
         const createData = {};
         const editData = {};
+        const noChangePrices = [];
         Object.assign(createData, {
             branchCompanyId: this.state.branchCompanyId || values.branchCompanyId,
             branchCompanyName: this.state.branchCompanyName || values.branchCompanyName,
@@ -99,14 +95,21 @@ class SellPriceModal extends Component {
         })
         if (isEdit) {
             const { deliveryDay, minNumber, salesInsideNumber, suggestPrice } = newDatas;
+            this.newDatas.sellSectionPrices.map((item) => (
+                noChangePrices.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.percentage
+                })
+            ))
             Object.assign(editData, {
                 branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
                 branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
                 suggestPrice: this.state.suggestPrice || suggestPrice,
                 productId: this.newDatas.productId,
                 auditStatus: this.newDatas.auditStatus,
-                sellSectionPrices: sellSectionPrices.length === 0 ?
-                    this.newDatas.sellSectionPrices : sellSectionPrices,
+                sellSectionPrices: sellSectionPrices.length === 0 ? noChangePrices : sellSectionPrices,
                 deliveryDay,
                 minNumber,
                 salesInsideNumber,
@@ -215,7 +218,7 @@ class SellPriceModal extends Component {
                     endNumber: item.endNumber,
                     price: item.price,
                     startNumber: item.startNumber,
-                    percentage: item.startNumber
+                    percentage: item.percentage
                 })
             ))
             this.setState({
@@ -229,7 +232,7 @@ class SellPriceModal extends Component {
                     endNumber: item.endNumber,
                     price: item.price,
                     startNumber: item.startNumber,
-                    percentage: item.startNumber
+                    percentage: item.percentage
                 })
             })
             this.setState({
@@ -388,8 +391,11 @@ class SellPriceModal extends Component {
 
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
+    productId: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
     handlePostAdd: PropTypes.func,
+    getCostPrice: PropTypes.func,
+    clearCostPrice: PropTypes.func,
     handleClose: PropTypes.func,
     datas: PropTypes.objectOf(PropTypes.any)
 };
