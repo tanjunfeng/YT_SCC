@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
-    Form,
+    Form, message
 } from 'antd';
 import {
     modifyAuditVisible,
@@ -197,7 +197,10 @@ class ProcurementMaintenance extends PureComponent {
 
     handlePostAdd = (data, isEdit) => {
         const service = isEdit ? this.props.updateSellPrice : this.props.postSellPrice;
-        service(data).then(() => {
+        service(data).then((res) => {
+            if (res.code === 200) {
+                message.success(res.message)
+            }
             this.props.fetchPriceInfo({
                 pageNum: this.current,
                 pageSize: PAGE_SIZE,

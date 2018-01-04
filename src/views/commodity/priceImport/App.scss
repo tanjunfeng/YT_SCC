@@ -20,10 +20,8 @@ $promotionFieldWidth: 220px;
 }
 
 .price-import-wrap {
-    padding: 20px 0;
-    margin: 10px 0;
     .ant-form {
-        padding-top: 20px;
+        padding: 40px 0 20px;
         margin: 10px 0;
         border: 1px solid #c4c5c9;
     }
@@ -82,5 +80,8 @@ $promotionFieldWidth: 220px;
     }
     .ant-upload-list{
         display: none
+    }
+    .ant-btn {
+        margin-right: 20px;
     }
 }
