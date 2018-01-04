@@ -281,7 +281,7 @@ class ProdModal extends Component {
     }
 
     handleNewsPricChange = (newestPrice) => {
-        if (newestPrice) {
+        if (newestPrice && this.getFormData().purchasePrice) {
             const result = ((newestPrice - this.getFormData().purchasePrice) / this.getFormData().purchasePrice) * 100
             return result.toFixed(2)
         }
@@ -314,7 +314,7 @@ class ProdModal extends Component {
                 visible
                 className={isEdit ? prefixCls : 'creat-prod'}
                 onOk={this.handleOk}
-                width={'480px'}
+                width={isEdit ? '517px' : '480px'}
                 onCancel={this.handleCancel}
                 maskClosable={false}
             >
