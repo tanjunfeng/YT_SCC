@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, message, Select, Button, Input, Row, Col } from 'antd';
+import { Modal, Form, message, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-    pubFetchValueList
-} from '../../../actions/pub';
-import { productAddPriceVisible, toAddSellPrice } from '../../../actions/producthome';
-import { fetchAddProdPurchase } from '../../../actions';
 import {
 } from '../../../constant/searchParams';
 import {
@@ -84,10 +79,14 @@ class SellPriceModal extends Component {
     handleOk = () => {
         const { datas, isEdit, values = {} } = this.props;
         const { validateFields } = this.props.form;
-        const { branchCompanyId, branchCompanyName, cretFreConditObj, freCondit, editIsContinue, sellSectionPrices } = this.state;
+        const {
+            branchCompanyId, branchCompanyName, cretFreConditObj,
+            freCondit, editIsContinue, sellSectionPrices
+        } = this.state;
         const newDatas = datas.data;
         const createData = {};
         const editData = {};
+        const noChangePrices = [];
         Object.assign(createData, {
             branchCompanyId: this.state.branchCompanyId || values.branchCompanyId,
             branchCompanyName: this.state.branchCompanyName || values.branchCompanyName,
@@ -99,14 +98,21 @@ class SellPriceModal extends Component {
         })
         if (isEdit) {
             const { deliveryDay, minNumber, salesInsideNumber, suggestPrice } = newDatas;
+            this.newDatas.sellPricesInReview.sellSectionPrices.map((item) => (
+                noChangePrices.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.percentage
+                })
+            ))
             Object.assign(editData, {
                 branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
                 branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
                 suggestPrice: this.state.suggestPrice || suggestPrice,
                 productId: this.newDatas.productId,
                 auditStatus: this.newDatas.auditStatus,
-                sellSectionPrices: sellSectionPrices.length === 0 ?
-                    this.newDatas.sellSectionPrices : sellSectionPrices,
+                sellSectionPrices: sellSectionPrices.length === 0 ? noChangePrices : sellSectionPrices,
                 deliveryDay,
                 minNumber,
                 salesInsideNumber,
@@ -215,7 +221,7 @@ class SellPriceModal extends Component {
                     endNumber: item.endNumber,
                     price: item.price,
                     startNumber: item.startNumber,
-                    percentage: item.startNumber
+                    percentage: item.percentage
                 })
             ))
             this.setState({
@@ -229,7 +235,7 @@ class SellPriceModal extends Component {
                     endNumber: item.endNumber,
                     price: item.price,
                     startNumber: item.startNumber,
-                    percentage: item.startNumber
+                    percentage: item.percentage
                 })
             })
             this.setState({
@@ -294,32 +300,20 @@ class SellPriceModal extends Component {
                 className={isEdit ? prefixCls : 'createCls'}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
-                maskClosable={false}
+                maskClosable
+                destroyOnClose
                 confirmLoading={this.isDisabled}
             >
                 {
                     isEdit &&
                     <div>
-                        <span className="changeAfter">已提交销售关系:</span>
                         <span className="changeBefore">当前销售关系:</span>
+                        <span className="changeAfter">已提交销售关系:</span>
                     </div>
                 }
                 {
                     isEdit ?
                         <div>
-                            <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
-                                <FreightConditions
-                                    isEdit={isEdit}
-                                    isAfter={!isAfter}
-                                    isSub={this.newDatas.auditStatus === 1}
-                                    newDatas={this.newDatas}
-                                />
-                                <OnlyReadSteps
-                                    newDatas={this.referenceDatas}
-                                    isReadOnly={isReadOnly}
-                                    startNumber={freCondit.minNumber || this.newDatas.minNumber}
-                                />
-                            </div >
                             <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
                                 <div>
                                     <FreightConditions
@@ -327,18 +321,31 @@ class SellPriceModal extends Component {
                                         isAfter={isAfter}
                                         isSub={this.newDatas.auditStatus === 1}
                                         newDatas={this.newDatas}
-                                        onFreConditChange={this.handleOnFreConditChange}
-                                    />
-                                    <EditSteps
-                                        newDatas={this.newDatas}
-                                        isEdit={isEdit}
-                                        isSub={this.newDatas.auditStatus === 1}
-                                        startNumber={freCondit.minNumber || this.newDatas.minNumber}
-                                        onEditChange={this.handleEditSteps}
-                                        onEditPriceChange={this.handleEditPriceChange}
                                     />
                                 </div>
+                                <OnlyReadSteps
+                                    newDatas={this.referenceDatas}
+                                    isReadOnly={isReadOnly}
+                                    startNumber={freCondit.minNumber || this.newDatas.minNumber}
+                                />
                             </div>
+                            <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
+                                <FreightConditions
+                                    isEdit={isEdit}
+                                    isAfter={!isAfter}
+                                    isSub={this.newDatas.auditStatus === 1}
+                                    newDatas={this.newDatas}
+                                    onFreConditChange={this.handleOnFreConditChange}
+                                />
+                                <EditSteps
+                                    newDatas={this.newDatas}
+                                    isEdit={isEdit}
+                                    isSub={this.newDatas.auditStatus === 1}
+                                    startNumber={freCondit.minNumber || this.newDatas.minNumber}
+                                    onEditChange={this.handleEditSteps}
+                                    onEditPriceChange={this.handleEditPriceChange}
+                                />
+                            </div >
                             <Row className="edit-state-list">
                                 <Col>
                                     <span>提交人：</span>
@@ -388,8 +395,11 @@ class SellPriceModal extends Component {
 
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
+    productId: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
     handlePostAdd: PropTypes.func,
+    getCostPrice: PropTypes.func,
+    clearCostPrice: PropTypes.func,
     handleClose: PropTypes.func,
     datas: PropTypes.objectOf(PropTypes.any)
 };

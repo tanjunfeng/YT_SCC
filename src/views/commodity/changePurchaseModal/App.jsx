@@ -330,7 +330,10 @@ class ProdModal extends Component {
                                             rules: [{ required: true, message: '采购内装数' }],
                                             initialValue: getProductByIds.purchaseInsideNumber
                                         })(
-                                            <InputNumber min={0} placeholder="内装数" />)}
+                                            <InputNumber
+                                                min={0}
+                                                placeholder="内装数"
+                                            />)}
                                     </span>
                                 </FormItem>
                                 {
@@ -342,7 +345,12 @@ class ProdModal extends Component {
                                                     rules: [{ required: true, message: '请输入当前采购价!' }],
                                                     initialValue: initValue.purchasePrice
                                                 })(
-                                                    <InputNumber min={0} step={0.01} placeholder="当前采购价" />)}
+                                                    <InputNumber
+                                                        min={0}
+                                                        step={0.01}
+                                                        disabled={initValue.auditStatus === 1}
+                                                        placeholder="当前采购价"
+                                                    />)}
                                             </span>
                                         </FormItem>
                                         : <FormItem>
@@ -352,7 +360,11 @@ class ProdModal extends Component {
                                                     rules: [{ required: true, message: '请输入采购价!' }],
                                                     initialValue: initValue.purchasePrice
                                                 })(
-                                                    <InputNumber min={0} step={0.01} placeholder="采购价" />)}
+                                                    <InputNumber
+                                                        min={0}
+                                                        step={0.01}
+                                                        placeholder="采购价"
+                                                    />)}
                                             </span>
                                         </FormItem>
                                 }

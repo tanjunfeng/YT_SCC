@@ -171,7 +171,7 @@ class SearchForm extends Component {
     }
 
     handlePriceImport = () => {
-        window.open('/priceExamination')
+        window.open('/priceImport')
     }
 
     render() {
@@ -230,6 +230,9 @@ class SearchForm extends Component {
                                 )}
                         </FormItem>
                         <FormItem>
+                            <a onClick={this.handlePriceImport}>售价批量导入</a>
+                        </FormItem>
+                        <FormItem>
                             <Button
                                 type="primary"
                                 onClick={this.handleGetValue}
@@ -251,9 +254,6 @@ class SearchForm extends Component {
                             >
                                 创建
                             </Button>
-                        </FormItem>
-                        <FormItem>
-                            <a onClick={this.handlePriceImport}>售价批量导入</a>
                         </FormItem>
                     </Row>
                 </Form>
