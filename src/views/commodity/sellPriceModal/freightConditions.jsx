@@ -130,7 +130,10 @@ class FreightConditions extends Component {
     }
 
     render() {
-        const { prefixCls, form, getProductById, newDatas = {}, isAfter, isEdit, values = {}, isSub } = this.props;
+        const {
+            prefixCls, form, getProductById, newDatas = {},
+            isAfter, isEdit, values = {}, isSub
+        } = this.props;
         const { getFieldDecorator } = form;
         const { currentInside } = this.state;
         const data = newDatas;
@@ -140,7 +143,7 @@ class FreightConditions extends Component {
         return (
             <div className={`${prefixCls}-body-wrap`}>
                 {
-                    ((isEdit && !isAfter) || !isEdit) &&
+                    ((isEdit && isAfter) || !isEdit) &&
                     <Form
                         layout="inline"
                         onSubmit={this.handleSubmit}
@@ -153,7 +156,7 @@ class FreightConditions extends Component {
                                     <span>
                                         {getFieldDecorator('salesInsideNumber', {
                                             rules: [{ required: true, message: '请输入销售内装数' }],
-                                            initialValue: isEdit ? data.salesInsideNumber : values.salesInsideNumber
+                                            initialValue: isEdit ? sellPricesInReview.salesInsideNumber : values.salesInsideNumber
                                         })(
                                             <InputNumber
                                                 min={0}
@@ -180,13 +183,13 @@ class FreightConditions extends Component {
                                                     }
                                                 }
                                             ],
-                                            initialValue: data.minNumber
+                                            initialValue: isEdit ? sellPricesInReview.minNumber : values.minNumber
                                         })(
                                             <InputNumber
                                                 min={0}
                                                 disabled={isSub}
                                                 onChange={this.handleMinChange}
-                                                step={currentInside || data.salesInsideNumber}
+                                                step={currentInside || sellPricesInReview.salesInsideNumber}
                                             />
                                             )}
                                     </span>
@@ -195,7 +198,7 @@ class FreightConditions extends Component {
                                     <span>最大销售数量：</span>
                                     <span>
                                         {getFieldDecorator('maxNumber', {
-                                            initialValue: data.maxNumber
+                                            initialValue: isEdit ? sellPricesInReview.maxNumber : values.maxNumber
                                         })(
                                             <InputNumber
                                                 min={0}
@@ -211,7 +214,7 @@ class FreightConditions extends Component {
                                     <span className={`${prefixCls}-day-input`}>
                                         {getFieldDecorator('deliveryDay', {
                                             rules: [{ required: true, message: '请输入承诺发货时间!' }],
-                                            initialValue: isEdit ? data.deliveryDay : values.deliveryDay
+                                            initialValue: isEdit ? sellPricesInReview.deliveryDay : values.deliveryDay
                                         })(<InputNumber
                                             min={0}
                                             disabled={isSub}
@@ -229,14 +232,14 @@ class FreightConditions extends Component {
                                 <FormItem>
                                     <span>整箱销售单位:</span>
                                     <span className={`${prefixCls}-day-input`}>
-                                        {isEdit ? data.fullCaseUnit : values.fullCaseUnit || '-'}
+                                        {sellPricesInReview.fullCaseUnit || '-'}
                                     </span>
                                 </FormItem>
                                 {/* 采购模式 */}
                                 <FormItem className={`${prefixCls}-qy`}>
                                     <span className={`${prefixCls}-select`}> 采购模式 : </span>
                                     {getFieldDecorator('preHarvestPinStatus', {
-                                        initialValue: isEdit ? preHarvestPinStatusChange : '0'
+                                        initialValue: !isEdit ? preHarvestPinStatusChange : '0'
                                     })(
                                         <Select
                                             style={{ width: 90 }}
@@ -260,7 +263,7 @@ class FreightConditions extends Component {
                     </Form>
                 }
                 {
-                    (isEdit && isAfter && sellPricesInReview) &&
+                    (isEdit && !isAfter && newDatas) &&
                     <Form layout="inline">
                         <div className={`${prefixCls}-item last-freightConditions`}>
                             <div className={`${prefixCls}-item-title`}>货运条件</div>
@@ -270,28 +273,28 @@ class FreightConditions extends Component {
                                     <span className={
                                         sellPricesInReview.salesInsideNumber !== newDatas.salesInsideNumber ?
                                             'sell-modal-border' : null}
-                                    >{sellPricesInReview.salesInsideNumber}</span>
+                                    >{newDatas.salesInsideNumber}</span>
                                 </FormItem>
                                 <FormItem>
                                     <span>*起订量：</span>
                                     <span className={
                                         sellPricesInReview.minNumber !== newDatas.minNumber ?
                                             'sell-modal-border' : null}
-                                    >{sellPricesInReview.minNumber}</span>
+                                    >{newDatas.minNumber}</span>
                                 </FormItem>
                                 <FormItem>
                                     <span>最大销售数量：</span>
                                     <span className={
                                         sellPricesInReview.maxNumber !== newDatas.maxNumber ?
                                             'sell-modal-border' : null}
-                                    >{sellPricesInReview.maxNumber}</span>
+                                    >{newDatas.maxNumber}</span>
                                 </FormItem>
                                 <FormItem>
                                     <span>*承诺发货时间：下单后</span>
                                     <span className={
                                         sellPricesInReview.deliveryDay !== newDatas.deliveryDay ?
                                             'sell-modal-border' : null}
-                                    >{sellPricesInReview.deliveryDay}</span>
+                                    >{newDatas.deliveryDay}</span>
                                     天内发货
                                     </FormItem>
                                 <FormItem>

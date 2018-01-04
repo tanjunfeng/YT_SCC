@@ -49,8 +49,7 @@ class OnlyReadSteps extends Component {
 
     getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber, isReadOnly } = this.props;
-        const { sellPricesInReview = {} } = newDatas;
-        const { sellSectionPrices = [] } = sellPricesInReview;
+        const { sellSectionPrices = [] } = newDatas;
         const { auditStatus = 0 } = newDatas;
         return {
             isEdit,
@@ -82,17 +81,17 @@ class OnlyReadSteps extends Component {
                     <span className={
                         newDatas.sellPricesInReview.suggestPrice !== newDatas.suggestPrice ?
                             'sell-modal-border' : null}
-                    >{newDatas.sellPricesInReview.suggestPrice}</span>
+                    >{newDatas.suggestPrice}</span>
                     <span>商品采购价格：</span>
                     <span className={
                         newDatas.sellPricesInReview.purchasePrice !== newDatas.purchasePrice ?
                             'sell-modal-border' : null}
-                    >{newDatas.sellPricesInReview.purchasePrice || '-'}</span>
+                    >{newDatas.purchasePrice || '-'}</span>
                     <span className="edit-input">子公司:</span>
                     <span className={
-                        newDatas.sellPricesInReview.branchCompanyId !== newDatas.branchCompanyId ?
+                        newDatas.sellPricesInReview.branchCompanyId !== newDatas.sellPricesInReview.branchCompanyId ?
                             'sell-modal-border' : null}
-                    >{newDatas.sellPricesInReview.branchCompanyId} - {newDatas.sellPricesInReview.branchCompanyName}</span>
+                    >{newDatas.branchCompanyId} - {newDatas.branchCompanyName}</span>
                 </div>
             </div>
         )
