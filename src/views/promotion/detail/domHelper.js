@@ -112,13 +112,6 @@ const getRewardListConditionList = (purchaseConditionsRule) =>
                         </FormItem>
                     </Col>
                 </div>
-                {/* <div className="wd-317">
-                    <Col>
-                        <FormItem label="条件类型">
-                            {getConditionType(purchaseConditionsRule.condition)}
-                        </FormItem>
-                    </Col>
-                </div> */}
                 <div className="wd-297">
                     <Col>
                         <FormItem label="优惠方式">
