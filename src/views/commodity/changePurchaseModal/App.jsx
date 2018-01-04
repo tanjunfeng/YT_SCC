@@ -281,7 +281,7 @@ class ProdModal extends Component {
     }
 
     handleNewsPricChange = (newestPrice) => {
-        if (newestPrice) {
+        if (newestPrice && this.getFormData().purchasePrice) {
             const result = ((newestPrice - this.getFormData().purchasePrice) / this.getFormData().purchasePrice) * 100
             return result.toFixed(2)
         }
@@ -314,7 +314,7 @@ class ProdModal extends Component {
                 visible
                 className={isEdit ? prefixCls : 'creat-prod'}
                 onOk={this.handleOk}
-                width={'480px'}
+                width={isEdit ? '517px' : '480px'}
                 onCancel={this.handleCancel}
                 maskClosable={false}
             >
@@ -340,7 +340,7 @@ class ProdModal extends Component {
                                             <span className={`${prefixCls}-barcode-input`}>
                                                 {getFieldDecorator('purchasePrice', {
                                                     rules: [{ required: true, message: '请输入当前采购价!' }],
-                                                    initialValue: getProductByIds.purchasePrice
+                                                    initialValue: initValue.purchasePrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="当前采购价" />)}
                                             </span>
@@ -350,7 +350,7 @@ class ProdModal extends Component {
                                             <span className={`${prefixCls}-barcode-input`}>
                                                 {getFieldDecorator('newestPrice', {
                                                     rules: [{ required: true, message: '请输入采购价!' }],
-                                                    initialValue: getProductByIds.purchasePrice
+                                                    initialValue: initValue.purchasePrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="采购价" />)}
                                             </span>

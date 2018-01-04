@@ -36,7 +36,7 @@ class SellPriceModal extends Component {
             suggestPrice: null,
             branchCompanyId: null,
             branchCompanyName: null,
-            editIsContinue: true,
+            editIsContinue: false,
             cretFreConditObj: {},
             freCondit: {},
             sellSectionPrices: []
@@ -89,8 +89,8 @@ class SellPriceModal extends Component {
         const createData = {};
         const editData = {};
         Object.assign(createData, {
-            branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
-            branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
+            branchCompanyId: this.state.branchCompanyId || values.branchCompanyId,
+            branchCompanyName: this.state.branchCompanyName || values.branchCompanyName,
             suggestPrice: this.state.suggestPrice || values.suggestPrice,
             productId: values.id,
             sellSectionPrices: sellSectionPrices || values.sellSectionPrices,
@@ -105,7 +105,8 @@ class SellPriceModal extends Component {
                 suggestPrice: this.state.suggestPrice || suggestPrice,
                 productId: this.newDatas.productId,
                 auditStatus: this.newDatas.auditStatus,
-                sellSectionPrices: sellSectionPrices || newDatas.sellSectionPrices,
+                sellSectionPrices: sellSectionPrices.length === 0 ?
+                    this.newDatas.sellSectionPrices : sellSectionPrices,
                 deliveryDay,
                 minNumber,
                 salesInsideNumber,
@@ -201,11 +202,41 @@ class SellPriceModal extends Component {
         })
     }
 
+    handlePushPriceSteps = () => {
+
+    }
+
     handleEditPriceChange = (prices, isContinue) => {
-        this.setState({
-            sellSectionPrices: prices || this.newDatas.sellSectionPrices,
-            editIsContinue: isContinue
-        })
+        const newArr = [];
+        const priceArrMore = [];
+        if (prices.length === 1) {
+            prices.map((item) => (
+                newArr.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.startNumber
+                })
+            ))
+            this.setState({
+                sellSectionPrices: newArr,
+                editIsContinue: isContinue
+            })
+        }
+        if (prices.length > 1) {
+            prices.map((item) => {
+                priceArrMore.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.startNumber
+                })
+            })
+            this.setState({
+                sellSectionPrices: priceArrMore,
+                editIsContinue: isContinue
+            })
+        }
     }
 
     handleCreatPriceChange = (prices, isContinue) => {
@@ -261,28 +292,34 @@ class SellPriceModal extends Component {
                 title={isEdit ? '编辑销售价格' : '新增销售价格'}
                 visible
                 className={isEdit ? prefixCls : 'createCls'}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
                 maskClosable={false}
                 confirmLoading={this.isDisabled}
-                footer={[
-                    <Button key="back" onClick={this.handleCancel}>取消</Button>,
-                    <Button
-                        key="submit"
-                        type="primary"
-                        disabled={this.newDatas.auditStatus === 1}
-                        onClick={this.handleOk}
-                    >确定</Button>,
-                ]}
             >
                 {
                     isEdit &&
                     <div>
-                        <span className="changeBefore">修改前:</span>
-                        <span className="changeAfter">修改后:</span>
+                        <span className="changeAfter">已提交销售关系:</span>
+                        <span className="changeBefore">当前销售关系:</span>
                     </div>
                 }
                 {
                     isEdit ?
                         <div>
+                            <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
+                                <FreightConditions
+                                    isEdit={isEdit}
+                                    isAfter={!isAfter}
+                                    isSub={this.newDatas.auditStatus === 1}
+                                    newDatas={this.newDatas}
+                                />
+                                <OnlyReadSteps
+                                    newDatas={this.referenceDatas}
+                                    isReadOnly={isReadOnly}
+                                    startNumber={freCondit.minNumber || this.newDatas.minNumber}
+                                />
+                            </div >
                             <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
                                 <div>
                                     <FreightConditions
@@ -302,19 +339,6 @@ class SellPriceModal extends Component {
                                     />
                                 </div>
                             </div>
-                            <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
-                                <FreightConditions
-                                    isEdit={isEdit}
-                                    isAfter={!isAfter}
-                                    isSub={this.newDatas.auditStatus === 1}
-                                    newDatas={this.newDatas}
-                                />
-                                <OnlyReadSteps
-                                    newDatas={this.referenceDatas}
-                                    isReadOnly={isReadOnly}
-                                    startNumber={freCondit.minNumber || this.newDatas.minNumber}
-                                />
-                            </div >
                             <Row className="edit-state-list">
                                 <Col>
                                     <span>提交人：</span>

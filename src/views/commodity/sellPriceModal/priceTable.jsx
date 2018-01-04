@@ -52,7 +52,7 @@ class PriceTable extends PureComponent {
         const { startNumber } = nextProps.value;
         const prices = [...this.state.prices];
         if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
-            prices[0].startNumber = startNumber;
+            prices[0].startNumber = startNumber === undefined ? 0 : startNumber;
             this.setState({ prices });
             this.notify(prices);
         }
@@ -62,8 +62,8 @@ class PriceTable extends PureComponent {
      * 只读表格去除操作列，可编辑表格显示操作列
      */
     getColumns = () => {
-        const { readOnly } = this.props.value;
-        return readOnly
+        const { isReadOnly } = this.props.value;
+        return isReadOnly
             ? columns.filter((c, index) => index < 4)
             : columns
     }
@@ -217,7 +217,6 @@ class PriceTable extends PureComponent {
 
     renderOptions = (text, record, index) => {
         const { editable } = record;
-        const { isSub } = this.props.value;
         return (
             <div className="editable-row-operations">
                 {
@@ -234,13 +233,13 @@ class PriceTable extends PureComponent {
                         </span>
                         :
                         <span>
-                            <a disabled={isSub} onClick={() => this.edit(record.id)}>编辑</a>
+                            <a onClick={() => this.edit(record.id)}>编辑</a>
                             &nbsp;
                             {index > 0 ? <Popconfirm
                                 title="确定删除?"
                                 onConfirm={() => this.delete(record.id)}
                             >
-                                <a disabled={isSub}>删除</a>
+                                <a>删除</a>
                             </Popconfirm> : null}
                         </span>
                 }
@@ -263,12 +262,12 @@ class PriceTable extends PureComponent {
 
     render() {
         const { prices } = this.state;
-        const { isReadOnly, isSub } = this.props.value;
+        const { isReadOnly } = this.props.value;
         return (
             <div>
                 {
                     !isReadOnly &&
-                    <Button disabled={isSub} onClick={this.handleAdd}>添加阶梯价格</Button>
+                    <Button onClick={this.handleAdd}>添加阶梯价格</Button>
                 }
                 <Table
                     rowKey="id"
@@ -284,7 +283,6 @@ class PriceTable extends PureComponent {
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     onChange: PropTypes.func,
-    isSub: PropTypes.bool,
     isReadOnly: PropTypes.bool,
     costPrice: PropTypes.number
 };
