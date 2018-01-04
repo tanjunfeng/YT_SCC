@@ -165,6 +165,18 @@ class SaleCard extends Component {
 
     renderCard = (datas) => {
         const { prefixCls, minUnit, getProductById } = this.props;
+        const statusPrice = (status) => {
+            switch (status) {
+                case 1:
+                    return '已提交';
+                case 2:
+                    return '已审核';
+                case 3:
+                    return '已拒绝';
+                default:
+                    return '-';
+            }
+        }
         return datas.map((item) => (
             <div
                 key={item.id}
@@ -256,7 +268,7 @@ class SaleCard extends Component {
                         </p>
                         <p>
                             <span>最新售价状态 : </span>
-                            <span><i className={`new-price-state-${item.state}`} />已提交</span>
+                            <span><i className={`new-price-state-${item.status}`} />{statusPrice(item.status)}</span>
                         </p>
                     </div>
                     <div

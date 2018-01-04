@@ -49,7 +49,7 @@ class EditSteps extends Component {
             list: prices,
             sellPricesInReview,
             startNumber,
-            readOnly: false,
+            isReadOnly: isSub,
             auditStatus
         };
     }
@@ -141,6 +141,7 @@ EditSteps.propTypes = {
     values: PropTypes.objectOf(PropTypes.any),
     startNumber: PropTypes.number,
     isEdit: PropTypes.bool,
+    isSub: PropTypes.bool,
     onEditChange: PropTypes.func,
     onCreatPriceChange: PropTypes.func,
     onEditPriceChange: PropTypes.func,

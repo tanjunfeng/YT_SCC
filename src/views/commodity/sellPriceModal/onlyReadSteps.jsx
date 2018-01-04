@@ -48,13 +48,13 @@ class OnlyReadSteps extends Component {
     }
 
     getEditableTableValues = () => {
-        const { isEdit, newDatas, startNumber, isReadOnly } = this.props;
-        const { sellSectionPrices = [] } = newDatas;
-        const sellSectionPricesObj = { sellSectionPrices };
+        const { isEdit, newDatas = {}, startNumber, isReadOnly } = this.props;
+        const { sellPricesInReview = {} } = newDatas;
+        const { sellSectionPrices = [] } = sellPricesInReview;
         const { auditStatus = 0 } = newDatas;
         return {
             isEdit,
-            list: sellSectionPricesObj.sellSectionPrices,
+            list: sellSectionPrices,
             startNumber,
             data: newDatas.sellSectionPrices,
             isReadOnly,
@@ -75,9 +75,6 @@ class OnlyReadSteps extends Component {
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
                         <Table dataSource={this.getEditableTableValues().list} columns={this.columns} pagination={false} />
-                        {/* <PriceTable
-                            value={this.getEditableTableValues()}
-                        /> */}
                     </FormItem>
                 </div>
                 <div className="read-only-footer">
