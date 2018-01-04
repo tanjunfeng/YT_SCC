@@ -94,9 +94,6 @@ class SellPriceModal extends Component {
             suggestPrice: this.state.suggestPrice || values.suggestPrice,
             productId: values.id,
             sellSectionPrices: sellSectionPrices || values.sellSectionPrices,
-            // deliveryDay,
-            // minNumber,
-            // salesInsideNumber,
             ...cretFreConditObj,
             ...freCondit
         })
@@ -249,7 +246,6 @@ class SellPriceModal extends Component {
     }
 
     handleonCretFreConditChange = (data) => {
-        console.log(data)
         this.setState({
             cretFreConditObj: data
         })
@@ -265,10 +261,17 @@ class SellPriceModal extends Component {
                 title={isEdit ? '编辑销售价格' : '新增销售价格'}
                 visible
                 className={isEdit ? prefixCls : 'createCls'}
-                onOk={this.handleOk}
-                onCancel={this.handleCancel}
                 maskClosable={false}
                 confirmLoading={this.isDisabled}
+                footer={[
+                    <Button key="back" onClick={this.handleCancel}>取消</Button>,
+                    <Button
+                        key="submit"
+                        type="primary"
+                        disabled={this.newDatas.auditStatus === 1}
+                        onClick={this.handleOk}
+                    >确定</Button>,
+                ]}
             >
                 {
                     isEdit &&
