@@ -160,6 +160,10 @@ class PromotionCreate extends PureComponent {
         );
     }
 
+    goBack = () => {
+        this.props.history.push('/promotion');
+    }
+
     render() {
         const { form } = this.props;
         const { getFieldDecorator, getFieldValue } = form;
@@ -371,6 +375,11 @@ class PromotionCreate extends PureComponent {
                         htmlType="submit"
                         disabled={submitDisabled}
                     >保存</Button>
+                    <Button
+                        size="default"
+                        className='cancelBtn'
+                        onClick={this.goBack}
+                    >取消</Button>
                 </Row>
             </Form>
         );
