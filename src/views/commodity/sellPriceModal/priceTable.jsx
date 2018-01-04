@@ -52,7 +52,7 @@ class PriceTable extends PureComponent {
         const { startNumber } = nextProps.value;
         const prices = [...this.state.prices];
         if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
-            prices[0].startNumber = startNumber;
+            prices[0].startNumber = startNumber === undefined ? 0 : startNumber;
             this.setState({ prices });
             this.notify(prices);
         }
@@ -62,8 +62,8 @@ class PriceTable extends PureComponent {
      * 只读表格去除操作列，可编辑表格显示操作列
      */
     getColumns = () => {
-        const { readOnly } = this.props.value;
-        return readOnly
+        const { isReadOnly } = this.props.value;
+        return isReadOnly
             ? columns.filter((c, index) => index < 4)
             : columns
     }
