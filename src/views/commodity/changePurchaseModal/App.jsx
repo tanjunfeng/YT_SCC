@@ -340,7 +340,7 @@ class ProdModal extends Component {
                                             <span className={`${prefixCls}-barcode-input`}>
                                                 {getFieldDecorator('purchasePrice', {
                                                     rules: [{ required: true, message: '请输入当前采购价!' }],
-                                                    initialValue: getProductByIds.purchasePrice
+                                                    initialValue: initValue.purchasePrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="当前采购价" />)}
                                             </span>
@@ -350,7 +350,7 @@ class ProdModal extends Component {
                                             <span className={`${prefixCls}-barcode-input`}>
                                                 {getFieldDecorator('newestPrice', {
                                                     rules: [{ required: true, message: '请输入采购价!' }],
-                                                    initialValue: getProductByIds.purchasePrice
+                                                    initialValue: initValue.purchasePrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="采购价" />)}
                                             </span>

@@ -134,6 +134,7 @@ class FreightConditions extends Component {
         const { getFieldDecorator } = form;
         const { currentInside } = this.state;
         const data = newDatas;
+        const { sellPricesInReview = {} } = data;
         const preHarvestPinStatusChange =
             (data.preHarvestPinStatus === 1 ? '1' : '0');
         return (
@@ -259,7 +260,7 @@ class FreightConditions extends Component {
                     </Form>
                 }
                 {
-                    (isEdit && isAfter) &&
+                    (isEdit && isAfter && sellPricesInReview) &&
                     <Form layout="inline">
                         <div className={`${prefixCls}-item last-freightConditions`}>
                             <div className={`${prefixCls}-item-title`}>货运条件</div>
@@ -267,30 +268,30 @@ class FreightConditions extends Component {
                                 <FormItem>
                                     <span>*销售内装数：</span>
                                     <span className={
-                                        newDatas.sellPricesInReview.salesInsideNumber !== newDatas.salesInsideNumber ?
+                                        sellPricesInReview.salesInsideNumber !== newDatas.salesInsideNumber ?
                                             'sell-modal-border' : null}
-                                    >{newDatas.sellPricesInReview.salesInsideNumber}</span>
+                                    >{sellPricesInReview.salesInsideNumber}</span>
                                 </FormItem>
                                 <FormItem>
                                     <span>*起订量：</span>
                                     <span className={
-                                        newDatas.sellPricesInReview.minNumber !== newDatas.minNumber ?
+                                        sellPricesInReview.minNumber !== newDatas.minNumber ?
                                             'sell-modal-border' : null}
-                                    >{newDatas.sellPricesInReview.minNumber}</span>
+                                    >{sellPricesInReview.minNumber}</span>
                                 </FormItem>
                                 <FormItem>
                                     <span>最大销售数量：</span>
                                     <span className={
-                                        newDatas.sellPricesInReview.maxNumber !== newDatas.maxNumber ?
+                                        sellPricesInReview.maxNumber !== newDatas.maxNumber ?
                                             'sell-modal-border' : null}
-                                    >{newDatas.sellPricesInReview.maxNumber}</span>
+                                    >{sellPricesInReview.maxNumber}</span>
                                 </FormItem>
                                 <FormItem>
                                     <span>*承诺发货时间：下单后</span>
                                     <span className={
-                                        newDatas.sellPricesInReview.deliveryDay !== newDatas.deliveryDay ?
+                                        sellPricesInReview.deliveryDay !== newDatas.deliveryDay ?
                                             'sell-modal-border' : null}
-                                    >{newDatas.sellPricesInReview.deliveryDay}</span>
+                                    >{sellPricesInReview.deliveryDay}</span>
                                     天内发货
                                     </FormItem>
                                 <FormItem>
