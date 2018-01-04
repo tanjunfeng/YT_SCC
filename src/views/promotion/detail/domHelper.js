@@ -112,17 +112,45 @@ const getRewardListConditionList = (purchaseConditionsRule) =>
                         </FormItem>
                     </Col>
                 </div>
-                <div className="wd-317">
+                {/* <div className="wd-317">
                     <Col>
                         <FormItem label="条件类型">
                             {getConditionType(purchaseConditionsRule.condition)}
+                        </FormItem>
+                    </Col>
+                </div> */}
+                <div className="wd-297">
+                    <Col>
+                        <FormItem label="优惠方式">
+                            {getPreferentialBuyRule(purchaseConditionsRule.rule)}
+                        </FormItem>
+                    </Col>
+                </div>
+            </Row>
+        </li>
+    </ul>)
+
+/**
+ * 每满
+ *
+ * promotionRule.eachConditionGiveOnce.giveRuleCondition
+ */
+const getEachConditionGivenOneList = (giveRuleCondition) =>
+    (<ul className="list-panel">
+        <li><h2>奖励列表</h2></li>
+        <li>
+            <Row>
+                <div className="wd-396">
+                    <Col>
+                        <FormItem label="购买类型">
+                            {getPurchaseType(giveRuleCondition)}
                         </FormItem>
                     </Col>
                 </div>
                 <div className="wd-297">
                     <Col>
                         <FormItem label="优惠方式">
-                            {getPreferentialBuyRule(purchaseConditionsRule.rule)}
+                            {getPreferentialBuyRule(giveRuleCondition.rule)}
                         </FormItem>
                     </Col>
                 </div>
@@ -228,6 +256,28 @@ export const getRewardList = (promotionRule) =>
         )}
         {getRewardListConditionList(
             promotionRule.rewardListRule.purchaseConditionsRule
+        )}
+    </div>)
+
+/**
+ * 每满 dom 拼接
+ *
+ * @param {*object} promotionRule
+ */
+export const getEachConditionGivenOne = (promotionRule) =>
+    (<div>
+        <Row type="flex" justify="start">
+            <Col>
+                <FormItem label="优惠种类">
+                    {promotionRuleStatus[promotionRule.ruleName]}
+                </FormItem>
+            </Col>
+        </Row>
+        {getPurchaseConditionList(
+            promotionRule.eachConditionGiveOnce.conditions
+        )}
+        {getEachConditionGivenOneList(
+            promotionRule.eachConditionGiveOnce.giveRuleCondition
         )}
     </div>)
 
