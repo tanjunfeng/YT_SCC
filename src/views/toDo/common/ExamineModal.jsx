@@ -23,6 +23,7 @@ class ExamineModal extends PureComponent {
         super(props);
         this.state = {
             confirmLoading: false,
+            isValidate: true
         }
     }
 
@@ -62,9 +63,21 @@ class ExamineModal extends PureComponent {
         this.props.form.resetFields();
     }
 
+    /**
+     * 根据拒绝还是通过，应用不同的校验方式
+     * @param {object} e 事件对象
+     */
+    handleChange = (e) => {
+        this.setState({
+            isValidate: e.target.value === 'reject',
+        }, () => {
+            this.props.form.validateFields(['comment'], { force: true });
+        });
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { confirmLoading } = this.state;
+        const { confirmLoading, isValidate } = this.state;
         const { visible } = this.props;
         // 样式配置
         const formItemLayout = {
@@ -90,7 +103,7 @@ class ExamineModal extends PureComponent {
                                 initialValue: 'reject',
                                 rules: [{ required: true, message: '此项必选' }],
                             })(
-                                <Radio.Group>
+                                <Radio.Group onChange={this.handleChange}>
                                     <Radio value="pass">通过</Radio>
                                     <Radio value="reject">拒绝</Radio>
                                 </Radio.Group>)}
@@ -99,14 +112,14 @@ class ExamineModal extends PureComponent {
                             {getFieldDecorator('comment', {
                                 rules: [
                                     {
-                                        required: true,
+                                        required: isValidate,
                                         message: '此项必填'
                                     }, {
-                                        min: 5,
-                                        message: '审批意见不少于5个字'
+                                        min: isValidate ? 5 : 0,
+                                        message: '审批意见不少于5个字符'
                                     }],
                             })(
-                                <TextArea rows={4} placeholder="请输入审批意见（不少于5个字）" />)}
+                                <TextArea rows={4} placeholder="请输入审批意见" />)}
                         </FormItem>
                     </Form>
                 </Modal>
