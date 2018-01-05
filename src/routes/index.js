@@ -701,6 +701,33 @@ const routes = [
                         />
                     </Switch>
                 )
+            },
+            {
+                path: '/wishAreaList',
+                parent: 'procurementMng',
+                key: 'xyzq',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/wishAreaList"
+                            exact
+                            render={() => (<Bundle load={WishAreaList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/wishAreaList/wishAreaDetail/:id"
+                            exact
+                            render={
+                                () => (
+                                    <Bundle load={WishAreaDetail}>
+                                        {(App) => <App />}
+                                    </Bundle>
+                                )
+                            }
+                        />
+                    </Switch>
+                )
             }
         ]
     },
