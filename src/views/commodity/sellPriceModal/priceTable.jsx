@@ -132,7 +132,6 @@ class PriceTable extends PureComponent {
             });
         }
         if (typeof onChange === 'function') {
-            console.log(this.isContinue(prices));
             onChange(prices, this.isContinue(prices));
         }
     }
