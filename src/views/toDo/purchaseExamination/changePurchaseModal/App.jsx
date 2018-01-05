@@ -68,10 +68,10 @@ class ProdModal extends Component {
             <Modal
                 title="采购价格"
                 visible
-                className="purchase-examination-modal"
+                className="purchase-examination-modal todo-see-modal"
                 onOk={this.handleCancel}
-                width={'480px'}
                 onCancel={this.handleCancel}
+                width={'480px'}
                 maskClosable={false}
             >
                 <div className={`${prefixCls}-body-wrap`}>
