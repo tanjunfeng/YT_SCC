@@ -85,45 +85,44 @@ class ExamineModal extends PureComponent {
                 span: 6
             },
             wrapperCol: {
-                span: 18
+                span: 16,
+                offset: 2
             },
         };
         return (
-            <div>
-                <Modal
-                    title="采购进价/售价审批"
-                    visible={visible}
-                    onOk={this.handleOk}
-                    confirmLoading={confirmLoading}
-                    onCancel={this.handleCancel}
-                >
-                    <Form layout="vertical">
-                        <FormItem label="审批" {...formItemLayout}>
-                            {getFieldDecorator('outcome', {
-                                initialValue: 'reject',
-                                rules: [{ required: true, message: '此项必选' }],
-                            })(
-                                <Radio.Group onChange={this.handleChange}>
-                                    <Radio value="pass">通过</Radio>
-                                    <Radio value="reject">拒绝</Radio>
-                                </Radio.Group>)}
-                        </FormItem>
-                        <FormItem label="审批意见" {...formItemLayout}>
-                            {getFieldDecorator('comment', {
-                                rules: [
-                                    {
-                                        required: isValidate,
-                                        message: '此项必填'
-                                    }, {
-                                        min: isValidate ? 5 : 0,
-                                        message: '审批意见不少于5个字符'
-                                    }],
-                            })(
-                                <TextArea rows={4} placeholder="请输入审批意见" />)}
-                        </FormItem>
-                    </Form>
-                </Modal>
-            </div>
+            <Modal
+                title="采购进价/售价审批"
+                visible={visible}
+                onOk={this.handleOk}
+                confirmLoading={confirmLoading}
+                onCancel={this.handleCancel}
+            >
+                <Form>
+                    <FormItem label="审批" {...formItemLayout}>
+                        {getFieldDecorator('outcome', {
+                            initialValue: 'reject',
+                            rules: [{ required: true, message: '此项必选' }],
+                        })(
+                            <Radio.Group onChange={this.handleChange}>
+                                <Radio value="pass">通过</Radio>
+                                <Radio value="reject">拒绝</Radio>
+                            </Radio.Group>)}
+                    </FormItem>
+                    <FormItem label="审批意见" {...formItemLayout}>
+                        {getFieldDecorator('comment', {
+                            rules: [
+                                {
+                                    required: isValidate,
+                                    message: '此项必填'
+                                }, {
+                                    min: isValidate ? 5 : 0,
+                                    message: '审批意见不少于5个字符'
+                                }],
+                        })(
+                            <TextArea rows={4} placeholder="请输入审批意见" />)}
+                    </FormItem>
+                </Form>
+            </Modal>
         );
     }
 }
