@@ -52,9 +52,10 @@ class SearchForm extends Component {
      */
     handleGetValue = () => {
         this.props.onSearch(Utils.removeInvalid({
+            branchCompanyId: this.props.form.getFieldValue('branchCompany').id,
             branchCompanyName: this.props.form.getFieldValue('branchCompany').name,
             status: this.chooseInitiate,
-            state: this.chooseLatest
+            auditStatus: this.chooseLatest,
         }))
     }
 
@@ -211,7 +212,7 @@ class SearchForm extends Component {
                         </FormItem>
                         {/* 是否启用 */}
                         <FormItem label="最新售价状态：">
-                            {getFieldDecorator('LatestPriceOptions', {
+                            {getFieldDecorator('auditStatus', {
                                 initialValue: '-1'
                             })(
                                 <Select
