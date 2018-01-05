@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, Form, message, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import {
 } from '../../../constant/searchParams';
 import {
@@ -327,8 +328,8 @@ class SellPriceModal extends Component {
                 {
                     isEdit &&
                     <div>
-                        <span className="changeBefore">当前销售关系:</span>
-                        <span className="changeAfter">已提交销售关系:</span>
+                        <span className="changeBefore">当前销售价格:</span>
+                        <span className="changeAfter">修改销售价格:</span>
                     </div>
                 }
                 {
@@ -375,7 +376,10 @@ class SellPriceModal extends Component {
                                 </Col>
                                 <Col>
                                     <span>审核人：</span>
-                                    <span>{this.newDatas.auditUserName || '-'}</span>
+                                    <span>
+                                        {this.newDatas.auditUserName || '-'}
+                                        {moment(parseInt(this.newDatas.auditTime, 10)).format('YYYY-MM-DD HH:mm:ss') || '-'}
+                                    </span>
                                 </Col>
                                 <Col>
                                     <span>审核状态：</span>
