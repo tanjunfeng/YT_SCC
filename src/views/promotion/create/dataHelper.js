@@ -444,6 +444,10 @@ const forbidden = (state, values) => {
             message.error('请选择商品');
             return true;
         }
+        if (category === 'EACHCONDITIONGIVEONCE' && eachConditionGivenOne === 'ALL') {
+            message.error('请选择奖励类型');
+            return true;
+        }
     }
     return false;
 }

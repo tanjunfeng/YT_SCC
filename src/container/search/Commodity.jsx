@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
+import Utils from '../../util/util';
 import './SearchMind.scss';
 
 @connect(() => ({}), dispatch => bindActionCreators({
@@ -31,14 +32,23 @@ class Commodity extends PureComponent {
      */
     handleClear = () => {
         this.productSearchMind.reset();
-        this.props.onChange({ productId: '', saleName: '' });
+        this.props.onChange({ productId: '', productName: '' });
     }
 
     /**
      * 值清单
      */
-    handleChoose = ({ record }) => {
-        this.props.onChange(record);
+    handleChoose = (val) => {
+        this.props.onChange(val);
+    }
+
+    query = (params) => {
+        const conditions = {
+            teamText: params.value,
+            pageNum: params.pagination.current || 1,
+            pageSize: params.pagination.pageSize
+        };
+        return this.props.pubFetchValueList(Utils.removeInvalid(conditions), this.props.api);
     }
 
     render() {
@@ -46,31 +56,25 @@ class Commodity extends PureComponent {
             <SearchMind
                 compKey="productId"
                 ref={ref => { this.productSearchMind = ref }}
-                fetch={(params) =>
-                    this.props.pubFetchValueList({
-                        teamText: params.value,
-                        pageNum: params.pagination.current || 1,
-                        pageSize: params.pagination.pageSize
-                    }, 'queryProductForSelect')
-                }
+                fetch={this.query}
                 disabled={this.props.disabled}
                 defaultValue={this.props.initialValue}
                 rowKey="productId"
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
                 renderChoosedInputRaw={(row) => (
-                    <div>{row.saleName}</div>
+                    <div>{row.productName}</div>
                 )}
                 pageSize={6}
                 columns={[
                     {
-                        title: '商品ID',
+                        title: '商品编码',
                         dataIndex: 'productCode',
-                        width: 180,
+                        width: 70,
                     }, {
                         title: '商品名字',
-                        dataIndex: 'saleName',
-                        width: 200,
+                        dataIndex: 'productName',
+                        width: 140,
                     }
                 ]}
             />
