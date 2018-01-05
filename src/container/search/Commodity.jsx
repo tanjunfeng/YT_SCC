@@ -65,7 +65,7 @@ class Commodity extends PureComponent {
                 columns={[
                     {
                         title: '商品ID',
-                        dataIndex: 'productId',
+                        dataIndex: 'productCode',
                         width: 180,
                     }, {
                         title: '商品名字',
