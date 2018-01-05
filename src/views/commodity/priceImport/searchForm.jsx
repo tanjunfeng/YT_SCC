@@ -33,11 +33,6 @@ class SearchForm extends PureComponent {
         this.selectMap = this.selectMap.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        const nextImportsId = nextProps.form.getFieldValue('importsId')
-        this.props.isCreateChange(nextImportsId)
-    }
-
     /**
      * 获取表单数据
      */
@@ -152,6 +147,15 @@ class SearchForm extends PureComponent {
         this.props.getCreateChange();
     }
 
+    /**
+     * 判断创建变价单按钮是否可用
+     * @param {object} e 事件对象
+     */
+    ImportsIdChange = (e) => {
+        const value = e.target.value
+        this.props.isCreateChange(value)
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const props = {
@@ -180,7 +184,7 @@ class SearchForm extends PureComponent {
                     <Col>
                         <FormItem label="上传ID">
                             {getFieldDecorator('importsId')(
-                                <Input size="default" placeholder="请输入上传ID" />
+                                <Input size="default" placeholder="请输入上传ID" onChange={this.ImportsIdChange} />
                             )}
                         </FormItem>
                     </Col>
