@@ -258,6 +258,11 @@ export const priceChangeColumns = [
         title: '操作时间',
         dataIndex: 'createTime',
         key: 'createTime',
+        render: (text) => (
+            <span>
+                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+            </span>
+        )
     },
     {
         title: '当前价格',

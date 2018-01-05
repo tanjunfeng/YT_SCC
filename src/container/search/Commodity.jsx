@@ -64,8 +64,8 @@ class Commodity extends PureComponent {
                 pageSize={6}
                 columns={[
                     {
-                        title: '商品ID',
-                        dataIndex: 'productId',
+                        title: '商品编码',
+                        dataIndex: 'productCode',
                         width: 180,
                     }, {
                         title: '商品名字',

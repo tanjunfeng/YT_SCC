@@ -43,9 +43,13 @@ export const getRulesColumn = (form, licence, type = '') => {
                 rules: [{ required: true, message: '请选择优惠方式' }]
             })(<Select size="default" className="wd-90">
                 <Option key={-1} value="">- 请选择 -</Option>
-                <Option key={0} value="PERCENTAGE">折扣百分比</Option>
-                <Option key={1} value="DISCOUNTAMOUNT">折扣金额</Option>
-                {type === 'PRODUCT' ?
+                {licence !== 'eachConditionGivenOne' &&
+                    <Option key={0} value="PERCENTAGE">折扣百分比</Option>
+                }
+                {licence !== 'eachConditionGivenOne' &&
+                    <Option key={1} value="DISCOUNTAMOUNT">折扣金额</Option>
+                }
+                {type === 'PRODUCT' && licence !== 'eachConditionGivenOne' ?
                     <Option key={'FIXEDPRICE'} value="FIXEDPRICE">
                         固定单价
                     </Option> : null}
