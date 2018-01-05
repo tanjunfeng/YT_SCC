@@ -52,9 +52,10 @@ class SearchForm extends Component {
      */
     handleGetValue = () => {
         this.props.onSearch(Utils.removeInvalid({
+            branchCompanyId: this.props.form.getFieldValue('branchCompany').id,
             branchCompanyName: this.props.form.getFieldValue('branchCompany').name,
             status: this.chooseInitiate,
-            state: this.chooseLatest
+            auditStatus: this.chooseLatest,
         }))
     }
 
@@ -171,7 +172,7 @@ class SearchForm extends Component {
     }
 
     handlePriceImport = () => {
-        window.open('/priceExamination')
+        window.open('/priceImport')
     }
 
     render() {
@@ -211,7 +212,7 @@ class SearchForm extends Component {
                         </FormItem>
                         {/* 是否启用 */}
                         <FormItem label="最新售价状态：">
-                            {getFieldDecorator('LatestPriceOptions', {
+                            {getFieldDecorator('auditStatus', {
                                 initialValue: '-1'
                             })(
                                 <Select
@@ -228,6 +229,9 @@ class SearchForm extends Component {
                                     }
                                 </Select>
                                 )}
+                        </FormItem>
+                        <FormItem>
+                            <a onClick={this.handlePriceImport}>售价批量导入</a>
                         </FormItem>
                         <FormItem>
                             <Button
@@ -251,9 +255,6 @@ class SearchForm extends Component {
                             >
                                 创建
                             </Button>
-                        </FormItem>
-                        <FormItem>
-                            <a onClick={this.handlePriceImport}>售价批量导入</a>
                         </FormItem>
                     </Row>
                 </Form>

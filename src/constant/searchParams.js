@@ -326,12 +326,12 @@ export const preHarvestPinStatusOption = {
 
 // 采购退货
 export const supportReturnOption = {
-    defaultValue: 0,
+    defaultValue: '0',
     data: [{
-        key: 0,
+        key: '0',
         value: '否'
     }, {
-        key: 1,
+        key: '1',
         value: '是'
     }]
 }

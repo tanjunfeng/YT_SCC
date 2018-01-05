@@ -37,11 +37,10 @@ class SellPriceModal extends Component {
             <Modal
                 title="销售价格"
                 visible
-                className="sell-examination-modal"
+                className="sell-examination-modal todo-see-modal"
                 onOk={this.handleCancel}
                 onCancel={this.handleCancel}
                 maskClosable={false}
-                confirmLoading={this.isDisabled}
             >
                 <div>
                     <span className="changeBefore">修改前:</span>
@@ -84,7 +83,7 @@ class SellPriceModal extends Component {
                         <Col>
                             <span>售价状态：</span>
                             <span>
-                                <i className={`new-price-state-${newDatas.auditStatus}`} />
+                                <i className={`new-price-state new-price-state-${newDatas.auditStatus}`} />
                                 {this.catchAuditstate() || '-'}
                             </span>
                         </Col>

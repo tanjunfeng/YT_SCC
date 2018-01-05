@@ -472,8 +472,8 @@ class BasicInfo extends PureComponent {
             : moment().format('YYYY-MM-DD')
 
         // 供应商
-        const spDefaultValue = state.spId
-            ? `${state.spId}-${state.spName}`
+        const spDefaultValue = state.spNo
+            ? `${state.spNo}-${state.spName}`
             : ''
 
         // 供应商地点值清单回显数据

@@ -48,13 +48,12 @@ class OnlyReadSteps extends Component {
     }
 
     getEditableTableValues = () => {
-        const { isEdit, newDatas, startNumber, isReadOnly } = this.props;
+        const { isEdit, newDatas = {}, startNumber, isReadOnly } = this.props;
         const { sellSectionPrices = [] } = newDatas;
-        const sellSectionPricesObj = { sellSectionPrices };
         const { auditStatus = 0 } = newDatas;
         return {
             isEdit,
-            list: sellSectionPricesObj.sellSectionPrices,
+            list: sellSectionPrices,
             startNumber,
             data: newDatas.sellSectionPrices,
             isReadOnly,
@@ -75,9 +74,6 @@ class OnlyReadSteps extends Component {
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
                         <Table dataSource={this.getEditableTableValues().list} columns={this.columns} pagination={false} />
-                        {/* <PriceTable
-                            value={this.getEditableTableValues()}
-                        /> */}
                     </FormItem>
                 </div>
                 <div className="read-only-footer">
@@ -85,17 +81,17 @@ class OnlyReadSteps extends Component {
                     <span className={
                         newDatas.sellPricesInReview.suggestPrice !== newDatas.suggestPrice ?
                             'sell-modal-border' : null}
-                    >{newDatas.sellPricesInReview.suggestPrice}</span>
+                    >{newDatas.suggestPrice}</span>
                     <span>商品采购价格：</span>
                     <span className={
                         newDatas.sellPricesInReview.purchasePrice !== newDatas.purchasePrice ?
                             'sell-modal-border' : null}
-                    >{newDatas.sellPricesInReview.purchasePrice || '-'}</span>
+                    >{newDatas.purchasePrice || '-'}</span>
                     <span className="edit-input">子公司:</span>
                     <span className={
-                        newDatas.sellPricesInReview.branchCompanyId !== newDatas.branchCompanyId ?
+                        newDatas.sellPricesInReview.branchCompanyId !== newDatas.sellPricesInReview.branchCompanyId ?
                             'sell-modal-border' : null}
-                    >{newDatas.sellPricesInReview.branchCompanyId} - {newDatas.sellPricesInReview.branchCompanyName}</span>
+                    >{newDatas.branchCompanyId} - {newDatas.branchCompanyName}</span>
                 </div>
             </div>
         )

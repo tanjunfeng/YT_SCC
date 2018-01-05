@@ -332,11 +332,13 @@ export const purchaseListColumns = [
         title: '变更日期',
         dataIndex: 'modifyTime',
         key: 'modifyTime',
-        render: (text) => (
-            <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
-            </span>
-        )
+        render: (text) => {
+            return text ?
+                <span>
+                    {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                </span>
+                : null
+        }
     },
     {
         title: '当前节点',

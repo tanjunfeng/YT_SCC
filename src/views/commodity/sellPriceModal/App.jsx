@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, message, Select, Button, Input, Row, Col } from 'antd';
+import { Modal, Form, message, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-    pubFetchValueList
-} from '../../../actions/pub';
-import { productAddPriceVisible, toAddSellPrice } from '../../../actions/producthome';
-import { fetchAddProdPurchase } from '../../../actions';
+import moment from 'moment';
 import {
 } from '../../../constant/searchParams';
 import {
@@ -36,7 +32,7 @@ class SellPriceModal extends Component {
             suggestPrice: null,
             branchCompanyId: null,
             branchCompanyName: null,
-            editIsContinue: true,
+            editIsContinue: false,
             cretFreConditObj: {},
             freCondit: {},
             sellSectionPrices: []
@@ -81,16 +77,23 @@ class SellPriceModal extends Component {
         })
     }
 
+    /**
+     * 模态框点击确定按钮时，进行逐行校验，（必输项及是否合规项）
+     */
     handleOk = () => {
         const { datas, isEdit, values = {} } = this.props;
         const { validateFields } = this.props.form;
-        const { branchCompanyId, branchCompanyName, cretFreConditObj, freCondit, editIsContinue, sellSectionPrices } = this.state;
+        const {
+            branchCompanyId, branchCompanyName, cretFreConditObj,
+            freCondit, editIsContinue, sellSectionPrices
+        } = this.state;
         const newDatas = datas.data;
         const createData = {};
         const editData = {};
+        const noChangePrices = [];
         Object.assign(createData, {
-            branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
-            branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
+            branchCompanyId: this.state.branchCompanyId || values.branchCompanyId,
+            branchCompanyName: this.state.branchCompanyName || values.branchCompanyName,
             suggestPrice: this.state.suggestPrice || values.suggestPrice,
             productId: values.id,
             sellSectionPrices: sellSectionPrices || values.sellSectionPrices,
@@ -99,13 +102,21 @@ class SellPriceModal extends Component {
         })
         if (isEdit) {
             const { deliveryDay, minNumber, salesInsideNumber, suggestPrice } = newDatas;
+            this.newDatas.sellPricesInReview.sellSectionPrices.map((item) => (
+                noChangePrices.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.percentage
+                })
+            ))
             Object.assign(editData, {
                 branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
                 branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
                 suggestPrice: this.state.suggestPrice || suggestPrice,
                 productId: this.newDatas.productId,
                 auditStatus: this.newDatas.auditStatus,
-                sellSectionPrices: sellSectionPrices || newDatas.sellSectionPrices,
+                sellSectionPrices: sellSectionPrices.length === 0 ? noChangePrices : sellSectionPrices,
                 deliveryDay,
                 minNumber,
                 salesInsideNumber,
@@ -126,7 +137,7 @@ class SellPriceModal extends Component {
                 message.error('请输入最小起订量！');
                 return null;
             }
-            if (!editIsContinue) {
+            if (editIsContinue) {
                 message.error('阶梯价格不连续!');
                 return null;
             }
@@ -195,19 +206,59 @@ class SellPriceModal extends Component {
         }
     }
 
+    /**
+     * 建议零售价回传值
+     * @param {*} num number
+     */
     handleEditSteps = (num) => {
         this.setState({
             suggestPrice: num
         })
     }
 
+    /**
+     * 编辑阶梯价格回传值
+     * @param {*} prices list
+     * @param {*} isContinue bool
+     */
     handleEditPriceChange = (prices, isContinue) => {
-        this.setState({
-            sellSectionPrices: prices || this.newDatas.sellSectionPrices,
-            editIsContinue: isContinue
-        })
+        const newArr = [];
+        const priceArrMore = [];
+        if (prices.length === 1) {
+            prices.map((item) => (
+                newArr.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.percentage
+                })
+            ))
+            this.setState({
+                sellSectionPrices: newArr,
+                editIsContinue: isContinue
+            })
+        }
+        if (prices.length > 1) {
+            prices.map((item) => {
+                priceArrMore.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.percentage
+                })
+            })
+            this.setState({
+                sellSectionPrices: priceArrMore,
+                editIsContinue: isContinue
+            })
+        }
     }
 
+    /**
+     * 新建阶梯价格回传值
+     * @param {*} prices list
+     * @param {*} isContinue bool
+     */
     handleCreatPriceChange = (prices, isContinue) => {
         const newArr = [];
         const priceArrMore = [];
@@ -223,8 +274,7 @@ class SellPriceModal extends Component {
                 sellSectionPrices: newArr,
                 editIsContinue: isContinue
             })
-        }
-        if (prices.length > 1) {
+        } else if (prices.length > 1) {
             prices.map((item) => {
                 priceArrMore.push({
                     endNumber: item.endNumber,
@@ -239,12 +289,20 @@ class SellPriceModal extends Component {
         }
     }
 
+    /**
+     * 编辑货运条件头部form表单回传值
+     * @param {*} data Object
+     */
     handleOnFreConditChange = (data) => {
         this.setState({
             freCondit: data
         })
     }
 
+    /**
+     * 创建货运条件头部form表单回传值
+     * @param {*} data Object
+     */
     handleonCretFreConditChange = (data) => {
         this.setState({
             cretFreConditObj: data
@@ -261,23 +319,17 @@ class SellPriceModal extends Component {
                 title={isEdit ? '编辑销售价格' : '新增销售价格'}
                 visible
                 className={isEdit ? prefixCls : 'createCls'}
-                maskClosable={false}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                maskClosable
+                destroyOnClose
                 confirmLoading={this.isDisabled}
-                footer={[
-                    <Button key="back" onClick={this.handleCancel}>取消</Button>,
-                    <Button
-                        key="submit"
-                        type="primary"
-                        disabled={this.newDatas.auditStatus === 1}
-                        onClick={this.handleOk}
-                    >确定</Button>,
-                ]}
             >
                 {
                     isEdit &&
                     <div>
-                        <span className="changeBefore">修改前:</span>
-                        <span className="changeAfter">修改后:</span>
+                        <span className="changeBefore">当前销售价格:</span>
+                        <span className="changeAfter">修改销售价格:</span>
                     </div>
                 }
                 {
@@ -290,17 +342,13 @@ class SellPriceModal extends Component {
                                         isAfter={isAfter}
                                         isSub={this.newDatas.auditStatus === 1}
                                         newDatas={this.newDatas}
-                                        onFreConditChange={this.handleOnFreConditChange}
-                                    />
-                                    <EditSteps
-                                        newDatas={this.newDatas}
-                                        isEdit={isEdit}
-                                        isSub={this.newDatas.auditStatus === 1}
-                                        startNumber={freCondit.minNumber || this.newDatas.minNumber}
-                                        onEditChange={this.handleEditSteps}
-                                        onEditPriceChange={this.handleEditPriceChange}
                                     />
                                 </div>
+                                <OnlyReadSteps
+                                    newDatas={this.referenceDatas}
+                                    isReadOnly={isReadOnly}
+                                    startNumber={freCondit.minNumber || this.newDatas.minNumber}
+                                />
                             </div>
                             <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
                                 <FreightConditions
@@ -308,11 +356,15 @@ class SellPriceModal extends Component {
                                     isAfter={!isAfter}
                                     isSub={this.newDatas.auditStatus === 1}
                                     newDatas={this.newDatas}
+                                    onFreConditChange={this.handleOnFreConditChange}
                                 />
-                                <OnlyReadSteps
-                                    newDatas={this.referenceDatas}
-                                    isReadOnly={isReadOnly}
+                                <EditSteps
+                                    newDatas={this.newDatas}
+                                    isEdit={isEdit}
+                                    isSub={this.newDatas.auditStatus === 1}
                                     startNumber={freCondit.minNumber || this.newDatas.minNumber}
+                                    onEditChange={this.handleEditSteps}
+                                    onEditPriceChange={this.handleEditPriceChange}
                                 />
                             </div >
                             <Row className="edit-state-list">
@@ -324,7 +376,10 @@ class SellPriceModal extends Component {
                                 </Col>
                                 <Col>
                                     <span>审核人：</span>
-                                    <span>{this.newDatas.auditUserName || '-'}</span>
+                                    <span>
+                                        {this.newDatas.auditUserName || '-'}
+                                        {moment(parseInt(this.newDatas.auditTime, 10)).format('YYYY-MM-DD HH:mm:ss') || '-'}
+                                    </span>
                                 </Col>
                                 <Col>
                                     <span>审核状态：</span>
@@ -364,8 +419,11 @@ class SellPriceModal extends Component {
 
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
+    productId: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
     handlePostAdd: PropTypes.func,
+    getCostPrice: PropTypes.func,
+    clearCostPrice: PropTypes.func,
     handleClose: PropTypes.func,
     datas: PropTypes.objectOf(PropTypes.any)
 };

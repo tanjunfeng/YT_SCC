@@ -33,13 +33,13 @@ function getNewData(old) {
 class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
-        const newData = getNewData(props.value.list)
-
+        const newData = getNewData(props.value.list);
         this.state = {
-            prices: newData
+            prices: newData,
+            canAdd: true // 是否可继续添加价格
         }
-
         this.cacheData = newData.map(item => ({ ...item }));
+        this.notify(newData);
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, 'startNumber', index)
         columns[1].render = (text, record) => this.renderColumnsNum(text, record, 'endNumber')
         columns[2].render = (text, record) => this.renderColumnsPrice(text, record, 'price')
@@ -52,7 +52,7 @@ class PriceTable extends PureComponent {
         const { startNumber } = nextProps.value;
         const prices = [...this.state.prices];
         if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
-            prices[0].startNumber = startNumber;
+            prices[0].startNumber = startNumber === undefined ? 0 : startNumber;
             this.setState({ prices });
             this.notify(prices);
         }
@@ -62,8 +62,8 @@ class PriceTable extends PureComponent {
      * 只读表格去除操作列，可编辑表格显示操作列
      */
     getColumns = () => {
-        const { readOnly } = this.props.value;
-        return readOnly
+        const { isReadOnly } = this.props.value;
+        return isReadOnly
             ? columns.filter((c, index) => index < 4)
             : columns
     }
@@ -79,8 +79,19 @@ class PriceTable extends PureComponent {
 
     /**
      * 起始数量比终止数量还大
+     * 价格为 -
      */
-    isPriceInvalid = price => (price.startNumber >= price.endNumber)
+    isPriceInvalid = price => {
+        let res = false;
+        if (!price) return false;
+        if (price.startNumber >= price.endNumber) {
+            res = true;
+        }
+        if (price.price === '-') {
+            res = true;
+        }
+        return res;
+    }
 
     /**
      * 价格区间是否连续
@@ -90,7 +101,8 @@ class PriceTable extends PureComponent {
      */
     isContinue = (prices) => {
         const len = prices.length;
-        if (this.isPriceInvalid(prices[len - 1])) {
+        const lastPrice = prices[len - 1];
+        if (this.isPriceInvalid(lastPrice)) {
             return false;
         }
         for (let i = 0; i < len - 1; i++) {
@@ -107,7 +119,18 @@ class PriceTable extends PureComponent {
     }
 
     notify = (prices) => {
-        const { onChange } = this.props;
+        const { onChange, value } = this.props;
+        const { MAXGOODS } = value;
+        const lastPrice = prices[prices.length - 1] || null;
+        if (lastPrice !== null && lastPrice.endNumber < MAXGOODS - 1) {
+            this.setState({
+                canAdd: true
+            });
+        } else {
+            this.setState({
+                canAdd: false
+            });
+        }
         if (typeof onChange === 'function') {
             onChange(prices, this.isContinue(prices));
         }
@@ -180,7 +203,7 @@ class PriceTable extends PureComponent {
                 rate
             });
         } else {
-            const { startNumber = 1, price = 100.00, rate } = this.props.value;
+            const { startNumber = 1, price = '-', rate } = this.props.value;
             prices.push({
                 id: String(new Date().getTime()),
                 startNumber,
@@ -217,7 +240,6 @@ class PriceTable extends PureComponent {
 
     renderOptions = (text, record, index) => {
         const { editable } = record;
-        const { isSub } = this.props.value;
         return (
             <div className="editable-row-operations">
                 {
@@ -234,13 +256,13 @@ class PriceTable extends PureComponent {
                         </span>
                         :
                         <span>
-                            <a disabled={isSub} onClick={() => this.edit(record.id)}>编辑</a>
+                            <a onClick={() => this.edit(record.id)}>编辑</a>
                             &nbsp;
                             {index > 0 ? <Popconfirm
                                 title="确定删除?"
                                 onConfirm={() => this.delete(record.id)}
                             >
-                                <a disabled={isSub}>删除</a>
+                                <a>删除</a>
                             </Popconfirm> : null}
                         </span>
                 }
@@ -253,22 +275,26 @@ class PriceTable extends PureComponent {
      */
     renderGrossProfit = (text, record) => {
         const { costPrice } = this.props;
-        if (costPrice < 0) {
+        const rate = (price - costPrice) * 100 / costPrice;
+        if (costPrice < 0 || isNaN(rate)) {
             return (<span className="red">-</span>);
         }
         const { price } = record;
-        const rate = (price - costPrice) * 100 / costPrice;
         return (<span className="red">{rate.toFixed(2)}%</span>);
     }
 
     render() {
-        const { prices } = this.state;
-        const { isReadOnly, isSub } = this.props.value;
+        const { prices, canAdd } = this.state;
+        const { isReadOnly } = this.props.value;
         return (
             <div>
                 {
-                    !isReadOnly &&
-                    <Button disabled={isSub} onClick={this.handleAdd}>添加阶梯价格</Button>
+                    !isReadOnly ?
+                        <Button
+                            onClick={this.handleAdd}
+                            disabled={!canAdd}
+                        >添加阶梯价格</Button>
+                        : null
                 }
                 <Table
                     rowKey="id"
@@ -284,7 +310,6 @@ class PriceTable extends PureComponent {
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     onChange: PropTypes.func,
-    isSub: PropTypes.bool,
     isReadOnly: PropTypes.bool,
     costPrice: PropTypes.number
 };

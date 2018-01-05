@@ -32,7 +32,8 @@ class EditSteps extends Component {
         super(props);
 
         const { isEdit = false, newDatas = {} } = props;
-        const { sellSectionPrices = [] } = newDatas;
+        const { sellPricesInReview = {} } = newDatas;
+        const { sellSectionPrices = [] } = sellPricesInReview;
 
         this.state = {
             prices: isEdit ? sellSectionPrices : []
@@ -42,14 +43,16 @@ class EditSteps extends Component {
     getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber, isSub } = this.props;
         const { sellPricesInReview = {}, auditStatus } = newDatas;
+        const { sellSectionPrices = [] } = sellPricesInReview;
         const { prices } = this.state;
         return {
+            MAXGOODS,
             isSub,
             isEdit,
             list: prices,
-            sellPricesInReview,
+            sellSectionPrices,
             startNumber,
-            readOnly: false,
+            isReadOnly: isSub,
             auditStatus
         };
     }
@@ -77,6 +80,7 @@ class EditSteps extends Component {
 
     render() {
         const { prefixCls, form, newDatas = {}, values = {}, isEdit, isSub } = this.props;
+        const { sellPricesInReview = {} } = newDatas;
         const { getFieldDecorator } = form;
         return (
             <div className={`${prefixCls}-item item-max-height`}>
@@ -100,7 +104,7 @@ class EditSteps extends Component {
                             <span className={`${prefixCls}-day-input`}>
                                 {getFieldDecorator('suggestPrice', {
                                     rules: [{ required: true, message: '请输入建议零售价(元)!' }],
-                                    initialValue: values.suggestPrice || newDatas.suggestPrice
+                                    initialValue: sellPricesInReview.suggestPrice || values.suggestPrice
                                 })(
                                     <InputNumber
                                         min={0}
@@ -114,18 +118,24 @@ class EditSteps extends Component {
                             </span>
                         </FormItem>
                         <FormItem label="商品采购价格：">
-                            <span>{newDatas.purchasePrice || '-'}</span>
+                            <span>{sellPricesInReview.purchasePrice || '-'}</span>
                         </FormItem>
                         {
                             isEdit ?
                                 <FormItem label="子公司：">
-                                    <span>{newDatas.branchCompanyId} - {newDatas.branchCompanyName}</span>
+                                    <span>{sellPricesInReview.branchCompanyId} - {sellPricesInReview.branchCompanyName}</span>
                                 </FormItem> :
                                 <FormItem label="子公司：">
                                     {getFieldDecorator('branchCompany', {
-                                        initialValue: { id: '', name: '' }
-                                    })(<BranchCompany onChange={this.handleCompanyChange} disabled={isSub} />)}
+                                        initialValue: { id: '', name: '' },
+                                    })(<BranchCompany
+                                        url="queryBranchCompanyInfo"
+                                        onChange={this.handleCompanyChange}
+                                        values={values}
+                                        disabled={isSub}
+                                    />)}
                                 </FormItem>
+
                         }
                     </Col>
                 </Row>
@@ -141,6 +151,7 @@ EditSteps.propTypes = {
     values: PropTypes.objectOf(PropTypes.any),
     startNumber: PropTypes.number,
     isEdit: PropTypes.bool,
+    isSub: PropTypes.bool,
     onEditChange: PropTypes.func,
     onCreatPriceChange: PropTypes.func,
     onEditPriceChange: PropTypes.func,

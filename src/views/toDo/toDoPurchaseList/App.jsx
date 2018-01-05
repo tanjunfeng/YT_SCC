@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-28 17:46:31
+ * @Last Modified time: 2018-01-04 11:13:17
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -565,21 +565,21 @@ class toDoPurchaseList extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.processMsgInfo;
         return (
-            <div className="search-box">
-                <Form layout="inline">
-                    <div className="">
-                        <Row gutter={56}>
-                            <Col span={8}>
+            <div className="to-do-purchase-list">
+                <Form>
+                    <div className="search-box">
+                        <Row>
+                            <Col>
                                 {/* 退货单号 */}
                                 <FormItem label="采购单号" >
                                     {getFieldDecorator('purchaseRefundNo', {})(<Input size="default" />)}
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
+                            <Col>
                                 {/* 采购单类型 */}
                                 <FormItem label="采购单类型">
                                     {getFieldDecorator('purchaseOrderType', {initialValue: poType.defaultValue })(
-                                        <Select style={{ width: '153px' }} size="default">
+                                        <Select>
                                             {
                                                 poType.data.map((item) => (
                                                     <Option key={item.key} value={item.key}>
@@ -590,11 +590,11 @@ class toDoPurchaseList extends PureComponent {
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
+                            <Col>
                                 {/* 流程状态 */}
                                 <FormItem label="流程状态">
                                     {getFieldDecorator('auditStatus', { initialValue: '进行中' })(
-                                        <Select style={{ width: '153px' }} size="default" onChange={this.statusChange}>
+                                        <Select onChange={this.statusChange}>
                                             {
                                                 auditStatusOption.data.map((item) => (
                                                     <Option key={item.key} value={item.key}>
@@ -605,71 +605,64 @@ class toDoPurchaseList extends PureComponent {
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
+                            <Col>
                                 {/* 供应商 */}
-                                <FormItem>
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">供应商</span>
-                                        {getFieldDecorator('supplier', {
-                                            initialValue: { spId: '', spNo: '', companyName: '' }
-                                        })(
-                                            <Supplier
-                                                onChange={this.handleSupplierChange}
-                                            />
-                                        )}
-                                    </div>
+                                <FormItem label="供应商" className="labelTop">
+                                    {getFieldDecorator('supplier', {
+                                        initialValue: { spId: '', spNo: '', companyName: '' }
+                                    })(
+                                        <Supplier
+                                            onChange={this.handleSupplierChange}
+                                        />
+                                    )}
                                 </FormItem>
                             </Col>
                             {/* 供应商地点 */}
-                            <Col className="gutter-row" span={8}>
-                                <FormItem>
-                                    <span className="sc-form-item-label" style={{ width: 70 }}>供应商地点</span>
-                                    <span className="search-box-data-pic">
-                                        <SearchMind
-                                            style={{ zIndex: 9, verticalAlign: 'bottom' }}
-                                            compKey="providerNo"
-                                            ref={ref => { this.joiningAdressMind = ref }}
-                                            disabled={this.props.form.getFieldValue('supplier').spId === ''}
-                                            fetch={(params) =>
-                                                this.props.pubFetchValueList(Utils.removeInvalid({
-                                                    condition: params.value,
-                                                    pageSize: params.pagination.pageSize,
-                                                    pageNum: params.pagination.current || 1
-                                                }), 'supplierAdrSearchBox').then((res) => {
-                                                    const dataArr = res.data.data || [];
-                                                    if (!dataArr || dataArr.length === 0) {
-                                                        message.warning('没有可用的数据');
-                                                    }
-                                                    return res;
-                                                })}
-                                            rowKey="providerNo"
-                                            onChoosed={this.handleSupplierAddressChoose}
-                                            onClear={this.handleSupplierAddressClear}
-                                            renderChoosedInputRaw={(res) => (
-                                                <div>{res.providerNo} - {res.providerName}</div>
-                                            )}
-                                            pageSize={6}
-                                            columns={[
-                                                {
-                                                    title: '供应商地点编码',
-                                                    dataIndex: 'providerNo',
-                                                    width: 98
-                                                }, {
-                                                    title: '供应商地点名称',
-                                                    dataIndex: 'providerName'
+                            <Col>
+                                <FormItem label="供应商地点" className="labelTop">
+                                    <SearchMind
+                                        compKey="providerNo"
+                                        ref={ref => { this.joiningAdressMind = ref }}
+                                        disabled={this.props.form.getFieldValue('supplier').spId === ''}
+                                        fetch={(params) =>
+                                            this.props.pubFetchValueList(Utils.removeInvalid({
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
+                                            }), 'supplierAdrSearchBox').then((res) => {
+                                                const dataArr = res.data.data || [];
+                                                if (!dataArr || dataArr.length === 0) {
+                                                    message.warning('没有可用的数据');
                                                 }
-                                            ]}
-                                        />
-                                    </span>
+                                                return res;
+                                            })}
+                                        rowKey="providerNo"
+                                        onChoosed={this.handleSupplierAddressChoose}
+                                        onClear={this.handleSupplierAddressClear}
+                                        renderChoosedInputRaw={(res) => (
+                                            <div>{res.providerNo} - {res.providerName}</div>
+                                        )}
+                                        pageSize={6}
+                                        columns={[
+                                            {
+                                                title: '供应商地点编码',
+                                                dataIndex: 'providerNo',
+                                                width: 98
+                                            }, {
+                                                title: '供应商地点名称',
+                                                dataIndex: 'providerName'
+                                            }
+                                        ]}
+                                    />
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
+                            <Col>
                                 {/* 地点类型 */}
                                 <FormItem label="地点类型">
                                     {getFieldDecorator('adrType', {
                                         initialValue: locType.defaultValue
                                     })(
-                                        <Select style={{ width: '153px' }} size="default" onChange={this.onLocTypeChange}>
+                                        <Select onChange={this.onLocTypeChange}>
                                             {locType.data.map((item) => (
                                                 <Option key={item.key} value={item.key}>
                                                     {item.value}
@@ -680,54 +673,46 @@ class toDoPurchaseList extends PureComponent {
                                 </FormItem>
                             </Col>
                             {/* 退货地点 */}
-                            <Col span={8}>
+                            <Col>
                                 {/* 地点 */}
-                                <FormItem>
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">地点</span>
-                                        <SearchMind
-                                            style={{ zIndex: 7 }}
-                                            compKey="search-mind-key1"
-                                            rowKey="id"
-                                            ref={ref => { this.poAddress = ref }}
-                                            fetch={this.handleGetAddressMap}
-                                            onChoosed={this.handleAddressChoose}
-                                            onClear={this.handleAddressClear}
-                                            disabled={this.state.locDisabled}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>
-                                                    {row[this.state.locationData.code]} -
-                                                    {row[this.state.locationData.name]}
-                                                </div>
-                                            )}
-                                            pageSize={3}
-                                            columns={[
-                                                {
-                                                    title: '编码',
-                                                    dataIndex: this.state.locationData.code,
-                                                    width: 80
-                                                }, {
-                                                    title: '名称',
-                                                    dataIndex: this.state.locationData.name
-                                                }
-                                            ]}
-                                        />
-                                    </div>
+                                <FormItem label="地点" className="labelTop">
+                                    <SearchMind
+                                        compKey="search-mind-key1"
+                                        rowKey="id"
+                                        ref={ref => { this.poAddress = ref }}
+                                        fetch={this.handleGetAddressMap}
+                                        onChoosed={this.handleAddressChoose}
+                                        onClear={this.handleAddressClear}
+                                        disabled={this.state.locDisabled}
+                                        renderChoosedInputRaw={(row) => (
+                                            <div>
+                                                {row[this.state.locationData.code]} -
+                                                {row[this.state.locationData.name]}
+                                            </div>
+                                        )}
+                                        pageSize={3}
+                                        columns={[
+                                            {
+                                                title: '编码',
+                                                dataIndex: this.state.locationData.code,
+                                                width: 80
+                                            }, {
+                                                title: '名称',
+                                                dataIndex: this.state.locationData.name
+                                            }
+                                        ]}
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right' }}>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleResetValue}>
-                                        重置
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" onClick={this.handleSearch} size="default">
-                                        搜索
-                                    </Button>
-                                </FormItem>
+                            <Col>
+                                <Button size="default" onClick={this.handleResetValue}>
+                                    重置
+                                </Button>
+                                <Button type="primary" onClick={this.handleSearch} size="default">
+                                    搜索
+                                </Button>
                             </Col>
                         </Row>
                     </div>
