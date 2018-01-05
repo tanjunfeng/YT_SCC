@@ -129,6 +129,13 @@ class FreightConditions extends Component {
         })
     }
 
+    preHarvestPinStatus = () => {
+        const { newDatas = {} } = this.props;
+        const { sellPricesInReview = {} } = newDatas;
+        const { preHarvestPinStatus = {} } = sellPricesInReview;
+        return preHarvestPinStatus === 1 ? '1' : '0';
+    }
+
     render() {
         const {
             prefixCls, form, getProductById, newDatas = {},
@@ -138,6 +145,7 @@ class FreightConditions extends Component {
         const { currentInside } = this.state;
         const data = newDatas;
         const { sellPricesInReview = {} } = data;
+        console.log(this.preHarvestPinStatus())
         const preHarvestPinStatusChange = (data.preHarvestPinStatus === 1 ? '1' : '0');
         return (
             <div className={`${prefixCls}-body-wrap`}>
@@ -247,7 +255,7 @@ class FreightConditions extends Component {
                                 <FormItem className={`${prefixCls}-qy`}>
                                     <span className={`${prefixCls}-select`}> 采购模式 : </span>
                                     {getFieldDecorator('preHarvestPinStatus', {
-                                        initialValue: !isEdit ? preHarvestPinStatusChange : '0'
+                                        initialValue: isEdit ? this.preHarvestPinStatus() : '0'
                                     })(
                                         <Select
                                             size="default"
