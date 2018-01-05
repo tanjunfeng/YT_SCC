@@ -26,38 +26,61 @@ const FormItem = Form.Item;
         pubFetchValueList,
     }, dispatch)
 )
+
 class EditSteps extends Component {
     constructor(props) {
         super(props);
+
+        const { isEdit = false, newDatas = {} } = props;
+        const { sellPricesInReview = {} } = newDatas;
+        const { sellSectionPrices = [] } = sellPricesInReview;
+
         this.state = {
-            prices: [...props.newDatas.sellSectionPrices]
+            prices: isEdit ? sellSectionPrices : []
         }
     }
 
     getEditableTableValues = () => {
-        const { isEdit, newDatas = {}, startNumber } = this.props;
-        const { sellSectionPrices = [] } = newDatas;
+        const { isEdit, newDatas = {}, startNumber, isSub } = this.props;
+        const { sellPricesInReview = {}, auditStatus } = newDatas;
+        const { sellSectionPrices = [] } = sellPricesInReview;
         const { prices } = this.state;
         return {
+            MAXGOODS,
+            isSub,
             isEdit,
             list: prices,
+            sellSectionPrices,
             startNumber,
-            readOnly: false
+            isReadOnly: isSub,
+            auditStatus
         };
     }
 
     handleNewestPriceChange = (num) => {
         const { isEdit } = this.props;
         const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
-        service(num);
+        service(num)
     }
 
     handlePricesChange = (prices, isContinue) => {
+        const { isEdit } = this.props;
+        const service = isEdit ? this.props.onEditPriceChange : this.props.onCreatPriceChange;
+        service(prices, isContinue)
         this.setState({ prices });
     }
 
+    handleCompanyChange = (record) => {
+        this.props.onCreateComChange(record);
+    }
+
+    handleValueFormat = (text) => {
+        return Number(text).toFixed(2);
+    }
+
     render() {
-        const { prefixCls, form, newDatas = {}, values = {}, isEdit } = this.props;
+        const { prefixCls, form, newDatas = {}, values = {}, isEdit, isSub } = this.props;
+        const { sellPricesInReview = {} } = newDatas;
         const { getFieldDecorator } = form;
         return (
             <div className={`${prefixCls}-item item-max-height`}>
@@ -79,32 +102,33 @@ class EditSteps extends Component {
                     <Col className="sell-prigce-edit-footer">
                         <FormItem label="建议零售价(元)：">
                             <span className={`${prefixCls}-day-input`}>
-                                {getFieldDecorator('newestPrice', {
+                                {getFieldDecorator('suggestPrice', {
                                     rules: [{ required: true, message: '请输入建议零售价(元)!' }],
-                                    initialValue: values.suggestPrice || null
+                                    initialValue: sellPricesInReview.suggestPrice || values.suggestPrice
                                 })(
                                     <InputNumber
                                         min={0}
                                         step={0.01}
-                                        formatter={text => Math.floor(text * 100) / 100}
-                                        parser={text => Math.floor(text * 100) / 100}
+                                        disabled={isSub}
+                                        formatter={this.handleValueFormat}
+                                        parser={this.handleValueFormat}
                                         onChange={this.handleNewestPriceChange}
                                     />
                                     )}
                             </span>
                         </FormItem>
                         <FormItem label="商品采购价格：">
-                            <span>{newDatas.suggestPrice || '-'}</span>
+                            <span>{sellPricesInReview.purchasePrice || '-'}</span>
                         </FormItem>
                         {
                             isEdit ?
                                 <FormItem label="子公司：">
-                                    <span>{newDatas.branchCompanyId} - {newDatas.branchCompanyName}</span>
+                                    <span>{sellPricesInReview.branchCompanyId} - {sellPricesInReview.branchCompanyName}</span>
                                 </FormItem> :
                                 <FormItem label="子公司：">
                                     {getFieldDecorator('branchCompany', {
-                                        initialValue: { id: '', name: '' }
-                                    })(<BranchCompany />)}
+                                        initialValue: { id: '', name: '' },
+                                    })(<BranchCompany url="findCompanyBaseInfo" onChange={this.handleCompanyChange} disabled={isSub} />)}
                                 </FormItem>
                         }
                     </Col>
@@ -118,8 +142,15 @@ EditSteps.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
     newDatas: PropTypes.objectOf(PropTypes.any),
+    values: PropTypes.objectOf(PropTypes.any),
     startNumber: PropTypes.number,
-    onEditChange: PropTypes.func
+    isEdit: PropTypes.bool,
+    isSub: PropTypes.bool,
+    onEditChange: PropTypes.func,
+    onCreatPriceChange: PropTypes.func,
+    onEditPriceChange: PropTypes.func,
+    onCreateComChange: PropTypes.func,
+    onCreateChange: PropTypes.func
 };
 
 EditSteps.defaultProps = {

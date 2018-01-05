@@ -1,41 +1,39 @@
 {
-    "timestamp":1514439962223,
-    "code":200,
-    "message":{
-
-    },
-    "exception":null,
-    "data":{
-        "id":"xprod347515",
-        "name":"大川碳化工艺钻板DC-8572",
-        "invoiceLimit":0,
-        "firstLevelCategoryName":"日杂",
-        "secondLevelCategoryName":"家居百货",
-        "thirdLevelCategoryName":null,
-        "fourthLevelCategoryName":"竹制菜板",
-        "saleName":"大川碳化工艺钻板DC-8572",
-        "inputTaxRate":17,
-        "deductibleTaxRate":15,
-        "brandName":"大川",
-        "supplyChainStatus":2,
-        "purchaseInsideNumber":1,
-        "salesInsideNumber":1,
-        "productCode":"1000063",
-        "internationalCodes":[
+    "timestamp": 1515046285282,
+    "code": 200,
+    "message": {},
+    "exception": null,
+    "data": {
+        "id": "49957",
+        "name": "南方黑芝麻糊480%",
+        "invoiceLimit": 0,
+        "firstLevelCategoryName": "休闲食品",
+        "secondLevelCategoryName": "冲调保健1",
+        "thirdLevelCategoryName": "干果",
+        "fourthLevelCategoryName": "羹糊",
+        "saleName": "南方黑芝麻糊480%",
+        "inputTaxRate": 17,
+        "deductibleTaxRate": null,
+        "brandName": "南方",
+        "supplyChainStatus": 2,
+        "purchaseInsideNumber": 1,
+        "salesInsideNumber": 1,
+        "productCode": "1001298",
+        "internationalCodes": [
             {
-                "id":"xincode329488",
-                "productId":"xprod347515",
-                "internationalCode":"6953066185720",
-                "barcodeType":1
+                "id": "49957",
+                "productId": "49957",
+                "internationalCode": "6901333100518",
+                "barcodeType": 1
             }
         ],
-        "minUnit":"个",
-        "purchasePrice":19.6,
-        "suggestPrice":29.5,
-        "deliveryDay":6,
-        "sellFullCase":0,
-        "fullCaseUnit":null,
-        "fullCaseUnitId":null
+        "minUnit": "袋1",
+        "purchasePrice": 14.80,
+        "suggestPrice": 19.50,
+        "deliveryDay": 4,
+        "sellFullCase": 0,
+        "fullCaseUnit": "",
+        "fullCaseUnitId": ""
     },
-    "success":true
+    "success": true
 }

@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, message, Select, Button, Input, Row, Col } from 'antd';
+import { Modal, Form, message, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
-    pubFetchValueList
-} from '../../../actions/pub';
-import { productAddPriceVisible, toAddSellPrice } from '../../../actions/producthome';
-import { fetchAddProdPurchase } from '../../../actions';
-import {
 } from '../../../constant/searchParams';
 import {
-    getSellPriceInfoByIdAction
+    getCostPrice, clearCostPrice
 } from '../../../actions/commodity';
 import FreightConditions from './freightConditions';
 import OnlyReadSteps from './onlyReadSteps';
@@ -19,15 +14,11 @@ import EditSteps from './editSteps';
 
 @connect(
     state => ({
-        toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
-        getProductById: state.toJS().commodity.getProductById
+        productId: state.toJS().commodity.getProductById.id,
+        costPrice: state.toJS().commodity.costPrice
     }),
     dispatch => bindActionCreators({
-        productAddPriceVisible,
-        fetchAddProdPurchase,
-        pubFetchValueList,
-        getSellPriceInfoByIdAction,
-        toAddSellPrice
+        getCostPrice, clearCostPrice
     }, dispatch)
 )
 
@@ -37,19 +28,20 @@ class SellPriceModal extends Component {
         this.handleMaxChange = this.handleMaxChange.bind(this);
 
         this.state = {
-            newestPrice: null,
+            suggestPrice: null,
             branchCompanyId: null,
             branchCompanyName: null,
-            isContinue: true,
+            editIsContinue: false,
             cretFreConditObj: {},
-            freCondit: {}
+            freCondit: {},
+            sellSectionPrices: []
         }
         this.isSub = false; // 判断是否为已提交状态(true为已提交)
         this.isDisabled = false;
         this.successPost = true;
         this.messageAlert = true;
-        this.newDatas = {...props.datas.data};
-        this.referenceDatas = {...props.datas.data};
+        this.newDatas = { ...props.datas.data };
+        this.referenceDatas = { ...props.datas.data };
     }
 
     componentDidMount() {
@@ -86,10 +78,49 @@ class SellPriceModal extends Component {
 
     handleOk = () => {
         const { datas, isEdit, values = {} } = this.props;
-        const { validateFields, setFields } = this.props.form;
-        const { branchCompanyId, branchCompanyName, cretFreConditObj, freCondit, isContinue } = this.state;
+        const { validateFields } = this.props.form;
+        const {
+            branchCompanyId, branchCompanyName, cretFreConditObj,
+            freCondit, editIsContinue, sellSectionPrices
+        } = this.state;
         const newDatas = datas.data;
-        const data = {};
+        const createData = {};
+        const editData = {};
+        const noChangePrices = [];
+        Object.assign(createData, {
+            branchCompanyId: this.state.branchCompanyId || values.branchCompanyId,
+            branchCompanyName: this.state.branchCompanyName || values.branchCompanyName,
+            suggestPrice: this.state.suggestPrice || values.suggestPrice,
+            productId: values.id,
+            sellSectionPrices: sellSectionPrices || values.sellSectionPrices,
+            ...cretFreConditObj,
+            ...freCondit
+        })
+        if (isEdit) {
+            const { deliveryDay, minNumber, salesInsideNumber, suggestPrice } = newDatas;
+            this.newDatas.sellPricesInReview.sellSectionPrices.map((item) => (
+                noChangePrices.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.percentage
+                })
+            ))
+            Object.assign(editData, {
+                branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
+                branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
+                suggestPrice: this.state.suggestPrice || suggestPrice,
+                productId: this.newDatas.productId,
+                auditStatus: this.newDatas.auditStatus,
+                sellSectionPrices: sellSectionPrices.length === 0 ? noChangePrices : sellSectionPrices,
+                deliveryDay,
+                minNumber,
+                salesInsideNumber,
+                id: this.newDatas.id,
+                ...cretFreConditObj,
+                ...freCondit
+            })
+        }
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
@@ -102,11 +133,7 @@ class SellPriceModal extends Component {
                 message.error('请输入最小起订量！');
                 return null;
             }
-            if (!isEdit && !cretFreConditObj.maxNumber) {
-                message.error('请输入最大销售数量！');
-                return null;
-            }
-            if (!isContinue) {
+            if (!editIsContinue) {
                 message.error('阶梯价格不连续!');
                 return null;
             }
@@ -116,15 +143,15 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            Object.assign(data, {
-                branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
-                branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
-                newestPrice: this.state.newestPrice,
-                productId: values.id,
-                ...cretFreConditObj,
-                ...freCondit
-            })
-            this.props.handlePostAdd(data, isEdit)
+            if (isEdit) {
+                this.props.handlePostAdd(editData, isEdit);
+            } else {
+                this.props.handlePostAdd(createData, isEdit);
+            }
+            if (this.newDatas.auditStatus === 1) {
+                message.error('已提交状态不可以进行编辑，请点击取消退出!');
+                return null;
+            }
             return null;
         })
     }
@@ -133,12 +160,27 @@ class SellPriceModal extends Component {
         this.props.handleClose();
     }
 
-    handleCompyChange = (object, data) => {
+    handleCreatPrice = (num) => {
         this.setState({
-            newestPrice: object.newestPrice,
-            branchCompanyId: data.id,
-            branchCompanyName: data.name,
+            suggestPrice: num
         })
+    }
+
+    handleCompyChange = (record) => {
+        const { productId } = this.props;
+        const branchCompanyId = record.id;
+        this.setState({
+            branchCompanyId,
+            branchCompanyName: record.name,
+        });
+        if (branchCompanyId !== '') {
+            // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodPurchase/queryPurchasePriceForSellPrice
+            this.props.getCostPrice({
+                productId, branchCompanyId
+            });
+        } else {
+            this.props.clearCostPrice();
+        }
     }
 
     handleMaxChange = (num) => {
@@ -162,8 +204,76 @@ class SellPriceModal extends Component {
 
     handleEditSteps = (num) => {
         this.setState({
-            newestPrice: num
+            suggestPrice: num
         })
+    }
+
+    handlePushPriceSteps = () => {
+
+    }
+
+    handleEditPriceChange = (prices, isContinue) => {
+        const newArr = [];
+        const priceArrMore = [];
+        if (prices.length === 1) {
+            prices.map((item) => (
+                newArr.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.percentage
+                })
+            ))
+            this.setState({
+                sellSectionPrices: newArr,
+                editIsContinue: isContinue
+            })
+        }
+        if (prices.length > 1) {
+            prices.map((item) => {
+                priceArrMore.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.percentage
+                })
+            })
+            this.setState({
+                sellSectionPrices: priceArrMore,
+                editIsContinue: isContinue
+            })
+        }
+    }
+
+    handleCreatPriceChange = (prices, isContinue) => {
+        const newArr = [];
+        const priceArrMore = [];
+        if (prices.length === 1) {
+            prices.map((item) => (
+                newArr.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber
+                })
+            ))
+            this.setState({
+                sellSectionPrices: newArr,
+                editIsContinue: isContinue
+            })
+        }
+        if (prices.length > 1) {
+            prices.map((item) => {
+                priceArrMore.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber
+                })
+            })
+            this.setState({
+                sellSectionPrices: priceArrMore,
+                editIsContinue: isContinue
+            })
+        }
     }
 
     handleOnFreConditChange = (data) => {
@@ -179,7 +289,7 @@ class SellPriceModal extends Component {
     }
 
     render() {
-        const { prefixCls, form, datas, isEdit, values } = this.props;
+        const { prefixCls, isEdit, values } = this.props;
         const isAfter = this.isAfter === true;
         const isReadOnly = true;
         const { freCondit, cretFreConditObj } = this.state;
@@ -190,14 +300,15 @@ class SellPriceModal extends Component {
                 className={isEdit ? prefixCls : 'createCls'}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
-                maskClosable={false}
+                maskClosable
+                destroyOnClose
                 confirmLoading={this.isDisabled}
             >
                 {
                     isEdit &&
                     <div>
-                        <span className="changeBefore">修改前:</span>
-                        <span className="changeAfter">修改后:</span>
+                        <span className="changeBefore">当前销售关系:</span>
+                        <span className="changeAfter">已提交销售关系:</span>
                     </div>
                 }
                 {
@@ -210,15 +321,13 @@ class SellPriceModal extends Component {
                                         isAfter={isAfter}
                                         isSub={this.newDatas.auditStatus === 1}
                                         newDatas={this.newDatas}
-                                        onFreConditChange={this.handleOnFreConditChange}
-                                    />
-                                    <EditSteps
-                                        newDatas={this.newDatas}
-                                        isEdit={isEdit}
-                                        startNumber={freCondit.minNumber || this.newDatas.minNumber}
-                                        onEditChange={this.handleEditSteps}
                                     />
                                 </div>
+                                <OnlyReadSteps
+                                    newDatas={this.referenceDatas}
+                                    isReadOnly={isReadOnly}
+                                    startNumber={freCondit.minNumber || this.newDatas.minNumber}
+                                />
                             </div>
                             <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
                                 <FreightConditions
@@ -226,10 +335,15 @@ class SellPriceModal extends Component {
                                     isAfter={!isAfter}
                                     isSub={this.newDatas.auditStatus === 1}
                                     newDatas={this.newDatas}
+                                    onFreConditChange={this.handleOnFreConditChange}
                                 />
-                                <OnlyReadSteps
-                                    newDatas={this.referenceDatas}
+                                <EditSteps
+                                    newDatas={this.newDatas}
+                                    isEdit={isEdit}
+                                    isSub={this.newDatas.auditStatus === 1}
                                     startNumber={freCondit.minNumber || this.newDatas.minNumber}
+                                    onEditChange={this.handleEditSteps}
+                                    onEditPriceChange={this.handleEditPriceChange}
                                 />
                             </div >
                             <Row className="edit-state-list">
@@ -244,7 +358,7 @@ class SellPriceModal extends Component {
                                     <span>{this.newDatas.auditUserName || '-'}</span>
                                 </Col>
                                 <Col>
-                                    <span>售价状态：</span>
+                                    <span>审核状态：</span>
                                     <span>
                                         <i className={`new-price-state-${this.newDatas.auditStatus}`} />
                                         {this.catchAuditstate() || '-'}
@@ -259,13 +373,15 @@ class SellPriceModal extends Component {
                                         isEdit={isEdit}
                                         values={values}
                                         newDatas={this.newDatas}
-                                        onDataChange={this.handleonCretFreConditChange}
+                                        onReactChange={this.handleonCretFreConditChange}
                                     />
                                     <EditSteps
                                         newDatas={this.newDatas}
                                         isEdit={isEdit}
                                         startNumber={cretFreConditObj.minNumber || values.minNumber}
-                                        onCreateChange={this.handleCompyChange}
+                                        onCreateChange={this.handleCreatPrice}
+                                        onCreateComChange={this.handleCompyChange}
+                                        onCreatPriceChange={this.handleCreatPriceChange}
                                         values={values}
                                     />
                                 </div>
@@ -279,8 +395,11 @@ class SellPriceModal extends Component {
 
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
+    productId: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
     handlePostAdd: PropTypes.func,
+    getCostPrice: PropTypes.func,
+    clearCostPrice: PropTypes.func,
     handleClose: PropTypes.func,
     datas: PropTypes.objectOf(PropTypes.any)
 };

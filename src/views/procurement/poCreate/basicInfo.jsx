@@ -77,6 +77,7 @@ class BasicInfo extends PureComponent {
             currencyCode: 'CNY',
             // 供应商id
             spId: null,
+            spName: null,
             // 供应商地点id
             spAdrId: null,
             // 供应商地点名
@@ -183,6 +184,7 @@ class BasicInfo extends PureComponent {
             spAdrName = selectedSupplierLocRawData.providerName;
         }
 
+        const { applySupplierRecord, pickerDate } = this.state;
         const mapValues = {
             addressId,
             addressCd,
@@ -193,8 +195,8 @@ class BasicInfo extends PureComponent {
             spAdrId,
             spAdrNo,
             spAdrName,
+            estimatedDeliveryDate: pickerDate,
         };
-        const { applySupplierRecord } = this.state;
         const basicInfo = Object.assign({}, formValues, mapValues, applySupplierRecord);
         return basicInfo;
     }
@@ -313,11 +315,13 @@ class BasicInfo extends PureComponent {
      * @param {Object} value
      */
     handleSupplierChange = (value) => {
-        const { spId } = value;
+        this.clearSupplierAbout();
+        const { spId, companyName } = value;
         if (spId !== '') {
+            this.setState({spName: companyName});
+            this.setState({spId});
             this.props.stateChange({spId});
         }
-        this.clearSupplierAbout();
     }
 
     /**
@@ -349,6 +353,8 @@ class BasicInfo extends PureComponent {
             currencyCode: 'CNY',
             // 供应商id
             spId: null,
+            // 供应商名
+            spName: null,
             // 供应商地点id
             spAdrId: null,
             // 供应商地点名
@@ -425,7 +431,7 @@ class BasicInfo extends PureComponent {
             param: params.value,
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
-        }, 'getWarehouseInfo1')
+        }, 'getWarehouseLogic')
     )
 
     /**
@@ -466,8 +472,8 @@ class BasicInfo extends PureComponent {
             : moment().format('YYYY-MM-DD')
 
         // 供应商
-        const spDefaultValue = state.spId
-            ? `${state.spId}-${state.spName}`
+        const spDefaultValue = state.spNo
+            ? `${state.spNo}-${state.spName}`
             : ''
 
         // 供应商地点值清单回显数据

@@ -9,15 +9,19 @@ const getPreferentialValueOfPC = (values) => {
         purchaseConditionRule,
         purchaseConditionRulePercent,
         purchaseConditionRuleGive,
-        // purchaseConditionRulePrice,
-        // purchaseConditionRuleAmount
+        purchaseConditionRuleAmount,
+        purchaseConditionRulePrice
     } = values;
     let preferentialValue = '';
     switch (purchaseConditionRule) {
         case 'PERCENTAGE': // 折扣百分比
             preferentialValue = purchaseConditionRulePercent;
             break;
+        case 'DISCOUNTAMOUNT': // 折扣金额
+            preferentialValue = purchaseConditionRuleAmount;
+            break;
         case 'FIXEDPRICE': // 固定单价
+            preferentialValue = purchaseConditionRulePrice;
             break;
         case 'GIVESAMEPRODUCT': // 赠送相同商品
             preferentialValue = purchaseConditionRuleGive;
@@ -174,12 +178,6 @@ const getEachGiveOncePreferentialValue = values => {
 
 const getProductOfECGO = (condition, values) => {
     const { eachConditionGivenOne, eachConditionGivenOneProduct } = values;
-    // console.log(eachConditionGivenOneProduct.record);
-    // if (!eachConditionGivenOneProduct.record) {
-    //     eachConditionGivenOneProduct.record = {};
-    //     message.error('请选商品');
-    //     return;
-    // }
     switch (eachConditionGivenOne) {
         case 'PRODUCT':
             Object.assign(condition, {

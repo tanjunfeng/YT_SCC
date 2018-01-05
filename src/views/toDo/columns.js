@@ -294,17 +294,6 @@ export const purchaseListColumns = [
         dataIndex: 'processType',
         key: 'processType',
     },
-    // {
-    //     title: '状态',
-    //     dataIndex: 'status',
-    //     key: 'status',
-    //     render: text => {
-    //         const statusItem = purchaseStatus.data.find(val => (
-    //             val.key === text.toString()
-    //         ))
-    //         return statusItem.value
-    //     }
-    // },
     {
         title: '供应商编号',
         dataIndex: 'spNo',
@@ -338,11 +327,13 @@ export const purchaseListColumns = [
         title: '变更日期',
         dataIndex: 'modifyTime',
         key: 'modifyTime',
-        render: (text) => (
-            <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
-            </span>
-        )
+        render: (text) => {
+            return text ?
+                <span>
+                    {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                </span>
+                : null
+        }
     },
     {
         title: '当前节点',

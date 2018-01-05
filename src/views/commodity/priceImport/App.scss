@@ -1,43 +1,87 @@
 $promotionFieldWidth: 220px;
-.price-import {
-    border: 1px solid #c4c5c9;
-    padding: 40px 0 20px;
-    margin: 10px 0;
+.price-import-wrap {
+    .price-import-result {
+        span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 100%;
+            margin-right: 5px;
+            position: relative;
+            top: -1px;
+        }
+        .success {
+            background-color: green;
+        }
+        .error {
+            background-color: red;
+        }
+    }
+}
+
+.price-import-wrap {
+    .ant-form {
+        padding: 40px 0 20px;
+        margin: 10px 0;
+        border: 1px solid #c4c5c9;
+    }
     .ant-form-item-label {
-        width: 80px;
+        width: 100px;
         .sc-form-item-label {
             text-align: right;
         }
     }
+    .ant-form-item-control-wrapper{
+        display: inline-block;
+    }
     .ant-form-item {
         float: left;
         display: block;
-        .ant-form-item-control-wrapper,
-        .ant-select-selection,
-        .ywc-smind {
-            width: $promotionFieldWidth;
-        }
-        &.double .ant-form-item-control-wrapper {
-            width: $promotionFieldWidth * 2;
-        }
+        height: 42px;
+        margin-bottom: 24px;
         .ywc-smind {
             top: 4px;
         }
-    }
-    // .ant-btn {
-    //     margin-right: 20px;
-    // }
-    .search-mind-label {
-        text-align: right;
-        width: 80px;
-    }
-    .price-import-btn {
-        .ant-form-item-control-wrapper {
-            width: auto!important;
+        @media screen and (min-width: 0px) and (max-width: 1400px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind {
+                width: 220px;
+            }
+        }
+        @media screen and (min-width: 1401px) and (max-width: 1600px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind {
+                width: 230px;
+            }
+        }
+        @media screen and (min-width: 1601px) and (max-width: 1920px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind {
+                width: 200px;
+            }
+        }
+        @media screen and (min-width: 1921px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind {
+                width: 260px;
+            }
         }
     }
-    .upload {
-        line-height: 0!important;
-        margin-top: 7px;
+    .ant-btn {
+        margin: 6px 10px;
+    }
+    .ant-upload-list{
+        display: none
+    }
+    .ant-btn {
+        margin-right: 20px;
     }
 }

@@ -280,6 +280,18 @@ class Cardline extends Component {
     handleAddPrice = () => {
     }
 
+    catchAuditstate = (value) => {
+        switch (value) {
+            case 1:
+                return '已提交';
+            case 2:
+                return '已审核';
+            case 3:
+                return '已拒绝';
+            default:
+                return null;
+        }
+    }
 
     renderCard = (datas) => {
         const {
@@ -340,6 +352,13 @@ class Cardline extends Component {
                             <p>
                                 <span>采购价格 / 元 : </span>
                                 <span>{item.purchasePrice}</span>
+                            </p>
+                            <p>
+                                <span>最新采购价格状态 : </span>
+                                <span>
+                                    <i className={`new-price-state-${item.auditStatus}`} />
+                                    {this.catchAuditstate(item.auditStatus)}
+                                </span>
                             </p>
                         </div>
                         <div className={`${prefixCls}-checkboxGroup`} >

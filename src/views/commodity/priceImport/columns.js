@@ -33,13 +33,10 @@ export const priceListColumns = [
         dataIndex: 'handleResult',
         key: 'handleResult',
         render: text => {
-            if (!text) {
-                return ''
-            }
             const item = priceResult.data.find(val => (
                 val.key === text.toString()
             ))
-            return item.value
+            return <div className="price-import-result"><span className={item.key === '0' ? 'error' : 'success'} />{item.value}</div>
         }
     },
     {

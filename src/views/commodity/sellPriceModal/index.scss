@@ -102,6 +102,9 @@
     .read-only-footer{
         height: 32px;
         line-height: 32px;
+        span{
+            padding: 0 5px;
+        }
     }
     .new-price-state {
         &-1 {
@@ -127,6 +130,9 @@
             border-radius: 50%;
             display: inline-block;
             vertical-align: middle;
+        }
+        .editable-row-operations-true{
+            display: none;
         }
     }
     .createCls {
