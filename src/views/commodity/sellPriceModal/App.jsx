@@ -76,6 +76,9 @@ class SellPriceModal extends Component {
         })
     }
 
+    /**
+     * 模态框点击确定按钮时，进行逐行校验，（必输项及是否合规项）
+     */
     handleOk = () => {
         const { datas, isEdit, values = {} } = this.props;
         const { validateFields } = this.props.form;
@@ -133,7 +136,7 @@ class SellPriceModal extends Component {
                 message.error('请输入最小起订量！');
                 return null;
             }
-            if (!editIsContinue) {
+            if (editIsContinue) {
                 message.error('阶梯价格不连续!');
                 return null;
             }
@@ -202,16 +205,21 @@ class SellPriceModal extends Component {
         }
     }
 
+    /**
+     * 建议零售价回传值
+     * @param {*} num number
+     */
     handleEditSteps = (num) => {
         this.setState({
             suggestPrice: num
         })
     }
 
-    handlePushPriceSteps = () => {
-
-    }
-
+    /**
+     * 编辑阶梯价格回传值
+     * @param {*} prices list
+     * @param {*} isContinue bool
+     */
     handleEditPriceChange = (prices, isContinue) => {
         const newArr = [];
         const priceArrMore = [];
@@ -245,6 +253,11 @@ class SellPriceModal extends Component {
         }
     }
 
+    /**
+     * 新建阶梯价格回传值
+     * @param {*} prices list
+     * @param {*} isContinue bool
+     */
     handleCreatPriceChange = (prices, isContinue) => {
         const newArr = [];
         const priceArrMore = [];
@@ -260,8 +273,7 @@ class SellPriceModal extends Component {
                 sellSectionPrices: newArr,
                 editIsContinue: isContinue
             })
-        }
-        if (prices.length > 1) {
+        } else if (prices.length > 1) {
             prices.map((item) => {
                 priceArrMore.push({
                     endNumber: item.endNumber,
@@ -276,12 +288,20 @@ class SellPriceModal extends Component {
         }
     }
 
+    /**
+     * 编辑货运条件头部form表单回传值
+     * @param {*} data Object
+     */
     handleOnFreConditChange = (data) => {
         this.setState({
             freCondit: data
         })
     }
 
+    /**
+     * 创建货运条件头部form表单回传值
+     * @param {*} data Object
+     */
     handleonCretFreConditChange = (data) => {
         this.setState({
             cretFreConditObj: data
