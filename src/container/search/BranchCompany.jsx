@@ -37,6 +37,7 @@ class BranchCompany extends PureComponent {
      * 子公司-值清单
      */
     handleChoose = ({ record }) => {
+        console.log(record)
         this.props.onChange(record);
     }
 
