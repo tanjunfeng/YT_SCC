@@ -15,7 +15,7 @@ import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { priceListColumns as columns } from '../columns';
 import ExamineModal from '../common/ExamineModal';
-import SeeModal from '../common/seeModal';
+import SeeModal from '../common/SeeModal';
 import SellPriceModal from './sellPriceModal';
 import {
     getSellPriceInfoByIdAction
