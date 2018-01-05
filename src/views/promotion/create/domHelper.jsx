@@ -53,7 +53,7 @@ export const getRulesColumn = (form, licence, type = '') => {
                     <Option key={'FIXEDPRICE'} value="FIXEDPRICE">
                         固定单价
                     </Option> : null}
-                {type === 'PRODUCT' ?
+                {type === 'PRODUCT' || (licence === 'eachConditionGivenOne' && type === 'ALL') ?
                     <Option key={'GIVESAMEPRODUCT'} value="GIVESAMEPRODUCT">
                         赠送相同商品
                     </Option> : null}
@@ -139,7 +139,7 @@ export const buyType = (form, licence) => {
                 {getFieldDecorator(licence, {
                     initialValue: 'ALL'
                 })(<Select size="default" className="wd-90">
-                    <Option key={'ALL'} value="ALL">全部</Option>
+                    <Option key={'ALL'} value="ALL">{licence === 'eachConditionGivenOne' ? '请选择' : '全部'}</Option>
                     {/* 每满类型不能按品类添加 */}
                     {
                         licence !== 'eachConditionGivenOne' &&
