@@ -137,10 +137,10 @@ class SellPriceModal extends Component {
                 message.error('请输入最小起订量！');
                 return null;
             }
-            if (editIsContinue) {
-                message.error('阶梯价格不连续!');
-                return null;
-            }
+            // if (!editIsContinue) {
+            //     message.error('阶梯价格不连续!');
+            //     return null;
+            // }
             if (isEdit) {
                 Object.assign(result, {
                     id: datas.id,
