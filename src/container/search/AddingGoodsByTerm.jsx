@@ -23,6 +23,7 @@ class AddingGoodsByTerm extends PureComponent {
     }
 
     query = (params) => {
+        console.log(params);
         const conditions = {
             teamText: params.value,
             pageNum: params.pagination.current || 1,

@@ -10,7 +10,7 @@ import { Form, Row, InputNumber, Select } from 'antd';
 import Util from '../../../util/util';
 import { MAX_AMOUNT_OF_ORDER } from '../../../constant';
 import { Category } from '../../../container/cascader';
-import { AddingGoodsByTerm } from '../../../container/search';
+import { Commodity } from '../../../container/search';
 import BuyConditionList from './buyConditionList';
 
 const Option = Select.Option;
@@ -232,7 +232,7 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
                                 productCode: '',
                                 productName: ''
                             }
-                        })(<AddingGoodsByTerm />)}
+                        })(<Commodity api="queryProductByTerm" />)}
                     </FormItem> : null}
             </div>
             {licence === 'purchaseCondition' &&
