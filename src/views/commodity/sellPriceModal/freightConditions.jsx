@@ -140,8 +140,13 @@ class FreightConditions extends Component {
         const { sellPricesInReview = {} } = data;
         const preHarvestPinStatusChange =
             (data.preHarvestPinStatus === 1 ? '1' : '0');
-        const previewHarvestPinStatusChange =
-            (data.sellPricesInReview.preHarvestPinStatus === 1 ? '1' : '0');
+        const previewHarvestPinStatusChange = () => {
+            if (data) {
+                (data.sellPricesInReview.preHarvestPinStatus === 1 ? '1' : '0');
+            } else {
+                (values.sellPricesInReview.preHarvestPinStatus === 1 ? '1' : '0');
+            }
+        }
         return (
             <div className={`${prefixCls}-body-wrap`}>
                 {
@@ -158,18 +163,16 @@ class FreightConditions extends Component {
                                     <span>{getFieldDecorator('salesInsideNumber', {
                                         rules: [{ required: true, message: '请输入销售内装数' }],
                                         initialValue: isEdit ? sellPricesInReview.salesInsideNumber : values.salesInsideNumber
-                                    })(
-                                        <InputNumber
+                                    })(<InputNumber
                                             className={
                                                 sellPricesInReview.salesInsideNumber !==
                                                     newDatas.salesInsideNumber ?
-                                                        'sell-modal-border' : null
+                                                    'sell-modal-border' : null
                                             }
                                             min={0}
                                             disabled={isSub}
                                             onChange={this.handleInsideChange}
-                                        />
-                                        )}
+                                        />)}
                                     </span>
                                 </FormItem>
                                 <FormItem>
@@ -194,7 +197,7 @@ class FreightConditions extends Component {
                                             className={
                                                 sellPricesInReview.minNumber !==
                                                     newDatas.minNumber ?
-                                                        'sell-modal-border' : null
+                                                    'sell-modal-border' : null
                                             }
                                             min={0}
                                             disabled={isSub}
@@ -206,21 +209,19 @@ class FreightConditions extends Component {
                                 </FormItem>
                                 <FormItem>
                                     <span>最大销售数量：</span>
-                                    <span>{getFieldDecorator('maxNumber', {
+                                    <span className="max-number-input">{getFieldDecorator('maxNumber', {
                                         initialValue: isEdit ? sellPricesInReview.maxNumber : values.maxNumber
-                                    })(
-                                        <InputNumber
+                                    })(<InputNumber
                                             min={0}
                                             disabled={isSub}
                                             className={
                                                 sellPricesInReview.maxNumber !==
                                                     newDatas.maxNumber ?
-                                                        'sell-modal-border' : null
+                                                    'sell-modal-border' : null
                                             }
                                             onChange={this.handleMaxChange}
                                             step={currentInside || data.salesInsideNumber}
-                                        />
-                                        )}
+                                        />)}
                                     </span>
                                 </FormItem>
                                 <FormItem>
@@ -239,7 +240,7 @@ class FreightConditions extends Component {
                                         onChange={this.handleDelayChange}
                                     />)}
                                     </span>
-                                天内发货
+                                    天内发货
                                 </FormItem>
                                 <FormItem>
                                     <span>是否整箱销售:</span>
@@ -263,7 +264,7 @@ class FreightConditions extends Component {
                                             className={
                                                 previewHarvestPinStatusChange !==
                                                     preHarvestPinStatusChange ?
-                                                'sell-modal-border' : null
+                                                    'sell-modal-border' : null
                                             }
                                             size="default"
                                             disabled={isSub}
