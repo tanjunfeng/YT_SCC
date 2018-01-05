@@ -128,8 +128,14 @@ class EditSteps extends Component {
                                 <FormItem label="子公司：">
                                     {getFieldDecorator('branchCompany', {
                                         initialValue: { id: '', name: '' },
-                                    })(<BranchCompany url="queryBranchCompanyInfo" onChange={this.handleCompanyChange} disabled={isSub} />)}
+                                    })(<BranchCompany
+                                        url="queryBranchCompanyInfo"
+                                        onChange={this.handleCompanyChange}
+                                        values={values}
+                                        disabled={isSub}
+                                    />)}
                                 </FormItem>
+
                         }
                     </Col>
                 </Row>
