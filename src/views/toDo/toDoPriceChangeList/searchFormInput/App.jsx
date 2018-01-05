@@ -135,7 +135,7 @@ class SearchFormInput extends PureComponent {
                                     providerNo: '',
                                     providerName: '',
                                     spAdrid: ''
-                                }})(<SupplierAdderss disabled={this.props.form.getFieldValue('supplier').spId === ''} />)}
+                                }})(<SupplierAdderss pId={this.props.form.getFieldValue('supplier').spId} disabled={this.props.form.getFieldValue('supplier').spId === ''} />)}
                             </FormItem>
                         </Col>
                     </Row>
