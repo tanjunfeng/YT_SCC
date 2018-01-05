@@ -41,7 +41,8 @@ class BranchCompany extends PureComponent {
     }
 
     render() {
-        const { url } = this.props;
+        const { url, values = {} } = this.props;
+        const { id } = values;
         return (
             <SearchMind
                 compKey="spId"
@@ -50,7 +51,8 @@ class BranchCompany extends PureComponent {
                     // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
                     this.props.pubFetchValueList({
                         branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                        branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
+                        branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : '',
+                        productId: id || ''
                     }, url)
                 }
                 disabled={this.props.disabled}
@@ -73,6 +75,7 @@ class BranchCompany extends PureComponent {
             />
         );
     }
+
 }
 
 BranchCompany.propTypes = {
@@ -80,10 +83,11 @@ BranchCompany.propTypes = {
     url: PropTypes.string,
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
-    value: PropTypes.objectOf(PropTypes.any)
+    value: PropTypes.objectOf(PropTypes.any),
+    values: PropTypes.objectOf(PropTypes.any)
 }
 
-BranchCompany.defaultTypes = {
+BranchCompany.defaultProps = {
     url: 'findCompanyBaseInfo'
 }
 
