@@ -171,7 +171,6 @@ class FreightConditions extends Component {
                                     <span>
                                         {getFieldDecorator('minNumber', {
                                             rules: [
-                                                { required: true, message: '请输入最小起订量!' },
                                                 {
                                                     validator: (rule, value, callback) => {
                                                         const { getFieldValue } = this.props.form
