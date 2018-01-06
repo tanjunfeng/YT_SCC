@@ -12,6 +12,7 @@ import {
 import FreightConditions from './freightConditions';
 import OnlyReadSteps from './onlyReadSteps';
 import EditSteps from './editSteps';
+import Utils from '../../../util/util';
 
 @connect(
     state => ({
@@ -378,7 +379,7 @@ class SellPriceModal extends Component {
                                     <span>审核人：</span>
                                     <span>
                                         {this.newDatas.auditUserName || '-'}
-                                        {moment(parseInt(this.newDatas.auditTime, 10)).format('YYYY-MM-DD HH:mm:ss') || '-'}
+                                        {Utils.getTime(this.newDatas.auditTime)}
                                     </span>
                                 </Col>
                                 <Col>
