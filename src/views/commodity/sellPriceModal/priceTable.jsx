@@ -87,7 +87,7 @@ class PriceTable extends PureComponent {
         if (price.startNumber >= price.endNumber) {
             res = true;
         }
-        if (price.price === '-') {
+        if (price.price === '-' || isNaN(price.price)) {
             res = true;
         }
         return res;
