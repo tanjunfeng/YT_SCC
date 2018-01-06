@@ -348,7 +348,7 @@ class ProdModal extends Component {
                                                     <InputNumber
                                                         min={0}
                                                         step={0.01}
-                                                        disabled={initValue.auditStatus === 1}
+                                                        disabled
                                                         placeholder="当前采购价"
                                                     />)}
                                             </span>
@@ -363,6 +363,7 @@ class ProdModal extends Component {
                                                     <InputNumber
                                                         min={0}
                                                         step={0.01}
+                                                        disabled={initValue.auditStatus === 1}
                                                         placeholder="采购价"
                                                     />)}
                                             </span>
