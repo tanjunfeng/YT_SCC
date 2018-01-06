@@ -110,10 +110,6 @@ class EditSteps extends Component {
                                         min={0}
                                         step={0.01}
                                         disabled={isSub}
-                                        className={
-                                            newDatas.sellPricesInReview.suggestPrice !== newDatas.suggestPrice ?
-                                                'sell-modal-border' : null
-                                        }
                                         formatter={this.handleValueFormat}
                                         parser={this.handleValueFormat}
                                         onChange={this.handleNewestPriceChange}
@@ -122,10 +118,7 @@ class EditSteps extends Component {
                             </span>
                         </FormItem>
                         <FormItem label="商品采购价格：">
-                            <span className={
-                                newDatas.sellPricesInReview.purchasePrice !== newDatas.purchasePrice ?
-                                    'sell-modal-border' : null}
-                            >{sellPricesInReview.purchasePrice || '-'}</span>
+                            <span>{sellPricesInReview.purchasePrice || '-'}</span>
                         </FormItem>
                         {
                             isEdit ?
@@ -137,10 +130,6 @@ class EditSteps extends Component {
                                         initialValue: { id: '', name: '' },
                                     })(<BranchCompany
                                         url="queryBranchCompanyInfo"
-                                        className={
-                                            newDatas.sellPricesInReview.branchCompanyId !== newDatas.sellPricesInReview.branchCompanyId ?
-                                                'sell-modal-border' : null
-                                        }
                                         onChange={this.handleCompanyChange}
                                         values={values}
                                         disabled={isSub}
