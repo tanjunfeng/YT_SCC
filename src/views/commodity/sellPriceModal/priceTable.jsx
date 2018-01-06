@@ -53,8 +53,6 @@ class PriceTable extends PureComponent {
         const { prices } = this.state;
         if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
             prices[0].startNumber = startNumber === undefined ? 0 : startNumber;
-            // this.setState({ prices });
-            // this.notify(prices);
         }
     }
 
@@ -281,11 +279,11 @@ class PriceTable extends PureComponent {
      */
     renderGrossProfit = (text, record) => {
         const { costPrice } = this.props;
+        const { price } = record;
         const rate = (price - costPrice) * 100 / costPrice;
         if (costPrice < 0 || isNaN(rate)) {
             return (<span className="red">-</span>);
         }
-        const { price } = record;
         return (<span className="red">{rate.toFixed(2)}%</span>);
     }
 
