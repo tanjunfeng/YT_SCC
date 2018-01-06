@@ -313,7 +313,7 @@ class Utils {
      */
     static getListWidthObj = (dom) => {
         const { childNodes } = dom;
-        const widthArr = Array.prototype.map.call(childNodes,((ele) => ele.offsetWidth));
+        const widthArr = Array.prototype.map.call(childNodes, (ele => ele.offsetWidth));
         return {
             widthArr,
         }
