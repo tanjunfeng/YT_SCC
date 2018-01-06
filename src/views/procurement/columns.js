@@ -169,3 +169,35 @@ export const printColumns = [{
     key: 'totalAmount',
     width: 100
 }];
+
+export const wishAreaColumns = [{
+    title: '商品编码',
+    dataIndex: 'productCode',
+    key: 'productCode',
+}, {
+    title: '商品条码',
+    dataIndex: 'internationalCode',
+    key: 'internationalCode',
+}, {
+    title: '商品名称',
+    dataIndex: 'productName',
+    key: 'productName',
+    className: 'left',
+}, {
+    title: '需求数量',
+    dataIndex: 'purchaseNumber',
+    key: 'purchaseNumber',
+}, {
+    title: '第一次提交时间',
+    dataIndex: 'packingSpecifications',
+    key: 'packingSpecifications',
+}, {
+    title: '处理状态',
+    dataIndex: 'status',
+    key: 'status',
+}, {
+    title: '操作',
+    dataIndex: 'operation',
+    key: 'operation',
+    render: this.renderActions
+}];

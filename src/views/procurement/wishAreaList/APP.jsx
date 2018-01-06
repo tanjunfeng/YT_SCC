@@ -3,7 +3,7 @@
  * @Description: 心愿专区
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-06 10:51:52
+ * @Last Modified time: 2018-01-06 16:35:24
  */
 
 import React, { PureComponent } from 'react';
@@ -39,7 +39,7 @@ class WishAreaList extends PureComponent {
     render() {
         return (
             <div>
-                <searchForm
+                <SearchForm
                 />
                 <GoodsTable
                 />
