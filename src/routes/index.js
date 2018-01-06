@@ -60,6 +60,8 @@ import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/poRcvDetail';
 import ReturnManagementList from 'bundle-loader?lazy!../views/procurement/returnManagementList';
 import ReturnManagementDetail from 'bundle-loader?lazy!../views/procurement/returnManagementDetail';
 import ReturnManagementCreat from 'bundle-loader?lazy!../views/procurement/returnManagementCreat';
+import WishAreaList from 'bundle-loader?lazy!../views/procurement/wishAreaList';
+// import WishAreaListDetail from 'bundle-loader?lazy!../views/procurement/wishAreaListDetail';
 
 // 商品采购关系维护
 import ProcurementMaintenance from 'bundle-loader?lazy!../views/commodity/procurementMaintenance';
@@ -715,7 +717,7 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
-                        <Route
+                        {/* <Route
                             path="/wishAreaList/wishAreaDetail/:id"
                             exact
                             render={
@@ -725,7 +727,7 @@ const routes = [
                                     </Bundle>
                                 )
                             }
-                        />
+                        /> */}
                     </Switch>
                 )
             }

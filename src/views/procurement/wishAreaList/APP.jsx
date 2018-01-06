@@ -1,38 +1,53 @@
 /*
  * @Author: tanjf
  * @Description: 心愿专区
- * @CreateDate: 2018-01-05 17:09:59
+ * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-05 17:27:02
+ * @Last Modified time: 2018-01-06 10:51:52
  */
+
 import React, { PureComponent } from 'react';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { bindActionsCreators } from 'redux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import {
+    Form, Input, Button, Row, Col, Select,
+    Icon, Table, message, Upload,
+    DatePicker
+} from 'antd';
 import moment from 'moment';
+import { PAGE_SIZE } from '../../../constant';
+import SearchForm from './searchForm';
+import GoodsTable from './goodsTable';
+
+const FormItem = Form.Item;
+const dateFormat = 'YYYY-MM-DD';
+const Option = Select.Option;
 
 @connect(state => ({
-
-}), dispatch => bindActionsCreators({
-
+}), dispatch => bindActionCreators({
 }, dispatch))
 
 class WishAreaList extends PureComponent {
-    constructor(prosp) {
+    constructor(props) {
         super(props);
+        this.state = {
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                <searchForm
+                />
+                <GoodsTable
+                />
+            </div>
+        )
     }
 }
-
-render() {
-    return (
-        <div>
-            123123
-        </div>
-    )
+WishAreaList.propTypes = {
+    form: PropTypes.objectOf(PropTypes.any),
 }
-
-WishAreaList.PropTypes = {
-
-}
-
-export default withRouter(Form.creat()(WishAreaList));
+export default withRouter(Form.create()(WishAreaList));
