@@ -50,11 +50,11 @@ class PriceTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
         // 当用户手工修改 startNumber 时，更新 prices 第一条记录并通知父组件更新
         const { startNumber } = nextProps.value;
-        const prices = [...this.state.prices];
+        const { prices } = this.state;
         if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
             prices[0].startNumber = startNumber === undefined ? 0 : startNumber;
-            this.setState({ prices });
-            this.notify(prices);
+            // this.setState({ prices });
+            // this.notify(prices);
         }
     }
 
@@ -120,17 +120,17 @@ class PriceTable extends PureComponent {
 
     notify = (prices) => {
         const { onChange, value } = this.props;
-        const { MAXGOODS } = value;
-        const lastPrice = prices[prices.length - 1] || null;
-        if (lastPrice !== null && lastPrice.endNumber < MAXGOODS - 1) {
-            this.setState({
-                canAdd: true
-            });
-        } else {
-            this.setState({
-                canAdd: false
-            });
-        }
+        // const { MAXGOODS } = value;
+        // const lastPrice = prices[prices.length - 1] || null;
+        // if (lastPrice !== null && lastPrice.endNumber < MAXGOODS - 1) {
+        //     this.setState({
+        //         canAdd: true
+        //     });
+        // } else {
+        //     this.setState({
+        //         canAdd: false
+        //     });
+        // }
         if (typeof onChange === 'function') {
             onChange(prices, this.isContinue(prices));
         }
@@ -140,11 +140,17 @@ class PriceTable extends PureComponent {
      * 格式化数据
      */
     formatData = (record) => {
-        const { startNumber, endNumber, price } = record;
+        const { startNumber, endNumber, price = NaN } = record;
+        let p = Number(price);
+        if (isNaN(p)) {
+            p = '-';
+        } else {
+            p = Number(price).toFixed(2)
+        }
         Object.assign(record, {
             startNumber: Math.ceil(startNumber),
             endNumber: Math.ceil(endNumber),
-            price: Number(price).toFixed(2)
+            price: p
         })
     }
 
