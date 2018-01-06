@@ -281,7 +281,7 @@ class PriceTable extends PureComponent {
         const { costPrice } = this.props;
         const { price } = record;
         const rate = (price - costPrice) * 100 / costPrice;
-        if (costPrice < 0 || isNaN(rate)) {
+        if (costPrice === null || isNaN(rate)) {
             return (<span className="red">-</span>);
         }
         return (<span className="red">{rate.toFixed(2)}%</span>);

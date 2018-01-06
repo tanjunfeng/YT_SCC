@@ -126,5 +126,5 @@ export const getCostPrice = params => dispatch => (
 
 export const clearCostPrice = () => dispatch => (dispatch({
     type: ActionType.CLEAR_COST_PRICE,
-    payload: -100.00
+    payload: null
 }));
