@@ -71,7 +71,7 @@ class PriceTable extends PureComponent {
         const target = prices.filter(item => id === item.id)[0];
         if (target) {
             target.editable = true;
-            this.setState({ prices });
+            this.checkAddable(prices);
         }
     }
 
@@ -116,19 +116,26 @@ class PriceTable extends PureComponent {
         return true;
     }
 
+    /**
+     * 校验是否能继续添加价格
+     */
+    checkAddable = (prices) => {
+        const { value } = this.props;
+        const { MAXGOODS } = value;
+        const lastPrice = prices[prices.length - 1] || null;
+        if (lastPrice !== null && lastPrice.endNumber < MAXGOODS - 1) {
+            this.setState({
+                canAdd: true, prices
+            });
+        } else {
+            this.setState({
+                canAdd: false, prices
+            });
+        }
+    }
+
     notify = (prices) => {
-        const { onChange, value } = this.props;
-        // const { MAXGOODS } = value;
-        // const lastPrice = prices[prices.length - 1] || null;
-        // if (lastPrice !== null && lastPrice.endNumber < MAXGOODS - 1) {
-        //     this.setState({
-        //         canAdd: true
-        //     });
-        // } else {
-        //     this.setState({
-        //         canAdd: false
-        //     });
-        // }
+        const { onChange } = this.props;
         if (typeof onChange === 'function') {
             onChange(prices, this.isContinue(prices));
         }
@@ -158,7 +165,7 @@ class PriceTable extends PureComponent {
         if (target) {
             delete target.editable;
             this.formatData(target); // 保存时，数据格式化
-            this.setState({ prices });
+            this.checkAddable(prices);
             this.cacheData = prices.map(item => ({ ...item }));
             this.notify(prices);
         }
@@ -170,7 +177,7 @@ class PriceTable extends PureComponent {
         if (target) {
             Object.assign(target, this.cacheData.filter(item => id === item.id)[0]);
             delete target.editable;
-            this.setState({ prices });
+            this.checkAddable(prices);
         }
     }
 
@@ -180,7 +187,7 @@ class PriceTable extends PureComponent {
         if (index > 0) {
             prices.splice(index, 1);
             this.cacheData = prices.map(item => ({ ...item }));
-            this.setState({ prices });
+            this.checkAddable(prices);
             this.notify(prices);
         }
     }
@@ -190,7 +197,7 @@ class PriceTable extends PureComponent {
         const target = prices.filter(item => id === item.id)[0];
         if (target) {
             target[column] = value;
-            this.setState({ prices });
+            this.checkAddable(prices);
         }
     }
 
@@ -216,7 +223,7 @@ class PriceTable extends PureComponent {
                 rate
             });
         }
-        this.setState({ prices });
+        this.checkAddable(prices);
         this.notify(prices);
     }
 
