@@ -17,8 +17,11 @@ import {
 import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
 
-function getNewData(old) {
-    return Immutable.fromJS(old).toJS();
+function getNewData(props) {
+    if (props.value.isReadOnly && props.value.isEdit) {
+        return [];
+    }
+    return Immutable.fromJS(props.value.list).toJS();
 }
 
 @connect(
@@ -33,13 +36,16 @@ function getNewData(old) {
 class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
-        const newData = getNewData(props.value.list);
+        const newData = getNewData(props);
         this.state = {
             prices: newData,
             canAdd: true // 是否可继续添加价格
         }
         this.cacheData = newData.map(item => ({ ...item }));
         this.notify(newData);
+    }
+
+    componentWillMount() {
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, 'startNumber', index)
         columns[1].render = (text, record) => this.renderColumnsNum(text, record, 'endNumber')
         columns[2].render = (text, record) => this.renderColumnsPrice(text, record, 'price')
