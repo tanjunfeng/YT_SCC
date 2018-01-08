@@ -35,7 +35,7 @@ class SearchForm extends PureComponent {
         return Util.removeInvalid({
             status,
             companyId: company.id,
-            productNo: product.productCode
+            productNo: product.record.productCode
         });
     }
 
@@ -85,7 +85,7 @@ class SearchForm extends PureComponent {
                     <FormItem label="商品">
                         {getFieldDecorator('product', {
                             initialValue: { productId: '', productName: '' }
-                        })(<Commodity />)
+                        })(<Commodity api="queryProductForSelect" />)
                         }
                     </FormItem>
                 </Row>
