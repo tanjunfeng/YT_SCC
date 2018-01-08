@@ -172,10 +172,6 @@ class SearchForm extends Component {
         this.props.handleAdd();
     }
 
-    handlePriceImport = () => {
-        window.open('/priceImport')
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;
