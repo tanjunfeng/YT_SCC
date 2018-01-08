@@ -260,7 +260,7 @@ export const priceChangeColumns = [
         key: 'createTime',
         render: (text) => (
             <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                { text ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : '-'}
             </span>
         )
     },
