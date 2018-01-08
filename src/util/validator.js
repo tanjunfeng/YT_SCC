@@ -133,7 +133,9 @@ export class Validator {
             }
             checkBankAccount(
                 Utils.removeInvalid({ bankAccount: e.target.value, id: _id, status: _status })
-            ).catch((res) => {
+            ).then(() => {
+                _this.bankAccount = true;
+            }).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
                         bankAccount: {
@@ -142,6 +144,7 @@ export class Validator {
                     });
                 }
             })
+
         },
         // 请输入营业执照号是否重复
         licenseNo: (e, _this, _id = null, _status = null) => {
