@@ -48,7 +48,7 @@ class BankInfo extends PureComponent {
             companyName: accountName,
         }
 
-        this.bankAccount = false;
+        this.bankAccount = true;
     }
 
     componentDidMount() {
