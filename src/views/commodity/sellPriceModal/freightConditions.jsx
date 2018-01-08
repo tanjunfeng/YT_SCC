@@ -231,7 +231,7 @@ class FreightConditions extends Component {
                                 <FormItem>
                                     <span>整箱销售单位:</span>
                                     <span className={`${prefixCls}-day-input`}>
-                                        {sellPricesInReview.fullCaseUnit || '-'}
+                                        {getProductById.fullCaseUnit || '-'}
                                     </span>
                                 </FormItem>
                                 {/* 采购模式 */}
