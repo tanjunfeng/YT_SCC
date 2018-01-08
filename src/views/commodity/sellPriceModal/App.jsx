@@ -154,7 +154,6 @@ class SellPriceModal extends Component {
                 this.props.handlePostAdd(createData, isEdit);
             }
             if (this.newDatas.auditStatus === 1) {
-                message.error('已提交状态不可以进行编辑，请点击取消退出!');
                 return null;
             }
             return null;
