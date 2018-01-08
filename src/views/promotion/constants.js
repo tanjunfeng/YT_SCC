@@ -58,7 +58,8 @@ export const overlayOptions = [
 export const promotionRuleStatus = {
     PURCHASECONDITION: '购买条件',
     REWARDLIST: '奖励列表',
-    TOTALPUCHASELIST: '整个购买列表'
+    TOTALPUCHASELIST: '整个购买列表',
+    EACHCONDITIONGIVEONCE: '每满'
 }
 
 // 购买类型

@@ -30,7 +30,7 @@ const { TextArea } = Input;
 
 @connect(
     state => ({
-        orderDetailData: state.toJS().order.orderDetailData
+        orderDetailData: state.toJS().order.orderDetailData,
     }),
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
@@ -45,7 +45,8 @@ class OrderInformation extends PureComponent {
     state = {
         textAreaNote: this.props.orderDetailData.description,
         description: this.props.orderDetailData.description,
-        manualSplitOrder: {}
+        manualSplitOrder: {},
+        isMultiple: true
     }
 
     componentWillMount() {
@@ -121,12 +122,12 @@ class OrderInformation extends PureComponent {
     /**
      * 拆单返回数组
      */
-    handleGoodsSplit = (splitGroups) => {
+    handleGoodsSplit = (splitGroups, isMultiple) => {
         const manualSplitOrder = {
             parentOrderId: this.orderId,
             groups: splitGroups
         }
-        this.setState({ manualSplitOrder });
+        this.setState({ manualSplitOrder, isMultiple });
     }
 
     /**
@@ -147,7 +148,11 @@ class OrderInformation extends PureComponent {
      * 基于界面显示库存拆单
      */
     displayInventory = () => {
-        const { manualSplitOrder = null } = this.state;
+        const { manualSplitOrder = null, isMultiple } = this.state;
+        if (!isMultiple) {
+            message.error('不是销售内装数的整数倍');
+            return;
+        }
         if (manualSplitOrder.groups === undefined) {
             message.error('请完整填写拆单数据!');
             return;

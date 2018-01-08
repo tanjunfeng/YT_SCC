@@ -233,7 +233,11 @@ const orderListColumns = [{
     dataIndex: 'orderTypeDesc',
     key: 'orderTypeDesc',
 }, {
-    title: '订单金额',
+    title: '商品总金额',
+    dataIndex: 'rawSubtotal',
+    key: 'rawSubtotal',
+}, {
+    title: '实付金额',
     dataIndex: 'total',
     key: 'total',
 }, {

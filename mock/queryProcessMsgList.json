@@ -1,36 +1,59 @@
 {
-    "timestamp": 1512464459110,
-    "code": 200,
-    "message": {},
-    "exception": null,
-    "data": {
-      "pageNum": 0,
-      "pageSize": 10,
-      "total": 1,
-      "data": [
-        {
-          "id": 1,
-          "refundAdrName": "深圳仓深圳(广东子公司直营)常温正常仓",
-          "spName": "四川福仁缘农业开发有限公司",
-          "totalRefundCost": "298.80",
-          "adrType": 0,
-          "GM": "10000_22",
-          "CGTH": "10000_382",
-          "FM": "10000_407",
-          "currentNode": "子公司采购主管",
-          "refundNo": "17112800009",
-          "createTime": 1511840257000,
-          "totalRefundMoney": "331.65",
-          "createUser": "yaomuming",
-          "startTime": 1512463879415,
-          "totalRefundAmount": 5,
-          "endTime": 1512464424861,
-          "PM": "10000_382",
-          "apAdrName": "全国-四川福仁缘农业开发有限公司",
-          "taskId": "50046"
-        }
-      ]
-    },
-    "success": true
-  }
-
+  "timestamp": 1515056690874,
+  "code": 200,
+  "message": {},
+  "exception": null,
+  "data": {
+    "pageNum": 1,
+    "pageSize": 20,
+    "total": 3,
+    "data": [
+      {
+        "productNo": "1000074",
+        "taskId": "97699",
+        "companyName": "成都子公司",
+        "endTime": null,
+        "id": "687",
+        "processType": "SPXS",
+        "startTime": 1515054813446,
+        "PM": "10000_382",
+        "PD": "10000_22",
+        "currentNode": "子公司采购经理",
+        "companyId": "10000",
+        "productName": "宏轩阁大好大棉线拖把HXG-1958",
+        "modifyTime": 1515054813000
+      },
+      {
+        "productNo": "1000047",
+        "taskId": "95203",
+        "companyName": "成都子公司",
+        "endTime": null,
+        "id": "677",
+        "processType": "SPXS",
+        "startTime": 1514973407989,
+        "PM": "10000_382",
+        "PD": "10000_22",
+        "currentNode": "子公司采购经理",
+        "companyId": "10000",
+        "productName": "测试85",
+        "modifyTime": 1514973408000
+      },
+      {
+        "productNo": "1000054",
+        "taskId": "95217",
+        "companyName": "成都子公司",
+        "endTime": null,
+        "id": "678",
+        "processType": "SPXS",
+        "startTime": 1514973891104,
+        "PM": "10000_382",
+        "PD": "10000_22",
+        "currentNode": "子公司采购经理",
+        "companyId": "10000",
+        "productName": "大川全家福筷DC-8505",
+        "modifyTime": 1514973891000
+      }
+    ]
+  },
+  "success": true
+}

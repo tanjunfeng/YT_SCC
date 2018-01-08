@@ -1,127 +1,187 @@
 {
-  "timestamp": 1513146214227,
-  "code": 200,
-  "message": "请求成功",
-  "exception": null,
-  "data": {
-    "sellPriceInfoVos": {
-      "pageNum": 1,
-      "pageSize": 15,
-      "total": 3,
-      "data": [
-        {
-          "id": 606,
-          "productId": "60000117016",
-          "lowestPrice": 0.00,
-          "createTime": 1511516970000,
-          "modifyTime": 1511849320000,
-          "status": 1,
-          "branchCompanyId": "10003",
-          "branchCompanyName": "四川雅堂小超总部",
-          "suggestPrice": 42.00,
-          "deliveryDay": 7,
-          "salesInsideNumber": 1,
-          "minNumber": 3,
-          "deleteStatus": 0,
-          "modifyUserId": "10027",
-          "createUserId": "10027",
-          "sellSectionPrices": [
-            {
-              "id": 1327,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 606,
-              "deleteStatus": 0
-            },
-            {
-              "id": 1328,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 606,
-              "deleteStatus": 0
-            },
-            {
-              "id": 1329,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 606,
-              "deleteStatus": 0
-            },
-            {
-              "id": 1330,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 606,
-              "deleteStatus": 0
-            }
-          ],
-          "maxNumber": 323,
-          "preHarvestPinStatus": 0
-        },
-        {
-          "id": 635,
-          "productId": "60000117016",
-          "lowestPrice": 111.00,
-          "createTime": 1512625929000,
-          "modifyTime": null,
-          "status": 1,
-          "branchCompanyId": "10000",
-          "branchCompanyName": "成都子公司",
-          "suggestPrice": 42.00,
-          "deliveryDay": 7,
-          "salesInsideNumber": 1,
-          "minNumber": 1,
-          "deleteStatus": 0,
-          "modifyUserId": null,
-          "createUserId": "10027",
-          "sellSectionPrices": [
-            {
-              "id": 1356,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 635,
-              "deleteStatus": 0
-            }
-          ],
-          "maxNumber": 1,
-          "preHarvestPinStatus": 0
-        },
-        {
-          "id": 645,
-          "productId": "60000117016",
-          "lowestPrice": 2.00,
-          "createTime": 1513132564000,
-          "modifyTime": null,
-          "status": 1,
-          "branchCompanyId": "10004",
-          "branchCompanyName": "湖南子公司",
-          "suggestPrice": 42.00,
-          "deliveryDay": 7,
-          "salesInsideNumber": 1,
-          "minNumber": 2,
-          "deleteStatus": 0,
-          "modifyUserId": null,
-          "createUserId": "10027",
-          "sellSectionPrices": [
-            {
-              "id": 1372,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 645,
-              "deleteStatus": 0
-            }
-          ],
-          "maxNumber": null,
-          "preHarvestPinStatus": 0
+    "timestamp":1514367616802,
+    "code":200,
+    "message":"请求成功",
+    "exception":null,
+    "data":{
+        "sellPriceInfoVos":{
+            "pageNum":1,
+            "pageSize":15,
+            "total":3,
+            "data":[
+                {
+                    "id":666,
+                    "productId":"60000117016",
+                    "lowestPrice":1.5,
+                    "createTime":1513768119000,
+                    "modifyTime":null,
+                    "status":1,
+                    "branchCompanyId":"10000",
+                    "branchCompanyName":"成都子公司",
+                    "suggestPrice":42,
+                    "deliveryDay":7,
+                    "salesInsideNumber":10,
+                    "minNumber":100,
+                    "deleteStatus":0,
+                    "modifyUserId":null,
+                    "createUserId":"10027",
+                    "sellSectionPrices":[
+                        {
+                            "id":1422,
+                            "price":1.5,
+                            "startNumber":100,
+                            "endNumber":2147483647,
+                            "sellPriceId":666,
+                            "deleteStatus":0,
+                            "percentage":-95.65
+                        }
+                    ],
+                    "sellPricesInReview":null,
+                    "purchasePrice":34.5,
+                    "maxNumber":null,
+                    "preHarvestPinStatus":0,
+                    "auditUserName":null,
+                    "auditTime":null
+                },
+                {
+                    "id":669,
+                    "productId":"60000117016",
+                    "lowestPrice":40,
+                    "createTime":1514268974000,
+                    "modifyTime":null,
+                    "status":1,
+                    "branchCompanyId":"100067",
+                    "branchCompanyName":"湖南省益阳子公司",
+                    "suggestPrice":42,
+                    "deliveryDay":7,
+                    "salesInsideNumber":10,
+                    "minNumber":10,
+                    "deleteStatus":0,
+                    "modifyUserId":null,
+                    "createUserId":"10027",
+                    "sellSectionPrices":[
+                        {
+                            "id":1429,
+                            "price":40,
+                            "startNumber":10,
+                            "endNumber":2147483647,
+                            "sellPriceId":669,
+                            "deleteStatus":0,
+                            "percentage":null
+                        }
+                    ],
+                    "sellPricesInReview":null,
+                    "purchasePrice":34.5,
+                    "maxNumber":100,
+                    "preHarvestPinStatus":0,
+                    "auditUserName":null,
+                    "auditTime":null
+                },
+                {
+                    "id":672,
+                    "productId":"60000117016",
+                    "lowestPrice":22,
+                    "createTime":1514365339000,
+                    "modifyTime":null,
+                    "status":1,
+                    "branchCompanyId":"123456",
+                    "branchCompanyName":"测试子公司2",
+                    "suggestPrice":12,
+                    "deliveryDay":10,
+                    "salesInsideNumber":10,
+                    "minNumber":10,
+                    "deleteStatus":0,
+                    "modifyUserId":null,
+                    "createUserId":"987654",
+                    "sellSectionPrices":[
+                        {
+                            "id":1439,
+                            "price":24,
+                            "startNumber":10,
+                            "endNumber":20,
+                            "sellPriceId":672,
+                            "deleteStatus":0,
+                            "percentage":null
+                        },
+                        {
+                            "id":1440,
+                            "price":23,
+                            "startNumber":21,
+                            "endNumber":30,
+                            "sellPriceId":672,
+                            "deleteStatus":0,
+                            "percentage":null
+                        },
+                        {
+                            "id":1441,
+                            "price":22,
+                            "startNumber":31,
+                            "endNumber":2147483647,
+                            "sellPriceId":672,
+                            "deleteStatus":0,
+                            "percentage":null
+                        }
+                    ],
+                    "sellPricesInReview":{
+                        "id":672,
+                        "productId":"60000117016",
+                        "lowestPrice":22,
+                        "createTime":1514365339013,
+                        "modifyTime":null,
+                        "status":1,
+                        "branchCompanyId":"123456",
+                        "branchCompanyName":"测试子公司2",
+                        "suggestPrice":12,
+                        "deliveryDay":10,
+                        "salesInsideNumber":10,
+                        "minNumber":10,
+                        "deleteStatus":0,
+                        "modifyUserId":null,
+                        "createUserId":"987654",
+                        "sellSectionPrices":[
+                            {
+                                "id":null,
+                                "price":24,
+                                "startNumber":10,
+                                "endNumber":20,
+                                "sellPriceId":672,
+                                "deleteStatus":0,
+                                "percentage":null
+                            },
+                            {
+                                "id":null,
+                                "price":23,
+                                "startNumber":21,
+                                "endNumber":30,
+                                "sellPriceId":672,
+                                "deleteStatus":0,
+                                "percentage":null
+                            },
+                            {
+                                "id":null,
+                                "price":22,
+                                "startNumber":31,
+                                "endNumber":2147483647,
+                                "sellPriceId":672,
+                                "deleteStatus":0,
+                                "percentage":null
+                            }
+                        ],
+                        "sellPricesInReview":null,
+                        "purchasePrice":null,
+                        "maxNumber":null,
+                        "preHarvestPinStatus":1,
+                        "auditUserName":null,
+                        "auditTime":null
+                    },
+                    "purchasePrice":34.5,
+                    "maxNumber":null,
+                    "preHarvestPinStatus":1,
+                    "auditUserName":null,
+                    "auditTime":null
+                }
+            ]
         }
-      ]
-    }
-  },
-  "success": true
+    },
+    "success":true
 }

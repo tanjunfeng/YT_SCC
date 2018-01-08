@@ -1,0 +1,79 @@
+.purchase-examination-modal {
+    .ant-modal-body {
+        height: 700px;
+        overflow-y: auto;
+    }
+    form .ant-input-number {
+        margin-right: 0;
+    }
+    .purchase-modal-adjustment {
+        margin-left: 35px;
+    }
+    &-item {
+        border: 1px solid #eee;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+    &-item-title {
+        font-size: 14px;
+    }
+    &-barcode-input {
+        display: inline-block;
+        .ant-input-number {
+            width: 100%;
+        }
+    }
+    &-warehouse-input {
+        display: inline-block;
+    }
+    &-label {
+        display: inline-block;
+        width: 110px;
+        text-align: right;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+    .has-error .ant-form-explain,
+    .has-error .ant-form-split {
+        margin-left: 92px;
+    }
+    .ant-form-inline .ant-form-item {
+        margin-right: 0px;
+    }
+    &-data-pic {
+        vertical-align: middle;
+        display: inline-block;
+        height: 30px;
+    }
+    &-barcode-input {
+        top: 7px;
+        right: -90px;
+    }
+    &-sub-state {
+        .ant-form-item {
+            width: 260px;
+        }
+    }
+    .new-price-state {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+        top: -2px;
+        margin-right: 5px;
+        &-1 {
+            background: #5397E8;
+        }
+        &-2 {
+            background: #71E135;
+        }
+        &-3 {
+            background: red;
+        }
+    }
+    .purchase-modal-label {
+        vertical-align: top;
+    }
+}

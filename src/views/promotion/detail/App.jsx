@@ -14,7 +14,7 @@ import { clearPromotionDetail, getPromotionDetail, updateStoreId } from '../../.
 import { basicDetailBefore, basicDetailAfter } from '../columns';
 import {
     getRowFromFields, getNoConditions, getPurchaseCondition,
-    getRewardList, getTotalPurchaseList
+    getRewardList, getTotalPurchaseList, getEachConditionGivenOne
 } from './domHelper';
 
 const FormItem = Form.Item;
@@ -118,6 +118,10 @@ class PromotionDetail extends PureComponent {
         });
     }
 
+    goBack = () => {
+        this.props.history.push('/promotion');
+    }
+    
     render() {
         const { form, promotion } = this.props;
         const { getFieldDecorator } = form;
@@ -134,6 +138,9 @@ class PromotionDetail extends PureComponent {
                 }
                 {branch === 'REWARDLIST' ?
                     getRewardList(promotionRule) : null
+                }
+                {branch === 'EACHCONDITIONGIVEONCE' ?
+                    getEachConditionGivenOne(promotionRule) : null
                 }
                 {branch === 'TOTALPUCHASELIST' ?
                     getTotalPurchaseList(promotionRule) : null
@@ -169,6 +176,12 @@ class PromotionDetail extends PureComponent {
                             htmlType="submit"
                             disabled={submitDisabled}
                         >保存</Button>
+                        <Button
+                        style={{marginLeft: '20px'}}
+                            size="default"
+                            onClick={this.goBack}
+                            disabled={submitDisabled}
+                        >取消</Button>
                     </Row> : null}
             </Form>
         );

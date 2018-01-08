@@ -21,7 +21,7 @@ import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
 import {
     getChooseButton, getRules, getRulesColumn,
-    getPromotion, getRewardList, getTotalPurchaseList
+    getPromotion, getRewardList, getTotalPurchaseList, getEachConditionGivenOne
 } from './domHelper';
 import { getFormData } from './dataHelper';
 
@@ -45,7 +45,7 @@ class PromotionCreate extends PureComponent {
         companies: [], // 所选区域子公司
         conditions: [], // 购买条件列表
         categoryPC: null, // 购买条件品类, PC = PURCHASECONDITION
-        categoryRL: null, // 奖励列表品类，RL = REWARDLIST
+        categoryRL: null // 奖励列表品类，RL = REWARDLIST
     }
 
     handleSelectorOk = (companies) => {
@@ -160,6 +160,10 @@ class PromotionCreate extends PureComponent {
         );
     }
 
+    goBack = () => {
+        this.props.history.push('/promotion');
+    }
+
     render() {
         const { form } = this.props;
         const { getFieldDecorator, getFieldValue } = form;
@@ -221,6 +225,7 @@ class PromotionCreate extends PureComponent {
                                 <Option key={'PURCHASECONDITION'} value="PURCHASECONDITION">购买条件</Option>
                                 <Option key={'REWARDLIST'} value="REWARDLIST">奖励列表</Option>
                                 <Option key={'TOTALPUCHASELIST'} value="TOTALPUCHASELIST">整个购买列表</Option>
+                                <Option key={'EACHCONDITIONGIVEONCE'} value="EACHCONDITIONGIVEONCE">每满</Option>
                             </Select>)}
                         </FormItem>
                     }
@@ -255,6 +260,17 @@ class PromotionCreate extends PureComponent {
                             conditions,
                             handleBuyConditionsChange: this.handleBuyConditionsChange
                         }) : null}
+                {/* 指定条件——每满 */}
+                {getFieldValue('condition') === 1 && getFieldValue('category') === 'EACHCONDITIONGIVEONCE' ?
+                    getEachConditionGivenOne(
+                        {
+                            form,
+                            licence: 'eachConditionGivenOne',
+                            conditions,
+                            handleBuyConditionsChange: this.handleBuyConditionsChange
+                        }
+                    ) : null
+                }
                 <Row>
                     <FormItem label="使用区域">
                         {getFieldDecorator('area', {
@@ -359,6 +375,11 @@ class PromotionCreate extends PureComponent {
                         htmlType="submit"
                         disabled={submitDisabled}
                     >保存</Button>
+                    <Button
+                        size="default"
+                        className='cancelBtn'
+                        onClick={this.goBack}
+                    >取消</Button>
                 </Row>
             </Form>
         );
