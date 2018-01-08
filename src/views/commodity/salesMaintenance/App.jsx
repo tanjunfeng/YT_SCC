@@ -127,12 +127,10 @@ class ProcurementMaintenance extends PureComponent {
      * @param {string} goto 数据列表分页
      */
     handlePaginationChange = (goto = 1) => {
-        this.current = goto;
-        this.props.fetchPriceInfo({
-            pageNum: goto,
-            pageSize: PAGE_SIZE,
-            ...this.searchForm
-        });
+        const params = {
+            pageNum: goto, pageSize: PAGE_SIZE, ...this.searchForm
+        };
+        this.props.fetchPriceInfo(params);
     }
 
     /**
@@ -194,13 +192,14 @@ class ProcurementMaintenance extends PureComponent {
 
     handlePostAdd = (data, isEdit) => {
         const service = isEdit ? this.props.updateSellPrice : this.props.postSellPrice;
+        const { getProductById = {} } = this.props;
         service(data).then((res) => {
             if (res.code === 200 && res.success) {
                 message.success(res.message);
                 this.props.fetchPriceInfo({
                     pageNum: this.current,
                     pageSize: PAGE_SIZE,
-                    ...data
+                    productId: getProductById.id
                 });
             } else {
                 message.warning(res.message)
