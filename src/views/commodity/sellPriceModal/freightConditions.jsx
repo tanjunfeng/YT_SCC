@@ -231,14 +231,14 @@ class FreightConditions extends Component {
                                 <FormItem>
                                     <span>整箱销售单位:</span>
                                     <span className={`${prefixCls}-day-input`}>
-                                        {sellPricesInReview.fullCaseUnit || '-'}
+                                        {getProductById.fullCaseUnit || '-'}
                                     </span>
                                 </FormItem>
                                 {/* 采购模式 */}
                                 <FormItem className={`${prefixCls}-qy`}>
                                     <span className={`${prefixCls}-select`}> 采购模式 : </span>
                                     {getFieldDecorator('preHarvestPinStatus', {
-                                        initialValue: isEdit ? preHarvestPinStatusChange : '0'
+                                        initialValue: preHarvestPinStatusChange
                                     })(
                                         <Select
                                             style={{ width: 90 }}
