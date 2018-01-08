@@ -238,7 +238,7 @@ class FreightConditions extends Component {
                                 <FormItem className={`${prefixCls}-qy`}>
                                     <span className={`${prefixCls}-select`}> 采购模式 : </span>
                                     {getFieldDecorator('preHarvestPinStatus', {
-                                        initialValue: isEdit ? preHarvestPinStatusChange : '0'
+                                        initialValue: preHarvestPinStatusChange
                                     })(
                                         <Select
                                             style={{ width: 90 }}
