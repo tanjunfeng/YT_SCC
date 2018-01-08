@@ -200,7 +200,7 @@ class SearchForm extends PureComponent {
                     <Col>
                         <FormItem label="商品">
                             {getFieldDecorator('product', {
-                                initialValue: { productId: '', saleName: '' }
+                                initialValue: { productId: '', productName: '' }
                             })(<Commodity api="queryProductForSelect" />)
                             }
                         </FormItem>

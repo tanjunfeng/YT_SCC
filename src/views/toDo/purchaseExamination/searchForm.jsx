@@ -52,7 +52,7 @@ class SearchForm extends PureComponent {
             status,
             spNo: this.supplierEncoded,
             spAdrNo: this.supplierAdressId,
-            productNo: product.productCode
+            productNo: product.record.productCode
         });
     }
 
@@ -199,8 +199,8 @@ class SearchForm extends PureComponent {
                     </FormItem>
                     <FormItem label="商品">
                         {getFieldDecorator('product', {
-                            initialValue: { productId: '', saleName: '' }
-                        })(<Commodity />)
+                            initialValue: { productId: '', productName: '' }
+                        })(<Commodity  api="queryProductForSelect" />)
                         }
                     </FormItem>
                 </Row>

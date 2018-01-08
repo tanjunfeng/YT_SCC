@@ -294,7 +294,7 @@ class ImportPurchasePriceList extends PureComponent {
                                             width: 98
                                         }, {
                                             title: '商品名称',
-                                            dataIndex: 'saleName',
+                                            dataIndex: 'productName',
                                             width: 140
                                         }
                                     ]}
