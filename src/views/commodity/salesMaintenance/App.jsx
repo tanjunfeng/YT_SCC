@@ -102,10 +102,10 @@ class ProcurementMaintenance extends PureComponent {
         const { key } = item;
         switch (key) {
             case 'changeAudit':
-                this.props.modifyAuditVisible({isVisible: true, record});
+                this.props.modifyAuditVisible({ isVisible: true, record });
                 break;
             case 'CheckReason':
-                this.props.modifyCheckReasonVisible({isVisible: true, record});
+                this.props.modifyCheckReasonVisible({ isVisible: true, record });
                 break;
             default:
                 break;
@@ -172,7 +172,7 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     handleCardClick = data => {
-        this.props.getSellPriceInfoByIdAction({id: data.id}).then((res) => {
+        this.props.getSellPriceInfoByIdAction({ id: data.id }).then((res) => {
             if (res.code === 200) {
                 this.setState({
                     datas: res,
@@ -221,7 +221,7 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getProductById, stepPriceDetail = {}, match} = this.props;
+        const { prefixCls, getProductById, stepPriceDetail = {}, match } = this.props;
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm
@@ -277,7 +277,7 @@ ProcurementMaintenance.propTypes = {
 
 ProcurementMaintenance.defaultProps = {
     prefixCls: 'card-line',
-    postSellPrice: () => {}
+    postSellPrice: () => { }
 };
 
 export default withRouter(Form.create()(ProcurementMaintenance));
