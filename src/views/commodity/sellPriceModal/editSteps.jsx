@@ -52,7 +52,8 @@ class EditSteps extends Component {
             currentPrices: sellSectionPrices,
             startNumber,
             isReadOnly: isSub,
-            auditStatus
+            auditStatus,
+            grossProfit: sellPricesInReview.purchasePrice || null
         };
     }
 

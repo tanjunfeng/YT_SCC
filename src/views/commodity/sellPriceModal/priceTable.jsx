@@ -337,11 +337,12 @@ class PriceTable extends PureComponent {
     }
 
     /**
-     * 获取毛利率看
+     * 获取毛利率
      */
     renderGrossProfit = (text, record) => {
-        const { costPrice } = this.props;
+        const { isEdit, grossProfit } = this.props.value;
         const { price } = record;
+        const costPrice = isEdit ? grossProfit : this.props.costPrice;
         const rate = (price - costPrice) * 100 / costPrice;
         if (costPrice === null || isNaN(rate)) {
             return (<span className="red">-</span>);
