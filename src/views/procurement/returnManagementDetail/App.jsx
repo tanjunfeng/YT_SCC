@@ -87,7 +87,12 @@ class ReturnManagementDetail extends PureComponent {
             }, {
                 title: '可退库存',
                 dataIndex: 'possibleNum',
-                key: 'possibleNum'
+                key: 'possibleNum',
+                render: (text, record) => {
+                    // if (record.status) {
+                        
+                    // }
+                }
             }, {
                 title: '退货数量',
                 dataIndex: 'refundAmount',
