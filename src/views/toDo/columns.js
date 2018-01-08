@@ -47,7 +47,7 @@ export const poMngListColumns = [
         key: 'estimatedDeliveryDate',
         render: (text) => (
             <span>
-                { Util.getTime(text) }
+                { Util.getDate(text) }
             </span>
         )
     },
@@ -260,7 +260,7 @@ export const priceChangeColumns = [
         key: 'createTime',
         render: (text) => (
             <span>
-                { Util.getTime(text) }
+                { Util.getDate(text) }
             </span>
         )
     },
@@ -335,7 +335,7 @@ export const purchaseListColumns = [
         render: (text) => {
             return text ?
                 <span>
-                    { Util.getTime(text) }
+                    { Util.getDate(text) }
                 </span>
                 : null
         }
@@ -385,7 +385,7 @@ export const priceListColumns = [
         key: 'modifyTime',
         render: (text) => (
             <span>
-                { Util.getTime(text) }
+                { Util.getDate(text) }
             </span>
         )
     },
