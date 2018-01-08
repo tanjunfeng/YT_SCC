@@ -73,7 +73,7 @@ class PriceTable extends PureComponent {
         if (target) {
             target.editable = true;
             // 为空时截取掉减号
-            if (target.price === '-') {
+            if (target.price === '-' || !target.price) {
                 Object.assign(target, { price: '' });
             }
             this.checkAddable(prices);
@@ -81,19 +81,30 @@ class PriceTable extends PureComponent {
     }
 
     /**
+     * 校验字段是否存在有效值
+     */
+    isTextInvalid = text => (text === '-' || isNaN(text))
+
+    /**
      * 起始数量比终止数量还大
      * 价格为 -
      */
-    isPriceInvalid = price => {
-        let res = false;
-        if (!price) return false;
-        if (price.startNumber >= price.endNumber) {
-            res = true;
+    isPriceInvalid = record => {
+        if (!record) return false;
+        const {startNumber, endNumber, price} = record;
+        if (startNumber >= endNumber) {
+            return true;
         }
-        if (price.price === '-' || isNaN(price.price)) {
-            res = true;
+        if (this.isTextInvalid(startNumber)) {
+            return true;
         }
-        return res;
+        if (this.isTextInvalid(endNumber)) {
+            return true;
+        }
+        if (this.isTextInvalid(price)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -146,21 +157,31 @@ class PriceTable extends PureComponent {
         }
     }
 
+    formatInteger = number => {
+        const n = Number(number);
+        if (isNaN(n)) {
+            return '-';
+        }
+        return Math.ceil(n);
+    }
+
+    formatPrice = price => {
+        const p = Number(price);
+        if (isNaN(p)) {
+            return '-';
+        }
+        return p.toFixed(2);
+    }
+
     /**
      * 格式化数据
      */
     formatData = (record) => {
         const { startNumber, endNumber, price = NaN } = record;
-        let p = Number(price);
-        if (isNaN(p)) {
-            p = '-';
-        } else {
-            p = Number(price).toFixed(2)
-        }
         Object.assign(record, {
-            startNumber: Math.ceil(startNumber),
-            endNumber: Math.ceil(endNumber),
-            price: p
+            startNumber: this.formatInteger(startNumber),
+            endNumber: this.formatInteger(endNumber),
+            price: this.formatPrice(price)
         })
     }
 
@@ -232,7 +253,7 @@ class PriceTable extends PureComponent {
         this.notify(prices);
     }
 
-    renderColumnsNum = (text, record, column, index) => {
+    renderColumnsNum = (text = '', record, column, index) => {
         let editable = record.editable;
         if (column === 'startNumber' && index === 0) {
             editable = false;
@@ -245,7 +266,7 @@ class PriceTable extends PureComponent {
             />);
     }
 
-    renderColumnsPrice = (text, record, column) => (
+    renderColumnsPrice = (text = '', record, column) => (
         <EditableCell
             editable={record.editable}
             value={String(text)}
