@@ -54,7 +54,7 @@ class SellPriceModal extends Component {
             const result = values;
             result.productId = datas.id || datas.productId;
             const priceList = [];
-            priceList.forEach((obj) => {
+            priceList.forEach(obj => {
                 if (obj === null || obj === undefined) {
                     this.successPost = true;
                     setFields({
@@ -103,7 +103,7 @@ class SellPriceModal extends Component {
         })
         if (isEdit) {
             const { deliveryDay, minNumber, salesInsideNumber, suggestPrice } = newDatas;
-            this.newDatas.sellPricesInReview.sellSectionPrices.map((item) => (
+            this.newDatas.sellPricesInReview.sellSectionPrices.forEach(item => (
                 noChangePrices.push({
                     endNumber: item.endNumber,
                     price: item.price,
@@ -226,7 +226,7 @@ class SellPriceModal extends Component {
         const newArr = [];
         const priceArrMore = [];
         if (prices.length === 1) {
-            prices.map((item) => (
+            prices.forEach(item => (
                 newArr.push({
                     endNumber: item.endNumber,
                     price: item.price,
@@ -240,7 +240,7 @@ class SellPriceModal extends Component {
             })
         }
         if (prices.length > 1) {
-            prices.map((item) => {
+            prices.forEach(item => {
                 priceArrMore.push({
                     endNumber: item.endNumber,
                     price: item.price,
@@ -264,7 +264,7 @@ class SellPriceModal extends Component {
         const newArr = [];
         const priceArrMore = [];
         if (prices.length === 1) {
-            prices.map((item) => (
+            prices.forEach(item => (
                 newArr.push({
                     endNumber: item.endNumber,
                     price: item.price,
@@ -276,7 +276,7 @@ class SellPriceModal extends Component {
                 editIsContinue: isContinue
             })
         } else if (prices.length > 1) {
-            prices.map((item) => {
+            prices.forEach(item => {
                 priceArrMore.push({
                     endNumber: item.endNumber,
                     price: item.price,

@@ -53,6 +53,7 @@ class PriceTable extends PureComponent {
         const { prices } = this.state;
         if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
             prices[0].startNumber = startNumber === undefined ? 0 : startNumber;
+            this.notify(prices);
         }
     }
 
@@ -71,6 +72,10 @@ class PriceTable extends PureComponent {
         const target = prices.filter(item => id === item.id)[0];
         if (target) {
             target.editable = true;
+            // 为空时截取掉减号
+            if (target.price === '-') {
+                Object.assign(target, { price: '' });
+            }
             this.checkAddable(prices);
         }
     }
