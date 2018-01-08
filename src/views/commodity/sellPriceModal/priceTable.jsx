@@ -17,11 +17,20 @@ import {
 import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
 
-function getNewData(props) {
-    if (props.value.isReadOnly && props.value.isEdit) {
-        return [];
+function getNewData(props, mark) {
+    const { isReadOnly, currentPrices, list, isEdit } = props.value;
+    if (isReadOnly && isEdit) {
+        currentPrices.forEach((currentRecord, index) => {
+            const { startNumber, endNumber, price } = currentRecord;
+            const record = list[index];
+            mark.push({
+                startNumber: startNumber !== record.startNumber,
+                endNumber: endNumber !== record.endNumber,
+                price: price !== record.price
+            });
+        })
     }
-    return Immutable.fromJS(props.value.list).toJS();
+    return Immutable.fromJS(list).toJS();
 }
 
 @connect(
@@ -36,7 +45,8 @@ function getNewData(props) {
 class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
-        const newData = getNewData(props);
+        this.mark = [];
+        const newData = getNewData(props, this.mark);
         this.state = {
             prices: newData,
             canAdd: true // 是否可继续添加价格
@@ -46,10 +56,10 @@ class PriceTable extends PureComponent {
     }
 
     componentWillMount() {
-        columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, 'startNumber', index)
-        columns[1].render = (text, record) => this.renderColumnsNum(text, record, 'endNumber')
-        columns[2].render = (text, record) => this.renderColumnsPrice(text, record, 'price')
-        columns[3].render = (text, record) => this.renderGrossProfit(text, record)
+        columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, index, 'startNumber')
+        columns[1].render = (text, record, index) => this.renderColumnsNum(text, record, index, 'endNumber')
+        columns[2].render = (text, record, index) => this.renderColumnsPrice(text, record, index, 'price')
+        columns[3].render = (text, record, index) => this.renderGrossProfit(text, record, index)
         columns[4].render = (text, record, index) => this.renderOptions(text, record, index)
     }
 
@@ -79,8 +89,14 @@ class PriceTable extends PureComponent {
         if (target) {
             target.editable = true;
             // 为空时截取掉减号
-            if (target.price === '-' || !target.price) {
-                Object.assign(target, { price: '' });
+            if (this.isTextInvalid(target.price)) {
+                target.price = '';
+            }
+            if (this.isTextInvalid(target.startNumber)) {
+                target.startNumber = '';
+            }
+            if (this.isTextInvalid(target.endNumber)) {
+                target.endNumber = '';
             }
             this.checkAddable(prices);
         }
@@ -89,7 +105,7 @@ class PriceTable extends PureComponent {
     /**
      * 校验字段是否存在有效值
      */
-    isTextInvalid = text => (text === '-' || isNaN(text))
+    isTextInvalid = text => (text === '-' || !text || isNaN(text))
 
     /**
      * 起始数量比终止数量还大
@@ -97,7 +113,7 @@ class PriceTable extends PureComponent {
      */
     isPriceInvalid = record => {
         if (!record) return false;
-        const {startNumber, endNumber, price} = record;
+        const { startNumber, endNumber, price } = record;
         if (startNumber >= endNumber) {
             return true;
         }
@@ -141,7 +157,7 @@ class PriceTable extends PureComponent {
     /**
      * 校验是否能继续添加价格
      */
-    checkAddable = (prices) => {
+    checkAddable = prices => {
         const { value } = this.props;
         const { MAXGOODS } = value;
         const lastPrice = prices[prices.length - 1] || null;
@@ -259,7 +275,12 @@ class PriceTable extends PureComponent {
         this.notify(prices);
     }
 
-    renderColumnsNum = (text = '', record, column, index) => {
+    isMarkable = (index, column) => {
+        if (this.mark.length === 0) return false;
+        return this.mark[index][column];
+    }
+
+    renderColumnsNum = (text = '', record, index, column) => {
         let editable = record.editable;
         if (column === 'startNumber' && index === 0) {
             editable = false;
@@ -268,15 +289,17 @@ class PriceTable extends PureComponent {
             <EditableCell
                 editable={editable}
                 value={String(text)}
+                mark={this.isMarkable(index, column)}
                 onChange={value => this.handleChange(value, record.id, column)}
             />);
     }
 
-    renderColumnsPrice = (text = '', record, column) => (
+    renderColumnsPrice = (text = '', record, index, column) => (
         <EditableCell
             editable={record.editable}
             value={String(text)}
             type="price"
+            mark={this.isMarkable(index, column)}
             onChange={value => this.handleChange(value, record.id, column)}
         />
     );
