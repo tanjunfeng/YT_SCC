@@ -234,9 +234,9 @@ class ProdModal extends Component {
                     message.success(res.message)
                     this.handleCancel();
                     this.props.goto()
+                } else {
+                    message.error(res.message)
                 }
-            }).catch(() => {
-                message.error('操作失败')
             })
         })
     }

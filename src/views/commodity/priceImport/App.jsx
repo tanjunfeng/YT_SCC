@@ -38,10 +38,6 @@ class PriceImport extends PureComponent {
         }
     }
 
-    // componentDidMount() {
-    //     this.isCreateChange()
-    // }
-
     componentWillReceiveProps(nextProps) {
         if (!nextProps.priceImportlist.data) {
             return;
