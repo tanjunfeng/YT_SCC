@@ -78,20 +78,11 @@ class OnlyReadSteps extends Component {
                 </div>
                 <div className="read-only-footer">
                     <span>*建议零售价(元):</span>
-                    <span className={
-                        newDatas.sellPricesInReview.suggestPrice !== newDatas.suggestPrice ?
-                            'sell-modal-border' : null}
-                    >{newDatas.suggestPrice}</span>
+                    <span>{newDatas.suggestPrice}</span>
                     <span>商品采购价格：</span>
-                    <span className={
-                        newDatas.sellPricesInReview.purchasePrice !== newDatas.purchasePrice ?
-                            'sell-modal-border' : null}
-                    >{newDatas.purchasePrice || '-'}</span>
+                    <span>{newDatas.purchasePrice || '-'}</span>
                     <span className="edit-input">子公司:</span>
-                    <span className={
-                        newDatas.sellPricesInReview.branchCompanyId !== newDatas.sellPricesInReview.branchCompanyId ?
-                            'sell-modal-border' : null}
-                    >{newDatas.branchCompanyId} - {newDatas.branchCompanyName}</span>
+                    <span>{newDatas.branchCompanyId} - {newDatas.branchCompanyName}</span>
                 </div>
             </div>
         )

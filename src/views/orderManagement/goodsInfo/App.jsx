@@ -46,7 +46,7 @@ class GoodsInfo extends PureComponent {
                 }
 
                 if (record.abnormalGoods) {
-                    message = record.abnormalResonse || '毛利异常';
+                    message = '毛利异常';
                     const tipClassName = arrowTip ? 'abnormalResonse resonse-top' : 'abnormalResonse';
                     errorTip = <div className={tipClassName}>{message}</div>;
                 } else {

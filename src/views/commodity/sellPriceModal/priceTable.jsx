@@ -50,11 +50,9 @@ class PriceTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
         // 当用户手工修改 startNumber 时，更新 prices 第一条记录并通知父组件更新
         const { startNumber } = nextProps.value;
-        const prices = [...this.state.prices];
+        const { prices } = this.state;
         if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
             prices[0].startNumber = startNumber === undefined ? 0 : startNumber;
-            this.setState({ prices });
-            this.notify(prices);
         }
     }
 
@@ -73,7 +71,7 @@ class PriceTable extends PureComponent {
         const target = prices.filter(item => id === item.id)[0];
         if (target) {
             target.editable = true;
-            this.setState({ prices });
+            this.checkAddable(prices);
         }
     }
 
@@ -87,7 +85,7 @@ class PriceTable extends PureComponent {
         if (price.startNumber >= price.endNumber) {
             res = true;
         }
-        if (price.price === '-') {
+        if (price.price === '-' || isNaN(price.price)) {
             res = true;
         }
         return res;
@@ -118,19 +116,26 @@ class PriceTable extends PureComponent {
         return true;
     }
 
-    notify = (prices) => {
-        const { onChange, value } = this.props;
+    /**
+     * 校验是否能继续添加价格
+     */
+    checkAddable = (prices) => {
+        const { value } = this.props;
         const { MAXGOODS } = value;
         const lastPrice = prices[prices.length - 1] || null;
         if (lastPrice !== null && lastPrice.endNumber < MAXGOODS - 1) {
             this.setState({
-                canAdd: true
+                canAdd: true, prices
             });
         } else {
             this.setState({
-                canAdd: false
+                canAdd: false, prices
             });
         }
+    }
+
+    notify = (prices) => {
+        const { onChange } = this.props;
         if (typeof onChange === 'function') {
             onChange(prices, this.isContinue(prices));
         }
@@ -140,11 +145,17 @@ class PriceTable extends PureComponent {
      * 格式化数据
      */
     formatData = (record) => {
-        const { startNumber, endNumber, price } = record;
+        const { startNumber, endNumber, price = NaN } = record;
+        let p = Number(price);
+        if (isNaN(p)) {
+            p = '-';
+        } else {
+            p = Number(price).toFixed(2)
+        }
         Object.assign(record, {
             startNumber: Math.ceil(startNumber),
             endNumber: Math.ceil(endNumber),
-            price: Number(price).toFixed(2)
+            price: p
         })
     }
 
@@ -154,7 +165,7 @@ class PriceTable extends PureComponent {
         if (target) {
             delete target.editable;
             this.formatData(target); // 保存时，数据格式化
-            this.setState({ prices });
+            this.checkAddable(prices);
             this.cacheData = prices.map(item => ({ ...item }));
             this.notify(prices);
         }
@@ -166,7 +177,7 @@ class PriceTable extends PureComponent {
         if (target) {
             Object.assign(target, this.cacheData.filter(item => id === item.id)[0]);
             delete target.editable;
-            this.setState({ prices });
+            this.checkAddable(prices);
         }
     }
 
@@ -176,7 +187,7 @@ class PriceTable extends PureComponent {
         if (index > 0) {
             prices.splice(index, 1);
             this.cacheData = prices.map(item => ({ ...item }));
-            this.setState({ prices });
+            this.checkAddable(prices);
             this.notify(prices);
         }
     }
@@ -186,7 +197,7 @@ class PriceTable extends PureComponent {
         const target = prices.filter(item => id === item.id)[0];
         if (target) {
             target[column] = value;
-            this.setState({ prices });
+            this.checkAddable(prices);
         }
     }
 
@@ -212,7 +223,7 @@ class PriceTable extends PureComponent {
                 rate
             });
         }
-        this.setState({ prices });
+        this.checkAddable(prices);
         this.notify(prices);
     }
 
@@ -275,11 +286,11 @@ class PriceTable extends PureComponent {
      */
     renderGrossProfit = (text, record) => {
         const { costPrice } = this.props;
+        const { price } = record;
         const rate = (price - costPrice) * 100 / costPrice;
-        if (costPrice < 0 || isNaN(rate)) {
+        if (costPrice === null || isNaN(rate)) {
             return (<span className="red">-</span>);
         }
-        const { price } = record;
         return (<span className="red">{rate.toFixed(2)}%</span>);
     }
 

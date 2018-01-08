@@ -601,7 +601,7 @@ export const sellPriceChangeList = (params) => http.get('/prodSell/sellPriceChan
 // 查询售价变更创建变价单是否可用
 export const isSellVaild = (params) => http.get('/prodSell/isSellVaild', params);
 // 创建变价单
-export const createSell = (params) => http.post('/prodPurchase/createSell', params);
+export const createSell = (params) => http.post('/prodSell/createSell', params);
 /* **************procurement*********** */
 
 // 查询采购单详情
