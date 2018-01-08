@@ -10,6 +10,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { message, Form, Select, Button, Icon, Row, Col } from 'antd';
 import Utils from '../../../util/util';
 import { BranchCompany } from '../../../container/search';
@@ -178,6 +179,7 @@ class SearchForm extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;
+        const pathname = window.location.pathname;
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{ fontSize: 16, fontWeight: 900 }}>
@@ -231,7 +233,7 @@ class SearchForm extends Component {
                                 )}
                         </FormItem>
                         <FormItem>
-                            <a onClick={this.handlePriceImport}>售价批量导入</a>
+                            <Link target="_blank" to="/priceImport">售价批量导入</Link>
                         </FormItem>
                         <FormItem>
                             <Button
