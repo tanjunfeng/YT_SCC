@@ -5,7 +5,6 @@
  * 定义列表数据
  */
 import React from 'react';
-import moment from 'moment';
 import Util from '../../util/util';
 import { locType, poStatus } from '../../constant/procurement';
 
@@ -261,7 +260,7 @@ export const priceChangeColumns = [
         key: 'createTime',
         render: (text) => (
             <span>
-                { text ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : '-'}
+                { Util.getTime(text) }
             </span>
         )
     },
@@ -336,7 +335,7 @@ export const purchaseListColumns = [
         render: (text) => {
             return text ?
                 <span>
-                    {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                    { Util.getTime(text) }
                 </span>
                 : null
         }
@@ -386,7 +385,7 @@ export const priceListColumns = [
         key: 'modifyTime',
         render: (text) => (
             <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                { Util.getTime(text) }
             </span>
         )
     },
@@ -416,7 +415,7 @@ export const seeModalColumns = [
         key: 'handlerDate',
         render: (text) => (
             <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD HH:mm:ss')}
+                { Util.getTime(text) }
             </span>
         )
     },
