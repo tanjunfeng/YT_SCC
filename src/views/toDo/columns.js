@@ -1,11 +1,12 @@
 /**
  * @file formColumns.js
- * @author shijh,liujinyu
+ * @author shijh,liujinyu,zhoucl
  *
  * 定义列表数据
  */
 import React from 'react';
 import moment from 'moment';
+import Util from '../../util/util';
 import { locType, poStatus } from '../../constant/procurement';
 
 const purchase = ['普通采购单'];
@@ -47,7 +48,7 @@ export const poMngListColumns = [
         key: 'estimatedDeliveryDate',
         render: (text) => (
             <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                { Util.getTime(text) }
             </span>
         )
     },
