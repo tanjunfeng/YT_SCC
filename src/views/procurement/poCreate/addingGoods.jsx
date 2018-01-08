@@ -46,7 +46,7 @@ class AddingGoods extends PureComponent {
                                 addonBefore="添加商品"
                                 onChoosed={this.props.handleChoosedMaterialMap}
                                 renderChoosedInputRaw={(data) => (
-                                    <div>{data.productCode} - {data.saleName}</div>
+                                    <div>{data.productCode} - {data.productName}</div>
                                 )}
                                 pageSize={6}
                                 columns={[
@@ -56,7 +56,7 @@ class AddingGoods extends PureComponent {
                                         width: 98
                                     }, {
                                         title: '商品名称',
-                                        dataIndex: 'saleName',
+                                        dataIndex: 'productName',
                                         width: 140
                                     }
                                 ]}
