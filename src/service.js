@@ -563,9 +563,6 @@ export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSu
 // 查询商品价格信息
 export const getProdPurchaseById = (params) => http.get('/prodPurchase/getProdPurchaseById', params);
 
-// 销售价格信息
-export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
-
 // 新增商品采购关系
 export const addProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
 
