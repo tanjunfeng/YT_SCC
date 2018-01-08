@@ -1,11 +1,11 @@
 /**
  * @file formColumns.js
- * @author shijh,liujinyu
+ * @author shijh,liujinyu,zhoucl
  *
  * 定义列表数据
  */
 import React from 'react';
-import moment from 'moment';
+import Util from '../../util/util';
 import { locType, poStatus } from '../../constant/procurement';
 
 const purchase = ['普通采购单'];
@@ -47,7 +47,7 @@ export const poMngListColumns = [
         key: 'estimatedDeliveryDate',
         render: (text) => (
             <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                { Util.getDate(text) }
             </span>
         )
     },
@@ -260,7 +260,7 @@ export const priceChangeColumns = [
         key: 'createTime',
         render: (text) => (
             <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                { Util.getDate(text) }
             </span>
         )
     },
@@ -335,7 +335,7 @@ export const purchaseListColumns = [
         render: (text) => {
             return text ?
                 <span>
-                    {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                    { Util.getDate(text) }
                 </span>
                 : null
         }
@@ -385,7 +385,7 @@ export const priceListColumns = [
         key: 'modifyTime',
         render: (text) => (
             <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                { Util.getDate(text) }
             </span>
         )
     },
@@ -415,7 +415,7 @@ export const seeModalColumns = [
         key: 'handlerDate',
         render: (text) => (
             <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD HH:mm:ss')}
+                { Util.getTime(text) }
             </span>
         )
     },
