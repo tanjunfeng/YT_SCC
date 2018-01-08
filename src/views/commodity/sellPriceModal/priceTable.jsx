@@ -10,6 +10,7 @@ import { Table, Popconfirm, Button } from 'antd';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import { bindActionCreators } from 'redux';
+import cs from 'classnames';
 
 import {
     getCostPrice
@@ -18,8 +19,8 @@ import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
 
 function getNewData(props, mark) {
-    const { isReadOnly, currentPrices, list, isEdit } = props.value;
-    if (isReadOnly && isEdit) {
+    const { isReadOnly, currentPrices, list, isEdit, shouldMark } = props.value;
+    if (shouldMark && isReadOnly && isEdit) {
         currentPrices.forEach((currentRecord, index) => {
             const { startNumber, endNumber, price } = currentRecord;
             const record = list[index];
@@ -339,15 +340,16 @@ class PriceTable extends PureComponent {
     /**
      * 获取毛利率
      */
-    renderGrossProfit = (text, record) => {
-        const { isEdit, grossProfit } = this.props.value;
+    renderGrossProfit = (text, record, index) => {
+        const { isEdit, grossProfit, shouldMark } = this.props.value;
         const { price } = record;
         const costPrice = isEdit ? grossProfit : this.props.costPrice;
-        const rate = (price - costPrice) * 100 / costPrice;
-        if (costPrice === null || isNaN(rate)) {
-            return (<span className="red">-</span>);
+        if (costPrice === null || isNaN(costPrice)) {
+            return (<span>-</span>);
         }
-        return (<span className="red">{rate.toFixed(2)}%</span>);
+        const rate = (price - costPrice) * 100 / costPrice;
+        const mark = this.isMarkable(index, 'price') && shouldMark;
+        return (<span className={mark ? "red" : null}>{`${rate.toFixed(2)}%`}</span>);
     }
 
     render() {
