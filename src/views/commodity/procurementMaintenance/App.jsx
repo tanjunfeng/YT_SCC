@@ -30,7 +30,6 @@ import {
 } from '../../../actions/producthome';
 import getProdPurchaseById from '../../../actions/fetch/fetchGetProdPurchaseById';
 
-
 @connect(
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
