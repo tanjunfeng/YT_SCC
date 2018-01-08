@@ -42,15 +42,14 @@ class EditSteps extends Component {
 
     getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber, isSub } = this.props;
-        const { sellPricesInReview = {}, auditStatus } = newDatas;
-        const { sellSectionPrices = [] } = sellPricesInReview;
+        const { sellPricesInReview = {}, sellSectionPrices = {}, auditStatus } = newDatas;
         const { prices } = this.state;
         return {
             MAXGOODS,
             isSub,
             isEdit,
             list: prices,
-            sellSectionPrices,
+            currentPrices: sellSectionPrices,
             startNumber,
             isReadOnly: isSub,
             auditStatus

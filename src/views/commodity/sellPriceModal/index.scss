@@ -1,16 +1,16 @@
 .sell-modal {
     min-width: 950px;
-    .max-number-input{
+    .max-number-input {
         display: inline;
     }
-    .changeBefore{
+    .changeBefore {
         width: 49%;
         display: inline-block;
     }
-    .last-freightConditions{
+    .last-freightConditions {
         min-height: 235px;
     }
-    .changeAfter{
+    .changeAfter {
         width: 49%;
         margin-left: 1%;
         display: inline-block;
@@ -53,8 +53,8 @@
             left: 30px;
         }
     }
-    .sell-modal-body-width{
-        .sell-modal-item{
+    .sell-modal-body-width {
+        .sell-modal-item {
             min-height: 260px;
         }
     }
@@ -76,7 +76,7 @@
     .sell-modal-body-width {
         width: 50%;
     }
-    .sell-modal-body-width:last-child{
+    .sell-modal-body-width:last-child {
         float: right;
     }
     .sell-modal-body-wrap::after {
@@ -88,24 +88,26 @@
     }
     .edit-state-list {
         display: flex;
-        div{
+        div {
             width: 30%;
         }
-        div:first-child{
+        div:first-child {
             margin-left: 10%;
         }
     }
     .sell-modal-border {
         border: 1px solid red;
         padding: 5px 10px;
-        .editable-cell .ant-input-number {
-            width: 60px;
+        .editable-cell {
+            .ant-input-number {
+                width: 60px;
+            }
         }
     }
-    .read-only-footer{
+    .read-only-footer {
         height: 32px;
         line-height: 32px;
-        span{
+        span {
             padding: 0 5px;
         }
     }
@@ -134,7 +136,7 @@
             display: inline-block;
             vertical-align: middle;
         }
-        .editable-row-operations-true{
+        .editable-row-operations-true {
             display: none;
         }
     }
@@ -194,12 +196,13 @@
             overflow-y: auto;
         }
     }
-    .ant-message-warning {
+    .ant-message-warning, span.red {
         color: red;
     }
 }
-.sell-prigce-edit-footer{
-    .ant-row{
+
+.sell-prigce-edit-footer {
+    .ant-row {
         display: inline-flex;
         margin-bottom: 0;
     }
