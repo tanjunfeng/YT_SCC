@@ -18,19 +18,7 @@ import {
 import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
 
-function getNewData(props, mark) {
-    const { isReadOnly, currentPrices, list, isEdit, shouldMark } = props.value;
-    if (shouldMark && isReadOnly && isEdit) {
-        currentPrices.forEach((currentRecord, index) => {
-            const { startNumber, endNumber, price } = currentRecord;
-            const record = list[index];
-            mark.push({
-                startNumber: startNumber !== record.startNumber,
-                endNumber: endNumber !== record.endNumber,
-                price: price !== record.price
-            });
-        })
-    }
+function getNewData(list) {
     return Immutable.fromJS(list).toJS();
 }
 
@@ -47,7 +35,7 @@ class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
         this.mark = [];
-        const newData = getNewData(props, this.mark);
+        const newData = getNewData(props.value.list);
         this.state = {
             prices: newData,
             canAdd: true // 是否可继续添加价格
@@ -57,6 +45,7 @@ class PriceTable extends PureComponent {
     }
 
     componentWillMount() {
+        this.markTable();
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, index, 'startNumber')
         columns[1].render = (text, record, index) => this.renderColumnsNum(text, record, index, 'endNumber')
         columns[2].render = (text, record, index) => this.renderColumnsPrice(text, record, index, 'price')
@@ -71,6 +60,21 @@ class PriceTable extends PureComponent {
         if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
             prices[0].startNumber = startNumber === undefined ? 0 : startNumber;
             this.notify(prices);
+        }
+    }
+
+    markTable = () => {
+        const { isReadOnly, currentPrices, list, isEdit } = this.props.value;
+        if (isReadOnly && isEdit) {
+            currentPrices.forEach((currentRecord, index) => {
+                const { startNumber, endNumber, price } = currentRecord;
+                const record = list[index];
+                this.mark.push({
+                    startNumber: startNumber !== record.startNumber,
+                    endNumber: endNumber !== record.endNumber,
+                    price: price !== record.price
+                });
+            })
         }
     }
 
