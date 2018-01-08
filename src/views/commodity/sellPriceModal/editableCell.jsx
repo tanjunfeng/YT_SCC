@@ -16,7 +16,6 @@ class EditableCell extends PureComponent {
 
     render() {
         const { editable, value, type } = this.props;
-        // console.log(value === '-' ? '没有值' : '');
         return (
             <div className="editable-cell">
                 {editable ?

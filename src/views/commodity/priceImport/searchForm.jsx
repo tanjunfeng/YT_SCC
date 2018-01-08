@@ -68,6 +68,7 @@ class SearchForm extends PureComponent {
     handleReset() {
         this.props.form.resetFields(); // 清除当前查询条件
         this.props.handlePurchaseReset(); // 通知查询条件已清除
+        this.props.isCreateChange(''); // 通知父组件禁用创建变价单按钮
     }
 
     /**
@@ -199,7 +200,7 @@ class SearchForm extends PureComponent {
                     <Col>
                         <FormItem label="商品">
                             {getFieldDecorator('product', {
-                                initialValue: { productId: '', saleName: '' }
+                                initialValue: { productId: '', productName: '' }
                             })(<Commodity api="queryProductForSelect" />)
                             }
                         </FormItem>
