@@ -73,7 +73,7 @@ class PriceTable extends PureComponent {
         if (target) {
             target.editable = true;
             // 为空时截取掉减号
-            if (target.price === '-') {
+            if (target.price === '-' || !target.price) {
                 Object.assign(target, { price: '' });
             }
             this.checkAddable(prices);
@@ -232,7 +232,7 @@ class PriceTable extends PureComponent {
         this.notify(prices);
     }
 
-    renderColumnsNum = (text, record, column, index) => {
+    renderColumnsNum = (text = '', record, column, index) => {
         let editable = record.editable;
         if (column === 'startNumber' && index === 0) {
             editable = false;
@@ -245,7 +245,7 @@ class PriceTable extends PureComponent {
             />);
     }
 
-    renderColumnsPrice = (text, record, column) => (
+    renderColumnsPrice = (text = '', record, column) => (
         <EditableCell
             editable={record.editable}
             value={String(text)}
