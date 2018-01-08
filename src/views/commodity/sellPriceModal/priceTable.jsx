@@ -71,6 +71,10 @@ class PriceTable extends PureComponent {
         const target = prices.filter(item => id === item.id)[0];
         if (target) {
             target.editable = true;
+            // 为空时截取掉减号
+            if (target.price === '-') {
+                Object.assign(target, { price: '' });
+            }
             this.checkAddable(prices);
         }
     }
