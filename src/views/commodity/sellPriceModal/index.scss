@@ -24,6 +24,7 @@
     }
     form .ant-input-number {
         margin-right: 0;
+        top: 4px;
     }
     &-item {
         border: 1px solid #eee;
@@ -48,11 +49,6 @@
         display: inline-block;
         height: 30px;
     }
-    &.ant-modal {
-        .ant-form-inline .ant-form-explain {
-            left: 30px;
-        }
-    }
     .sell-modal-body-width {
         .sell-modal-item {
             min-height: 260px;
@@ -60,6 +56,7 @@
     }
     .ant-form-explain {
         width: 160px;
+        left: 0;
     }
     .sell-modal-item {
         width: 461px;
@@ -178,11 +175,6 @@
             display: inline-block;
             height: 30px;
         }
-        &.ant-modal {
-            .ant-form-inline .ant-form-explain {
-                left: 30px;
-            }
-        }
         .ant-form-explain {
             width: 160px;
         }
@@ -204,6 +196,10 @@
     .ant-message-warning, .diff-price-table span.red {
         color: red;
     }
+}
+
+.createCls.ant-modal .ant-form-inline .ant-form-explain {
+    left: 0;
 }
 
 .sell-prigce-edit-footer {
