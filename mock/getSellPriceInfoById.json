@@ -71,7 +71,7 @@
             "sellSectionPrices": [
                 {
                     "id": 1,
-                    "price": 10,
+                    "price": 11,
                     "startNumber": 3,
                     "endNumber": 2147,
                     "sellPriceId": 2495,
@@ -80,7 +80,7 @@
                 },
                 {
                     "id": 2,
-                    "price": 100,
+                    "price": 99,
                     "startNumber": 2148,
                     "endNumber": 21490,
                     "sellPriceId": 2495,
@@ -89,7 +89,7 @@
                 },
                 {
                     "id": 3,
-                    "price": 1020,
+                    "price": 1010,
                     "startNumber": 21491,
                     "endNumber": 2147483647,
                     "sellPriceId": 2495,

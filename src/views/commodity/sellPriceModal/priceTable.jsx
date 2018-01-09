@@ -283,7 +283,9 @@ class PriceTable extends PureComponent {
 
     isMarkable = (index, column) => {
         const { markList } = this.props.value;
-        if (markList.length === 0) return false;
+        if (markList.length === 0 || !markList[index]) {
+            return false;
+        }
         return markList[index][column];
     }
 
