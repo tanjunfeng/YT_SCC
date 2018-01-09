@@ -53,7 +53,6 @@ class EditSteps extends Component {
             startNumber,
             isReadOnly: isSub,
             auditStatus,
-            shouldMark: true,
             grossProfit: sellPricesInReview.purchasePrice || null
         };
     }

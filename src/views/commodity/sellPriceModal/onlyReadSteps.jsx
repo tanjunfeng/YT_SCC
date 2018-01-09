@@ -58,7 +58,6 @@ class OnlyReadSteps extends Component {
             data: newDatas.sellSectionPrices,
             isReadOnly,
             isSub: auditStatus === 1,
-            shouldMark: false,
             grossProfit: sellPricesInReview.purchasePrice || null
         };
     }

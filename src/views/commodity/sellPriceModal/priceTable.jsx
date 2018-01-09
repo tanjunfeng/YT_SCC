@@ -345,14 +345,14 @@ class PriceTable extends PureComponent {
      * 获取毛利率
      */
     renderGrossProfit = (text, record, index) => {
-        const { isEdit, grossProfit, shouldMark } = this.props.value;
+        const { isEdit, grossProfit } = this.props.value;
         const { price } = record;
         const costPrice = isEdit ? grossProfit : this.props.costPrice;
         if (costPrice === null || isNaN(costPrice)) {
             return (<span>-</span>);
         }
         const rate = (price - costPrice) * 100 / costPrice;
-        const mark = this.isMarkable(index, 'price') && shouldMark;
+        const mark = this.isMarkable(index, 'price');
         return (<span className={mark ? "red" : null}>{`${rate.toFixed(2)}%`}</span>);
     }
 
