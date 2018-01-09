@@ -3,7 +3,7 @@
  * @Description: 心愿专区
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-06 16:35:24
+ * @Last Modified time: 2018-01-09 14:10:16
  */
 
 import React, { PureComponent } from 'react';
@@ -19,7 +19,7 @@ import {
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import SearchForm from './searchForm';
-import GoodsTable from './goodsTable';
+import { wishAreaColumns } from '../columns';
 
 const FormItem = Form.Item;
 const dateFormat = 'YYYY-MM-DD';
@@ -41,7 +41,22 @@ class WishAreaList extends PureComponent {
             <div>
                 <SearchForm
                 />
-                <GoodsTable
+                <Table
+                    dataSource={data}
+                    columns={wishAreaColumns}
+                    rowKey="orderId"
+                    scroll={{
+                        x: 1400
+                    }}
+                    bordered
+                    pagination={{
+                        current: this.param.current,
+                        pageNum,
+                        pageSize,
+                        total,
+                        showQuickJumper: true,
+                        onChange: this.onPaginate
+                    }}
                 />
             </div>
         )

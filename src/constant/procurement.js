@@ -171,6 +171,24 @@ export const poType = {
     }]
 }
 
+// 处理状态
+export const processingState = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '发货成功'
+    }, {
+        key: '1',
+        value: '缺货处理'
+    }, {
+        key: '2',
+        value: '未开始'
+    }]
+}
+
 // 货币类型
 export const poNo = {
     defaultValue: 'CNY',
