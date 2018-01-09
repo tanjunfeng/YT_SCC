@@ -63,7 +63,7 @@ class PriceTable extends PureComponent {
         const { value, onMarkable } = this.props;
         const { isReadOnly, currentPrices, list, isEdit, markList = [] } = value;
         const ml = [...markList];
-        if (isReadOnly && isEdit) {
+        if (isEdit) {
             currentPrices.forEach((currentRecord, index) => {
                 const { startNumber, endNumber, price } = currentRecord;
                 const record = list[index];
@@ -145,6 +145,9 @@ class PriceTable extends PureComponent {
         const len = prices.length;
         const lastPrice = prices[len - 1];
         if (this.isPriceInvalid(lastPrice)) {
+            return false;
+        }
+        if (lastPrice && (lastPrice.endNumber > this.props.value.MAXGOODS)) {
             return false;
         }
         for (let i = 0; i < len - 1; i++) {
@@ -371,7 +374,7 @@ class PriceTable extends PureComponent {
                             onClick={this.handleAdd}
                             disabled={!canAdd}
                         >添加阶梯价格</Button>
-                        : null
+                        : <span>&nbsp;</span>
                 }
                 <Table
                     rowKey="id"
