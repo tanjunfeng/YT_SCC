@@ -35,7 +35,7 @@ class SearchForm extends PureComponent {
         return Util.removeInvalid({
             status,
             companyId: company.id,
-            productNo: product.record.productCode
+            productNo: product.record ? product.record.productCode : ''
         });
     }
 
