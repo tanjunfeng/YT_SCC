@@ -160,6 +160,11 @@ class FreightConditions extends Component {
                                         })(
                                             <InputNumber
                                                 min={0}
+                                                className={
+                                                    sellPricesInReview.salesInsideNumber
+                                                        !== newDatas.salesInsideNumber
+                                                        ? 'sell-modal-border' : null
+                                                }
                                                 disabled={isSub}
                                                 onChange={this.handleInsideChange}
                                             />
@@ -187,6 +192,9 @@ class FreightConditions extends Component {
                                             <InputNumber
                                                 min={0}
                                                 disabled={isSub}
+                                                className={sellPricesInReview.minNumber
+                                                            !== newDatas.minNumber
+                                                            ? 'sell-modal-border' : null}
                                                 onChange={this.handleMinChange}
                                                 step={currentInside || sellPricesInReview.salesInsideNumber}
                                             />
@@ -201,6 +209,9 @@ class FreightConditions extends Component {
                                         })(
                                             <InputNumber
                                                 min={0}
+                                                className={sellPricesInReview.maxNumber
+                                                            !== newDatas.maxNumber
+                                                            ? 'sell-modal-border' : null}
                                                 disabled={isSub}
                                                 onChange={this.handleMaxChange}
                                                 step={currentInside || data.salesInsideNumber}
@@ -216,6 +227,9 @@ class FreightConditions extends Component {
                                             initialValue: isEdit ? sellPricesInReview.deliveryDay : values.deliveryDay
                                         })(<InputNumber
                                             min={0}
+                                            className={sellPricesInReview.deliveryDay
+                                                        !== newDatas.deliveryDay
+                                                        ? 'sell-modal-border' : null}
                                             disabled={isSub}
                                             onChange={this.handleDelayChange}
                                         />)}
@@ -245,6 +259,9 @@ class FreightConditions extends Component {
                                             className="sc-form-item-select"
                                             size="default"
                                             disabled={isSub}
+                                            className={sellPricesInReview.preHarvestPinStatus
+                                                            !== newDatas.preHarvestPinStatus
+                                                            ? 'sell-modal-border' : null}
                                             onChange={this.handleSelectChange}
                                         >
                                             {
@@ -269,31 +286,19 @@ class FreightConditions extends Component {
                             <div className={`${prefixCls}-item-content`}>
                                 <FormItem>
                                     <span>*销售内装数：</span>
-                                    <span className={
-                                        sellPricesInReview.salesInsideNumber !== newDatas.salesInsideNumber ?
-                                            'sell-modal-border' : null}
-                                    >{newDatas.salesInsideNumber}</span>
+                                    <span>{newDatas.salesInsideNumber}</span>
                                 </FormItem>
                                 <FormItem>
                                     <span>*起订量：</span>
-                                    <span className={
-                                        sellPricesInReview.minNumber !== newDatas.minNumber ?
-                                            'sell-modal-border' : null}
-                                    >{newDatas.minNumber}</span>
+                                    <span>{newDatas.minNumber}</span>
                                 </FormItem>
                                 <FormItem>
                                     <span>最大销售数量：</span>
-                                    <span className={
-                                        sellPricesInReview.maxNumber !== newDatas.maxNumber ?
-                                            'sell-modal-border' : null}
-                                    >{newDatas.maxNumber}</span>
+                                    <span>{newDatas.maxNumber}</span>
                                 </FormItem>
                                 <FormItem>
                                     <span>*承诺发货时间：下单后</span>
-                                    <span className={
-                                        sellPricesInReview.deliveryDay !== newDatas.deliveryDay ?
-                                            'sell-modal-border' : null}
-                                    >{newDatas.deliveryDay}</span>
+                                    <span>{newDatas.deliveryDay}</span>
                                     天内发货
                                     </FormItem>
                                 <FormItem>

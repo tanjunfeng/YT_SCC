@@ -46,7 +46,8 @@ class SaleCard extends Component {
 
         this.state = {
             checked: true,
-            id: this.props.index
+            id: this.props.index,
+            current: 1,
         }
         this.preHarvestPinStatus = '0'
     }
@@ -112,7 +113,6 @@ class SaleCard extends Component {
             distributeWarehouseId
         }
         this.props.fetchUpdateProdPurchase(data);
-        // this.handlePaginationChange();
     }
 
     /**
@@ -299,12 +299,6 @@ class SaleCard extends Component {
                                 {
                                     this.renderCard(initalValue.data)
                                 }
-                                <Pagination
-                                    current={initalValue.pageNumber}
-                                    pageSize={PAGE_SIZE}
-                                    onChange={this.handlePaginationChange}
-                                    total={initalValue.total}
-                                />
                             </Form>
                             : <div className={`${prefixCls}-no-data`}>
                                 暂无数据
