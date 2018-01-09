@@ -18,10 +18,6 @@ import {
 import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
 
-function getNewData(list) {
-    return Immutable.fromJS(list).toJS();
-}
-
 @connect(
     state => ({
         costPrice: state.toJS().commodity.costPrice
@@ -35,22 +31,23 @@ class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
         this.mark = [];
-        const newData = getNewData(props.value.list);
         this.state = {
-            prices: newData,
+            prices: Immutable.fromJS(props.value.list).toJS(),
             canAdd: true // 是否可继续添加价格
         }
-        this.cacheData = newData.map(item => ({ ...item }));
-        this.notify(newData);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.markTable();
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, index, 'startNumber')
         columns[1].render = (text, record, index) => this.renderColumnsNum(text, record, index, 'endNumber')
         columns[2].render = (text, record, index) => this.renderColumnsPrice(text, record, index, 'price')
         columns[3].render = (text, record, index) => this.renderGrossProfit(text, record, index)
         columns[4].render = (text, record, index) => this.renderOptions(text, record, index)
+
+        const { prices } = this.state;
+        this.cacheData = prices.map(item => ({ ...item }));
+        this.notify(prices);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -345,14 +342,14 @@ class PriceTable extends PureComponent {
      * 获取毛利率
      */
     renderGrossProfit = (text, record, index) => {
-        const { isEdit, grossProfit, shouldMark } = this.props.value;
+        const { isEdit, grossProfit } = this.props.value;
         const { price } = record;
         const costPrice = isEdit ? grossProfit : this.props.costPrice;
         if (costPrice === null || isNaN(costPrice)) {
             return (<span>-</span>);
         }
         const rate = (price - costPrice) * 100 / costPrice;
-        const mark = this.isMarkable(index, 'price') && shouldMark;
+        const mark = this.isMarkable(index, 'price');
         return (<span className={mark ? "red" : null}>{`${rate.toFixed(2)}%`}</span>);
     }
 

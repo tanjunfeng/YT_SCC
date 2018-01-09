@@ -53,7 +53,6 @@ class EditSteps extends Component {
             startNumber,
             isReadOnly: isSub,
             auditStatus,
-            shouldMark: true,
             grossProfit: sellPricesInReview.purchasePrice || null
         };
     }
@@ -92,7 +91,7 @@ class EditSteps extends Component {
                         </span>
                 </div>
                 <div className={`${prefixCls}-item-content`}>
-                    <FormItem>
+                    <FormItem className="diff-price-table">
                         <PriceTable
                             value={this.getEditableTableValues()}
                             onChange={this.handlePricesChange}
