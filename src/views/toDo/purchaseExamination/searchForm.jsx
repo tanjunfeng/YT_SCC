@@ -52,7 +52,7 @@ class SearchForm extends PureComponent {
             status,
             spNo: this.supplierEncoded,
             spAdrNo: this.supplierAdressId,
-            productNo: product.record.productCode
+            productNo: product.record ? product.record.productCode : ''
         });
     }
 
