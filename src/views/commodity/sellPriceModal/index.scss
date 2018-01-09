@@ -16,7 +16,7 @@
         display: inline-block;
     }
     .ant-modal-content {
-        width: 1020px;
+        width: 1100px;
     }
     .ant-modal-body {
         min-height: 700px;
@@ -112,6 +112,7 @@
     .read-only-footer {
         height: 32px;
         line-height: 32px;
+        display: inline-block;
         span {
             padding: 0 5px;
         }
@@ -211,4 +212,10 @@
         display: inline-flex;
         margin-bottom: 0;
     }
+    .sell-modal-edit-company{
+        width: 250px;
+    }
+}
+.sell-modal-redonly-company{
+    display: block;
 }
