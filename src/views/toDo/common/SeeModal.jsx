@@ -5,8 +5,7 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Modal, Table } from 'antd';
-import { withRouter } from 'react-router';
+import { Modal, Table } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -38,23 +37,23 @@ class SeeModal extends PureComponent {
         const { approvalList, seeModelvisible } = this.props
         return (
             approvalList.length > 0
-                ? <div>
-                    <Modal
-                        title="采购进价/售价审批"
-                        visible={seeModelvisible}
-                        onOk={this.handleCancel}
-                        onCancel={this.handleCancel}
-                        width={1000}
-                    >
-                        <Table
-                            dataSource={approvalList}
-                            columns={columns}
-                            rowKey="id"
-                            bordered
-                            pagination={false}
-                        />
-                    </Modal>
-                </div>
+                ? <Modal
+                    title="采购进价/售价审批"
+                    visible={seeModelvisible}
+                    onOk={this.handleCancel}
+                    onCancel={this.handleCancel}
+                    width={1000}
+                    className="todo-see-modal"
+                    maskClosable={false}
+                >
+                    <Table
+                        dataSource={approvalList}
+                        columns={columns}
+                        rowKey="id"
+                        bordered
+                        pagination={false}
+                    />
+                </Modal>
                 : null
         );
     }
@@ -68,4 +67,4 @@ SeeModal.propTypes = {
     approvalList: PropTypes.objectOf(PropTypes.any)
 };
 
-export default withRouter(Form.create()(SeeModal));
+export default SeeModal;

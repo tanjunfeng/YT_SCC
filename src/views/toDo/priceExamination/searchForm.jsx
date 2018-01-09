@@ -35,7 +35,7 @@ class SearchForm extends PureComponent {
         return Util.removeInvalid({
             status,
             companyId: company.id,
-            productNo: product.productCode
+            productNo: product.record ? product.record.productCode : ''
         });
     }
 
@@ -70,30 +70,24 @@ class SearchForm extends PureComponent {
         return (
             <Form layout="inline" className="purchase">
                 <Row gutter={40}>
-                    <Col span={8}>
-                        <FormItem label="状态">
-                            {getFieldDecorator('status', { initialValue: purchaseStatus.defaultValue })(
-                                <Select size="default" onChange={this.statusChange}>
-                                    {this.selectMap()}
-                                </Select>
-                            )}
-                        </FormItem>
-                    </Col>
-                    <Col span={8}>
-                        <FormItem label="子公司">
-                            {getFieldDecorator('company', {
-                                initialValue: { id: '', name: '' }
-                            })(<BranchCompany />)}
-                        </FormItem>
-                    </Col>
-                    <Col span={8}>
-                        <FormItem label="商品">
-                            {getFieldDecorator('product', {
-                                initialValue: { productId: '', saleName: '' }
-                            })(<Commodity />)
-                            }
-                        </FormItem>
-                    </Col>
+                    <FormItem label="状态">
+                        {getFieldDecorator('status', { initialValue: purchaseStatus.defaultValue })(
+                            <Select size="default" onChange={this.statusChange}>
+                                {this.selectMap()}
+                            </Select>
+                        )}
+                    </FormItem>
+                    <FormItem label="子公司">
+                        {getFieldDecorator('company', {
+                            initialValue: { id: '', name: '' }
+                        })(<BranchCompany />)}
+                    </FormItem>
+                    <FormItem label="商品">
+                        {getFieldDecorator('product', {
+                            initialValue: { productId: '', productName: '' }
+                        })(<Commodity api="queryProductForSelect" />)
+                        }
+                    </FormItem>
                 </Row>
                 <Row gutter={40} type="flex" justify="end">
                     <Col>

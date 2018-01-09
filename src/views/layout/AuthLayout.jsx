@@ -112,7 +112,7 @@ class AuthLayout extends PureComponent {
                                 placement="bottomCenter"
                             >
                                 <a className="ant-layout-header-drop">
-                                    <span className="ant-layout-header-username" alt={user.loginName}>{user.loginName}</span><Icon type="down" />
+                                    <span className="ant-layout-header-username" title={user.employeeName} alt={user.employeeName}>{user.employeeName}</span><Icon type="down" />
                                 </a>
                             </Dropdown>
                         </div>

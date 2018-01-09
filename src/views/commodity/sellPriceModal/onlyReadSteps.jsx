@@ -25,40 +25,18 @@ const FormItem = Form.Item;
     }, dispatch)
 )
 class OnlyReadSteps extends Component {
-    constructor(props) {
-        super(props)
-
-        this.columns = [{
-            title: '起始数量',
-            dataIndex: 'startNumber',
-            key: 'startNumber',
-        }, {
-            title: '终止数量',
-            dataIndex: 'endNumber',
-            key: 'endNumber',
-        }, {
-            title: '最新售价/元',
-            dataIndex: 'price',
-            key: 'price',
-        }, {
-            title: '商品毛利率',
-            dataIndex: 'percentage',
-            key: 'percentage',
-        }];
-    }
-
     getEditableTableValues = () => {
-        const { isEdit, newDatas, startNumber, isReadOnly } = this.props;
-        const { sellSectionPrices = [] } = newDatas;
-        const sellSectionPricesObj = { sellSectionPrices };
+        const { isEdit, newDatas = {}, startNumber, isReadOnly } = this.props;
+        const { sellPricesInReview, sellSectionPrices = [] } = newDatas;
         const { auditStatus = 0 } = newDatas;
         return {
             isEdit,
-            list: sellSectionPricesObj.sellSectionPrices,
+            list: sellSectionPrices,
             startNumber,
             data: newDatas.sellSectionPrices,
             isReadOnly,
-            isSub: auditStatus === 1
+            isSub: auditStatus === 1,
+            grossProfit: sellPricesInReview.purchasePrice || null
         };
     }
 
@@ -69,33 +47,24 @@ class OnlyReadSteps extends Component {
                 <div className={`${prefixCls}-item-title`}>
                     添加阶梯价格
                     <span className={`${prefixCls}-item-tip`}>
-                    &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
+                        &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
                     </span>
                 </div>
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
-                        <Table dataSource={this.getEditableTableValues().list} columns={this.columns} pagination={false} />
-                        {/* <PriceTable
+                        <PriceTable
                             value={this.getEditableTableValues()}
-                        /> */}
+                            onChange={() => {}}
+                        />
                     </FormItem>
                 </div>
                 <div className="read-only-footer">
                     <span>*建议零售价(元):</span>
-                    <span className={
-                        newDatas.sellPricesInReview.suggestPrice !== newDatas.suggestPrice ?
-                            'sell-modal-border' : null}
-                    >{newDatas.sellPricesInReview.suggestPrice}</span>
+                    <span>{newDatas.suggestPrice}</span>
                     <span>商品采购价格：</span>
-                    <span className={
-                        newDatas.sellPricesInReview.purchasePrice !== newDatas.purchasePrice ?
-                            'sell-modal-border' : null}
-                    >{newDatas.sellPricesInReview.purchasePrice || '-'}</span>
+                    <span>{newDatas.purchasePrice || '-'}</span>
                     <span className="edit-input">子公司:</span>
-                    <span className={
-                        newDatas.sellPricesInReview.branchCompanyId !== newDatas.branchCompanyId ?
-                            'sell-modal-border' : null}
-                    >{newDatas.sellPricesInReview.branchCompanyId} - {newDatas.sellPricesInReview.branchCompanyName}</span>
+                    <span>{newDatas.branchCompanyId} - {newDatas.branchCompanyName}</span>
                 </div>
             </div>
         )

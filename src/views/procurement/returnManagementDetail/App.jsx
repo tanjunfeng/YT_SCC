@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 采购退货详情页
  * @CreateDate: 2017-10-27 11:26:16
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-21 11:33:22
+ * @Last Modified by: zhoucl
+ * @Last Modified time: 2018-01-08 13:37:15
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -39,7 +39,7 @@ class ReturnManagementDetail extends PureComponent {
         super(props);
         this.state = {
             editable: false
-        }
+        };
         // 收货单商品行信息
         this.columns = [
             {
@@ -87,7 +87,14 @@ class ReturnManagementDetail extends PureComponent {
             }, {
                 title: '可退库存',
                 dataIndex: 'possibleNum',
-                key: 'possibleNum'
+                key: 'possibleNum',
+                render: (text, record) => {
+                    if (parseInt(record.status, 10) == 4 || parseInt(record.status, 10) == 5) {
+                        return '-';
+                    } else {
+                        return text
+                    }
+                }
             }, {
                 title: '退货数量',
                 dataIndex: 'refundAmount',

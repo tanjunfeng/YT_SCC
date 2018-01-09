@@ -16,11 +16,16 @@ import { PAGE_SIZE } from '../../../constant';
 import { priceListColumns as columns } from '../columns';
 import ExamineModal from '../common/ExamineModal';
 import SeeModal from '../common/SeeModal';
+import SellPriceModal from './sellPriceModal';
+import {
+    getSellPriceInfoByIdAction
+} from '../../../actions/commodity';
 
 @connect(state => ({
     processMsgInfo: state.toJS().procurement.processMsgInfo,
 }), dispatch => bindActionCreators({
-    queryProcessMsgInfo
+    queryProcessMsgInfo,
+    getSellPriceInfoByIdAction
 }, dispatch))
 
 class PriceExamination extends PureComponent {
@@ -30,7 +35,9 @@ class PriceExamination extends PureComponent {
             visible: false,
             seeModelvisible: false,
             // 默认未完成
-            isComplete: '0'
+            isComplete: '0',
+            show: false,
+            datas: {}
         }
         // 搜索参数
         this.param = {};
@@ -115,6 +122,12 @@ class PriceExamination extends PureComponent {
         })
     }
 
+    handleClose = () => {
+        this.setState({
+            show: false
+        })
+    }
+
     /**
      * 促销活动表单操作
     *
@@ -135,6 +148,14 @@ class PriceExamination extends PureComponent {
                 break;
             case 'see':
                 // 查看
+                this.props.getSellPriceInfoByIdAction({ id: record.id }).then((res) => {
+                    if (res.code === 200) {
+                        this.setState({
+                            datas: res,
+                            show: true,
+                        })
+                    }
+                })
                 break;
             case 'results':
                 // 审批意见
@@ -223,6 +244,13 @@ class PriceExamination extends PureComponent {
                     closeSeeModal={this.closeSeeModal}
                     taskId={this.taskId}
                 />
+                {
+                    this.state.show &&
+                    <SellPriceModal
+                        datas={this.state.datas}
+                        handleClose={this.handleClose}
+                    />
+                }
             </div>
         );
     }
@@ -230,6 +258,7 @@ class PriceExamination extends PureComponent {
 
 PriceExamination.propTypes = {
     queryProcessMsgInfo: PropTypes.func,
+    getSellPriceInfoByIdAction: PropTypes.func,
     processMsgInfo: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 

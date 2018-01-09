@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Row, Col} from 'antd';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
+import Utils from '../../../util/util';
 
 @connect(state => ({
     po: state.toJS().procurement.po || {},
@@ -21,6 +22,7 @@ import { pubFetchValueList } from '../../../actions/pub';
 class AddingGoods extends PureComponent {
     render() {
         const { spAdrId, businessMode, spId } = this.props;
+        console.log(this.props);
         const supplierInfo = spAdrId ? `${spAdrId}-1` : null;
         const distributionStatus = businessMode;
         return (
@@ -34,19 +36,19 @@ class AddingGoods extends PureComponent {
                                 rowKey="productCode"
                                 ref={ref => { this.addPo = ref }}
                                 fetch={(params) =>
-                                    this.props.pubFetchValueList({
+                                    this.props.pubFetchValueList(Utils.removeInvalid({
                                         supplierInfo,
                                         distributionStatus,
                                         teamText: params.value,
                                         pageNum: params.pagination.current || 1,
                                         pageSize: params.pagination.pageSize
-                                    }, 'queryProductForSelect')
+                                    }), 'queryProductForSelect')
                                 }
                                 disabled={spId === ''}
                                 addonBefore="添加商品"
                                 onChoosed={this.props.handleChoosedMaterialMap}
                                 renderChoosedInputRaw={(data) => (
-                                    <div>{data.productCode} - {data.saleName}</div>
+                                    <div>{data.productCode} - {data.productName}</div>
                                 )}
                                 pageSize={6}
                                 columns={[
@@ -56,7 +58,7 @@ class AddingGoods extends PureComponent {
                                         width: 98
                                     }, {
                                         title: '商品名称',
-                                        dataIndex: 'saleName',
+                                        dataIndex: 'productName',
                                         width: 140
                                     }
                                 ]}
