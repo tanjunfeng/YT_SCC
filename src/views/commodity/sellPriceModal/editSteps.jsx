@@ -110,6 +110,9 @@ class EditSteps extends Component {
                                     <InputNumber
                                         min={0}
                                         step={0.01}
+                                        className={sellPricesInReview.suggestPrice
+                                                        !== newDatas.suggestPrice
+                                                        ? 'sell-modal-border' : null}
                                         disabled={isSub}
                                         formatter={this.handleValueFormat}
                                         parser={this.handleValueFormat}
@@ -119,12 +122,24 @@ class EditSteps extends Component {
                             </span>
                         </FormItem>
                         <FormItem label="商品采购价格：">
-                            <span>{sellPricesInReview.purchasePrice || '-'}</span>
+                            <span className={
+                                sellPricesInReview.suggestPrice
+                                !== newDatas.suggestPrice
+                                ? 'sell-modal-border' : null
+                            }>
+                                {sellPricesInReview.purchasePrice || '-'}
+                            </span>
                         </FormItem>
                         {
                             isEdit ?
                                 <FormItem label="子公司：">
-                                    <span>{sellPricesInReview.branchCompanyId} - {sellPricesInReview.branchCompanyName}</span>
+                                    <span className={
+                                        sellPricesInReview.branchCompanyId
+                                        !== newDatas.branchCompanyId
+                                        ? 'sell-modal-border' : null
+                                    }>
+                                        {sellPricesInReview.branchCompanyId} - {sellPricesInReview.branchCompanyName}
+                                    </span>
                                 </FormItem> :
                                 <FormItem label="子公司：">
                                     {getFieldDecorator('branchCompany', {

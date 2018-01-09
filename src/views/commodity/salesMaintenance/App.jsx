@@ -127,10 +127,8 @@ class ProcurementMaintenance extends PureComponent {
      * @param {string} goto 数据列表分页
      */
     handlePaginationChange = (goto = 1) => {
-        const params = {
-            pageNum: goto, pageSize: PAGE_SIZE, ...this.searchForm
-        };
-        this.props.fetchPriceInfo(params);
+        this.current = goto;
+        this.handleFormSearch()
     }
 
     /**
@@ -241,6 +239,7 @@ class ProcurementMaintenance extends PureComponent {
                         handleDelete={this.handleDelete}
                         handleCardClick={this.handleCardClick}
                         handleChangeStatus={this.handleChangeStatus}
+                        paginationChange={this.handlePaginationChange}
                         isSale
                     />
                 </div>
