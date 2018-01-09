@@ -138,7 +138,7 @@ class FreightConditions extends Component {
         const { currentInside } = this.state;
         const data = newDatas;
         const { sellPricesInReview = {} } = data;
-        const preHarvestPinStatusChange = String(data.sellPricesInReview.preHarvestPinStatus);
+        const preHarvestPinStatusChange = data.sellPricesInReview ? String(data.sellPricesInReview.preHarvestPinStatus) : '0';
         return (
             <div className={`${prefixCls}-body-wrap`}>
                 {
