@@ -49,7 +49,7 @@ class OnlyReadSteps extends Component {
 
     getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber, isReadOnly } = this.props;
-        const { sellSectionPrices = [] } = newDatas;
+        const { sellPricesInReview, sellSectionPrices = [] } = newDatas;
         const { auditStatus = 0 } = newDatas;
         return {
             isEdit,
@@ -57,7 +57,9 @@ class OnlyReadSteps extends Component {
             startNumber,
             data: newDatas.sellSectionPrices,
             isReadOnly,
-            isSub: auditStatus === 1
+            isSub: auditStatus === 1,
+            shouldMark: false,
+            grossProfit: sellPricesInReview.purchasePrice || null
         };
     }
 
@@ -68,12 +70,15 @@ class OnlyReadSteps extends Component {
                 <div className={`${prefixCls}-item-title`}>
                     添加阶梯价格
                     <span className={`${prefixCls}-item-tip`}>
-                    &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
+                        &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
                     </span>
                 </div>
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
-                        <Table dataSource={this.getEditableTableValues().list} columns={this.columns} pagination={false} />
+                        <PriceTable
+                            value={this.getEditableTableValues()}
+                            onChange={() => {}}
+                        />
                     </FormItem>
                 </div>
                 <div className="read-only-footer">

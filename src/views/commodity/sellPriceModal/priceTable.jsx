@@ -10,6 +10,7 @@ import { Table, Popconfirm, Button } from 'antd';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import { bindActionCreators } from 'redux';
+import cs from 'classnames';
 
 import {
     getCostPrice
@@ -17,19 +18,7 @@ import {
 import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
 
-function getNewData(props, mark) {
-    const { isReadOnly, currentPrices, list, isEdit } = props.value;
-    if (isReadOnly && isEdit) {
-        currentPrices.forEach((currentRecord, index) => {
-            const { startNumber, endNumber, price } = currentRecord;
-            const record = list[index];
-            mark.push({
-                startNumber: startNumber !== record.startNumber,
-                endNumber: endNumber !== record.endNumber,
-                price: price !== record.price
-            });
-        })
-    }
+function getNewData(list) {
     return Immutable.fromJS(list).toJS();
 }
 
@@ -46,7 +35,7 @@ class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
         this.mark = [];
-        const newData = getNewData(props, this.mark);
+        const newData = getNewData(props.value.list);
         this.state = {
             prices: newData,
             canAdd: true // 是否可继续添加价格
@@ -56,6 +45,7 @@ class PriceTable extends PureComponent {
     }
 
     componentWillMount() {
+        this.markTable();
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, index, 'startNumber')
         columns[1].render = (text, record, index) => this.renderColumnsNum(text, record, index, 'endNumber')
         columns[2].render = (text, record, index) => this.renderColumnsPrice(text, record, index, 'price')
@@ -70,6 +60,21 @@ class PriceTable extends PureComponent {
         if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
             prices[0].startNumber = startNumber === undefined ? 0 : startNumber;
             this.notify(prices);
+        }
+    }
+
+    markTable = () => {
+        const { isReadOnly, currentPrices, list, isEdit } = this.props.value;
+        if (isReadOnly && isEdit) {
+            currentPrices.forEach((currentRecord, index) => {
+                const { startNumber, endNumber, price } = currentRecord;
+                const record = list[index];
+                this.mark.push({
+                    startNumber: startNumber !== record.startNumber,
+                    endNumber: endNumber !== record.endNumber,
+                    price: price !== record.price
+                });
+            })
         }
     }
 
@@ -339,15 +344,16 @@ class PriceTable extends PureComponent {
     /**
      * 获取毛利率
      */
-    renderGrossProfit = (text, record) => {
-        const { isEdit, grossProfit } = this.props.value;
+    renderGrossProfit = (text, record, index) => {
+        const { isEdit, grossProfit, shouldMark } = this.props.value;
         const { price } = record;
         const costPrice = isEdit ? grossProfit : this.props.costPrice;
-        const rate = (price - costPrice) * 100 / costPrice;
-        if (costPrice === null || isNaN(rate)) {
-            return (<span className="red">-</span>);
+        if (costPrice === null || isNaN(costPrice)) {
+            return (<span>-</span>);
         }
-        return (<span className="red">{rate.toFixed(2)}%</span>);
+        const rate = (price - costPrice) * 100 / costPrice;
+        const mark = this.isMarkable(index, 'price') && shouldMark;
+        return (<span className={mark ? "red" : null}>{`${rate.toFixed(2)}%`}</span>);
     }
 
     render() {
