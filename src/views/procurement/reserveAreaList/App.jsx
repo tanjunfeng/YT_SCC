@@ -3,7 +3,7 @@
  * @Description: 预定专区
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-09 17:34:21
+ * @Last Modified time: 2018-01-09 22:33:08
  */
 
 import React, { PureComponent } from 'react';
@@ -13,8 +13,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
     Form, Input, Button, Row, Col, Select,
-    Icon, Table, message, Upload,
-    DatePicker
+    Icon, Table, message, Upload, Menu,
+    DatePicker, Dropdown
 } from 'antd';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
@@ -24,6 +24,8 @@ import {
     queryReserveAreaList,
     clearReserveAreaList
 } from '../../../actions/process';
+import { Link } from 'react-router-dom';
+import { sellPriceChangeExport } from '../../../service'
 
 const FormItem = Form.Item;
 const dateFormat = 'YYYY-MM-DD';
@@ -70,7 +72,7 @@ class ReserveAreaList extends PureComponent {
      */
     query = () => {
         this.props.queryReserveAreaList(this.param).then((data) => {
-            const { pageNum, pageSize } = data.data;
+            const { pageNum, pageSize } = data;
             Object.assign(this.param, { pageNum, pageSize });
         });
     }
@@ -79,7 +81,7 @@ class ReserveAreaList extends PureComponent {
      * searchForm 回传值
      * @param {Object} param
      */
-    onAreaListSearch = (param) => {
+    handleAreaListSearch = (param) => {
         this.onAreaListReset();
         this.param = {
             current: 1,
@@ -91,24 +93,74 @@ class ReserveAreaList extends PureComponent {
     /**
      * 列表页查询条件重置
      */
-    onAreaListReset = () => {
+    handleAreaListReset = () => {
         this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
     }
 
+    handleSelect = (record, index) => {
+        if (index.key === '1') {
+            console.log(record)
+        }
+    }
+
+    /**
+     * 下载导入结果的回调
+    */
+    exportList = () => {
+        Utils.exportExcel(sellPriceChangeExport, Utils.removeInvalid(this.param));
+    }
+
+    /**
+     * 表单操作
+     * @param {Object} text 当前行的值
+     * @param {object} record 单行数据
+    */
+    renderOperation = (text, record) => {
+        const { productId } = record;
+        const { pathname } = this.props.location;
+        const menu = (
+            <Menu onClick={(item) => this.handleSelect(record, item)}>
+                <Menu.Item key={0}>
+                    <Link to={`/commodifyList/${productId}`}>查看详情</Link>
+                </Menu.Item>
+                <Menu.Item key={1}>
+                    <a target="_blank" rel="noopener noreferrer">
+                                到货通知
+                    </a>
+                </Menu.Item>
+                <Menu.Item key={2}>
+                    <a target="_blank" rel="noopener noreferrer">
+                                无货处理
+                    </a>
+                </Menu.Item>
+            </Menu>
+        );
+        return (
+            <Dropdown overlay={menu} placement="bottomCenter">
+                <a className="ant-dropdown-link">
+                    表单操作 <Icon type="down" />
+                </a>
+            </Dropdown>
+        )
+    }
+
     render() {
         const { reserveAreaData = {} } = this.props;
-        const { data = {} } = reserveAreaData;
+        const { data = [] } = reserveAreaData;
+        const { pageNum, total } = data;
+        wishAreaColumns[wishAreaColumns.length - 1].render = this.renderOperation;
         return (
             <div>
                 <SearchForm
-                    onAreaListSearch={this.onAreaListSearch}
-                    onAreaListReset={this.onAreaListReset}
+                    onAreaListSearch={this.handleAreaListSearch}
+                    onAreaListReset={this.handleAreaListReset}
+                    exportList={this.handleExportList}
                 />
                 <Table
-                    dataSource={data.data}
+                    dataSource={data}
                     columns={wishAreaColumns}
                     rowKey="productCode"
                     scroll={{
@@ -117,9 +169,9 @@ class ReserveAreaList extends PureComponent {
                     bordered
                     pagination={{
                         current: this.param.current,
-                        pageNum: data.pageNum,
+                        pageNum: pageNum,
                         pageSize: PAGE_SIZE,
-                        total: data.total,
+                        total: total,
                         showQuickJumper: true,
                         onChange: this.onPaginate
                     }}

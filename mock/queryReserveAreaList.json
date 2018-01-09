@@ -1,12 +1,12 @@
 {
-    "timestamp": 1507789738783,
+    "timestamp": 1504075200818,
     "code": 200,
-    "message": "请求成功",
+    "message": {},
     "exception": null,
     "data": {
-        "pageNum": 2,
+        "pageNum": 1,
         "pageSize": 20,
-        "total": 1973,
+        "total": 139,
         "data": [
             {
                 "productCode": "A000006",

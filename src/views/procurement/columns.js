@@ -7,6 +7,7 @@
 import React from 'react';
 import moment from 'moment';
 import { locType, poStatus, businessModeType, poType } from '../../constant/procurement';
+import Util from '../../util/util';
 
 // 供应商列表
 export const poMngListColumns = [
@@ -173,7 +174,15 @@ export const printColumns = [{
 export const wishAreaColumns = [{
     title: '商品编码',
     dataIndex: 'productCode',
-    key: 'productCode'
+    key: 'productCode',
+    render: text => {
+        if (!text) {
+            return '-';
+        }
+        return (
+            <span className={!text ? 'wishList-red' : ''}>{text}</span>
+        );
+    }
 }, {
     title: '商品条码',
     dataIndex: 'internationalCode',
@@ -181,7 +190,15 @@ export const wishAreaColumns = [{
 }, {
     title: '商品名称',
     dataIndex: 'productName',
-    key: 'productName'
+    key: 'productName',
+    render: text => {
+        if (!text) {
+            return '-';
+        }
+        return (
+            <span className={!text ? 'wishList-red' : ''}>{text}</span>
+        );
+    }
 }, {
     title: '需求数量',
     dataIndex: 'purchaseNumber',
@@ -189,14 +206,29 @@ export const wishAreaColumns = [{
 }, {
     title: '第一次提交时间',
     dataIndex: 'packingSpecifications',
-    key: 'packingSpecifications'
+    key: 'packingSpecifications',
+    render: timestamp => ({
+        children: Util.getTime(timestamp)
+    })
 }, {
     title: '处理状态',
     dataIndex: 'status',
-    key: 'status'
+    key: 'status',
+    render: (status) => {
+        switch (status) {
+            case 0:
+                return <span className="wishList-gray">未开始</span>;
+            case 1:
+                return <span className="wishList-green">到货处理</span>;
+            case 2:
+                return <span className="wishList-blue">无货处理</span>;
+            default:
+                return '-';
+        }
+    }
 }, {
     title: '操作',
     dataIndex: 'operation',
     key: 'operation',
-    render: this.renderActions
+    render: this.renderOperation
 }];
