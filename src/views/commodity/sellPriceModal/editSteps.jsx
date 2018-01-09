@@ -138,8 +138,8 @@ class EditSteps extends Component {
                         </FormItem>
                         <FormItem label="商品采购价格：">
                             <span className={
-                                sellPricesInReview.suggestPrice
-                                    !== newDatas.suggestPrice
+                                sellPricesInReview.purchasePrice
+                                    !== newDatas.purchasePrice
                                     ? 'sell-modal-border' : null
                             }>
                                 {sellPricesInReview.purchasePrice || '-'}
