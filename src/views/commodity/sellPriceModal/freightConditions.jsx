@@ -311,7 +311,7 @@ class FreightConditions extends Component {
                                 {/* 采购模式 */}
                                 <FormItem className={`${prefixCls}-qy`}>
                                     <span className={`${prefixCls}-select`}> 采购模式 : </span>
-                                    <span>{preHarvestPinStatusChange === '0' ? '先销后采' : '先采后销'}</span>
+                                    <span>{data.preHarvestPinStatus === 1 ? '先采后销' : '先销后采'}</span>
                                 </FormItem>
                             </div>
                         </div>
