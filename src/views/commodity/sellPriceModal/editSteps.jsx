@@ -36,7 +36,8 @@ class EditSteps extends Component {
         const { sellSectionPrices = [] } = sellPricesInReview;
 
         this.state = {
-            prices: isEdit ? sellSectionPrices : []
+            prices: isEdit ? sellSectionPrices : [],
+            markList: []
         }
     }
 
@@ -53,14 +54,15 @@ class EditSteps extends Component {
             startNumber,
             isReadOnly: isSub,
             auditStatus,
+            markList: this.state.markList,
             grossProfit: sellPricesInReview.purchasePrice || null
         };
     }
 
     handleNewestPriceChange = (num) => {
-        const { isEdit } = this.props;
-        const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
-        service(num)
+        const { isEdit, onEditChange, onCreateChange } = this.props;
+        const service = isEdit ? onEditChange : onCreateChange;
+        service(num);
     }
 
     handlePricesChange = (prices, isContinue) => {
@@ -68,6 +70,10 @@ class EditSteps extends Component {
         const service = isEdit ? this.props.onEditPriceChange : this.props.onCreatPriceChange;
         service(prices, isContinue)
         this.setState({ prices });
+    }
+
+    handleMarkable = (markList) => {
+        this.setState({ markList });
     }
 
     handleCompanyChange = (record) => {
@@ -95,6 +101,7 @@ class EditSteps extends Component {
                         <PriceTable
                             value={this.getEditableTableValues()}
                             onChange={this.handlePricesChange}
+                            onMarkable={this.handleMarkable}
                         />
                     </FormItem>
                 </div>
@@ -103,27 +110,51 @@ class EditSteps extends Component {
                         <FormItem label="建议零售价(元)：">
                             <span className={`${prefixCls}-day-input`}>
                                 {getFieldDecorator('suggestPrice', {
-                                    rules: [{ required: true, message: '请输入建议零售价(元)!' }],
+                                    rules: [
+                                        {
+                                            required: true, message: '建议零售价不能为空'
+                                        },
+                                        {
+                                            validator: Util.limitPositive,
+                                            message: '建议零售价不能为零或负数'
+                                        },
+                                        {
+                                            validator: Util.limitTwoDecimalPlaces,
+                                            message: '建议零售价必须是两位以内小数'
+                                        }],
                                     initialValue: sellPricesInReview.suggestPrice || values.suggestPrice
                                 })(
                                     <InputNumber
-                                        min={0}
                                         step={0.01}
+                                        className={sellPricesInReview.suggestPrice
+                                            !== newDatas.suggestPrice
+                                            ? 'sell-modal-border' : null}
                                         disabled={isSub}
-                                        formatter={this.handleValueFormat}
-                                        parser={this.handleValueFormat}
+                                        // onBlur={this.handleSugeestPriceBlur}
                                         onChange={this.handleNewestPriceChange}
                                     />
                                     )}
                             </span>
                         </FormItem>
                         <FormItem label="商品采购价格：">
-                            <span>{sellPricesInReview.purchasePrice || '-'}</span>
+                            <span className={
+                                sellPricesInReview.suggestPrice
+                                    !== newDatas.suggestPrice
+                                    ? 'sell-modal-border' : null
+                            }>
+                                {sellPricesInReview.purchasePrice || '-'}
+                            </span>
                         </FormItem>
                         {
                             isEdit ?
                                 <FormItem label="子公司：">
-                                    <span>{sellPricesInReview.branchCompanyId} - {sellPricesInReview.branchCompanyName}</span>
+                                    <span className={
+                                        sellPricesInReview.branchCompanyId
+                                            !== newDatas.branchCompanyId
+                                            ? 'sell-modal-border' : null
+                                    }>
+                                        {sellPricesInReview.branchCompanyId} - {sellPricesInReview.branchCompanyName}
+                                    </span>
                                 </FormItem> :
                                 <FormItem label="子公司：">
                                     {getFieldDecorator('branchCompany', {
