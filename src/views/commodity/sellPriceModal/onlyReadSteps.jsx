@@ -25,28 +25,6 @@ const FormItem = Form.Item;
     }, dispatch)
 )
 class OnlyReadSteps extends Component {
-    constructor(props) {
-        super(props)
-
-        this.columns = [{
-            title: '起始数量',
-            dataIndex: 'startNumber',
-            key: 'startNumber',
-        }, {
-            title: '终止数量',
-            dataIndex: 'endNumber',
-            key: 'endNumber',
-        }, {
-            title: '最新售价/元',
-            dataIndex: 'price',
-            key: 'price',
-        }, {
-            title: '商品毛利率',
-            dataIndex: 'percentage',
-            key: 'percentage',
-        }];
-    }
-
     getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber, isReadOnly } = this.props;
         const { sellPricesInReview, sellSectionPrices = [] } = newDatas;

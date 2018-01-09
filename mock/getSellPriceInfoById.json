@@ -62,7 +62,7 @@
                 }
             ],
             "sellPricesInReview": null,
-            "purchasePrice": null,
+            "purchasePrice": 9.5,
             "maxNumber": null,
             "preHarvestPinStatus": 0,
             "auditUserId": null,
@@ -73,7 +73,7 @@
             "fullCaseUnit": null,
             "firstCreated": 1
         },
-        "purchasePrice": null,
+        "purchasePrice": 95,
         "maxNumber": null,
         "preHarvestPinStatus": 0,
         "auditUserId": null,
