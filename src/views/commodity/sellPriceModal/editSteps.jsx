@@ -60,9 +60,9 @@ class EditSteps extends Component {
     }
 
     handleNewestPriceChange = (num) => {
-        const { isEdit } = this.props;
-        const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
-        service(num)
+        const { isEdit, onEditChange, onCreateChange } = this.props;
+        const service = isEdit ? onEditChange : onCreateChange;
+        service(num);
     }
 
     handlePricesChange = (prices, isContinue) => {
@@ -110,18 +110,23 @@ class EditSteps extends Component {
                         <FormItem label="建议零售价(元)：">
                             <span className={`${prefixCls}-day-input`}>
                                 {getFieldDecorator('suggestPrice', {
-                                    rules: [{ required: true, message: '请输入建议零售价(元)!' }],
+                                    rules: [
+                                        {
+                                            required: true, message: '建议零售价不能为空'
+                                        },
+                                        {
+                                            validator: Util.limitTwoDecimalPlacesAndNotZero,
+                                            message: '建议零售价必须大于 0'
+                                        }],
                                     initialValue: sellPricesInReview.suggestPrice || values.suggestPrice
                                 })(
                                     <InputNumber
-                                        min={0}
                                         step={0.01}
                                         className={sellPricesInReview.suggestPrice
                                             !== newDatas.suggestPrice
                                             ? 'sell-modal-border' : null}
                                         disabled={isSub}
-                                        formatter={this.handleValueFormat}
-                                        parser={this.handleValueFormat}
+                                        // onBlur={this.handleSugeestPriceBlur}
                                         onChange={this.handleNewestPriceChange}
                                     />
                                     )}
