@@ -233,9 +233,9 @@ export const processResult = {
         value: '错误'
     }, {
         key: '1',
-        value: '已提交'
+        value: '已验证'
     }, {
         key: '2',
-        value: '已验证'
+        value: '已提交'
     }]
 }

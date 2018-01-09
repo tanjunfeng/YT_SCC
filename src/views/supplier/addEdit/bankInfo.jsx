@@ -47,6 +47,8 @@ class BankInfo extends PureComponent {
         this.state = {
             companyName: accountName,
         }
+
+        this.bankAccount = true;
     }
 
     componentDidMount() {
@@ -66,7 +68,9 @@ class BankInfo extends PureComponent {
         }
         const upload = this.nodebankFile.getValue();
         form.validateFields((err, values) => {
-            if (!err) {
+
+            // 必须要没有错误和后端校验完成后才能执行下一步
+            if (!err && this.bankAccount) {
                 const {
                     bankAccount,
                     invoiceHead,
@@ -159,7 +163,7 @@ class BankInfo extends PureComponent {
                                                     onChange={this.handleCompanyNameChange}
                                                     placeholder="开户名"
                                                 />
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -175,7 +179,7 @@ class BankInfo extends PureComponent {
                                                 <Input
                                                     placeholder="供应商发票抬头"
                                                 />
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -201,7 +205,7 @@ class BankInfo extends PureComponent {
                                                         onChange={this.handleCompanyAddressChange}
                                                     />
                                                 </div>
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -225,7 +229,7 @@ class BankInfo extends PureComponent {
                                                 <Input
                                                     placeholder="供应商开户行"
                                                 />
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -254,6 +258,7 @@ class BankInfo extends PureComponent {
                                                     placeholder="银行账号"
                                                     onBlur={
                                                         (e) => {
+                                                            this.bankAccount = false;
                                                             Validator.repeat.bankAccount(
                                                                 e,
                                                                 this,
@@ -263,7 +268,7 @@ class BankInfo extends PureComponent {
                                                         }
                                                     }
                                                 />
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>

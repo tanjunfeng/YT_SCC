@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
 import './SearchMind.scss';
+import { message } from 'antd';
 
 @connect(() => ({}), dispatch => bindActionCreators({
     pubFetchValueList
@@ -42,6 +43,7 @@ class SupplierAdderss extends PureComponent {
     }
 
     render() {
+        const { pId } = this.props;
         return (
             <SearchMind
                 style={{ zIndex: 10000 }}
@@ -49,10 +51,17 @@ class SupplierAdderss extends PureComponent {
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
                     this.props.pubFetchValueList({
+                        pId,
                         condition: params.value,
                         pageNum: params.pagination.current || 1,
                         pageSize: params.pagination.pageSize
-                    }, 'supplierAdrSearchBox')
+                    }, 'supplierAdrSearchBox').then(res => {
+                        const dataArr = res.data.data || [];
+                        if (!dataArr || dataArr.length === 0) {
+                            message.warning('没有可用的数据');
+                        }
+                        return res;
+                    })
                 }
                 disabled={this.props.disabled}
                 defaultValue={this.props.initialValue}
@@ -84,7 +93,8 @@ SupplierAdderss.propTypes = {
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
-    initialValue: PropTypes.string
+    initialValue: PropTypes.string,
+    pId: PropTypes.string
 }
 
 export default SupplierAdderss;

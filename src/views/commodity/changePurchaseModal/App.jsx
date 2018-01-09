@@ -34,7 +34,7 @@ const { Option } = Select;
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
         getProductByIds: state.toJS().commodity.getProductById,
-        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
+        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseByIds,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
         updateProdPurchase: state.toJS().commodity.updateProdPurchase,
         purchaseCardData: state.toJS().commodity.purchaseCardData,
@@ -234,9 +234,9 @@ class ProdModal extends Component {
                     message.success(res.message)
                     this.handleCancel();
                     this.props.goto()
+                } else {
+                    message.error(res.message)
                 }
-            }).catch(() => {
-                message.error('操作失败')
             })
         })
     }
@@ -290,7 +290,7 @@ class ProdModal extends Component {
     render() {
         const {
             prefixCls, form, initValue = {}, userNames,
-            isEdit, data, hasMainSupplier, getProductByIds
+            isEdit, data, hasMainSupplier, getProductByIds, getProdPurchaseByIds
         } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
@@ -298,6 +298,7 @@ class ProdModal extends Component {
         const { spNo, companyName } = this.state;
         const { internationalCodes = [] } = data;
         const { internationalCode } = getProductByIds.internationalCodes[0];
+        const { supportReturn } = getProdPurchaseByIds;
         const firstCreated = () => {
             switch (userNames.firstCreated) {
                 case 0:
@@ -363,6 +364,7 @@ class ProdModal extends Component {
                                                     <InputNumber
                                                         min={0}
                                                         step={0.01}
+                                                        disabled={initValue.auditStatus === 1}
                                                         placeholder="采购价"
                                                     />)}
                                             </span>
@@ -423,7 +425,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('supportReturn', {
                                             rules: [{ required: true, message: '请选择是否支持退货!' }],
-                                            initialValue: supportReturnOption.defaultValue
+                                            initialValue: supportReturn ? String(supportReturn) : supportReturnOption.defaultValue
                                         })(
                                             <Select
                                                 className="sc-form-item-select"

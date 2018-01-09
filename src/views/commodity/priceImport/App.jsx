@@ -38,10 +38,6 @@ class PriceImport extends PureComponent {
         }
     }
 
-    // componentDidMount() {
-    //     this.isCreateChange()
-    // }
-
     componentWillReceiveProps(nextProps) {
         if (!nextProps.priceImportlist.data) {
             return;
@@ -86,13 +82,9 @@ class PriceImport extends PureComponent {
     */
     isCreateChange = (nextImportsId) => {
         this.nextImportsId = nextImportsId
-        const changeBtnDisabled = this.state.changeBtnDisabled
-        const nextChangeBtnDisabled = nextImportsId === ''
-        if (nextChangeBtnDisabled !== changeBtnDisabled) {
-            this.setState({
-                changeBtnDisabled: nextChangeBtnDisabled
-            })
-        }
+        this.setState({
+            changeBtnDisabled: nextImportsId === ''
+        })
     }
 
     /**

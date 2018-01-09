@@ -42,18 +42,18 @@ class EditSteps extends Component {
 
     getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber, isSub } = this.props;
-        const { sellPricesInReview = {}, auditStatus } = newDatas;
-        const { sellSectionPrices = [] } = sellPricesInReview;
+        const { sellPricesInReview = {}, sellSectionPrices = {}, auditStatus } = newDatas;
         const { prices } = this.state;
         return {
             MAXGOODS,
             isSub,
             isEdit,
             list: prices,
-            sellSectionPrices,
+            currentPrices: sellSectionPrices,
             startNumber,
             isReadOnly: isSub,
-            auditStatus
+            auditStatus,
+            grossProfit: sellPricesInReview.purchasePrice || null
         };
     }
 
@@ -91,7 +91,7 @@ class EditSteps extends Component {
                         </span>
                 </div>
                 <div className={`${prefixCls}-item-content`}>
-                    <FormItem>
+                    <FormItem className="diff-price-table">
                         <PriceTable
                             value={this.getEditableTableValues()}
                             onChange={this.handlePricesChange}
@@ -128,8 +128,14 @@ class EditSteps extends Component {
                                 <FormItem label="子公司：">
                                     {getFieldDecorator('branchCompany', {
                                         initialValue: { id: '', name: '' },
-                                    })(<BranchCompany url="findCompanyBaseInfo" onChange={this.handleCompanyChange} disabled={isSub} />)}
+                                    })(<BranchCompany
+                                        url="queryBranchCompanyInfo"
+                                        onChange={this.handleCompanyChange}
+                                        values={values}
+                                        disabled={isSub}
+                                    />)}
                                 </FormItem>
+
                         }
                     </Col>
                 </Row>

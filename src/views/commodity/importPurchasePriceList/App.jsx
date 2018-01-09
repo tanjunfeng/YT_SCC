@@ -284,7 +284,7 @@ class ImportPurchasePriceList extends PureComponent {
                                     }
                                     onChoosed={this.handleProductChoosed}
                                     renderChoosedInputRaw={(product) => (
-                                        <div>{product.productCode} - {product.saleName}</div>
+                                        <div>{product.productCode} - {product.productName}</div>
                                     )}
                                     pageSize={6}
                                     columns={[
@@ -294,7 +294,7 @@ class ImportPurchasePriceList extends PureComponent {
                                             width: 98
                                         }, {
                                             title: '商品名称',
-                                            dataIndex: 'saleName',
+                                            dataIndex: 'productName',
                                             width: 140
                                         }
                                     ]}

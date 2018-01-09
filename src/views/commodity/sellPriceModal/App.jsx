@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, Form, message, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import {
 } from '../../../constant/searchParams';
 import {
@@ -11,6 +12,7 @@ import {
 import FreightConditions from './freightConditions';
 import OnlyReadSteps from './onlyReadSteps';
 import EditSteps from './editSteps';
+import Utils from '../../../util/util';
 
 @connect(
     state => ({
@@ -52,7 +54,7 @@ class SellPriceModal extends Component {
             const result = values;
             result.productId = datas.id || datas.productId;
             const priceList = [];
-            priceList.forEach((obj) => {
+            priceList.forEach(obj => {
                 if (obj === null || obj === undefined) {
                     this.successPost = true;
                     setFields({
@@ -76,6 +78,9 @@ class SellPriceModal extends Component {
         })
     }
 
+    /**
+     * 模态框点击确定按钮时，进行逐行校验，（必输项及是否合规项）
+     */
     handleOk = () => {
         const { datas, isEdit, values = {} } = this.props;
         const { validateFields } = this.props.form;
@@ -98,7 +103,7 @@ class SellPriceModal extends Component {
         })
         if (isEdit) {
             const { deliveryDay, minNumber, salesInsideNumber, suggestPrice } = newDatas;
-            this.newDatas.sellPricesInReview.sellSectionPrices.map((item) => (
+            this.newDatas.sellPricesInReview.sellSectionPrices.forEach(item => (
                 noChangePrices.push({
                     endNumber: item.endNumber,
                     price: item.price,
@@ -149,7 +154,6 @@ class SellPriceModal extends Component {
                 this.props.handlePostAdd(createData, isEdit);
             }
             if (this.newDatas.auditStatus === 1) {
-                message.error('已提交状态不可以进行编辑，请点击取消退出!');
                 return null;
             }
             return null;
@@ -202,21 +206,26 @@ class SellPriceModal extends Component {
         }
     }
 
+    /**
+     * 建议零售价回传值
+     * @param {*} num number
+     */
     handleEditSteps = (num) => {
         this.setState({
             suggestPrice: num
         })
     }
 
-    handlePushPriceSteps = () => {
-
-    }
-
+    /**
+     * 编辑阶梯价格回传值
+     * @param {*} prices list
+     * @param {*} isContinue bool
+     */
     handleEditPriceChange = (prices, isContinue) => {
         const newArr = [];
         const priceArrMore = [];
         if (prices.length === 1) {
-            prices.map((item) => (
+            prices.forEach(item => (
                 newArr.push({
                     endNumber: item.endNumber,
                     price: item.price,
@@ -230,7 +239,7 @@ class SellPriceModal extends Component {
             })
         }
         if (prices.length > 1) {
-            prices.map((item) => {
+            prices.forEach(item => {
                 priceArrMore.push({
                     endNumber: item.endNumber,
                     price: item.price,
@@ -245,11 +254,16 @@ class SellPriceModal extends Component {
         }
     }
 
+    /**
+     * 新建阶梯价格回传值
+     * @param {*} prices list
+     * @param {*} isContinue bool
+     */
     handleCreatPriceChange = (prices, isContinue) => {
         const newArr = [];
         const priceArrMore = [];
         if (prices.length === 1) {
-            prices.map((item) => (
+            prices.forEach(item => (
                 newArr.push({
                     endNumber: item.endNumber,
                     price: item.price,
@@ -260,9 +274,8 @@ class SellPriceModal extends Component {
                 sellSectionPrices: newArr,
                 editIsContinue: isContinue
             })
-        }
-        if (prices.length > 1) {
-            prices.map((item) => {
+        } else if (prices.length > 1) {
+            prices.forEach(item => {
                 priceArrMore.push({
                     endNumber: item.endNumber,
                     price: item.price,
@@ -276,12 +289,20 @@ class SellPriceModal extends Component {
         }
     }
 
+    /**
+     * 编辑货运条件头部form表单回传值
+     * @param {*} data Object
+     */
     handleOnFreConditChange = (data) => {
         this.setState({
             freCondit: data
         })
     }
 
+    /**
+     * 创建货运条件头部form表单回传值
+     * @param {*} data Object
+     */
     handleonCretFreConditChange = (data) => {
         this.setState({
             cretFreConditObj: data
@@ -307,8 +328,8 @@ class SellPriceModal extends Component {
                 {
                     isEdit &&
                     <div>
-                        <span className="changeBefore">当前销售关系:</span>
-                        <span className="changeAfter">已提交销售关系:</span>
+                        <span className="changeBefore">当前销售价格:</span>
+                        <span className="changeAfter">修改销售价格:</span>
                     </div>
                 }
                 {
@@ -355,7 +376,10 @@ class SellPriceModal extends Component {
                                 </Col>
                                 <Col>
                                     <span>审核人：</span>
-                                    <span>{this.newDatas.auditUserName || '-'}</span>
+                                    <span>
+                                        {this.newDatas.auditUserName || '-'}
+                                        {Utils.getTime(this.newDatas.auditTime)}
+                                    </span>
                                 </Col>
                                 <Col>
                                     <span>审核状态：</span>
