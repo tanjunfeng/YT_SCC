@@ -115,8 +115,12 @@ class EditSteps extends Component {
                                             required: true, message: '建议零售价不能为空'
                                         },
                                         {
-                                            validator: Util.limitTwoDecimalPlacesAndNotZero,
-                                            message: '建议零售价必须大于 0'
+                                            validator: Util.limitPositive,
+                                            message: '建议零售价不能为零或负数'
+                                        },
+                                        {
+                                            validator: Util.limitTwoDecimalPlaces,
+                                            message: '建议零售价必须是两位以内小数'
                                         }],
                                     initialValue: sellPricesInReview.suggestPrice || values.suggestPrice
                                 })(
