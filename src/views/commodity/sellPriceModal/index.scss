@@ -24,6 +24,7 @@
     }
     form .ant-input-number {
         margin-right: 0;
+        top: 4px;
     }
     &-item {
         border: 1px solid #eee;
@@ -50,7 +51,7 @@
     }
     &.ant-modal {
         .ant-form-inline .ant-form-explain {
-            left: 30px;
+            left: 0;
         }
     }
     .sell-modal-body-width {

@@ -130,7 +130,6 @@ class EditSteps extends Component {
                                             !== newDatas.suggestPrice
                                             ? 'sell-modal-border' : null}
                                         disabled={isSub}
-                                        // onBlur={this.handleSugeestPriceBlur}
                                         onChange={this.handleNewestPriceChange}
                                     />
                                     )}
