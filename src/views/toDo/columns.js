@@ -1,11 +1,11 @@
 /**
  * @file formColumns.js
- * @author shijh
+ * @author shijh,liujinyu,zhoucl
  *
  * 定义列表数据
  */
 import React from 'react';
-import moment from 'moment';
+import Util from '../../util/util';
 import { locType, poStatus } from '../../constant/procurement';
 
 const purchase = ['普通采购单'];
@@ -47,7 +47,7 @@ export const poMngListColumns = [
         key: 'estimatedDeliveryDate',
         render: (text) => (
             <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                { Util.getDate(text) }
             </span>
         )
     },
@@ -201,3 +201,236 @@ export const goodsColumns = [{
     dataIndex: 'operation',
     width: 50
 }];
+
+export const priceChangeColumns = [
+    {
+        title: '变价类型',
+        dataIndex: 'changeType',
+        key: 'changeType',
+        render: text => (text === 0 ? '采购进价变更' : '售价变更')
+    },
+    {
+        title: '供应商',
+        dataIndex: 'spCodeAndName',
+        key: 'spCodeAndName',
+    },
+    {
+        title: '供应商地点',
+        dataIndex: 'spAdrCodeAndName',
+        key: 'spAdrCodeAndName',
+    },
+    {
+        title: '子公司',
+        dataIndex: 'branchCompanyCodeAndName',
+        key: 'branchCompanyCodeAndName',
+    },
+    {
+        title: '部类',
+        dataIndex: 'firstLevelCategoryName',
+        key: 'firstLevelCategoryName',
+    },
+    {
+        title: '大类',
+        dataIndex: 'secondLevelCategoryName',
+        key: 'secondLevelCategoryName',
+    },
+    {
+        title: '中类',
+        dataIndex: 'thirdLevelCategoryName',
+        key: 'thirdLevelCategoryName',
+    },
+    {
+        title: '小类',
+        dataIndex: 'fourthLevelCategoryName',
+        key: 'fourthLevelCategoryName',
+    },
+    {
+        title: '商品信息',
+        dataIndex: 'productCodeAndDesc',
+        key: 'productCodeAndDesc',
+    },
+    {
+        title: '操作人',
+        dataIndex: 'createUserName',
+        key: 'createUserName',
+    },
+    {
+        title: '操作时间',
+        dataIndex: 'createTime',
+        key: 'createTime',
+        render: (text) => (
+            <span>
+                { Util.getDate(text) }
+            </span>
+        )
+    },
+    {
+        title: '当前价格',
+        dataIndex: 'price',
+        key: 'price',
+    },
+    {
+        title: '提交价格',
+        dataIndex: 'newestPrice',
+        key: 'newestPrice',
+    },
+    {
+        title: '商品毛利率',
+        dataIndex: 'grossProfitMargin',
+        key: 'grossProfitMargin',
+        render: text => (
+            <span className={parseFloat(text) < 0 ? 'decrease' : ''}>{text}</span>
+        )
+    },
+    {
+        title: '调价百分比',
+        dataIndex: 'percentage',
+        key: 'percentage',
+        render: text => (
+            <span className={parseFloat(text) < 0 ? 'decrease' : ''}>{text}</span>
+        )
+    }
+];
+
+// 进价审核列表
+export const purchaseListColumns = [
+    {
+        title: '变价类型',
+        dataIndex: 'processType',
+        key: 'processType',
+    },
+    {
+        title: '供应商编号',
+        dataIndex: 'spNo',
+        key: 'spNo',
+    },
+    {
+        title: '供应商名称',
+        dataIndex: 'spName',
+        key: 'spName',
+    },
+    {
+        title: '供应商地点编号',
+        dataIndex: 'spAdrNo',
+        key: 'spAdrNo',
+    }, {
+        title: '供应商地点名称',
+        dataIndex: 'spAdrName',
+        key: 'spAdrName',
+    },
+    {
+        title: '商品编号',
+        dataIndex: 'productNo',
+        key: 'productNo',
+    },
+    {
+        title: '商品名称',
+        dataIndex: 'productName',
+        key: 'productName',
+    },
+    {
+        title: '变更日期',
+        dataIndex: 'modifyTime',
+        key: 'modifyTime',
+        render: (text) => {
+            return text ?
+                <span>
+                    { Util.getDate(text) }
+                </span>
+                : null
+        }
+    },
+    {
+        title: '当前节点',
+        dataIndex: 'currentNode',
+        key: 'currentNode'
+    },
+    {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation'
+    }
+]
+
+// 售价审核列表
+export const priceListColumns = [
+    {
+        title: '变价类型',
+        dataIndex: 'processType',
+        key: 'processType',
+    },
+    {
+        title: '子公司编号',
+        dataIndex: 'companyId',
+        key: 'companyId',
+    },
+    {
+        title: '子公司名称',
+        dataIndex: 'companyName',
+        key: 'companyName',
+    },
+    {
+        title: '商品编号',
+        dataIndex: 'productNo',
+        key: 'productNo',
+    },
+    {
+        title: '商品名称',
+        dataIndex: 'productName',
+        key: 'productName',
+    },
+    {
+        title: '变更日期',
+        dataIndex: 'modifyTime',
+        key: 'modifyTime',
+        render: (text) => (
+            <span>
+                { Util.getDate(text) }
+            </span>
+        )
+    },
+    {
+        title: '当前节点',
+        dataIndex: 'currentNode',
+        key: 'currentNode'
+
+    },
+    {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation'
+    }
+]
+
+// 查看审核意见弹窗表格
+export const seeModalColumns = [
+    {
+        title: '审批人',
+        dataIndex: 'handler',
+        key: 'handler',
+    },
+    {
+        title: '审批时间',
+        dataIndex: 'handlerDate',
+        key: 'handlerDate',
+        render: (text) => (
+            <span>
+                { Util.getTime(text) }
+            </span>
+        )
+    },
+    {
+        title: '审批结果',
+        dataIndex: 'pass',
+        key: 'pass',
+        render: text => (
+            text ? '通过' : '拒绝'
+        )
+    },
+    {
+        title: '审批意见',
+        dataIndex: 'content',
+        key: 'content'
+    }
+]
+

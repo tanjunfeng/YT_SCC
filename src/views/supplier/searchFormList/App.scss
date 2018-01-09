@@ -1,38 +1,64 @@
-.ant-form {
-    .sc-form {
-        &-item {
-            min-width: 340px;
-            margin-right: 16px;
-            display: inline-block;
-            &-label {
-                min-width: 60px;
-                margin-right: 8px;
-                display: inline-block;
-            }
-            &-input {
-                width: 270px;
-                display: inline-block;
-            }
-            &-select {
-                width: 270px;
-                display: inline-block;
-            }
-            &-input-license {
-                width: 234px;
-            }
-            &-date-picker {
-                width: 246px;
-            }
-        }
-        &-button-group {
-            display: inline-block;
-        }
-        .tr {
+
+.search-form-list-manage {
+    .ant-form {
+        padding: 40px 0 20px;
+        margin: 10px 0;
+        border: 1px solid #c4c5c9;
+    }
+    .ant-form-item-label {
+        width: 110px;
+        .sc-form-item-label {
             text-align: right;
         }
     }
-}
-.gyl-form-item-date-picker {
-    margin-left: 13px;
-    width: 234px!important;
+    .ant-form-item-control-wrapper{
+        display: inline-block;
+    }
+    .ant-form-item {
+        float: left;
+        display: block;
+        height: 42px;
+        margin-bottom: 24px;
+        @media screen and (min-width: 0px) and (max-width: 1400px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            {
+                width: 220px;
+            }
+        }
+        @media screen and (min-width: 1401px) and (max-width: 1600px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            {
+                width: 230px;
+            }
+        }
+        @media screen and (min-width: 1601px) and (max-width: 1920px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            {
+                width: 200px;
+            }
+        }
+        @media screen and (min-width: 1921px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            {
+                width: 260px;
+            }
+        }
+    }
+    .ant-btn {
+        margin: 6px 10px;
+    }
+    .ant-upload-list{
+        display: none
+    }
+    .ant-btn {
+        margin-right: 20px;
+    }
 }

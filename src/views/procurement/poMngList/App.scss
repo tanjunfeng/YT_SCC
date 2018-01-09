@@ -1,22 +1,52 @@
-.ant-table-pagination {
-    margin-right: 15px;
-}
-.change-form {
-    padding-left: 30px;
+.po-mng-list {
+    padding: 20px 0;
+    margin: 10px 0;
+    .ant-form {
+        border: 1px solid #c4c5c9;
+    }
+    .ant-form-item-label {
+        width: 100px;
+        .sc-form-item-label {
+            text-align: right;
+        }
+    }
     .ant-form-item {
-        margin-bottom: 15px
+        float: left;
+        display: block;
+        height: 42px;
+        .ywc-smind {
+            top: 4px;
+        }
+        @media screen and (min-width: 0px) and (max-width: 1400px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 220px;
+            }
+        }
+        @media screen and (min-width: 1401px) and (max-width: 1600px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 230px;
+            }
+        }
+        @media screen and (min-width: 1601px) and (max-width: 1920px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 200px;
+            }
+        }
+        @media screen and (min-width: 1921px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 260px;
+            }
+        }
     }
-
-    .ant-form-explain {
-        padding-left: 73px;
-    }
-
-    &-label {
-        min-width: 61px;
-        text-align: right;
-    }
-
-    &-tip {
-        margin-left: 10px;
+    .ant-btn {
+        margin: 6px 10px;
     }
 }

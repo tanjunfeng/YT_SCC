@@ -28,7 +28,7 @@ import {
     QueryProdPurchaseExtByCondition,
     UpdateProdPurchase
 } from '../../../actions/producthome';
-
+import getProdPurchaseById from '../../../actions/fetch/fetchGetProdPurchaseById';
 
 @connect(
     state => ({
@@ -45,7 +45,8 @@ import {
         productAddPriceVisible,
         modifyAuditVisible,
         UpdateProdPurchase,
-        fetchCheckMainSupplier
+        fetchCheckMainSupplier,
+        getProdPurchaseById
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -60,6 +61,8 @@ class ProcurementMaintenance extends PureComponent {
         this.searchForm = {};
         this.current = 1;
         this.state = {
+            userNames: {},
+            createUserName: '',
             // 控制当前操作card下标
             index: 0,
             // 默认值
@@ -134,6 +137,12 @@ class ProcurementMaintenance extends PureComponent {
      * 修改关系
      */
     handleChange(record) {
+        this.props.getProdPurchaseById({id: record.id}).then((res) => {
+            this.setState({
+                createUserName: res.createUserName,
+                userNames: res
+            });
+        })
         this.setState({
             initData: record,
             showModal: true,
@@ -182,6 +191,7 @@ class ProcurementMaintenance extends PureComponent {
                         initData={this.props.purchaseCardData}
                         proId={match.params.id}
                         onCliked={this.handleChange}
+                        getCardData={this.handleGetCardData}
                     />
                 </div>
                 {
@@ -189,6 +199,8 @@ class ProcurementMaintenance extends PureComponent {
                     <ProdModal
                         data={getProductByIds}
                         initValue={this.state.initData}
+                        userNames={this.state.userNames}
+                        createUserName={this.state.createUserName}
                         isEdit={this.state.isEdit}
                         goto={this.getCardData}
                         handleClose={this.handleCloseModal}
@@ -202,6 +214,7 @@ class ProcurementMaintenance extends PureComponent {
 ProcurementMaintenance.propTypes = {
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
     QueryProdPurchaseExtByCondition: PropTypes.func,
+    getProdPurchaseById: PropTypes.func,
     prefixCls: PropTypes.string,
     getProductByIds: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),

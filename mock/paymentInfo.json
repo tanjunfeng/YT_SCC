@@ -13,7 +13,7 @@
                 "currencyCode": null,
                 "transNum": null,
                 "payRecordNo": null,
-                "state": "3",
+                "state": "approved",
                 "stateDetail": "公司内",
                 "channel": "未知支付类型",
                 "createTime": null,
@@ -21,7 +21,7 @@
                 "remark": null,
                 "operationTime": null,
                 "refundReason": null,
-                "shouldConfirm": false
+                "shouldConfirm": true
             }
         ],
         "totalAmount": 2167.5,

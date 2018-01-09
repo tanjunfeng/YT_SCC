@@ -13,6 +13,8 @@ import { bindActionCreators } from 'redux';
 import EditableCell from './editableCell';
 import { fetchOrderDetailInfo, clearOrderDetailInfo } from '../../../actions/order';
 
+const noImage = require('../../../images/default/noPic.png');
+
 @connect(
     () => ({}),
     dispatch => bindActionCreators({
@@ -23,7 +25,6 @@ import { fetchOrderDetailInfo, clearOrderDetailInfo } from '../../../actions/ord
 class GoodsInfo extends PureComponent {
     constructor(props) {
         super(props);
-
         let className;
         let message;
         this.columns = [{
@@ -31,21 +32,37 @@ class GoodsInfo extends PureComponent {
             dataIndex: 'productImg',
             key: 'productImg',
             render: (text, record) => {
+                let errorTip = null;
+                let arrowTip = null;
+
+                if (record.type === 'promotion') {
+                    message = '赠';
+                    const tipClassName = 'arrowTip giftColor';
+                    arrowTip = <p className={tipClassName}><span>{message}</span></p>;
+                } else if (record.type === 'subItem') {
+                    message = '套';
+                    const tipClassName = 'arrowTip packageColor';
+                    arrowTip = <p className={tipClassName}><span>{message}</span></p>;
+                }
+
                 if (record.abnormalGoods) {
                     message = '毛利异常';
-                    className = 'abnormalResonse';
+                    const tipClassName = arrowTip ? 'abnormalResonse resonse-top' : 'abnormalResonse';
+                    errorTip = <div className={tipClassName}>{message}</div>;
                 } else {
-                    className = '';
-                    message = '';
+                    errorTip = '';
                 }
+
+                const imgUrl = text || noImage;
                 return (
                     <div>
                         <img
-                            src={text}
+                            src={imgUrl}
                             alt="未上传"
                             style={{ width: 50, height: 50, verticalAlign: 'middle' }}
                         />
-                        <div className={className}>{message}</div>
+                        {arrowTip}
+                        {errorTip}
                     </div>
                 )
             }
@@ -145,7 +162,7 @@ class GoodsInfo extends PureComponent {
                 } else {
                     className = '';
                 }
-                return <span className={className}>￥{Number(record.itemPrice.salePrice).toFixed(2)}</span>
+                return <span className={className}>{`￥${Number(record.itemPrice.salePrice).toFixed(2)}`}</span>
             }
         }, {
             title: '金额',
@@ -185,7 +202,7 @@ class GoodsInfo extends PureComponent {
         }
     }
 
-    onCellChange = record => value => {
+    onCellChange = record => (value, isMultiple) => {
         const goodsList = [...this.state.goodsList];
         const index = goodsList.findIndex(goods => goods.id === record.id);
         let v = value;
@@ -196,7 +213,7 @@ class GoodsInfo extends PureComponent {
             goodsList[index][`sub${this.getLastSubNum(1)}`] = v;
             goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - v;
             this.setState({ goodsList }, () => {
-                this.noticeParent();
+                this.noticeParent(isMultiple);
             });
         }
     }
@@ -225,12 +242,12 @@ class GoodsInfo extends PureComponent {
     /**
      * 回传子订单数据给父组件
      */
-    noticeParent = () => {
+    noticeParent = isMultiple => {
         const arr = [];
         for (let i = 1; i <= this.getLastSubNum(); i++) {
             arr.push(this.getSubObject(i));
         }
-        this.props.onChange(arr);
+        this.props.onChange(arr, isMultiple);
     }
 
     addSubOrders = () => {
@@ -238,7 +255,7 @@ class GoodsInfo extends PureComponent {
         const subNum = this.getLastSubNum() + 1;
         this.columns.push({ title: `子订单${subNum}`, dataIndex: `sub${subNum}` });
         goodsList.forEach(goods => {
-            const quantityUsed = goods[`sub${subNum - 2}`];  // 倒数第二列的数量应该算作占用库存
+            const quantityUsed = goods[`sub${subNum - 2}`]; // 倒数第二列的数量应该算作占用库存
             Object.assign(goods, {
                 [`sub${subNum}`]: 0,
                 quantityLeft: goods.quantityLeft - quantityUsed
@@ -288,7 +305,7 @@ class GoodsInfo extends PureComponent {
             <EditableCell
                 value={value}
                 min={0}
-                step={1}
+                step={record.unitQuantity || 1}
                 max={record.quantityLeft}
                 onChange={this.onCellChange(record)}
             />

@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-22 04:48:29
+ * @Last Modified by: chenghaojie
+ * @Last Modified time: 2018-01-04 11:14:58
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -43,6 +43,7 @@ import {
     queryProcessMsgInfo,
     queryHighChart,
     clearHighChart,
+    returnAuditInfo,
 } from '../../../actions/process';
 import {
     getWarehouseAddressMap,
@@ -52,7 +53,6 @@ import {
 } from '../../../actions';
 import ApproModal from '../../../components/approModal'
 import FlowImage from '../../../components/flowImage';
-import {auditInfo} from '../../../service';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -76,6 +76,7 @@ const { TextArea } = Input;
     queryProcessDefinitions,
     queryHighChart,
     clearHighChart,
+    returnAuditInfo,
 }, dispatch))
 
 class toDoReturnList extends PureComponent {
@@ -111,7 +112,7 @@ class toDoReturnList extends PureComponent {
             spAdrNo: '', // 供应商地点编码
             status: 0, // 流程状态，默认进行中
             spName: null, // 供应商名
-            apAdrName: null, // 供应商地点名
+            spAdrName: null, // 供应商地点名
             refundAdrName: null, // 地点
         };
         // 初始页号
@@ -403,7 +404,7 @@ class toDoReturnList extends PureComponent {
     handleSupplierAddressChoose = ({ record }) => {
         this.setState({
             spAdrId: record.spId,
-            apAdrName: record.providerName
+            spAdrName: record.providerName
         });
     }
 
@@ -413,7 +414,7 @@ class toDoReturnList extends PureComponent {
     handleSupplierAddressClear = () => {
         this.setState({
             spAdrId: '',
-            apAdrName: ''
+            spAdrName: ''
         });
         this.joiningAdressMind.reset();
     }
@@ -525,7 +526,7 @@ class toDoReturnList extends PureComponent {
     handleApprovalOk = () => {
         const { refundNo, taskId } = this.examinationAppData;
         this.getFormData().then((param) => {
-            auditInfo({ ...param, orderNo: refundNo, taskId, type: 1 })
+            this.props.returnAuditInfo({ ...param, orderNo: refundNo, taskId, type: 1 })
                 .then((res) => {
                     if (res.code === 200) {
                         message.success(res.message);
@@ -535,7 +536,7 @@ class toDoReturnList extends PureComponent {
 
                         this.queryReturnMngList(this.current);
                     }
-                });
+                })
         });
     }
 
@@ -586,7 +587,7 @@ class toDoReturnList extends PureComponent {
         const spName = this.state.spName;
 
         // 供应商地点编号
-        const apAdrName = this.state.apAdrName;
+        const spAdrName = this.state.spAdrName;
 
         // 地点
         const refundAdrName = this.state.refundAdrName;
@@ -600,7 +601,7 @@ class toDoReturnList extends PureComponent {
             purchaseOrderType,
             adrType,
             spName,
-            apAdrName,
+            spAdrName,
             refundAdrName,
             status
         };
@@ -649,262 +650,241 @@ class toDoReturnList extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.processMsgInfo;
         return (
-            <div className="search-box">
-                <Form layout="inline">
-                    <div className="">
-                        <Row gutter={56}>
-                            <Col span={8}>
-                                {/* 退货单号 */}
-                                <FormItem label="退货单号" >
-                                    {getFieldDecorator('purchaseRefundNo', {})(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 流程状态 */}
-                                <FormItem label="流程状态">
-                                    {getFieldDecorator('auditStatus', { initialValue: '进行中' })(
-                                        <Select style={{ width: '153px' }} size="default" onChange={this.statusChange}>
-                                            {
-                                                auditStatusOption.data.map((item) => (
-                                                    <Option key={item.key} value={item.key}>
-                                                        {item.value}
-                                                    </Option>))
-                                            }
-                                        </Select>
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 供应商 */}
-                                <FormItem>
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">供应商</span>
-                                        <SearchMind
-                                            style={{
-                                                zIndex: 101
-                                            }}
-                                            compKey="search-mind-supply"
-                                            ref={ref => {
-                                                this.supplySearchMind = ref
-                                            }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }, 'querySuppliersList')}
-                                            addonBefore=""
-                                            onChoosed={this.handleSupplyChoose}
-                                            onClear={this.handleSupplyClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.spNo}-{row.companyName}</div>
-                                            )}
-                                            rowKey="spId"
-                                            pageSize={5}
-                                            columns={[
-                                                {
-                                                    title: '供应商',
-                                                    dataIndex: 'spNo',
-                                                    width: 80
-                                                }, {
-                                                    title: '供应商名称',
-                                                    dataIndex: 'companyName'
-                                                }
-                                            ]}
-                                        />
-                                    </div>
-                                </FormItem>
-                            </Col>
-                            {/* 供应商地点 */}
-                            <Col className="gutter-row" span={8}>
-                                <FormItem>
-                                    <span className="sc-form-item-label" style={{ width: 70 }}>供应商地点</span>
-                                    <span className="search-box-data-pic">
-                                        <SearchMind
-                                            style={{ zIndex: 9, verticalAlign: 'bottom' }}
-                                            compKey="providerNo"
-                                            ref={ref => { this.joiningAdressMind = ref }}
-                                            fetch={(params) =>
-                                                this.props.pubFetchValueList(Utils.removeInvalid({
-                                                    condition: params.value,
-                                                    pageSize: params.pagination.pageSize,
-                                                    pageNum: params.pagination.current || 1
-                                                }), 'supplierAdrSearchBox').then((res) => {
-                                                    const dataArr = res.data.data || [];
-                                                    if (!dataArr || dataArr.length === 0) {
-                                                        message.warning('没有可用的数据');
-                                                    }
-                                                    return res;
-                                                })}
-                                            onChoosed={this.handleSupplierAddressChoose}
-                                            onClear={this.handleSupplierAddressClear}
-                                            renderChoosedInputRaw={(res) => (
-                                                <div>{res.providerNo} - {res.providerName}</div>
-                                            )}
-                                            rowKey="providerNo"
-                                            pageSize={6}
-                                            columns={[
-                                                {
-                                                    title: '供应商地点编码',
-                                                    dataIndex: 'providerNo',
-                                                    width: 98
-                                                }, {
-                                                    title: '供应商地点名称',
-                                                    dataIndex: 'providerName'
-                                                }
-                                            ]}
-                                        />
-                                    </span>
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 地点类型 */}
-                                <FormItem label="地点类型">
-                                    {getFieldDecorator('adrType', {
-                                        initialValue: locType.defaultValue
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default" onChange={this.onLocTypeChange}>
-                                            {locType.data.map((item) => (
+            <Form className="to-do-return-list">
+                <div className="search-box">
+                    <Row>
+                        <Col>
+                            {/* 退货单号 */}
+                            <FormItem label="退货单号" >
+                                {getFieldDecorator('purchaseRefundNo', {})(<Input size="default" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 流程状态 */}
+                            <FormItem label="流程状态">
+                                {getFieldDecorator('auditStatus', { initialValue: '进行中' })(
+                                    <Select style={{ width: '153px' }} size="default" onChange={this.statusChange}>
+                                        {
+                                            auditStatusOption.data.map((item) => (
                                                 <Option key={item.key} value={item.key}>
                                                     {item.value}
-                                                </Option>
-                                            ))}
-                                        </Select>
-                                        )}
-                                </FormItem>
-                            </Col>
-                            {/* 退货地点 */}
-                            <Col span={8}>
-                                {/* 地点 */}
-                                <FormItem>
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">地点</span>
-                                        <SearchMind
-                                            style={{ zIndex: 7 }}
-                                            compKey="search-mind-key1"
-                                            rowKey="id"
-                                            ref={ref => { this.poAddress = ref }}
-                                            fetch={this.handleGetAddressMap}
-                                            onChoosed={this.handleAddressChoose}
-                                            onClear={this.handleAddressClear}
-                                            disabled={this.state.locDisabled}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>
-                                                    {row[this.state.locationData.code]} -
-                                                    {row[this.state.locationData.name]}
-                                                </div>
-                                            )}
-                                            pageSize={3}
-                                            columns={[
-                                                {
-                                                    title: '编码',
-                                                    dataIndex: this.state.locationData.code,
-                                                    width: 80
-                                                }, {
-                                                    title: '名称',
-                                                    dataIndex: this.state.locationData.name
-                                                }
-                                            ]}
-                                        />
-                                    </div>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40} type="flex" justify="end">
-                            <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right' }}>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleResetValue}>
-                                        重置
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" onClick={this.handleSearch} size="default">
-                                        搜索
-                                    </Button>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                    </div>
-                    <div >
-                        <Table
-                            dataSource={data}
-                            columns={this.columns}
-                            rowKey="taskId"
-                            scroll={{
-                                x: 1800
-                            }}
-                            pagination={{
-                                current: this.current,
-                                total,
-                                pageSize,
-                                pageNum,
-                                showQuickJumper: true,
-                                onChange: this.onPaginate
-                            }}
-                        />
-                        <ApproModal
-                            visible={this.state.isVisibleModal}
-                            onOk={this.handleModalOk}
-                            onCancel={this.handleModalCancel}
-                            approvalList={this.props.approvalList}
-                        />
-                        <FlowImage data={this.props.highChartData} closeCanvas={this.closeCanvas} >
-                            <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
-                        </FlowImage>
-                        {
-                            this.state.approvalVisible &&
-                            <Modal
-                                title="审批"
-                                visible={this.state.approvalVisible}
-                                onOk={this.handleApprovalOk}
-                                onCancel={this.handleApprovalCancel}
-                                width={400}
-                            >
-                                <div>
-                                    <Form onSubmit={(e) => {
-                                        e.preventDefault()
+                                                </Option>))
+                                        }
+                                    </Select>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 供应商 */}
+                            <FormItem label="供应商" className="labelTop">
+                                <SearchMind
+                                    compKey="search-mind-supply"
+                                    ref={ref => {
+                                        this.supplySearchMind = ref
                                     }}
-                                    >
-                                        {/* 审批意见 */}
-                                        <FormItem label="审批意见" style={{ display: 'flex' }}>
-                                            {getFieldDecorator('outcome', {
-                                                initialValue: optionStatus.defaultValue,
-                                                rules: [{ required: true, message: '请选择审批意见!' }]
-                                            })(
-                                                <Select style={{ width: '153px' }} size="default">
-                                                    {
-                                                        optionStatus.data.map((item) => (
-                                                            <Option key={item.key} value={item.key}>
-                                                                {item.value}
-                                                            </Option>))
-                                                    }
-                                                </Select>
-                                                )}
-                                        </FormItem>
-                                        <FormItem label="意见" style={{ display: 'flex' }}>
-                                            {getFieldDecorator('comment', {
-                                                initialValue: '',
-                                                rules: [
-                                                    { required: false, message: '请填写审批意见!' },
-                                                    { max: 150, message: '请输入150字以内' }
-                                                ]
-                                            })(
-                                                <TextArea
-                                                    placeholder="可填写意见"
-                                                    style={{ resize: 'none' }}
-                                                    autosize={{
-                                                        minRows: 4,
-                                                        maxRows: 6
-                                                    }}
-                                                />
-                                                )}
-                                        </FormItem>
-                                    </Form>
-                                </div>
-                            </Modal>
-                        }
-                    </div>
-                </Form>
-            </div >
+                                    fetch={(params) => this.props.pubFetchValueList({
+                                        condition: params.value,
+                                        pageSize: params.pagination.pageSize,
+                                        pageNum: params.pagination.current || 1
+                                    }, 'querySuppliersList')}
+                                    addonBefore=""
+                                    onChoosed={this.handleSupplyChoose}
+                                    onClear={this.handleSupplyClear}
+                                    renderChoosedInputRaw={(row) => (
+                                        <div>{row.spNo}-{row.companyName}</div>
+                                    )}
+                                    rowKey="spId"
+                                    columns={[
+                                        {
+                                            title: '供应商',
+                                            dataIndex: 'spNo',
+                                            width: 80
+                                        }, {
+                                            title: '供应商名称',
+                                            dataIndex: 'companyName'
+                                        }
+                                    ]}
+                                />
+                            </FormItem>
+                        </Col>
+                        {/* 供应商地点 */}
+                        <Col>
+                            <FormItem label="供应商地点" className="labelTop">
+                                <SearchMind
+                                    compKey="providerNo"
+                                    ref={ref => { this.joiningAdressMind = ref }}
+                                    fetch={(params) =>
+                                        this.props.pubFetchValueList(Utils.removeInvalid({
+                                            condition: params.value,
+                                            pageSize: params.pagination.pageSize,
+                                            pageNum: params.pagination.current || 1
+                                        }), 'supplierAdrSearchBox').then((res) => {
+                                            const dataArr = res.data.data || [];
+                                            if (!dataArr || dataArr.length === 0) {
+                                                message.warning('没有可用的数据');
+                                            }
+                                            return res;
+                                        })}
+                                    onChoosed={this.handleSupplierAddressChoose}
+                                    onClear={this.handleSupplierAddressClear}
+                                    renderChoosedInputRaw={(res) => (
+                                        <div>{res.providerNo} - {res.providerName}</div>
+                                    )}
+                                    rowKey="providerNo"
+                                    pageSize={6}
+                                    columns={[
+                                        {
+                                            title: '供应商地点编码',
+                                            dataIndex: 'providerNo',
+                                            width: 98
+                                        }, {
+                                            title: '供应商地点名称',
+                                            dataIndex: 'providerName'
+                                        }
+                                    ]}
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 地点类型 */}
+                            <FormItem label="地点类型">
+                                {getFieldDecorator('adrType', {
+                                    initialValue: locType.defaultValue
+                                })(
+                                    <Select onChange={this.onLocTypeChange}>
+                                        {locType.data.map((item) => (
+                                            <Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </FormItem>
+                        </Col>
+                        {/* 退货地点 */}
+                        <Col>
+                            {/* 地点 */}
+                            <FormItem label="地点" className="labelTop">
+                                <SearchMind
+                                    compKey="search-mind-key1"
+                                    rowKey="id"
+                                    ref={ref => { this.poAddress = ref }}
+                                    fetch={this.handleGetAddressMap}
+                                    onChoosed={this.handleAddressChoose}
+                                    onClear={this.handleAddressClear}
+                                    disabled={this.state.locDisabled}
+                                    renderChoosedInputRaw={(row) => (
+                                        <div>
+                                            {row[this.state.locationData.code]} -
+                                            {row[this.state.locationData.name]}
+                                        </div>
+                                    )}
+                                    pageSize={3}
+                                    columns={[
+                                        {
+                                            title: '编码',
+                                            dataIndex: this.state.locationData.code,
+                                            width: 80
+                                        }, {
+                                            title: '名称',
+                                            dataIndex: this.state.locationData.name
+                                        }
+                                    ]}
+                                />
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={40} type="flex" justify="end">
+                        <Col>
+                            <Button size="default" onClick={this.handleResetValue}>
+                                重置
+                            </Button>
+                            <Button type="primary" onClick={this.handleSearch} size="default">
+                                搜索
+                            </Button>
+                        </Col>
+                    </Row>
+                </div>
+                <div >
+                    <Table
+                        dataSource={data}
+                        columns={this.columns}
+                        rowKey="taskId"
+                        scroll={{
+                            x: 1800
+                        }}
+                        pagination={{
+                            current: this.current,
+                            total,
+                            pageSize,
+                            pageNum,
+                            showQuickJumper: true,
+                            onChange: this.onPaginate
+                        }}
+                    />
+                    <ApproModal
+                        visible={this.state.isVisibleModal}
+                        onOk={this.handleModalOk}
+                        onCancel={this.handleModalCancel}
+                        approvalList={this.props.approvalList}
+                    />
+                    <FlowImage data={this.props.highChartData} closeCanvas={this.closeCanvas} >
+                        <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
+                    </FlowImage>
+                    {
+                        this.state.approvalVisible &&
+                        <Modal
+                            title="审批"
+                            visible={this.state.approvalVisible}
+                            onOk={this.handleApprovalOk}
+                            onCancel={this.handleApprovalCancel}
+                            width={400}
+                        >
+                            <div>
+                                <Form onSubmit={(e) => {
+                                    e.preventDefault()
+                                }}
+                                >
+                                    {/* 审批意见 */}
+                                    <FormItem label="审批意见" style={{ display: 'flex' }}>
+                                        {getFieldDecorator('outcome', {
+                                            initialValue: optionStatus.defaultValue,
+                                            rules: [{ required: true, message: '请选择审批意见!' }]
+                                        })(
+                                            <Select style={{ width: '153px' }} size="default">
+                                                {
+                                                    optionStatus.data.map((item) => (
+                                                        <Option key={item.key} value={item.key}>
+                                                            {item.value}
+                                                        </Option>))
+                                                }
+                                            </Select>
+                                        )}
+                                    </FormItem>
+                                    <FormItem label="意见" style={{ display: 'flex' }}>
+                                        {getFieldDecorator('comment', {
+                                            initialValue: '',
+                                            rules: [
+                                                { required: false, message: '请填写审批意见!' },
+                                                { max: 150, message: '请输入150字以内' }
+                                            ]
+                                        })(
+                                            <TextArea
+                                                placeholder="可填写意见"
+                                                style={{ resize: 'none' }}
+                                                autosize={{
+                                                    minRows: 4,
+                                                    maxRows: 6
+                                                }}
+                                            />
+                                        )}
+                                    </FormItem>
+                                </Form>
+                            </div>
+                        </Modal>
+                    }
+                </div>
+            </Form>
         );
     }
 }
@@ -920,7 +900,8 @@ toDoReturnList.propTypes = {
     deleteBatchRefundOrder: PropTypes.func,
     queryHighChart: PropTypes.func,
     clearHighChart: PropTypes.func,
-    highChartData: PropTypes.string
+    highChartData: PropTypes.string,
+    returnAuditInfo: PropTypes.func,
 };
 
 export default withRouter(Form.create()(toDoReturnList));

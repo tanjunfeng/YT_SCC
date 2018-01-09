@@ -10,9 +10,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
-    Form,
+    Form, message
 } from 'antd';
-
 import {
     modifyAuditVisible,
     modifyCheckReasonVisible,
@@ -30,7 +29,8 @@ import SellPriceModal from '../sellPriceModal'
 import {
     postSellPrice,
     updateSellPrice,
-    updatePriceStatus
+    updatePriceStatus,
+    getSellPriceInfoByIdAction
 } from '../../../actions/commodity';
 
 @connect(
@@ -43,7 +43,8 @@ import {
         getProdPurchaseById: state.toJS().commodity.getProdPurchaseById,
         queryProdPurchases: state.toJS().commodity.queryProdPurchases,
         getProductById: state.toJS().commodity.getProductById,
-        stepPriceList: state.toJS().commodity.stepPriceList,
+        stepPriceDetail: state.toJS().commodity.stepPriceDetail,
+        getSellPriceInfoById: state.toJS().commodity.getSellPriceInfoById,
     }),
     dispatch => bindActionCreators({
         modifyAuditVisible,
@@ -52,19 +53,20 @@ import {
         fetchPriceInfo,
         postSellPrice,
         updateSellPrice,
-        updatePriceStatus
+        updatePriceStatus,
+        getSellPriceInfoByIdAction
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
     constructor(props) {
         super(props);
-
-        this.handleFormReset = this.handleFormReset.bind(this);
-        this.handlePaginationChange = this.handlePaginationChange.bind(this);
-
         this.searchForm = {};
         this.current = 1;
         this.state = {
+            // 新建modal
+            values: {},
+            // 修改modal
+            datas: {},
             // 控制当前操作card下标
             index: 0,
             // 默认值
@@ -75,6 +77,7 @@ class ProcurementMaintenance extends PureComponent {
             isEdit: false
         }
     }
+
     /**
      * 加载刷新列表
      */
@@ -95,14 +98,14 @@ class ProcurementMaintenance extends PureComponent {
      * @param {Object} record 模态框状态
      * @param {string} index 下标
      */
-    handleSelect(record, index, item) {
+    handleSelect = (record, index, item) => {
         const { key } = item;
         switch (key) {
             case 'changeAudit':
-                this.props.modifyAuditVisible({isVisible: true, record});
+                this.props.modifyAuditVisible({ isVisible: true, record });
                 break;
             case 'CheckReason':
-                this.props.modifyCheckReasonVisible({isVisible: true, record});
+                this.props.modifyCheckReasonVisible({ isVisible: true, record });
                 break;
             default:
                 break;
@@ -114,28 +117,24 @@ class ProcurementMaintenance extends PureComponent {
      *
      * @param {Object} data 重置的表单
      */
-    handleFormReset(data) {
+    handleFormReset = (data) => {
         this.searchForm = data;
     }
 
     /**
-     *列表分页
+     * 列表分页
      *
      * @param {string} goto 数据列表分页
      */
-    handlePaginationChange(goto = 1) {
+    handlePaginationChange = (goto = 1) => {
         this.current = goto;
-        this.props.fetchPriceInfo({
-            pageNum: goto,
-            pageSize: PAGE_SIZE,
-            ...this.searchForm
-        });
+        this.handleFormSearch()
     }
 
     /**
      * 删除card
      */
-    handleDelete = (id) => {
+    handleDelete = id => {
         const { getProductById = {} } = this.props;
         const pid = getProductById.id;
         deleteSellPriceById({
@@ -151,7 +150,7 @@ class ProcurementMaintenance extends PureComponent {
         })
     }
 
-    handleFormSearch = (data) => {
+    handleFormSearch = data => {
         this.data = data;
         const { getProductById = {} } = this.props;
         this.props.fetchPriceInfo({
@@ -163,18 +162,22 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     handleAdd = () => {
-        const { getProductById } = this.props
+        const { getProductById } = this.props;
         this.setState({
-            datas: getProductById,
+            values: getProductById,
             show: true,
         })
     }
 
-    handleCardClick = (data) => {
-        this.setState({
-            datas: data,
-            isEdit: true,
-            show: true,
+    handleCardClick = data => {
+        this.props.getSellPriceInfoByIdAction({ id: data.id }).then((res) => {
+            if (res.code === 200) {
+                this.setState({
+                    datas: res,
+                    isEdit: true,
+                    show: true,
+                })
+            }
         })
     }
 
@@ -186,20 +189,24 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     handlePostAdd = (data, isEdit) => {
-        const { getProductById = {} } = this.props;
         const service = isEdit ? this.props.updateSellPrice : this.props.postSellPrice;
-        service(data).then(() => {
-            this.props.fetchPriceInfo({
-                pageNum: this.current,
-                pageSize: PAGE_SIZE,
-                productId: getProductById.id,
-                ...this.data
-            });
+        const { getProductById = {} } = this.props;
+        service(data).then((res) => {
+            if (res.code === 200 && res.success) {
+                message.success(res.message);
+                this.props.fetchPriceInfo({
+                    pageNum: this.current,
+                    pageSize: PAGE_SIZE,
+                    productId: getProductById.id
+                });
+            } else {
+                message.warning(res.message)
+            }
             this.handleClose()
         })
     }
 
-    handleChangeStatus = (data) => {
+    handleChangeStatus = data => {
         const { getProductById = {} } = this.props;
         this.props.updatePriceStatus(data).then(() => {
             this.props.fetchPriceInfo({
@@ -212,7 +219,7 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getProductById, stepPriceList = {}} = this.props;
+        const { prefixCls, getProductById, stepPriceDetail = {}, match } = this.props;
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm
@@ -223,23 +230,26 @@ class ProcurementMaintenance extends PureComponent {
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     handleAdd={this.handleAdd}
+                    value={match.params.id}
                 />
                 <div>
                     <Cardline.SaleCard
-                        initalValue={stepPriceList.sellPriceInfoVos || {}}
+                        initalValue={stepPriceDetail.sellPriceInfoVos || {}}
                         minUnit={getProductById.minUnit}
                         handleDelete={this.handleDelete}
                         handleCardClick={this.handleCardClick}
                         handleChangeStatus={this.handleChangeStatus}
+                        paginationChange={this.handlePaginationChange}
                         isSale
                     />
                 </div>
                 {
                     this.state.show &&
                     <SellPriceModal
+                        initalValue={stepPriceDetail.sellPriceInfoVos || {}}
                         datas={this.state.datas}
+                        values={this.state.values}
                         handleClose={this.handleClose}
-                        handleAdd={this.handleAdd}
                         handlePostAdd={this.handlePostAdd}
                         isEdit={this.state.isEdit}
                     />
@@ -259,13 +269,14 @@ ProcurementMaintenance.propTypes = {
     fetchPriceInfo: PropTypes.func,
     postSellPrice: PropTypes.func,
     updatePriceStatus: PropTypes.func,
-    stepPriceList: PropTypes.func,
+    getSellPriceInfoByIdAction: PropTypes.func,
+    stepPriceDetail: PropTypes.objectOf(PropTypes.any),
     updateSellPrice: PropTypes.func
 }
 
 ProcurementMaintenance.defaultProps = {
     prefixCls: 'card-line',
-    postSellPrice: () => {}
+    postSellPrice: () => { }
 };
 
 export default withRouter(Form.create()(ProcurementMaintenance));

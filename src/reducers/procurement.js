@@ -62,6 +62,8 @@ const initState = fromJS({
     approvalInfoList: [],
     // 查询审批列表
     processMsgInfo: {},
+    // 查询待办事项下价格变更列表
+    priceChangeList: {},
     // 查询退货单审批流程
     processDefinitions: [],
     // 退货商品列表
@@ -181,6 +183,8 @@ export default function (state = initState, action) {
 
         case ActionType.QUERY_PROCESS_MSG_LIST:// 采购审批列表下查询采购单审批列表
             return state.set('processMsgInfo', fromJS(action.payload));
+        case ActionType.QUERY_PRICE_CHANGE_LIST: // 价格变更记录列表
+            return state.set('priceChangeList', fromJS(action.payload));
         case ActionType.QUERY_PRO_DEFINITIONS:// 查询退货单审批流程
             return state.set('processDefinitions', fromJS(action.payload));
         case ActionType.RECEIVE_RETURN_MNG_LIST:// 采购退货列表

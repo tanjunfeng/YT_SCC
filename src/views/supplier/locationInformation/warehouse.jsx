@@ -192,6 +192,7 @@ class Warehouse extends Component {
 Warehouse.propTypes = {
     prefixCls: PropTypes.string,
     defaultValue: PropTypes.arrayOf(PropTypes.any),
+    handleChoose: PropTypes.arrayOf(PropTypes.any),
     fetch: PropTypes.func,
     isShow: PropTypes.bool,
 };

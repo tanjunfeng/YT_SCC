@@ -1,4 +1,5 @@
 .prod-modal {
+    width: 480px;
     .ant-modal-body {
         max-height: 400px;
         overflow-y: auto;
@@ -33,7 +34,7 @@
         text-align: right;
         margin-right: 10px;
         vertical-align: middle;
-        
+
     }
     .ant-form-item {
         margin-bottom: 10px;

@@ -1,127 +1,214 @@
 {
-  "timestamp": 1513146214227,
-  "code": 200,
-  "message": "请求成功",
-  "exception": null,
-  "data": {
-    "sellPriceInfoVos": {
-      "pageNum": 1,
-      "pageSize": 15,
-      "total": 3,
-      "data": [
-        {
-          "id": 606,
-          "productId": "60000117016",
-          "lowestPrice": 0.00,
-          "createTime": 1511516970000,
-          "modifyTime": 1511849320000,
-          "status": 1,
-          "branchCompanyId": "10003",
-          "branchCompanyName": "四川雅堂小超总部",
-          "suggestPrice": 42.00,
-          "deliveryDay": 7,
-          "salesInsideNumber": 1,
-          "minNumber": 3,
-          "deleteStatus": 0,
-          "modifyUserId": "10027",
-          "createUserId": "10027",
-          "sellSectionPrices": [
-            {
-              "id": 1327,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 606,
-              "deleteStatus": 0
-            },
-            {
-              "id": 1328,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 606,
-              "deleteStatus": 0
-            },
-            {
-              "id": 1329,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 606,
-              "deleteStatus": 0
-            },
-            {
-              "id": 1330,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 606,
-              "deleteStatus": 0
-            }
-          ],
-          "maxNumber": 323,
-          "preHarvestPinStatus": 0
-        },
-        {
-          "id": 635,
-          "productId": "60000117016",
-          "lowestPrice": 111.00,
-          "createTime": 1512625929000,
-          "modifyTime": null,
-          "status": 1,
-          "branchCompanyId": "10000",
-          "branchCompanyName": "成都子公司",
-          "suggestPrice": 42.00,
-          "deliveryDay": 7,
-          "salesInsideNumber": 1,
-          "minNumber": 1,
-          "deleteStatus": 0,
-          "modifyUserId": null,
-          "createUserId": "10027",
-          "sellSectionPrices": [
-            {
-              "id": 1356,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 635,
-              "deleteStatus": 0
-            }
-          ],
-          "maxNumber": 1,
-          "preHarvestPinStatus": 0
-        },
-        {
-          "id": 645,
-          "productId": "60000117016",
-          "lowestPrice": 2.00,
-          "createTime": 1513132564000,
-          "modifyTime": null,
-          "status": 1,
-          "branchCompanyId": "10004",
-          "branchCompanyName": "湖南子公司",
-          "suggestPrice": 42.00,
-          "deliveryDay": 7,
-          "salesInsideNumber": 1,
-          "minNumber": 2,
-          "deleteStatus": 0,
-          "modifyUserId": null,
-          "createUserId": "10027",
-          "sellSectionPrices": [
-            {
-              "id": 1372,
-              "price": 25.00,
-              "startNumber": 12,
-              "endNumber": 30,
-              "sellPriceId": 645,
-              "deleteStatus": 0
-            }
-          ],
-          "maxNumber": null,
-          "preHarvestPinStatus": 0
+    "timestamp": 1515479385490,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "sellPriceInfoVos": {
+            "pageNum": 1,
+            "pageSize": 20,
+            "total": 2,
+            "data": [
+                {
+                    "id": 2495,
+                    "productId": "60000484352",
+                    "lowestPrice": 10.00,
+                    "createTime": 1511159429000,
+                    "modifyTime": 1515420022000,
+                    "status": 1,
+                    "branchCompanyId": "10000",
+                    "branchCompanyName": "成都子公司",
+                    "suggestPrice": 45.00,
+                    "deliveryDay": 12,
+                    "salesInsideNumber": 1,
+                    "minNumber": 3,
+                    "deleteStatus": 0,
+                    "modifyUserId": "10001",
+                    "modifyUserName": null,
+                    "createUserId": "10314",
+                    "createUserName": null,
+                    "sellSectionPrices": [
+                        {
+                            "id": 3533,
+                            "price": 10.00,
+                            "startNumber": 3,
+                            "endNumber": 2147,
+                            "sellPriceId": 2495,
+                            "deleteStatus": 0,
+                            "percentage": -85
+                        },
+                        {
+                            "id": 3535,
+                            "price": 100.00,
+                            "startNumber": 2148,
+                            "endNumber": 21490,
+                            "sellPriceId": 2495,
+                            "deleteStatus": 0,
+                            "percentage": 50.0199999999999960209606797434389591217041015625
+                        },
+                        {
+                            "id": 3537,
+                            "price": 1020.00,
+                            "startNumber": 21491,
+                            "endNumber": 2147483647,
+                            "sellPriceId": 2495,
+                            "deleteStatus": 0,
+                            "percentage": 1430.15000000000009094947017729282379150390625
+                        }
+                    ],
+                    "sellPricesInReview": {
+                        "id": 2495,
+                        "productId": "60000484352",
+                        "lowestPrice": 10,
+                        "createTime": null,
+                        "modifyTime": 1515478685099,
+                        "status": 1,
+                        "branchCompanyId": "10000",
+                        "branchCompanyName": "成都子公司",
+                        "suggestPrice": 45,
+                        "deliveryDay": 12,
+                        "salesInsideNumber": 1,
+                        "minNumber": 3,
+                        "deleteStatus": 0,
+                        "modifyUserId": "10001",
+                        "modifyUserName": null,
+                        "createUserId": null,
+                        "createUserName": null,
+                        "sellSectionPrices": [
+                            {
+                                "id": 1,
+                                "price": 10,
+                                "startNumber": 3,
+                                "endNumber": 2147,
+                                "sellPriceId": 2495,
+                                "deleteStatus": 0,
+                                "percentage": -85
+                            },
+                            {
+                                "id": 2,
+                                "price": 100,
+                                "startNumber": 2148,
+                                "endNumber": 21490,
+                                "sellPriceId": 2495,
+                                "deleteStatus": 0,
+                                "percentage": 50.0199999999999960209606797434389591217041015625
+                            },
+                            {
+                                "id": 3,
+                                "price": 1020,
+                                "startNumber": 21491,
+                                "endNumber": 2147483647,
+                                "sellPriceId": 2495,
+                                "deleteStatus": 0,
+                                "percentage": 1430.15000000000009094947017729282379150390625
+                            }
+                        ],
+                        "sellPricesInReview": null,
+                        "purchasePrice": null,
+                        "maxNumber": 4,
+                        "preHarvestPinStatus": 1,
+                        "auditUserId": null,
+                        "auditTime": null,
+                        "auditStatus": 1,
+                        "auditUserName": null,
+                        "sellFullCase": null,
+                        "fullCaseUnit": null,
+                        "firstCreated": 0
+                    },
+                    "purchasePrice": 12.00,
+                    "maxNumber": 4,
+                    "preHarvestPinStatus": 0,
+                    "auditUserId": "10021",
+                    "auditTime": 1515469742000,
+                    "auditStatus": 1,
+                    "auditUserName": null,
+                    "sellFullCase": null,
+                    "fullCaseUnit": null,
+                    "firstCreated": 0
+                },
+                {
+                    "id": 2519,
+                    "productId": "60000484352",
+                    "lowestPrice": 45.00,
+                    "createTime": 1513754086000,
+                    "modifyTime": 1513754101000,
+                    "status": 1,
+                    "branchCompanyId": "10004",
+                    "branchCompanyName": "湖南子公司",
+                    "suggestPrice": 45.00,
+                    "deliveryDay": 12,
+                    "salesInsideNumber": 1,
+                    "minNumber": 1,
+                    "deleteStatus": 0,
+                    "modifyUserId": "10001",
+                    "modifyUserName": null,
+                    "createUserId": "10001",
+                    "createUserName": null,
+                    "sellSectionPrices": [
+                        {
+                            "id": 3441,
+                            "price": 45.00,
+                            "startNumber": 1,
+                            "endNumber": 2147483647,
+                            "sellPriceId": 2519,
+                            "deleteStatus": 0,
+                            "percentage": 275
+                        }
+                    ],
+                    "sellPricesInReview": {
+                        "id": 2519,
+                        "productId": "60000484352",
+                        "lowestPrice": 45,
+                        "createTime": null,
+                        "modifyTime": 1515461426123,
+                        "status": 1,
+                        "branchCompanyId": "10004",
+                        "branchCompanyName": "湖南子公司",
+                        "suggestPrice": 45,
+                        "deliveryDay": 12,
+                        "salesInsideNumber": 1,
+                        "minNumber": 1,
+                        "deleteStatus": 0,
+                        "modifyUserId": "10001",
+                        "modifyUserName": null,
+                        "createUserId": null,
+                        "createUserName": null,
+                        "sellSectionPrices": [
+                            {
+                                "id": 1,
+                                "price": 45,
+                                "startNumber": 1,
+                                "endNumber": 2147483647,
+                                "sellPriceId": 2519,
+                                "deleteStatus": 0,
+                                "percentage": 275
+                            }
+                        ],
+                        "sellPricesInReview": null,
+                        "purchasePrice": null,
+                        "maxNumber": null,
+                        "preHarvestPinStatus": 1,
+                        "auditUserId": null,
+                        "auditTime": null,
+                        "auditStatus": 1,
+                        "auditUserName": null,
+                        "sellFullCase": null,
+                        "fullCaseUnit": null,
+                        "firstCreated": 0
+                    },
+                    "purchasePrice": 12.00,
+                    "maxNumber": null,
+                    "preHarvestPinStatus": 0,
+                    "auditUserId": null,
+                    "auditTime": null,
+                    "auditStatus": 1,
+                    "auditUserName": null,
+                    "sellFullCase": null,
+                    "fullCaseUnit": null,
+                    "firstCreated": 0
+                }
+            ]
         }
-      ]
-    }
-  },
-  "success": true
+    },
+    "success": true
 }

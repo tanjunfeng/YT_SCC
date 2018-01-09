@@ -307,6 +307,19 @@ class Utils {
     }
 
     /**
+     * 获取该list 下所有node 节点并返回宽度数组
+     * @param {Object} dom node 节点
+     * 返回对象
+     */
+    static getListWidthObj = (dom) => {
+        const { childNodes } = dom;
+        const widthArr = Array.prototype.map.call(childNodes, (ele => ele.offsetWidth));
+        return {
+            widthArr,
+        }
+    }
+
+    /**
      * 限制输入两位小数校验
      */
     static limitTwoDecimalPlaces = (rule, value, callback) => {

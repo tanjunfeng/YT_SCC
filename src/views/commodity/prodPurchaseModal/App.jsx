@@ -243,7 +243,7 @@ class ProdPurchaseModal extends Component {
                 visible={this.props.toAddPriceVisible}
                 className={prefixCls}
                 onOk={this.handleOk}
-                width={'500px'}
+                width={'480px'}
                 onCancel={this.handleCancel}
                 maskClosable={false}
             >
@@ -252,7 +252,7 @@ class ProdPurchaseModal extends Component {
                 <div className={`${prefixCls}-body-wrap`}>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
                         <div className={`${prefixCls}-item`}>
-                            <div className={`${prefixCls}-item-title`}>货运条件</div>
+                            <div className={`${prefixCls}-item-title`}>货运条件111</div>
                             <div className={`${prefixCls}-item-content`}>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*采购内装数：</span>
