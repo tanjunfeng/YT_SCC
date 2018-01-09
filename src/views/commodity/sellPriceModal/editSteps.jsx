@@ -36,7 +36,8 @@ class EditSteps extends Component {
         const { sellSectionPrices = [] } = sellPricesInReview;
 
         this.state = {
-            prices: isEdit ? sellSectionPrices : []
+            prices: isEdit ? sellSectionPrices : [],
+            markList: []
         }
     }
 
@@ -53,6 +54,7 @@ class EditSteps extends Component {
             startNumber,
             isReadOnly: isSub,
             auditStatus,
+            markList: this.state.markList,
             grossProfit: sellPricesInReview.purchasePrice || null
         };
     }
@@ -68,6 +70,10 @@ class EditSteps extends Component {
         const service = isEdit ? this.props.onEditPriceChange : this.props.onCreatPriceChange;
         service(prices, isContinue)
         this.setState({ prices });
+    }
+
+    handleMarkable = (markList) => {
+        this.setState({ markList });
     }
 
     handleCompanyChange = (record) => {
@@ -95,6 +101,7 @@ class EditSteps extends Component {
                         <PriceTable
                             value={this.getEditableTableValues()}
                             onChange={this.handlePricesChange}
+                            onMarkable={this.handleMarkable}
                         />
                     </FormItem>
                 </div>
@@ -110,8 +117,8 @@ class EditSteps extends Component {
                                         min={0}
                                         step={0.01}
                                         className={sellPricesInReview.suggestPrice
-                                                        !== newDatas.suggestPrice
-                                                        ? 'sell-modal-border' : null}
+                                            !== newDatas.suggestPrice
+                                            ? 'sell-modal-border' : null}
                                         disabled={isSub}
                                         formatter={this.handleValueFormat}
                                         parser={this.handleValueFormat}
@@ -123,8 +130,8 @@ class EditSteps extends Component {
                         <FormItem label="商品采购价格：">
                             <span className={
                                 sellPricesInReview.suggestPrice
-                                !== newDatas.suggestPrice
-                                ? 'sell-modal-border' : null
+                                    !== newDatas.suggestPrice
+                                    ? 'sell-modal-border' : null
                             }>
                                 {sellPricesInReview.purchasePrice || '-'}
                             </span>
@@ -134,8 +141,8 @@ class EditSteps extends Component {
                                 <FormItem label="子公司：">
                                     <span className={
                                         sellPricesInReview.branchCompanyId
-                                        !== newDatas.branchCompanyId
-                                        ? 'sell-modal-border' : null
+                                            !== newDatas.branchCompanyId
+                                            ? 'sell-modal-border' : null
                                     }>
                                         {sellPricesInReview.branchCompanyId} - {sellPricesInReview.branchCompanyName}
                                     </span>

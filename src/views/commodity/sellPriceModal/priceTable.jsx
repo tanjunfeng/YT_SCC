@@ -30,7 +30,6 @@ import { stepPriceColumns as columns } from './columns';
 class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
-        this.mark = [];
         this.state = {
             prices: Immutable.fromJS(props.value.list).toJS(),
             canAdd: true // 是否可继续添加价格
@@ -61,17 +60,22 @@ class PriceTable extends PureComponent {
     }
 
     markTable = () => {
-        const { isReadOnly, currentPrices, list, isEdit } = this.props.value;
+        const { value, onMarkable } = this.props;
+        const { isReadOnly, currentPrices, list, isEdit, markList } = value;
+        const ml = [...markList];
         if (isReadOnly && isEdit) {
             currentPrices.forEach((currentRecord, index) => {
                 const { startNumber, endNumber, price } = currentRecord;
                 const record = list[index];
-                this.mark.push({
+                ml.push({
                     startNumber: startNumber !== record.startNumber,
                     endNumber: endNumber !== record.endNumber,
                     price: price !== record.price
                 });
-            })
+            });
+            if (typeof onMarkable === 'function') {
+                onMarkable(ml);
+            }
         }
     }
 
@@ -278,8 +282,9 @@ class PriceTable extends PureComponent {
     }
 
     isMarkable = (index, column) => {
-        if (this.mark.length === 0) return false;
-        return this.mark[index][column];
+        const { markList } = this.props.value;
+        if (markList.length === 0) return false;
+        return markList[index][column];
     }
 
     renderColumnsNum = (text = '', record, index, column) => {
