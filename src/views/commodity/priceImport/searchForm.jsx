@@ -33,11 +33,6 @@ class SearchForm extends PureComponent {
         this.selectMap = this.selectMap.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        const nextImportsId = nextProps.form.getFieldValue('importsId')
-        this.props.isCreateChange(nextImportsId)
-    }
-
     /**
      * 获取表单数据
      */
@@ -52,7 +47,7 @@ class SearchForm extends PureComponent {
         return Util.removeInvalid({
             importsId,
             branchCompanyId: company.id,
-            productId: product.productId,
+            productId: product.record ? product.record.productId : '',
             uploadStartDate: pariceDateRange.length > 1 ? pariceDateRange[0].valueOf() : '',
             uploadEndDate: pariceDateRange.length > 1 ? pariceDateRange[1].valueOf() : '',
             handleResult
@@ -73,6 +68,7 @@ class SearchForm extends PureComponent {
     handleReset() {
         this.props.form.resetFields(); // 清除当前查询条件
         this.props.handlePurchaseReset(); // 通知查询条件已清除
+        this.props.isCreateChange(''); // 通知父组件禁用创建变价单按钮
     }
 
     /**
@@ -117,6 +113,7 @@ class SearchForm extends PureComponent {
                 if (res.code === 200) {
                     message.success('上传成功');
                     this.props.form.setFieldsValue({ importsId: res.data })
+                    this.props.isCreateChange(res.data)
                     this.handleSearch();
                 } else {
                     message.error(res.message);
@@ -152,6 +149,15 @@ class SearchForm extends PureComponent {
         this.props.getCreateChange();
     }
 
+    /**
+     * 判断创建变价单按钮是否可用
+     * @param {object} e 事件对象
+     */
+    ImportsIdChange = (e) => {
+        const value = e.target.value
+        this.props.isCreateChange(value)
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const props = {
@@ -180,7 +186,7 @@ class SearchForm extends PureComponent {
                     <Col>
                         <FormItem label="上传ID">
                             {getFieldDecorator('importsId')(
-                                <Input size="default" placeholder="请输入上传ID" />
+                                <Input size="default" placeholder="请输入上传ID" onChange={this.ImportsIdChange} />
                             )}
                         </FormItem>
                     </Col>
@@ -194,8 +200,8 @@ class SearchForm extends PureComponent {
                     <Col>
                         <FormItem label="商品">
                             {getFieldDecorator('product', {
-                                initialValue: { productId: '', saleName: '' }
-                            })(<Commodity />)
+                                initialValue: { productId: '', productName: '' }
+                            })(<Commodity api="queryProductForSelect" />)
                             }
                         </FormItem>
                     </Col>

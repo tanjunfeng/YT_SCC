@@ -90,7 +90,7 @@ const initState = Immutable.fromJS({
     getSellPriceInfoById: {},
 
     // 成本价
-    costPrice: -100.00
+    costPrice: null
 });
 
 export default function (state = initState, action) {

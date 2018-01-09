@@ -12,7 +12,9 @@ $promotionFieldWidth: 220px;
     .ant-form-item {
         float: left;
         display: block;
-        .ant-form-item-control-wrapper, .ant-select-selection, .ywc-smind {
+        .ant-form-item-control-wrapper,
+        .ant-select-selection,
+        .ywc-smind {
             width: $promotionFieldWidth;
         }
         &.double .ant-form-item-control-wrapper {
@@ -28,5 +30,16 @@ $promotionFieldWidth: 220px;
     .search-mind-label {
         text-align: right;
         width: 80px;
+    }
+}
+
+.todo-see-modal {
+    .ant-modal-footer {
+        .ant-btn {
+            display: none;
+        }
+        .ant-btn-primary {
+            display: inline-block;
+        }
     }
 }

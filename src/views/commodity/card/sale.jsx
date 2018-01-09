@@ -268,7 +268,7 @@ class SaleCard extends Component {
                         </p>
                         <p>
                             <span>最新售价状态 : </span>
-                            <span><i className={`new-price-state-${item.status}`} />{statusPrice(item.status)}</span>
+                            <span><i className={`new-price-state-${item.auditStatus}`} />{statusPrice(item.auditStatus)}</span>
                         </p>
                     </div>
                     <div

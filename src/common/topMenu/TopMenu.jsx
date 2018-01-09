@@ -7,14 +7,10 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Menu, Icon, Carousel, Dropdown } from 'antd';
+import { Menu, Icon, Dropdown } from 'antd';
 import { CODE } from '../../constant';
 import Utils from '../../util/util';
 import './topMenu.scss';
-
-const SubMenu = Menu.SubMenu;
 
 class TopMenu extends Component {
     constructor(props) {
@@ -23,39 +19,41 @@ class TopMenu extends Component {
             dropDownMenu: [],
             menuStyle: {}
         }
-        
+
         const { topMenus } = props;
         this.defaultSelect = topMenus.menu.find((item) => item.code === CODE);
         this.showDropdown = false;
     }
+
     componentDidMount() {
-        this.winWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        this.winWidth = window.innerWidth
+            || document.documentElement.clientWidth
+            || document.body.clientWidth;
         this.topMenuWidth = parseInt(this.winWidth, 10) - 200 - 140;
         const ul = document.querySelector('.top-menu-warp .ant-menu');
         const { widthArr } = Utils.getListWidthObj(ul);
         let count = 1
-        this.totalWidth = widthArr.reduce(function(sum, value, index, array) {
+        this.totalWidth = widthArr.reduce(function (sum, value, index) {
             const difference = (sum + value) - this.topMenuWidth;
-            if(difference > 0){
-                if(count === 1){
+            if (difference > 0) {
+                if (count === 1) {
                     this.menuIndex = index;
-                    count++; 
+                    count++;
                 }
             }
             return sum + value;
         }.bind(this), 0);
-        this.showDropdown = this.totalWidth > this.topMenuWidth ? true : false;
+        this.showDropdown = this.totalWidth > this.topMenuWidth;
         const newArr = this.props.topMenus.menu.slice(this.menuIndex);
         const newWidthArr = widthArr.slice(this.menuIndex);
-        if(this.showDropdown){
+        if (this.showDropdown) {
             this.setState({
-                dropDownMenu : newArr,
+                dropDownMenu: newArr,
                 menuStyle: {
                     width: `${this.totalWidth - newWidthArr.reduce((sum, value) => sum + value)}px`
                 }
             })
         }
-        console.log(this);
     }
     /**
      * 列表点击事件
@@ -77,14 +75,7 @@ class TopMenu extends Component {
             /* eslint-enable */
         }
     }
-    /**
-     * 列表点击事件
-     * @param e 事件对象
-     */
-    handPrev = (e) => {
-        console.log(e);
-        
-    }
+
     /**
      * 渲染按钮列表
      */
@@ -109,17 +100,16 @@ class TopMenu extends Component {
      * 渲染下拉按钮
      */
     renderDropDown = () => {
-        const { dropDownMenu } = this.state;
         const menu = (<Menu
-                    onClick={this.handleClick}
-                    selectedKeys={[`${this.defaultSelect.id},${this.defaultSelect.url}`]}
-                >
-                    { 
-                        this.renderDropDownMenuList() 
-                    }   
-                </Menu>)
+            onClick={this.handleClick}
+            selectedKeys={[`${this.defaultSelect.id},${this.defaultSelect.url}`]}
+        >
+            {
+                this.renderDropDownMenuList()
+            }
+        </Menu>)
         return (
-            <Dropdown 
+            <Dropdown
                 overlay={menu}
                 placement="bottomCenter"
             >
@@ -132,7 +122,7 @@ class TopMenu extends Component {
     render() {
         return (
             <div className="top-menu-warp">
-                <div className={this.showDropdown ? "ant-menu-warp on" : "ant-menu-warp"}>
+                <div className={this.showDropdown ? 'ant-menu-warp on' : 'ant-menu-warp'}>
                     <Menu
                         onClick={this.handleClick}
                         selectedKeys={[`${this.defaultSelect.id},${this.defaultSelect.url}`]}
@@ -143,10 +133,10 @@ class TopMenu extends Component {
                             this.renderMenuList()
                         }
                     </Menu>
-                    
+
                 </div>
                 {
-                   this.showDropdown && this.renderDropDown()
+                    this.showDropdown && this.renderDropDown()
                 }
             </div>
         );

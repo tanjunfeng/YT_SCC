@@ -406,7 +406,7 @@ class StoreAdjList extends Component {
                                     onChoosed={this.handleSubCompanyChoose}
                                     onClear={this.handleSubCompanyClear}
                                     renderChoosedInputRaw={(row) => (
-                                        <div>{row.saleName}</div>
+                                        <div>{row.productName}</div>
                                     )}
                                     columns={[
                                         {
@@ -415,7 +415,7 @@ class StoreAdjList extends Component {
                                             width: 150,
                                         }, {
                                             title: '商品名字',
-                                            dataIndex: 'saleName',
+                                            dataIndex: 'productName',
                                             width: 200,
                                         }
                                     ]}
