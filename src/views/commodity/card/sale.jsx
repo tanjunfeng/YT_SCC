@@ -165,6 +165,18 @@ class SaleCard extends Component {
 
     renderCard = (datas) => {
         const { prefixCls, minUnit, getProductById } = this.props;
+        const statusPrice = (status) => {
+            switch (status) {
+                case 1:
+                    return '已提交';
+                case 2:
+                    return '已审核';
+                case 3:
+                    return '已拒绝';
+                default:
+                    return '-';
+            }
+        }
         return datas.map((item) => (
             <div
                 key={item.id}
@@ -221,7 +233,7 @@ class SaleCard extends Component {
                             <span>整箱单位 : </span>
                             <span>{getProductById.fullCaseUnit}</span>
                         </p>
-                        <p>
+                        <div>
                             <span>销售价格 : </span>
                             <ul className={`${prefixCls}-step-price`}>
                                 {
@@ -229,7 +241,7 @@ class SaleCard extends Component {
                                         (
                                             <li
                                                 className={`${prefixCls}-step-item`}
-                                                key={`${i.startNumber} - ${i.endNumber} - ${i.price}`}
+                                                key={`${i.id}`}
                                             >
                                                 <span
                                                     className={`${prefixCls}-step-item-left`}
@@ -249,10 +261,14 @@ class SaleCard extends Component {
                                     )
                                 }
                             </ul>
-                        </p>
+                        </div>
                         <p>
                             <span>建议零售价(元) : </span>
                             <span>{item.suggestPrice}</span>
+                        </p>
+                        <p>
+                            <span>最新售价状态 : </span>
+                            <span><i className={`new-price-state-${item.auditStatus}`} />{statusPrice(item.auditStatus)}</span>
                         </p>
                     </div>
                     <div

@@ -11,6 +11,10 @@ import {
     queryChartData as queryChartDataService,
     processImage as processImageService,
     queryProcessMsgInfo as queryProcessMsgInfoService,
+    processImageByBusi as processImageByBusiService,
+    queryCommentHisByBusi as queryCommentHisByBusiService,
+    queryProdPriceChangeList as queryProdPriceChangeListService,
+    auditInfo as auditInfoService,
 } from '../service';
 
 // 流程管理下获取所有流程信息
@@ -121,6 +125,98 @@ export const queryProcessMsgInfo = (params) => dispatch => (
         queryProcessMsgInfoService(params)
             .then(res => {
                 dispatch(queryProcessMsgInfoAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+/**
+ * 查询待办事项下价格变更记录列表数据
+ * @param {*} data
+ */
+const queryPriceChangeListAction = data => ({
+    type: ActionType.QUERY_PRICE_CHANGE_LIST,
+    payload: data
+});
+
+export const queryPriceChangeList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryProdPriceChangeListService(params)
+            .then(res => {
+                dispatch(queryPriceChangeListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 业务中获取高亮流程图数据
+const processImageBusiAction = (data) => ({
+    type: ActionType.PROCESS_IMAGE_BY_BUSI,
+    payload: data
+});
+
+export const processImageBusi = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        processImageByBusiService(params)
+            .then(res => {
+                dispatch(
+                    processImageBusiAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+/**
+ * 清空业务中高亮流程图数据
+ */
+export const clearprocessImageBusi = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_PROCESS_IMAGE_BUSI,
+    payload: null
+}));
+
+/**
+ * 查询待办事项下获取审批列表数据
+ * @param {*} data
+ */
+const queryCommentHisBusiAction = (data) => ({
+    type: ActionType.QUERY_COMMENT_HIS_BUSI,
+    payload: data
+});
+
+export const queryCommentHisBusi = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryCommentHisByBusiService(params)
+            .then(res => {
+                dispatch(queryCommentHisBusiAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+/**
+ * 审批代办事项
+ * @param {*} data
+ */
+const returnAuditInfoAction = (data) => ({
+    type: ActionType.RETURN_AUDIT_INFO,
+    payload: data
+});
+
+export const returnAuditInfo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        auditInfoService(params)
+            .then(res => {
+                dispatch(returnAuditInfoAction(res));
                 resolve(res);
             })
             .catch(err => {

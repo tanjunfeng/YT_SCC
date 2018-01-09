@@ -11,7 +11,7 @@ import {
 } from 'antd';
 
 import { Category } from '../../../container/cascader';
-import { AddingGoodsByTerm } from '../../../container/search';
+import { Commodity } from '../../../container/search';
 import { buyType, getConditionType } from './domHelper';
 import { isCategoryExist } from './dataHelper';
 import Util from '../../../util/util';
@@ -69,13 +69,14 @@ class BuyConditionModal extends PureComponent {
 
     getFormData = (callback) => {
         this.props.form.validateFields((err, values) => {
-            const { buyCondition, buyConditionType } = values;
+            const { buyCondition, buyConditionType, buyConditionProduct } = values;
             const { category } = this.state;
-            if (err) {
-                if (buyCondition === 'CATEGORY' && !isCategoryExist(category)) {
-                    message.error('请选择品类');
-                    return;
-                }
+            if (buyCondition === 'CATEGORY' && !isCategoryExist(category)) {
+                message.error('请选择品类');
+                return;
+            }
+            if (buyCondition === 'PRODUCT' && !buyConditionProduct.record) {
+                message.error('请选择商品');
                 return;
             }
             const formData = {
@@ -95,14 +96,26 @@ class BuyConditionModal extends PureComponent {
         this.setState({ category });
     }
 
+    handClearCategory = () => {
+        this.setState({ category: null });
+    }
+
     handleOk = () => {
         this.getFormData(data => {
             this.props.onOk(data);
+            /**
+             * 关闭窗口清除选中的category
+             */
+            this.handClearCategory();
         });
     }
 
     handleCancel = () => {
         this.props.onCancel();
+        /**
+         * 关闭窗口清除选中的category
+         */
+        this.handClearCategory();
     }
 
     render() {
@@ -132,7 +145,7 @@ class BuyConditionModal extends PureComponent {
                                         productCode: '',
                                         productName: ''
                                     }
-                                })(<AddingGoodsByTerm />)}
+                                })(<Commodity api="queryProductByTerm" />)}
                             </FormItem> : null}
                     </Row>
                     <Row>

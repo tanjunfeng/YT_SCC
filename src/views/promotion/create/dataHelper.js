@@ -4,19 +4,18 @@
 import { message } from 'antd';
 import Util from '../../../util/util';
 
-// 根据整数计算百分数
-const getPercent = (num) => (Number(num / 100.0).toFixed(2));
-
 const getPreferentialValueOfPC = (values) => {
     const {
-        purchaseConditionRule, purchaseConditionRulePercent,
-        purchaseConditionRulePrice, purchaseConditionRuleGive,
-        purchaseConditionRuleAmount
+        purchaseConditionRule,
+        purchaseConditionRulePercent,
+        purchaseConditionRuleGive,
+        purchaseConditionRuleAmount,
+        purchaseConditionRulePrice
     } = values;
     let preferentialValue = '';
     switch (purchaseConditionRule) {
         case 'PERCENTAGE': // 折扣百分比
-            preferentialValue = getPercent(purchaseConditionRulePercent);
+            preferentialValue = purchaseConditionRulePercent;
             break;
         case 'DISCOUNTAMOUNT': // 折扣金额
             preferentialValue = purchaseConditionRuleAmount;
@@ -108,21 +107,6 @@ const getPurchaseConditionsRule = (state, values) => {
     return Util.removeInvalid(promotionRule);
 }
 
-const getRewardListConditionValue = (values) => {
-    const { rewardListType, rewardListTypeAmount, rewardListTypeQuantity } = values;
-    let conditionValue = '';
-    switch (rewardListType) {
-        case 'AMOUNT':
-            conditionValue = rewardListTypeAmount
-            break;
-        case 'QUANTITY':
-            conditionValue = rewardListTypeQuantity
-            break;
-        default: break;
-    }
-    return conditionValue;
-}
-
 const getRewardListPreferentialValue = (values) => {
     const {
         rewardListRule, rewardListRulePercent,
@@ -167,6 +151,47 @@ const getCategoryOrProductOfRL = (condition, values, state) => {
     }
 }
 
+const getEachGiveOncePreferentialValue = values => {
+    const {
+        eachConditionGivenOneRule, eachConditionGivenOneRulePercent,
+        eachConditionGivenOneRuleAmount, eachConditionGivenOneRulePrice,
+        eachConditionGivenOneRuleGive
+    } = values;
+    let preferentialValue = '';
+    switch (eachConditionGivenOneRule) {
+        case 'PERCENTAGE':
+            preferentialValue = eachConditionGivenOneRulePercent;
+            break;
+        case 'DISCOUNTAMOUNT':
+            preferentialValue = eachConditionGivenOneRuleAmount;
+            break;
+        case 'FIXEDPRICE':
+            preferentialValue = eachConditionGivenOneRulePrice;
+            break;
+        case 'GIVESAMEPRODUCT':
+            preferentialValue = eachConditionGivenOneRuleGive;
+            break;
+        default: break;
+    }
+    return preferentialValue;
+}
+
+const getProductOfECGO = (condition, values) => {
+    const { eachConditionGivenOne, eachConditionGivenOneProduct } = values;
+    switch (eachConditionGivenOne) {
+        case 'PRODUCT':
+            Object.assign(condition, {
+                promoProduct: {
+                    productId: eachConditionGivenOneProduct.record.productId,
+                    productName: eachConditionGivenOneProduct.record.productName
+                }
+            });
+            break;
+        case 'ALL':
+        default: break;
+    }
+}
+
 /**
  * 指定条件——优惠种类——奖励列表
  *
@@ -174,7 +199,7 @@ const getCategoryOrProductOfRL = (condition, values, state) => {
  * @param {*} values
  */
 const getRewardListRule = (state, values) => {
-    const { category, rewardList, rewardListType, rewardListRule } = values;
+    const { category, rewardList, rewardListRule } = values;
     const { conditions } = state;
     const promotionRule = {
         useConditionRule: true,
@@ -183,9 +208,7 @@ const getRewardListRule = (state, values) => {
             conditions,
             purchaseConditionsRule: {
                 condition: {
-                    purchaseType: rewardList,
-                    conditionType: rewardListType,
-                    conditionValue: getRewardListConditionValue(values)
+                    purchaseType: rewardList
                 },
                 rule: {
                     preferentialWay: rewardListRule,
@@ -202,6 +225,43 @@ const getRewardListRule = (state, values) => {
     return Util.removeInvalid(promotionRule);
 }
 
+/**
+ * 指定条件——优惠种类——每满
+ *
+ * @param {*} state
+ * @param {*} values
+ */
+const getEacheachConditionGiveOnce = (state, values) => {
+    const { category,
+        eachConditionGivenOne,
+        eachConditionGivenOneRule
+    } = values;
+
+    const { conditions } = state;
+    const promotionRule = {
+        useConditionRule: true,
+        ruleName: category,
+        eachConditionGiveOnce: {
+            conditions,
+            giveRuleCondition: {
+                purchaseType: eachConditionGivenOne,
+                rule: {
+                    preferentialWay: eachConditionGivenOneRule,
+                    preferentialValue: getEachGiveOncePreferentialValue(values)
+                }
+            }
+        }
+    };
+
+    const giveRuleCondition = promotionRule.eachConditionGiveOnce.giveRuleCondition;
+    // 按全部、品类和商品拼接 condition 对象
+    getProductOfECGO(
+        giveRuleCondition,
+        values
+    );
+    return Util.removeInvalid(promotionRule);
+}
+
 // 不限制条件对象拼接
 const getNoConditionDataRule = (values) => {
     const { noConditionRule, noConditionRulePercent, noConditionRuleAmount } = values;
@@ -214,7 +274,7 @@ const getNoConditionDataRule = (values) => {
     switch (noConditionRule) {
         case 'PERCENTAGE':
             Object.assign(promotionRule.orderRule, {
-                preferentialValue: getPercent(noConditionRulePercent)
+                preferentialValue: noConditionRulePercent
             });
             break;
         case 'DISCOUNTAMOUNT':
@@ -315,6 +375,11 @@ const getPurchageWay = (formData, values, state) => {
                 promotionRule: getRewardListRule(state, values)
             });
             break;
+        case 'EACHCONDITIONGIVEONCE': // 每满
+            Object.assign(formData, {
+                promotionRule: getEacheachConditionGiveOnce(state, values)
+            });
+            break;
         case 'TOTALPUCHASELIST': // 整个购买列表
             Object.assign(formData, {
                 promotionRule: getTotalPurchaseListRule(state, values)
@@ -331,7 +396,15 @@ const getPurchageWay = (formData, values, state) => {
  * @param {*} values
  */
 const forbidden = (state, values) => {
-    const { condition, category, purchaseCondition, rewardList } = values;
+    const {
+        condition,
+        category,
+        purchaseCondition,
+        rewardList,
+        eachConditionGivenOne,
+        purchaseConditionProduct,
+        rewardListProduct,
+        eachConditionGivenOneProduct } = values;
     if (condition === 1) {
         if (category === 'PURCHASECONDITION'
             && purchaseCondition === 'CATEGORY'
@@ -353,6 +426,28 @@ const forbidden = (state, values) => {
             message.error('请添加购买条件');
             return true;
         }
+        if (category === 'EACHCONDITIONGIVEONCE'
+            && eachConditionGivenOne === 'PRODUCT'
+            && !eachConditionGivenOneProduct.record) {
+            message.error('请选择商品');
+            return true;
+        }
+        if (category === 'REWARDLIST'
+            && rewardList === 'PRODUCT'
+            && !rewardListProduct.record) {
+            message.error('请选择商品');
+            return true;
+        }
+        if (category === 'PURCHASECONDITION'
+            && purchaseCondition === 'PRODUCT'
+            && !purchaseConditionProduct.record) {
+            message.error('请选择商品');
+            return true;
+        }
+        if (category === 'EACHCONDITIONGIVEONCE' && eachConditionGivenOne === 'ALL') {
+            message.error('请选择奖励类型');
+            return true;
+        }
     }
     return false;
 }
@@ -363,25 +458,28 @@ const forbidden = (state, values) => {
  * @param {*object} { state: this.state, form: this.props.form }
  * @param {*function} callback 校验成功之后的回调
  */
-export const getFormData = ({ state, form }, callback) => {
+export const getFormData = ({ state, form }, callback, reject) => {
     const { validateFields } = form;
     validateFields((err, values) => {
         const { condition } = values;
         if (err || forbidden(state, values)) {
-            return;
-        }
-        const formData = getBasicData(state, values);
-        if (condition === 0) {
-            // 使用条件——不限制
-            Object.assign(formData, {
-                promotionRule: getNoConditionDataRule(values)
-            });
-        } else if (condition === 1) {
-            // 使用条件——指定条件——优惠方式
-            getPurchageWay(formData, values, state);
-        }
-        if (typeof callback === 'function') {
-            callback(Util.removeInvalid(formData));
+            if (typeof callback === 'function') {
+                reject();
+            }
+        } else {
+            const formData = getBasicData(state, values);
+            if (condition === 0) {
+                // 使用条件——不限制
+                Object.assign(formData, {
+                    promotionRule: getNoConditionDataRule(values)
+                });
+            } else if (condition === 1) {
+                // 使用条件——指定条件——优惠方式
+                getPurchageWay(formData, values, state);
+            }
+            if (typeof callback === 'function') {
+                callback(Util.removeInvalid(formData));
+            }
         }
     });
 }

@@ -1,18 +1,16 @@
 /*
- * @Author: tanjf
+ * @Author: chenghaojie
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
- * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-13 16:02:21
+ * @Last Modified by: chenghj
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {
-    Form,
     Modal,
     Table
 } from 'antd';
-import { withRouter } from 'react-router';
+
 import moment from 'moment';
 
 const dateFormat = 'YYYY-MM-DD';
@@ -22,14 +20,14 @@ class ApproModal extends PureComponent {
         super(props);
         this.searchParams = {};
         this.state = {
-            spId: '',   // 供应商编码
-            spAdrId: '',    // 供应商地点编码
+            spId: '', // 供应商编码
+            spAdrId: '', // 供应商地点编码
             isSupplyAdrDisabled: true, // 供应商地点禁用
-            locDisabled: true,  // 地点禁用
+            locDisabled: true, // 地点禁用
             locationData: {},
             isVisibleModal: false,
-            adrTypeCode: '',    // 地点编码
-            receivedTypeCode: ''  // 收货单状态编码
+            adrTypeCode: '', // 地点编码
+            receivedTypeCode: '' // 收货单状态编码
         };
         this.columns = [
             {
@@ -58,8 +56,8 @@ class ApproModal extends PureComponent {
                 )
             }, {
                 title: '审批意见',
-                dataIndex: 'auditOpinion',
-                key: 'auditOpinion',
+                dataIndex: 'content',
+                key: 'content',
                 render: text => {
                     let res = text;
                     if (text === null || undefined === text || text === '') {
@@ -115,4 +113,4 @@ ApproModal.propTypes = {
     approvalList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 
-export default withRouter(Form.create()(ApproModal));
+export default ApproModal;

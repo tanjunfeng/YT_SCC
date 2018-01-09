@@ -22,6 +22,10 @@ import ClassifiedList from 'bundle-loader?lazy!../views/commodity/classifiedList
 // 商品管理列表
 import ManagementList from 'bundle-loader?lazy!../views/commodity/managementList';
 import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDetail';
+// 采购进价批量导入
+import importPurchasePriceList from 'bundle-loader?lazy!../views/commodity/importPurchasePriceList';
+// 售价导入
+import PriceImport from 'bundle-loader?lazy!../views/commodity/priceImport';
 // 分类列表页商品排序管理
 import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
@@ -48,6 +52,7 @@ import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList4
 // 采购管理
 import PoMngList from 'bundle-loader?lazy!../views/procurement/poMngList';
 import PoDetail from 'bundle-loader?lazy!../views/procurement/poDetail';
+import PoCreate from 'bundle-loader?lazy!../views/procurement/poCreate';
 import PoPrintList from 'bundle-loader?lazy!../views/procurement/poPrintList';
 import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/poRcvMngList';
 import PoRcvList from 'bundle-loader?lazy!../views/procurement/poRcvList';
@@ -92,6 +97,12 @@ import StoreRealTime from 'bundle-loader?lazy!../views/storeAdjustment/storeReal
 import ToDoPurchaseList from 'bundle-loader?lazy!../views/toDo/toDoPurchaseList';
 // 退货单审批列表
 import ToDoReturnList from 'bundle-loader?lazy!../views/toDo/toDoReturnList';
+// 进价审核列表
+import PurchaseExamination from 'bundle-loader?lazy!../views/toDo/purchaseExamination';
+// 售价审核列表
+import PriceExamination from 'bundle-loader?lazy!../views/toDo/priceExamination';
+// 价格变更记录列表
+import toDoPriceChangeList from 'bundle-loader?lazy!../views/toDo/toDoPriceChangeList';
 
 // 简易结算支持
 import SimpleOrderList from 'bundle-loader?lazy!../views/simpleSettlement/simpleOrderList';
@@ -256,6 +267,38 @@ const routes = [
                         />
                     </Switch>
                 )
+            },
+            // 采购进价批量导入
+            {
+                path: '/importPurchasePrice',
+                parent: 'gylspgl',
+                key: 'importPurchasePrice',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/importPurchasePrice"
+                            exact
+                            render={() => (
+                                <Bundle load={importPurchasePriceList}>
+                                    {(App) => <App />}
+                                </Bundle>
+                            )}
+                        />
+                    </Switch>
+                )
+            },
+            // 售价导入
+            {
+                path: '/priceImport',
+                parent: 'gylspgl',
+                key: 'priceImport',
+                component: () => (
+                    <Route
+                        path="/priceImport"
+                        exact
+                        render={() => <Bundle load={PriceImport}>{(App) => <App />}</Bundle>}
+                    />
+                ),
             }
         ]
     },
@@ -534,14 +577,19 @@ const routes = [
                         />
                         {/* /po/create */}
                         <Route
-                            path="/po/:type"
+                            path="/po/detail/:purchaseOrderNo"
                             exact
                             render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
                         />
                         <Route
+                            path="/po/:type"
+                            exact
+                            render={() => <Bundle load={PoCreate}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
                             path="/po/:type/:purchaseOrderNo"
                             exact
-                            render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
+                            render={() => <Bundle load={PoCreate}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
@@ -781,6 +829,22 @@ const routes = [
                     </Switch>
                 )
             },
+            // 价格变更记录列表
+            {
+                path: '/toDoPriceChangeList',
+                parent: 'dbsx',
+                key: 'jgbgjllb',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/toDoPriceChangeList"
+                            render={() => (<Bundle load={toDoPriceChangeList}>
+                                {(App) => <App />}</Bundle>
+                            )}
+                        />
+                    </Switch>
+                )
+            },
             // 退货单审批列表
             {
                 path: '/toDoReturnList',
@@ -799,6 +863,40 @@ const routes = [
                             path="/toDoReturnList/returnManagementDetail/:id"
                             render={() => (<Bundle load={ReturnManagementDetail}>
                                 {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
+            },
+            // 进价审核列表
+            {
+                path: '/purchaseExamination',
+                parent: 'dbsx',
+                key: 'jjsh',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/purchaseExamination"
+                            exact
+                            render={() => (<Bundle load={PurchaseExamination}>
+                                {(App) => <App />}</Bundle>
+                            )}
+                        />
+                    </Switch>
+                )
+            },
+            // 售价审核列表
+            {
+                path: '/priceExamination',
+                parent: 'dbsx',
+                key: 'sjsh',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/priceExamination"
+                            exact
+                            render={() => (<Bundle load={PriceExamination}>
+                                {(App) => <App />}</Bundle>
+                            )}
                         />
                     </Switch>
                 )

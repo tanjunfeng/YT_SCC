@@ -14,8 +14,9 @@ import Common from './common';
 import FileCut from '../../fileCut';
 import { saveItemAd, uploadImageBase64Data } from '../../../../service';
 import LinkType from '../../common/linkType';
+import { testURl } from '../../constant';
 
-const defaultImge = require('../../../../images/default/1080x280.png');
+const defaultImge = require('../../../../images/default/1080x240.png');
 
 const FormItem = Form.Item;
 const imgConfig = {
@@ -171,6 +172,10 @@ class BannerItem extends Component {
                                                 && !value.linkId
                                                 && !value.linkKeyword) {
                                                 callback('请完成表单')
+                                            }
+                                            const objExp = new RegExp(testURl);
+                                            if (value.selected === '5' && !objExp.test(value.linkAddress)) {
+                                                callback('请输入完整链接地址')
                                             }
                                             callback()
                                         }

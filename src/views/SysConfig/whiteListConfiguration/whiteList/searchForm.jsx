@@ -23,7 +23,7 @@ class SearchForm extends PureComponent {
         warehouseVisible: false,
         companyVisible: false,
         supplyChoose: {},
-        visibleUpload: false,
+        isBtnDisabled: false,
         fileList: []
     }
 
@@ -99,55 +99,54 @@ class SearchForm extends PureComponent {
 
     /**
     *
-    * 上传文件模态框显示隐藏
-    */
-    showModalUpload = () => {
-        this.setState({
-            visibleUpload: true,
-        });
-    }
-
-    hideModalUpload = () => {
-        this.props.form.resetFields()
-        this.versionExplain = ''
-        this.setState({
-            visibleUpload: false,
-            fileList: [],
-            uploading: false
-        })
-    }
-
-    /**
-    *
     * 上传
     */
-    handleUpload = () => {
-        const { fileList } = this.state;
+    handleUpload = (fileList) => {
+        this.setState({
+            isBtnDisabled: true,
+            uploading: true
+        })
         const fileName = fileList[0].name;
-        if (fileName.indexOf('.xlsx') === -1 && fileName.indexOf('.xls') === -1 && fileName.indexOf('.xlsm') === -1) {
-            message.error('上传文件格式必须为excel格式，请清除后重新尝试');
-            return
+        if (fileName.indexOf('.xls') === -1) {
+            message.error('上传文件格式必须为excel格式，请重新尝试');
+            this.setState({
+                uploading: false,
+                isBtnDisabled: false
+            });
+            return;
         }
         const formData = new FormData();
         formData.append('file', fileList[0]);
-        this.setState({
-            uploading: true,
-        });
         reqwest({
             url: `${window.config.apiHost}sp/whiteListBatchImport`,
             method: 'post',
             processData: false,
             data: formData,
             success: (res) => {
-                if (res.code === 200) {
-                    message.success('上传成功');
-                    this.handleSearch()
-                    this.hideModalUpload()
-                } else {
-                    this.setState({
-                        uploading: false
-                    });
-                    message.error(res.message);
+                this.setState({
+                    uploading: false,
+                    isBtnDisabled: false
+                });
+                switch (res.code) {
+                    case 200:
+                        message.success('上传成功');
+                        this.handleSearch();
+                        break;
+                    case 10004:
+                        message.error(res.message);
+                        break;
+                    case 10024:
+                        Modal.error({
+                            title: '部分导入失败',
+                            content: (
+                                <div>
+                                    {res.data.map(d => <p>{d.storeId} - {d.errorMsg}</p>)}
+                                </div>
+                            ),
+                            onOk() { },
+                        });
+                        break;
+                    default: break;
                 }
             },
             error: () => {
@@ -163,137 +162,104 @@ class SearchForm extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { uploading } = this.state;
         const props = {
+            name: 'file',
             action: `${window.config.apiHost}sp/whiteListBatchImport`,
             onRemove: () => {
                 this.setState({
-                    fileList: []
+                    fileList: [],
+                    isBtnDisabled: false
                 });
             },
             beforeUpload: (file) => {
+                const fileList = [file]
                 this.setState({
-                    fileList: [file]
+                    fileList
                 });
+                this.handleUpload(fileList)
                 return false;
             },
             fileList: this.state.fileList
         };
 
         return (
-            <div className="search-box white-list">
-                <Form layout="inline">
-                    <div className="search-conditions">
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem label="加盟商编号" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('franchiseeId')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="加盟商名称">
-                                    {getFieldDecorator('franchinessName')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="所属子公司">
-                                    {getFieldDecorator('branchCompany', {
-                                        initialValue: { id: '', name: '' }
-                                    })(<BranchCompany />)}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem label="门店编号" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('storeId')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="门店名称" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('storeName')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 状态 */}
-                                <FormItem label="状态">
-                                    {getFieldDecorator('scPurchaseFlag', {
-                                        initialValue: 'all'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
-                                        </Select>)}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40} type="flex" justify="end">
-                            <Col span={8} className="export-left">
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.showModalUpload}>导入</Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
-                                </FormItem>
-                                <FormItem>
-                                    <a onClick={this.handleDownload}>下载导入模板</a>
-                                </FormItem>
-                            </Col>
-                            <Col span={16} className="search-right">
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleSearch}>
-                                        查询
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleReset}>
-                                        重置
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button
-                                        type="primary"
-                                        size="default"
-                                        onClick={this.handleGoOnline}
-                                        disabled={this.props.value.selectListlength}
-                                    >
-                                        上线
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button
-                                        type="primary"
-                                        size="default"
-                                        onClick={this.handleOffline}
-                                        disabled={this.props.value.selectListlength}
-                                    >
-                                        下线
-                                    </Button>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                    </div>
-                </Form>
-                <Modal
-                    title="模板导入"
-                    visible={this.state.visibleUpload}
-                    onCancel={this.hideModalUpload}
-                    footer={null}
-                >
-                    <div>
-                        <Upload {...props}>
-                            <Button disabled={this.state.fileList.length > 0}>
-                                <Icon type="upload" /> 选择文件
+            <div className="white-list-search-box">
+                <Form>
+                    <Row gutter={40}>
+                        <Col>
+                            <FormItem label="加盟商编号" style={{ paddingRight: 10 }}>
+                                {getFieldDecorator('franchiseeId')(<Input size="default" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="加盟商名称">
+                                {getFieldDecorator('franchinessName')(<Input size="default" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="所属子公司" className="labelTop">
+                                {getFieldDecorator('branchCompany', {
+                                    initialValue: { id: '', name: '' }
+                                })(<BranchCompany />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="门店编号" style={{ paddingRight: 10 }}>
+                                {getFieldDecorator('storeId')(<Input size="default" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="门店名称" style={{ paddingRight: 10 }}>
+                                {getFieldDecorator('storeName')(<Input size="default" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 状态 */}
+                            <FormItem label="状态">
+                                {getFieldDecorator('scPurchaseFlag', {
+                                    initialValue: 'all'
+                                })(
+                                    <Select>
+                                        {this.getStatus()}
+                                    </Select>)}
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={40} type="flex" justify="end">
+                        <Col span={12} className="export-left">
+                            <Upload {...props}>
+                                <Button disabled={this.state.isBtnDisabled}>
+                                    <Icon type="upload" /> {uploading ? '上传中' : '点击上传'}
+                                </Button>
+                            </Upload>
+                            <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
+                            <a onClick={this.handleDownload}>下载导入模板</a>
+                        </Col>
+                        <Col span={12} className="search-right">
+                            <Button type="primary" size="default" onClick={this.handleSearch}>
+                                查询
                             </Button>
-                        </Upload>
-                        <Button
-                            className="upload-demo-start"
-                            type="primary"
-                            onClick={this.handleUpload}
-                            disabled={this.state.fileList.length === 0}
-                            loading={uploading}
-                        >
-                            {uploading ? '上传中' : '点击上传'}
-                        </Button>
-                    </div>
-                </Modal>
+                            <Button size="default" onClick={this.handleReset}>
+                                重置
+                            </Button>
+                            <Button
+                                type="primary"
+                                size="default"
+                                onClick={this.handleGoOnline}
+                                disabled={this.props.value.selectListlength}
+                            >
+                                上线
+                            </Button>
+                            <Button
+                                type="primary"
+                                size="default"
+                                onClick={this.handleOffline}
+                                disabled={this.props.value.selectListlength}
+                            >
+                                下线
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
             </div >
         );
     }

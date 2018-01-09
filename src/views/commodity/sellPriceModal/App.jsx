@@ -1,75 +1,60 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, message, Select, Button } from 'antd';
+import { Modal, Form, message, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import SteppedPrice from '../steppedPrice';
-import SearchMind from '../../../components/searchMind';
+import moment from 'moment';
 import {
-    pubFetchValueList
-} from '../../../actions/pub';
-import { MAXGOODS } from '../../../constant'
-import { productAddPriceVisible } from '../../../actions/producthome';
-import { fetchAddProdPurchase } from '../../../actions';
-import {
-    preHarvestPinStatus,
 } from '../../../constant/searchParams';
-
-const FormItem = Form.Item;
-const Option = Select.Option;
+import {
+    getCostPrice, clearCostPrice
+} from '../../../actions/commodity';
+import FreightConditions from './freightConditions';
+import OnlyReadSteps from './onlyReadSteps';
+import EditSteps from './editSteps';
+import Utils from '../../../util/util';
 
 @connect(
     state => ({
-        toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
-        getProductById: state.toJS().commodity.getProductById
+        productId: state.toJS().commodity.getProductById.id,
+        costPrice: state.toJS().commodity.costPrice
     }),
     dispatch => bindActionCreators({
-        productAddPriceVisible,
-        fetchAddProdPurchase,
-        pubFetchValueList,
+        getCostPrice, clearCostPrice
     }, dispatch)
 )
+
 class SellPriceModal extends Component {
     constructor(props) {
         super(props);
-        this.handleOk = this.handleOk.bind(this);
-        this.handlePriceChange = this.handlePriceChange.bind(this);
         this.handleMaxChange = this.handleMaxChange.bind(this);
-        this.handleMinChange = this.handleMinChange.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
-        this.childCompany = props.datas.branchCompanyId ? {
-            branchCompanyId: props.datas.branchCompanyId,
-            branchCompanyName: props.datas.branchCompanyName
-        } : {};
 
         this.state = {
-            isEditPrice: false,
-            currentInside: null,
-            insideValue: null,
-            confirmVisible: false,
-            hasZero: this.hasZero(props.datas.sellSectionPrices || [])
+            suggestPrice: null,
+            branchCompanyId: null,
+            branchCompanyName: null,
+            editIsContinue: false,
+            cretFreConditObj: {},
+            freCondit: {},
+            sellSectionPrices: []
         }
-        this.choose = 0;
+        this.isSub = false; // 判断是否为已提交状态(true为已提交)
         this.isDisabled = false;
         this.successPost = true;
         this.messageAlert = true;
+        this.newDatas = { ...props.datas.data };
+        this.referenceDatas = { ...props.datas.data };
     }
 
     componentDidMount() {
         const { datas } = this.props;
         const { validateFields, setFields } = this.props.form;
-        const { results } = this.steppedPrice.getValue();
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
-            result.sellSectionPrices = results;
             result.productId = datas.id || datas.productId;
             const priceList = [];
-            results.forEach((item) => (
-                priceList.push(item.price)
-            ))
-
-            priceList.forEach((obj) => {
+            priceList.forEach(obj => {
                 if (obj === null || obj === undefined) {
                     this.successPost = true;
                     setFields({
@@ -89,417 +74,344 @@ class SellPriceModal extends Component {
                     this.successPost = false;
                 }
             })
+            return null;
         })
     }
 
-    handleOk() {
-        const { datas, handlePostAdd, isEdit } = this.props;
-        const { validateFields, setFields } = this.props.form;
-        const { isContinuity, results } = this.steppedPrice.getValue();
-        const choose = this.choose;
-        if (!isContinuity) {
-            setFields({
-                sellSectionPrices: {
-                    errors: [new Error('价格区间不连续，无法提交')],
-                },
+    /**
+     * 模态框点击确定按钮时，进行逐行校验，（必输项及是否合规项）
+     */
+    handleOk = () => {
+        const { datas, isEdit, values = {} } = this.props;
+        const { validateFields } = this.props.form;
+        const {
+            branchCompanyId, branchCompanyName, cretFreConditObj,
+            freCondit, editIsContinue, sellSectionPrices
+        } = this.state;
+        const newDatas = datas.data;
+        const createData = {};
+        const editData = {};
+        const noChangePrices = [];
+        Object.assign(createData, {
+            branchCompanyId: this.state.branchCompanyId || values.branchCompanyId,
+            branchCompanyName: this.state.branchCompanyName || values.branchCompanyName,
+            suggestPrice: this.state.suggestPrice || values.suggestPrice,
+            productId: values.id,
+            sellSectionPrices: sellSectionPrices || values.sellSectionPrices,
+            ...cretFreConditObj,
+            ...freCondit
+        })
+        if (isEdit) {
+            const { deliveryDay, minNumber, salesInsideNumber, suggestPrice } = newDatas;
+            this.newDatas.sellPricesInReview.sellSectionPrices.forEach(item => (
+                noChangePrices.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.percentage
+                })
+            ))
+            Object.assign(editData, {
+                branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
+                branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
+                suggestPrice: this.state.suggestPrice || suggestPrice,
+                productId: this.newDatas.productId,
+                auditStatus: this.newDatas.auditStatus,
+                sellSectionPrices: sellSectionPrices.length === 0 ? noChangePrices : sellSectionPrices,
+                deliveryDay,
+                minNumber,
+                salesInsideNumber,
+                id: this.newDatas.id,
+                ...cretFreConditObj,
+                ...freCondit
             })
-            return;
-        }
-        if (!this.childCompany) {
-            message.error('请选择子公司');
         }
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
-            result.sellSectionPrices = results;
             result.productId = datas.id || datas.productId;
-            const { branchCompanyId, branchCompanyName } = this.childCompany;
             if (!isEdit && (!branchCompanyId || !branchCompanyName)) {
                 message.error('请选择子公司！');
                 return null;
             }
-            Object.assign(result, this.childCompany);
+            if (!isEdit && !cretFreConditObj.minNumber) {
+                message.error('请输入最小起订量！');
+                return null;
+            }
+            if (!editIsContinue) {
+                message.error('阶梯价格不连续!');
+                return null;
+            }
             if (isEdit) {
                 Object.assign(result, {
                     id: datas.id,
                     productId: datas.productId
                 })
             }
-            const priceList = [];
-            results.forEach((item) => (
-                priceList.push(item.price)
-            ))
-            if (priceList.length === 0) {
-                setFields({
-                    sellSectionPrices: {
-                        errors: [new Error('价格不能为空，无法提交')],
-                    },
-                })
-                return false;
+            if (isEdit) {
+                this.props.handlePostAdd(editData, isEdit);
+            } else {
+                this.props.handlePostAdd(createData, isEdit);
             }
-            priceList.forEach((obj) => {
-                if (obj === null || obj === undefined) {
-                    this.successPost = true;
-                    setFields({
-                        sellSectionPrices: {
-                            errors: [new Error('价格不能为空，无法提交')],
-                        },
-                    })
-                    return;
-                }
-                if (obj === 0) {
-                    this.messageAlert = true;
-                } else {
-                    this.messageAlert = false;
-                }
-                if (obj >= 0) {
-                    this.successPost = false;
-                }
-            })
-            if (this.successPost) {
-                this.isDisabled = true;
-                if (this.messageAlert) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!')
-                }
-                if (!this.isDisabled) {
-                    handlePostAdd(result, isEdit, choose).then((res) => {
-                        if (res.code === 200) {
-                            this.isDisabled = false;
-                        }
-                    }).catch(() => {
-                        this.isDisabled = false;
-                    })
-                }
-            }
-            if (this.successPost === false) {
-                if (this.messageAlert) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => {
-                        handlePostAdd(result, isEdit, choose);
-                    })
-                } else {
-                    handlePostAdd(result, isEdit, choose);
-                }
+            if (this.newDatas.auditStatus === 1) {
+                return null;
             }
             return null;
         })
     }
 
-    hasZero(items) {
-        const filter = items.filter((item) => {
-            return item.price === 0;
-        })
-
-        return !!filter.length;
-    }
-
-    handleCancel() {
+    handleCancel = () => {
         this.props.handleClose();
     }
 
-    handlePriceChange(result) {
-        const { setFields, getFieldError } = this.props.form;
-        const { isContinuity, results } = result;
-
+    handleCreatPrice = (num) => {
         this.setState({
-            hasZero: this.hasZero(results)
+            suggestPrice: num
         })
+    }
 
-        if (isContinuity && getFieldError('sellSectionPrices')) {
-            setFields({
-                sellSectionPrices: {
-                    errors: null,
-                },
-            })
+    handleCompyChange = (record) => {
+        const { productId } = this.props;
+        const branchCompanyId = record.id;
+        this.setState({
+            branchCompanyId,
+            branchCompanyName: record.name,
+        });
+        if (branchCompanyId !== '') {
+            // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodPurchase/queryPurchasePriceForSellPrice
+            this.props.getCostPrice({
+                productId, branchCompanyId
+            });
+        } else {
+            this.props.clearCostPrice();
         }
-        this.isDisabled = false;
-    }
-
-    handleChoose = ({ record }) => {
-        this.childCompany = {
-            branchCompanyId: record.id,
-            branchCompanyName: record.name
-        };
-    }
-
-    handleClear = () => {
-        this.childCompany = null;
-    }
-
-    handleSelectChange = (item) => {
-        this.choose = item === '-1' ? null : item;
-    }
-
-    /**
-     * 销售内装数
-     */
-    handleInsideChange = (num) => {
-        this.setState({
-            currentInside: num
-        }, () => {
-            this.props.form.setFieldsValue({ minNumber: null })
-        })
-
-        this.steppedPrice.reset();
-    }
-
-    /**
-     * 最小起订数量
-     */
-    handleMinChange = (num) => {
-        const { results } = this.steppedPrice.getValue();
-        this.setState({
-            startNumber: num,
-            isEditPrice: true,
-            price: results[0].price
-        }, () => {
-            this.props.form.setFieldsValue({ minNumber: num });
-            this.steppedPrice.reset();
-        })
-    }
-
-    /**
-     * 最大销售数量
-     */
-    handleInsideChange = (num) => {
-        this.setState({
-            currentInside: num
-        }, () => {
-            this.props.form.setFieldsValue({ maxNumber: null })
-        })
-
-        // this.steppedPrice.reset();
     }
 
     handleMaxChange = (num) => {
-        // this.setState({
-        //     startNumber: num
-        // }, () => {
         this.props.form.setFieldsValue({ maxNumber: num });
-        // this.steppedPrice.reset();
-        // })
     }
 
-    handleConfirm = () => {
+    catchAuditstate = () => {
+        const { datas } = this.props;
+        const newDatas = JSON.parse(JSON.stringify(datas.data));
+        switch (newDatas.auditStatus) {
+            case 1:
+                return '已提交';
+            case 2:
+                return '已审核';
+            case 3:
+                return '已拒绝';
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * 建议零售价回传值
+     * @param {*} num number
+     */
+    handleEditSteps = (num) => {
         this.setState({
-            confirmVisible: true
+            suggestPrice: num
+        })
+    }
+
+    /**
+     * 编辑阶梯价格回传值
+     * @param {*} prices list
+     * @param {*} isContinue bool
+     */
+    handleEditPriceChange = (prices, isContinue) => {
+        const newArr = [];
+        const priceArrMore = [];
+        if (prices.length === 1) {
+            prices.forEach(item => (
+                newArr.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.percentage
+                })
+            ))
+            this.setState({
+                sellSectionPrices: newArr,
+                editIsContinue: isContinue
+            })
+        }
+        if (prices.length > 1) {
+            prices.forEach(item => {
+                priceArrMore.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber,
+                    percentage: item.percentage
+                })
+            })
+            this.setState({
+                sellSectionPrices: priceArrMore,
+                editIsContinue: isContinue
+            })
+        }
+    }
+
+    /**
+     * 新建阶梯价格回传值
+     * @param {*} prices list
+     * @param {*} isContinue bool
+     */
+    handleCreatPriceChange = (prices, isContinue) => {
+        const newArr = [];
+        const priceArrMore = [];
+        if (prices.length === 1) {
+            prices.forEach(item => (
+                newArr.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber
+                })
+            ))
+            this.setState({
+                sellSectionPrices: newArr,
+                editIsContinue: isContinue
+            })
+        } else if (prices.length > 1) {
+            prices.forEach(item => {
+                priceArrMore.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber
+                })
+            })
+            this.setState({
+                sellSectionPrices: priceArrMore,
+                editIsContinue: isContinue
+            })
+        }
+    }
+
+    /**
+     * 编辑货运条件头部form表单回传值
+     * @param {*} data Object
+     */
+    handleOnFreConditChange = (data) => {
+        this.setState({
+            freCondit: data
+        })
+    }
+
+    /**
+     * 创建货运条件头部form表单回传值
+     * @param {*} data Object
+     */
+    handleonCretFreConditChange = (data) => {
+        this.setState({
+            cretFreConditObj: data
         })
     }
 
     render() {
-        const { prefixCls, form, datas, isEdit, getProductById } = this.props;
-        const { getFieldDecorator } = form;
-        const { currentInside, startNumber, price, hasZero } = this.state;
-        const newDates = JSON.parse(JSON.stringify(datas));
-        const preHarvestPinStatusChange =
-            (newDates.preHarvestPinStatus === 1 ? '1' : '0');
-
+        const { prefixCls, isEdit, values } = this.props;
+        const isAfter = this.isAfter === true;
+        const isReadOnly = true;
+        const { freCondit, cretFreConditObj } = this.state;
         return (
             <Modal
                 title={isEdit ? '编辑销售价格' : '新增销售价格'}
                 visible
-                className={prefixCls}
+                className={isEdit ? prefixCls : 'createCls'}
                 onOk={this.handleOk}
-                width={'447px'}
                 onCancel={this.handleCancel}
-                maskClosable={false}
+                maskClosable
+                destroyOnClose
                 confirmLoading={this.isDisabled}
-                footer={
-                    !this.state.confirmVisible && hasZero
-                        ? [
-                            <Button key="confirm" size="large" type="danger" onClick={this.handleConfirm}>确认价格为0提交</Button>,
-                            <Button key="handleCancel" size="large" onClick={this.handleCancel}>取消</Button>
-                        ]
-                        : [
-                            <Button key="handleOk" size="large" type="primary" onClick={this.handleOk}>确认</Button>,
-                            <Button key="handleCancel" size="large" onClick={this.handleCancel}>取消</Button>
-                        ]
-                }
             >
-                <div className={`${prefixCls}-body-wrap`}>
-                    <Form layout="inline" onSubmit={this.handleSubmit}>
-                        <div className={`${prefixCls}-item`}>
-                            <div className={`${prefixCls}-item-title`}>货运条件</div>
-                            <div className={`${prefixCls}-item-content`}>
-                                <FormItem>
-                                    <span>*销售内装数：</span>
-                                    <span>
-                                        {getFieldDecorator('salesInsideNumber', {
-                                            rules: [{ required: true, message: '请输入销售内装数' }],
-                                            initialValue: newDates.salesInsideNumber
-                                        })(
-                                            <InputNumber
-                                                min={0}
-                                                onChange={this.handleInsideChange}
-                                            />
-                                        )}
-                                    </span>
-                                </FormItem>
-                                <FormItem>
-                                    <span>*起订量：</span>
-                                    <span>
-                                        {getFieldDecorator('minNumber', {
-                                            rules: [
-                                                { required: true, message: '请输入最小起订量!' },
-                                                {
-                                                    validator: (rule, value, callback) => {
-                                                        const { getFieldValue } = this.props.form
-                                                        if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
-                                                            callback('起订量需为内装数整数倍！')
-                                                        }
-
-                                                        callback()
-                                                    }
-                                                }
-                                            ],
-                                            initialValue: newDates.minNumber
-                                        })(
-                                            <InputNumber
-                                                min={0}
-                                                onChange={this.handleMinChange}
-                                                step={currentInside || newDates.salesInsideNumber}
-                                            />
-                                        )}
-                                    </span>
-                                </FormItem>
-                                <FormItem>
-                                    <span>*最大销售数量：</span>
-                                    <span>
-                                        {getFieldDecorator('maxNumber', {
-                                            initialValue: newDates.maxNumber
-                                        })(
-                                            <InputNumber
-                                                min={0}
-                                                onChange={this.handleMaxChange}
-                                                step={currentInside || newDates.salesInsideNumber}
-                                            />
-                                        )}
-                                    </span>
-                                </FormItem>
-                                <FormItem>
-                                    <span>*承诺发货时间：下单后</span>
-                                    <span className={`${prefixCls}-day-input`}>
-                                        {getFieldDecorator('deliveryDay', {
-                                            rules: [{ required: true, message: '请输入承诺发货时间!' }],
-                                            initialValue: newDates.deliveryDay
-                                        })(
-                                            <InputNumber min={0} />
-                                        )}
-                                    </span>
-                                    天内发货
-                                </FormItem>
-                                <FormItem>
-                                    <span>是否整箱销售:</span>
-                                    <span className={`${prefixCls}-day-input`}>
-                                        {getProductById.sellFullCase === 1 ? '是' : '否'}
-                                    </span>
-                                </FormItem>
-                                <FormItem>
-                                    <span>整箱销售单位:</span>
-                                    <span className={`${prefixCls}-day-input`}>
-                                        {getProductById.fullCaseUnit || '-'}
-                                    </span>
-                                </FormItem>
-                                {/* 采购模式 */}
-                                <FormItem className={`${prefixCls}-qy`}>
-                                    <span className={`${prefixCls}-select`}> 采购模式 : </span>
-                                    {getFieldDecorator('preHarvestPinStatus', {
-                                        initialValue: isEdit ? preHarvestPinStatusChange : '0'
-                                    })(
-                                        <Select
-                                            style={{ width: 90 }}
-                                            className="sc-form-item-select"
-                                            size="default"
-                                            onChange={this.handleSelectChange}
-                                        >
-                                            {
-                                                preHarvestPinStatus.data.map((item) =>
-                                                    (<Option key={item.key} value={item.key}>
-                                                        {item.value}
-                                                    </Option>)
-                                                )
-                                            }
-                                        </Select>
-                                    )}
-                                </FormItem>
-                            </div>
-                        </div>
-                        <div className={`${prefixCls}-item`}>
-                            <div className={`${prefixCls}-item-title`}>
-                                添加阶梯价格
-                                <span className={`${prefixCls}-item-tip`}>
-                                    &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
-                                </span>
-                            </div>
-                            <div className={`${prefixCls}-item-content`}>
-                                <FormItem>
-                                    {getFieldDecorator('sellSectionPrices', {
-                                    })(
-                                        <SteppedPrice
-                                            isEditor={this.state.isEditPrice}
-                                            isEdit={isEdit}
-                                            ref={node => { this.steppedPrice = node }}
-                                            handleChange={this.handlePriceChange}
-                                            startNumber={startNumber}
-                                            defaultValue={isEdit ? newDates.sellSectionPrices : []}
-                                            inputSize="default"
-                                            initvalue={getProductById.minUnit}
-                                            price={price}
-                                        />
-                                    )}
-                                </FormItem>
-                                <FormItem>
-                                    <span>* 建议零售价(元)：</span>
-                                    <span>
-                                        {getFieldDecorator('suggestPrice', {
-                                            rules: [{ required: true, message: '请输入建议零售价!' }],
-                                            initialValue: newDates.suggestPrice
-                                        })(
-                                            <InputNumber min={0} />
-                                        )}
-                                    </span>
-                                </FormItem>
-                            </div>
-                        </div>
-                        <div className={`${prefixCls}-item`}>
-                            <FormItem>
-                                <span className={`${prefixCls}-label`}>子公司：</span>
-                                <span className={`${prefixCls}-data-pic`}>
-                                    <SearchMind
-                                        compKey="search-mind-key1"
-                                        ref={ref => { this.searchMind = ref }}
-                                        fetch={(param) => this.props.pubFetchValueList({
-                                            branchCompanyName: param.value,
-                                            productId: newDates.productId || newDates.id
-                                        }, 'queryBranchCompanyInfo')}
-                                        placeholder="请输入公司名"
-                                        onChoosed={this.handleChoose}
-                                        disabled={isEdit}
-                                        defaultValue={
-                                            newDates.branchCompanyId ?
-                                                `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
-                                                undefined}
-                                        onClear={this.handleClear}
-                                        renderChoosedInputRaw={(data) => (
-                                            <div>{data.id} - {data.name}</div>
-                                        )}
-                                        pageSize={6}
-                                        columns={[
-                                            {
-                                                title: '公司编号',
-                                                dataIndex: 'id',
-                                                width: 98
-                                            }, {
-                                                title: '公司名',
-                                                dataIndex: 'name',
-                                                width: 140
-                                            }
-                                        ]}
+                {
+                    isEdit &&
+                    <div>
+                        <span className="changeBefore">当前销售价格:</span>
+                        <span className="changeAfter">修改销售价格:</span>
+                    </div>
+                }
+                {
+                    isEdit ?
+                        <div>
+                            <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
+                                <div>
+                                    <FreightConditions
+                                        isEdit={isEdit}
+                                        isAfter={isAfter}
+                                        isSub={this.newDatas.auditStatus === 1}
+                                        newDatas={this.newDatas}
                                     />
-                                </span>
-                            </FormItem>
+                                </div>
+                                <OnlyReadSteps
+                                    newDatas={this.referenceDatas}
+                                    isReadOnly={isReadOnly}
+                                    startNumber={freCondit.minNumber || this.newDatas.minNumber}
+                                />
+                            </div>
+                            <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
+                                <FreightConditions
+                                    isEdit={isEdit}
+                                    isAfter={!isAfter}
+                                    isSub={this.newDatas.auditStatus === 1}
+                                    newDatas={this.newDatas}
+                                    onFreConditChange={this.handleOnFreConditChange}
+                                />
+                                <EditSteps
+                                    newDatas={this.newDatas}
+                                    isEdit={isEdit}
+                                    isSub={this.newDatas.auditStatus === 1}
+                                    startNumber={freCondit.minNumber || this.newDatas.minNumber}
+                                    onEditChange={this.handleEditSteps}
+                                    onEditPriceChange={this.handleEditPriceChange}
+                                />
+                            </div >
+                            <Row className="edit-state-list">
+                                <Col>
+                                    <span>提交人：</span>
+                                    <span>{this.newDatas.firstCreated === 1 ?
+                                        this.newDatas.createUserName :
+                                        this.newDatas.modifyUserName || '-'}</span>
+                                </Col>
+                                <Col>
+                                    <span>审核人：</span>
+                                    <span>
+                                        {this.newDatas.auditUserName || '-'}
+                                        {Utils.getTime(this.newDatas.auditTime)}
+                                    </span>
+                                </Col>
+                                <Col>
+                                    <span>审核状态：</span>
+                                    <span>
+                                        <i className={`new-price-state-${this.newDatas.auditStatus}`} />
+                                        {this.catchAuditstate() || '-'}
+                                    </span>
+                                </Col>
+                            </Row>
+                        </div > :
+                        <div>
+                            <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
+                                <div>
+                                    <FreightConditions
+                                        isEdit={isEdit}
+                                        values={values}
+                                        newDatas={this.newDatas}
+                                        onReactChange={this.handleonCretFreConditChange}
+                                    />
+                                    <EditSteps
+                                        newDatas={this.newDatas}
+                                        isEdit={isEdit}
+                                        startNumber={cretFreConditObj.minNumber || values.minNumber}
+                                        onCreateChange={this.handleCreatPrice}
+                                        onCreateComChange={this.handleCompyChange}
+                                        onCreatPriceChange={this.handleCreatPriceChange}
+                                        values={values}
+                                    />
+                                </div>
+                            </div>
                         </div>
-                    </Form>
-                </div>
+                }
             </Modal>
         );
     }
@@ -507,13 +419,13 @@ class SellPriceModal extends Component {
 
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
+    productId: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
-    getProductById: PropTypes.objectOf(PropTypes.any),
     handlePostAdd: PropTypes.func,
-    pubFetchValueList: PropTypes.func,
+    getCostPrice: PropTypes.func,
+    clearCostPrice: PropTypes.func,
     handleClose: PropTypes.func,
-    datas: PropTypes.objectOf(PropTypes.any),
-    isEdit: PropTypes.bool,
+    datas: PropTypes.objectOf(PropTypes.any)
 };
 
 SellPriceModal.defaultProps = {

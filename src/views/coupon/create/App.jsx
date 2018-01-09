@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-03 15:56:50
+ * @Last Modified time: 2018-01-05 13:45:57
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -339,7 +339,7 @@ class CouponCreate extends PureComponent {
             subCompanies.push(company.companyName);
         });
         return (
-            <div className="coupons-create">
+            <div className="coupons-form">
                 <Form layout="inline" onSubmit={this.handleSubmit}>
                     <div className="coupon-add-item">
                         <div className="add-message coupon-add-license">
@@ -385,7 +385,7 @@ class CouponCreate extends PureComponent {
                                                 <InputNumber
                                                     size="default"
                                                     min={1}
-                                                    max={9999}
+                                                    max={MAX_AMOUNT_OF_ORDER}
                                                     parser={value => Math.ceil(value)}
                                                 />)}
                                             <span>元</span>

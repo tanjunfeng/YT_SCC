@@ -203,3 +203,21 @@ export const auditTypeCodes = {
     approve: '1',
     reject: '2'
 }
+
+// 采购进价批量导入-处理结果
+export const processResult = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '错误'
+    }, {
+        key: '1',
+        value: '已验证'
+    }, {
+        key: '2',
+        value: '已提交'
+    }]
+}

@@ -1,5 +1,5 @@
 /*
- * @Author: tanjf
+ * @Author: chenghaojie
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghj
@@ -7,11 +7,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {
-    Form,
     Modal,
     Table
 } from 'antd';
-import { withRouter } from 'react-router';
+
 import moment from 'moment';
 
 const dateFormat = 'YYYY-MM-DD';
@@ -114,4 +113,4 @@ ApproModal.propTypes = {
     approvalList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 
-export default withRouter(Form.create()(ApproModal));
+export default ApproModal;

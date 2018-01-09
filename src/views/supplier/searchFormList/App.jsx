@@ -27,7 +27,7 @@ class SearchForm extends PureComponent {
         this.searchData = {};
         this.state = {
             // 控制DatePicker的value
-            rengeTime: null,
+            rangeTime: null,
             // DatePicker选取后返回的格式化后的日期
             settledDate: null,
             // 供应商类型
@@ -44,7 +44,7 @@ class SearchForm extends PureComponent {
     */
     onEnterTimeChange = (date) => {
         this.setState({
-            rengeTime: date,
+            rangeTime: date,
             settledDate: date ? date._d * 1 : null,
         });
     }
@@ -53,22 +53,28 @@ class SearchForm extends PureComponent {
     * 获取form的值，赋给this.searchDate
     */
     getValue() {
+        const { supplierType } = this.state;
+        let { grade, gradeAdr } = this.props.form.getFieldsValue();
         const {
             providerName,
             providerNo,
             registLicenceNumber,
             providerType,
-            status,
-            grade,
+            status
         } = this.props.form.getFieldsValue();
+        if (grade === '0' || gradeAdr === '0') {
+            grade = null;
+            gradeAdr = null;
+        }
         const searchData = {
             providerName,
             providerNo,
             registLicenceNumber,
             providerType: providerType === '0' ? null : providerType,
             status: status === '-1' ? null : status,
-            grade: grade === '0' ? null : grade,
-            settledDate: this.state.settledDate
+            grade: supplierType === '1' ? grade : gradeAdr,
+            settledDate: this.state.settledDate,
+            rangeTime: this.state.rangeTime
         };
         this.searchData = Utils.removeInvalid(searchData);
     }
@@ -155,7 +161,7 @@ class SearchForm extends PureComponent {
         this.setState({
             supplierType: 0,
         });
-        this.setState({ rengeTime: null });
+        this.setState({ rangeTime: null, settledDate: null });
         onReset(this.searchData);
     }
 
@@ -187,85 +193,66 @@ class SearchForm extends PureComponent {
             this.props.isSuplierInputList ? secondSupplierStatusOptions
                 : firstSupplierStatusOptions;
         return (
-            <div className="manage-form">
+            <div className="search-form-list-manage">
                 <Form layout="inline">
                     <Row gutter={40}>
                         {/* 供应商编码 */}
-                        <Col span={8}>
-                            <FormItem className="sc-form-item">
-                                <div>
-                                    <span className="sc-form-item-label">供应商编码</span>
-                                    {getFieldDecorator('providerNo')(
-                                        <Input
-                                            className="sc-form-item-input"
-                                            placeholder="供应商编码"
-                                        />
-                                    )}
-                                </div>
+                        <Col>
+                            <FormItem label="供应商编码">
+                                {getFieldDecorator('providerNo')(
+                                    <Input
+                                        placeholder="供应商编码"
+                                    />
+                                )}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
+                        <Col>
                             {/* 供应商名称 */}
-                            <FormItem className="sc-form-item">
-                                <div>
-                                    <span className="sc-form-item-label">供应商名称</span>
-                                    {getFieldDecorator('providerName')(
-                                        <Input
-                                            className="sc-form-item-input"
-                                            placeholder="供应商名称"
-                                        />
-                                    )}
-                                </div>
+                            <FormItem label="供应商名称">
+                                {getFieldDecorator('providerName')(
+                                    <Input
+                                        placeholder="供应商名称"
+                                    />
+                                )}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
+                        <Col>
                             {/* 供应商营业执照号 */}
-                            <FormItem className="sc-form-item">
-                                <div>
-                                    <span className="sc-form-item-label">供应商营业执照号</span>
-                                    {getFieldDecorator('registLicenceNumber')(
-                                        <Input
-                                            className="sc-form-item-input-license sc-form-item-input"
-                                            placeholder="供应商营业执照号"
-                                        />
-                                    )}
-                                </div>
+                            <FormItem label="供应商营业执照号">
+                                {getFieldDecorator('registLicenceNumber')(
+                                    <Input
+                                        placeholder="供应商营业执照号"
+                                    />
+                                )}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
+                        <Col>
                             {/* 供应商类型 */}
-                            <FormItem className="sc-form-item">
-                                <div>
-                                    <span className="sc-form-item-label">供应商类型</span>
-                                    {getFieldDecorator('providerType', {
-                                        initialValue: supplierTypeOptions.defaultValue
-                                    })(
-                                        <Select
-                                            className="sc-form-item-select"
-                                            size="default"
-                                            onChange={this.handleSupplierTypeChange}
-                                        >
-                                            {
-                                                supplierTypeOptions.data.map((item) =>
-                                                    (<Option key={item.key} value={item.key}>
-                                                        {item.value}
-                                                    </Option>)
-                                                )
-                                            }
-                                        </Select>
-                                        )}
-                                </div>
+                            <FormItem label="供应商类型">
+                                {getFieldDecorator('providerType', {
+                                    initialValue: supplierTypeOptions.defaultValue
+                                })(
+                                    <Select
+                                        size="default"
+                                        onChange={this.handleSupplierTypeChange}
+                                    >
+                                        {
+                                            supplierTypeOptions.data.map((item) =>
+                                                (<Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>)}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
+                        <Col>
                             {/* 供应商状态 */}
-                            <FormItem className="sc-form-item">
-                                <span className="sc-form-item-label">供应商状态</span>
+                            <FormItem label="供应商状态">
                                 {getFieldDecorator('status', {
                                     initialValue: supplierStatusOptionss.defaultValue
                                 })(
                                     <Select
-                                        className="sc-form-item-select"
                                         size="default"
                                     >
                                         {
@@ -275,21 +262,19 @@ class SearchForm extends PureComponent {
                                                 </Option>)
                                             )
                                         }
-                                    </Select>
-                                    )}
+                                    </Select>)}
                             </FormItem>
                         </Col>
                         {
                             supplierType === '1' ?
-                                <Col span={8}>
-                                    <FormItem className="sc-form-item">
-                                        <span className="sc-form-item-label">供应商等级</span>
+                                <Col>
+                                    <FormItem label="供应商等级">
                                         {getFieldDecorator('grade', {
                                             initialValue: supplierLevelOptions.defaultValue
                                         })(
                                             <Select
                                                 disabled={this.state.supplierType === '-1'}
-                                                className="sc-form-item-select"
+
                                                 size="default"
                                             >
                                                 {
@@ -299,22 +284,20 @@ class SearchForm extends PureComponent {
                                                         </Option>)
                                                     )
                                                 }
-                                            </Select>
-                                            )}
+                                            </Select>)}
                                     </FormItem>
                                 </Col> : null
                         }
                         {
                             supplierType === '2' ?
-                                <Col span={8}>
-                                    <FormItem className="sc-form-item">
-                                        <span className="sc-form-item-label">供应商地点等级</span>
-                                        {getFieldDecorator('grade', {
+                                <Col>
+                                    <FormItem label="供应商地点等级">
+                                        {getFieldDecorator('gradeAdr', {
                                             initialValue: supplierPlaceLevelOptions.defaultValue
                                         })(
                                             <Select
                                                 disabled={this.state.handleUsed}
-                                                className="sc-form-item-select"
+
                                                 size="default"
                                             >
                                                 {
@@ -324,62 +307,49 @@ class SearchForm extends PureComponent {
                                                         </Option>)
                                                     )
                                                 }
-                                            </Select>
-                                            )}
+                                            </Select>)}
                                     </FormItem>
                                 </Col> : null
                         }
-                        <Col span={8}>
+                        <Col>
                             {/* 供应商入驻日期 */}
-                            <FormItem className="sc-form-item">
-                                <div>
-                                    <span className="sc-form-item-label">供应商入驻日期</span>
-                                    <DatePicker
-                                        className="sc-form-item-date-picker gyl-form-item-date-picker"
-                                        showToday
-                                        onChange={this.onEnterTimeChange}
-                                        value={this.state.rengeTime}
-                                        format="YYYY/MM/DD"
-                                        placeholder="入驻日期"
-                                    />
-                                </div>
+                            <FormItem label="供应商入驻日期">
+                                <DatePicker
+                                    showToday
+                                    onChange={this.onEnterTimeChange}
+                                    value={this.state.rangeTime}
+                                    format="YYYY/MM/DD"
+                                    placeholder="入驻日期"
+                                />
                             </FormItem>
                         </Col>
                     </Row>
                     <Row gutter={40} type="flex" justify="end">
-                        <Col span={16} className="tr">
-                            <FormItem>
-                                <Button
-                                    type="primary"
-                                    onClick={this.handleGetValue}
-                                    size="default"
-                                >
-                                    搜索
-                                </Button>
-                            </FormItem>
+                        <Col>
+                            <Button
+                                type="primary"
+                                onClick={this.handleGetValue}
+                                size="default"
+                            >
+                                搜索
+                            </Button>
                             {
                                 this.props.isSuplierAddMenu ?
-                                    <FormItem>
-                                        <Button
-                                            type="primary"
-                                            size="default"
-                                            onClick={this.handleAddValue}
-                                        >
+                                    <Button
+                                        type="primary"
+                                        size="default"
+                                        onClick={this.handleAddValue}
+                                    >
                                             创建
                                     </Button>
-                                    </FormItem>
                                     : null
                             }
-                            <FormItem>
-                                <Button size="default" onClick={this.handleResetValue}>
-                                    重置
-                                </Button>
-                            </FormItem>
-                            <FormItem>
-                                <Button size="default" onClick={this.handleDownload}>
-                                    导出供应商列表
-                                </Button>
-                            </FormItem>
+                            <Button size="default" onClick={this.handleResetValue}>
+                                重置
+                            </Button>
+                            <Button size="default" onClick={this.handleDownload}>
+                                导出供应商列表
+                            </Button>
                         </Col>
                     </Row>
                 </Form>

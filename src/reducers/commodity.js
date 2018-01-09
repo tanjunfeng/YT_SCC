@@ -75,7 +75,7 @@ const initState = Immutable.fromJS({
     getProductById: {},
 
     // 阶梯价格列表
-    stepPriceList: [],
+    stepPriceDetail: {},
 
     // 更新商品信息
     updateProdRecord: {},
@@ -84,8 +84,13 @@ const initState = Immutable.fromJS({
     getWarehouseLogicInfo: {},
 
     // 删除当前关系
-    deleteProd: {}
+    deleteProd: {},
 
+    // 跳转到修改页面
+    getSellPriceInfoById: {},
+
+    // 成本价
+    costPrice: null
 });
 
 export default function (state = initState, action) {
@@ -120,8 +125,7 @@ export default function (state = initState, action) {
                 .set('visibleData', id)
                 .set('isEdit', isEdit)
                 .set('pricingId', pricingId)
-                .set('id', id)
-                ;
+                .set('id', id);
         }
 
         // 新增采购价格弹窗
@@ -134,8 +138,7 @@ export default function (state = initState, action) {
                 .set('id', id)
                 .set('supplierId', supplierId)
                 .set('companyName', companyName)
-                .set('pricingId', pricingId)
-                ;
+                .set('pricingId', pricingId);
         }
 
         // 修改采购价格弹窗
@@ -168,6 +171,10 @@ export default function (state = initState, action) {
         case ActionType.CHECK_MAIN_SUPPLIER:
             return state.set('checkMainSupplier', action.payload);
 
+        case ActionType.RECEIVE_GET_SELL_PRICE: {
+            return state.set('getSellPriceInfoById', action.payload);
+        }
+
         case ActionType.GET_PRODPURCHASE_BYID:
             return state.set('getProdPurchaseByIds', action.payload);
 
@@ -181,7 +188,7 @@ export default function (state = initState, action) {
             return state.set('getProductById', action.payload);
 
         case ActionType.RECEIVE_PRICE_INFO:
-            return state.set('stepPriceList', action.payload)
+            return state.set('stepPriceDetail', action.payload)
 
         case ActionType.QUERY_PRODBY_CONDITION:
             return state.set('purchaseCardData', action.payload);
@@ -191,6 +198,10 @@ export default function (state = initState, action) {
 
         case ActionType.GER_WARE_HOUSE_LOGIC_INFO:
             return state.set('getWarehouseLogicInfo', action.payload);
+
+        case ActionType.GET_COST_PRICE:
+        case ActionType.CLEAR_COST_PRICE:
+            return state.set('costPrice', action.payload);
 
         default:
             return state;

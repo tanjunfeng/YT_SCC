@@ -1,85 +1,68 @@
-$whiteListConfigurationColWidth: 250px;
-.ant-table-pagination {
-    margin-right: 15px;
-}
-
-.change-form {
-    padding-left: 30px;
-    .ant-form-item {
-        margin-bottom: 15px
+.white-list-search-box {
+    .ant-form {
+        padding: 40px 0 20px;
+        margin: 10px 0;
+        border: 1px solid #c4c5c9;
     }
-    .ant-form-explain {
-        padding-left: 73px;
-    }
-    &-label {
-        min-width: 61px;
-        text-align: right;
-    }
-    &-tip {
-        margin-left: 10px;
-    }
-}
-
-.white-list {
     .ant-form-item-label {
-        width: 80px;
+        width: 110px;
         .sc-form-item-label {
             text-align: right;
         }
     }
-    .search-mind-label {
-        min-width: 80px;
+    .ant-form-item-control-wrapper{
         display: inline-block;
-        text-align: right;
-        width: 80px;
-        margin-right: 0;
-        &::after {
-            content: ":";
-            margin: 0 8px 0 2px;
-            position: relative;
-            top: -0.5px;
+    }
+    .labelTop {
+        .ant-form-item-label{
+            margin-top: -17px;
         }
     }
-    .ywc-smind-search-bar {
-        position: relative;
-        top: 4px;
+    .ant-form-item {
+        float: left;
+        display: block;
+        height: 42px;
+        margin-bottom: 24px;
+        @media screen and (min-width: 0px) and (max-width: 1400px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind
+            {
+                width: 220px;
+            }
+        }
+        @media screen and (min-width: 1401px) and (max-width: 1600px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind
+            {
+                width: 230px;
+            }
+        }
+        @media screen and (min-width: 1601px) and (max-width: 1920px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind
+            {
+                width: 200px;
+            }
+        }
+        @media screen and (min-width: 1921px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind
+            {
+                width: 260px;
+            }
+        }
     }
-    .row {
-        display: flex;
-        line-height: 46px;
-        justify-content: space-between;
-        .item-box {
-            display: flex;
-            flex-direction: row;
-        }
-        .label {
-            margin-right: 8px;
-            display: inline-block;
-        }
-        .ywc-smind {
-            width: $whiteListConfigurationColWidth;
-        }
-        .ywc-smind-search-bar {
-            margin: 8px 0;
-        }
+    .ant-btn {
+        margin: 6px 10px;
     }
-}
-
-.white-list-data-pic {
-    height: 30px;
-    display: inline-block;
-    vertical-align: bottom;
-}
-
-.upload-demo-start {
-    margin-top: 20px;
-}
-
-.search-conditions {
-    .export-left {
-        text-align: left;
+    .ant-upload-list{
+        display: none
     }
-    .search-right {
-        text-align: right;
+    .ant-btn {
+        margin-right: 20px;
     }
 }

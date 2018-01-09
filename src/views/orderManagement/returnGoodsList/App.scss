@@ -1,98 +1,72 @@
 .return-goods-list {
-    .ant-table-pagination {
-        margin-right: 15px;
+    .ant-form {
+        padding: 40px 0 20px;
+        margin: 10px 0;
+        border: 1px solid #c4c5c9;
     }
-    .change-form {
-        padding-left: 30px;
-        .ant-form-item {
-            margin-bottom: 15px
-        }
-        .ant-form-explain {
-            padding-left: 73px;
-        }
-        &-label {
-            min-width: 61px;
+    .ant-form-item-label {
+        width: 110px;
+        .sc-form-item-label {
             text-align: right;
         }
-        &-tip {
-            margin-left: 10px;
+    }
+    .ant-form-item-control-wrapper{
+        display: inline-block;
+    }
+    .itemTop {
+        .ant-form-item-control{
+            margin-top: 7px;
         }
     }
-    .search-box {
-        &-box {
-            background: #ffffff;
-            border: 1px solid #c4c5c9;
-            margin: 10px 0;
-            padding: 5px 18px;
-            display: flex;
-            flex-direction: column;
-            .small {
-                .ywc-smind {
-                    width: 200px;
-                }
+    .ant-form-item {
+        float: left;
+        display: block;
+        height: 42px;
+        margin-bottom: 24px;
+        @media screen and (min-width: 0px) and (max-width: 1400px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
+                width: 220px;
             }
-            .middle {
-                .ywc-smind {
-                    width: 250px;
-                }
+        }
+        @media screen and (min-width: 1401px) and (max-width: 1600px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
+                width: 230px;
             }
-            .row {
-                display: flex;
-                line-height: 46px;
-                justify-content: space-between;
-                .item-box {
-                    display: flex;
-                    flex-direction: row;
-                }
-                .label {
-                    margin-right: 8px;
-                    display: inline-block;
-                }
-            } // .ant-form-item-label label:after {
-            //   content: "";
-            // }
-            .ant-form-item-label label {
-                min-width: 80px;
-                display: inline-block;
-            }
-            .date-range-picker {
-                padding: 2px 0;
+        }
+        @media screen and (min-width: 1601px) and (max-width: 1920px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
                 width: 200px;
             }
-            .search-mind-label {
-                min-width: 80px;
-                display: inline-block;
-                &::after {
-                    content: ":";
-                    margin: 0 8px 0 2px;
-                    position: relative;
-                    top: -0.5px;
-                }
-            }
         }
-        .ant-advanced-search-form {
-            .ant-form-item {
-                margin-bottom: 0;
-                .ant-input {
-                    width: 200px;
-                }
+        @media screen and (min-width: 1921px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
+                width: 260px;
             }
         }
     }
-    .company-time {
-        .ywc-smind {
-            width: 200px;
-            vertical-align: middle;
-        }
+    .ant-btn {
+        margin: 6px 10px;
     }
-    .franchisee-item {
-        .ywc-smind {
-            width: 200px;
-            vertical-align: middle;
-        }
-        .sc-form-item-label {
-            margin-right: 0!important;
-        }
-        padding-left: 40px!important;
+    .ant-upload-list{
+        display: none
+    }
+    .ant-btn {
+        margin-right: 20px;
     }
 }

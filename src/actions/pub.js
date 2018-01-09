@@ -17,7 +17,7 @@ import {
     availablProducts,
     supplierSearchBox,
     supplierAdrSearchBox,
-    getWarehouseInfo1,
+    getWarehouseLogic,
     queryAllCategoriesWithIconByParentId,
     getStoreInfo,
     queryProductByStore,
@@ -55,7 +55,7 @@ const pubValueList = {
     // 供应商地点选择组件
     supplierAdrSearchBox,
     // 查询逻辑仓库列表
-    getWarehouseInfo1,
+    getWarehouseLogic,
     // 查询门店列表
     getStoreInfo,
     // 通过分公司编号查询商品
