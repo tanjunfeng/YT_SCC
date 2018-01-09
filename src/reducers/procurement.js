@@ -71,7 +71,9 @@ const initState = fromJS({
     // 原始退货上品列表
     originReturnList: [],
     // 采购单审批列表
-    approvalList: []
+    approvalList: [],
+    // 预定专区
+    reserveAreaData: {}
 });
 
 export default function (state = initState, action) {
@@ -176,6 +178,9 @@ export default function (state = initState, action) {
             return state.set('approvalList', fromJS(action.payload));
         case ActionType.RECEIVE_NEW_PURCHASE_ORDER:// 收货单详情
             return state.set('newPcOdData', fromJS(action.payload));
+
+        case ActionType.QUERY_RESERVE_LIST:// 预定专区列表
+            return state.set('reserveAreaData', fromJS(action.payload));
 
         case ActionType.RECEIVE_PO_RCV_INIT:// 初始收货单详情
             payload = action.payload || {};

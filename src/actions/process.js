@@ -15,6 +15,7 @@ import {
     queryCommentHisByBusi as queryCommentHisByBusiService,
     queryProdPriceChangeList as queryProdPriceChangeListService,
     auditInfo as auditInfoService,
+    queryReserveAreaList as queryReserveAreaListService,
 } from '../service';
 
 // 流程管理下获取所有流程信息
@@ -34,6 +35,30 @@ export const queryProcessData = (params) => dispatch => (
             .catch(err => reject(err));
     })
 );
+// 预定专区列表
+const queryReserveAreaListAction = (data) => ({
+    type: ActionType.QUERY_RESERVE_LIST,
+    payload: data
+});
+
+export const queryReserveAreaList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryReserveAreaListService(params)
+            .then(res => {
+                dispatch(
+                    queryReserveAreaListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+/**
+ * 清空预定专区列表
+ */
+export const clearReserveAreaList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_RESERVE_LIST,
+    payload: []
+}));
 // 流程管理下根据ID删除一条流程信息
 const delectProcessListAction = (data) => ({
     type: ActionType.DELECT_PROCESS_DATA,

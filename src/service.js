@@ -970,4 +970,6 @@ export const processImageByBusi = params => http.get('/bpm/processImageByBusi', 
 export const queryCommentHisByBusi = params => http.get('/bpm/queryCommentHisByBusi', params);
 // 价格变更记录模块
 export const queryProdPriceChangeList = params => http.get('/prodSell/queryProdPriceChangeList', params);
+// 预定专区
+export const queryReserveAreaList = params => http.get('/price/queryReserveAreaList', params);
 
