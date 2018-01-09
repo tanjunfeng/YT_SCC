@@ -63,7 +63,9 @@ class OnlyReadSteps extends Component {
                     <span>{newDatas.suggestPrice}</span>
                     <span>商品采购价格：</span>
                     <span>{newDatas.purchasePrice || '-'}</span>
-                    <span className="edit-input">子公司:</span>
+                </div>
+                <div className="sell-modal-edit-company">
+                    <span>子公司:</span>
                     <span>{newDatas.branchCompanyId} - {newDatas.branchCompanyName}</span>
                 </div>
             </div>

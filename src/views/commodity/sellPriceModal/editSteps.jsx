@@ -88,6 +88,7 @@ class EditSteps extends Component {
         const { prefixCls, form, newDatas = {}, values = {}, isEdit, isSub } = this.props;
         const { sellPricesInReview = {} } = newDatas;
         const { getFieldDecorator } = form;
+        const hasMarginLeft = isEdit ? 'sell-modal-edit-company' : '';
         return (
             <div className={`${prefixCls}-item item-max-height`}>
                 <div className={`${prefixCls}-item-title`}>
@@ -146,7 +147,7 @@ class EditSteps extends Component {
                         </FormItem>
                         {
                             isEdit ?
-                                <FormItem label="子公司：">
+                                <FormItem className={hasMarginLeft} label="子公司：">
                                     <span className={
                                         sellPricesInReview.branchCompanyId
                                             !== newDatas.branchCompanyId
