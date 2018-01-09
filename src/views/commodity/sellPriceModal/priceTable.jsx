@@ -61,7 +61,7 @@ class PriceTable extends PureComponent {
 
     markTable = () => {
         const { value, onMarkable } = this.props;
-        const { isReadOnly, currentPrices, list, isEdit, markList } = value;
+        const { isReadOnly, currentPrices, list, isEdit, markList = [] } = value;
         const ml = [...markList];
         if (isReadOnly && isEdit) {
             currentPrices.forEach((currentRecord, index) => {
