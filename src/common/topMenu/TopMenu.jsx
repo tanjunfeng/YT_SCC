@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Menu, Icon, Carousel, Dropdown } from 'antd';
-import { CODE } from '../../constant';
+import { CODE } from '../../constants';
 import Utils from '../../util/util';
 import './topMenu.scss';
 
@@ -21,7 +21,8 @@ class TopMenu extends Component {
         super(props);
         this.state = {
             dropDownMenu: [],
-            menuStyle: {}
+            menuStyle: {},
+            totalStyle: {}
         }
         
         const { topMenus } = props;
@@ -33,29 +34,40 @@ class TopMenu extends Component {
         this.topMenuWidth = parseInt(this.winWidth, 10) - 200 - 140;
         const ul = document.querySelector('.top-menu-warp .ant-menu');
         const { widthArr } = Utils.getListWidthObj(ul);
-        let count = 1
-        this.totalWidth = widthArr.reduce(function(sum, value, index, array) {
-            const difference = (sum + value) - this.topMenuWidth;
-            if(difference > 0){
-                if(count === 1){
-                    this.menuIndex = index;
-                    count++; 
-                }
-            }
-            return sum + value;
-        }.bind(this), 0);
+        this.count = 1;
+        this.totalWidth = widthArr.reduce(this.reduceCallback);
+        delete this.count;
         this.showDropdown = this.totalWidth > this.topMenuWidth ? true : false;
-        const newArr = this.props.topMenus.menu.slice(this.menuIndex);
-        const newWidthArr = widthArr.slice(this.menuIndex);
+        const newArr = this.props.topMenus.menu.slice(this.menuIndex - 1);
+        const topMenuWidthArr = widthArr.slice(0, this.menuIndex - 1);
         if(this.showDropdown){
             this.setState({
                 dropDownMenu : newArr,
                 menuStyle: {
-                    width: `${this.totalWidth - newWidthArr.reduce((sum, value) => sum + value)}px`
+                    width: `${topMenuWidthArr.reduce((sum, value) => sum + value)}px`
+                },
+                totalStyle: {
+                    width: `${topMenuWidthArr.reduce((sum, value) => sum + value) + 57}px`
                 }
             })
         }
         console.log(this);
+    }
+    /**
+     *  reduce 回调
+     * @param {Number} sum 执行函数后返回的值
+     * @param {Number} value 当前执行的值
+     * @param {Number} index 当前的索引
+     */
+    reduceCallback = (sum, value, index) => {
+        const difference = (sum + value) - this.topMenuWidth;
+        if(difference > 0){
+            if(this.count === 1){
+                this.menuIndex = index;
+                this.count++; 
+            }
+        }
+        return sum + value;
     }
     /**
      * 列表点击事件
@@ -131,8 +143,8 @@ class TopMenu extends Component {
     }
     render() {
         return (
-            <div className="top-menu-warp">
-                <div className={this.showDropdown ? "ant-menu-warp on" : "ant-menu-warp"}>
+            <div className={this.showDropdown ? "top-menu-warp on" : "top-menu-warp"} style={this.state.totalStyle}>
+                <div className="ant-menu-warp">
                     <Menu
                         onClick={this.handleClick}
                         selectedKeys={[`${this.defaultSelect.id},${this.defaultSelect.url}`]}
