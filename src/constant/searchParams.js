@@ -301,13 +301,13 @@ export const latestPriceStateOption = {
         key: '-1',
         value: '全部'
     }, {
-        key: '0',
+        key: '1',
         value: '已提交'
     }, {
-        key: '1',
+        key: '2',
         value: '已审核'
     }, {
-        key: '2',
+        key: '3',
         value: '已拒绝'
     }]
 }

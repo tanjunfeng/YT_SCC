@@ -10,7 +10,6 @@ import { Table, Popconfirm, Button } from 'antd';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import { bindActionCreators } from 'redux';
-import cs from 'classnames';
 
 import {
     getCostPrice
@@ -30,7 +29,6 @@ import { stepPriceColumns as columns } from './columns';
 class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
-        this.mark = [];
         this.state = {
             prices: Immutable.fromJS(props.value.list).toJS(),
             canAdd: true // 是否可继续添加价格
@@ -60,21 +58,6 @@ class PriceTable extends PureComponent {
         }
     }
 
-    markTable = () => {
-        const { isReadOnly, currentPrices, list, isEdit } = this.props.value;
-        if (isReadOnly && isEdit) {
-            currentPrices.forEach((currentRecord, index) => {
-                const { startNumber, endNumber, price } = currentRecord;
-                const record = list[index];
-                this.mark.push({
-                    startNumber: startNumber !== record.startNumber,
-                    endNumber: endNumber !== record.endNumber,
-                    price: price !== record.price
-                });
-            })
-        }
-    }
-
     /**
      * 只读表格去除操作列，可编辑表格显示操作列
      */
@@ -83,6 +66,26 @@ class PriceTable extends PureComponent {
         return isReadOnly
             ? columns.filter((c, index) => index < 4)
             : columns
+    }
+
+    markTable = () => {
+        const { value, onMarkable } = this.props;
+        const { currentPrices, list, isEdit, markList = [] } = value;
+        const ml = [...markList];
+        if (isEdit) {
+            currentPrices.forEach((currentRecord, index) => {
+                const { startNumber, endNumber, price } = currentRecord;
+                const record = list[index];
+                ml.push({
+                    startNumber: startNumber !== record.startNumber,
+                    endNumber: endNumber !== record.endNumber,
+                    price: price !== record.price
+                });
+            });
+            if (typeof onMarkable === 'function') {
+                onMarkable(ml);
+            }
+        }
     }
 
     edit = (id) => {
@@ -141,6 +144,9 @@ class PriceTable extends PureComponent {
         const len = prices.length;
         const lastPrice = prices[len - 1];
         if (this.isPriceInvalid(lastPrice)) {
+            return false;
+        }
+        if (lastPrice && (lastPrice.endNumber > this.props.value.MAXGOODS)) {
             return false;
         }
         for (let i = 0; i < len - 1; i++) {
@@ -278,8 +284,11 @@ class PriceTable extends PureComponent {
     }
 
     isMarkable = (index, column) => {
-        if (this.mark.length === 0) return false;
-        return this.mark[index][column];
+        const { markList } = this.props.value;
+        if (markList.length === 0 || !markList[index]) {
+            return false;
+        }
+        return markList[index][column];
     }
 
     renderColumnsNum = (text = '', record, index, column) => {
@@ -348,9 +357,9 @@ class PriceTable extends PureComponent {
         if (costPrice === null || isNaN(costPrice)) {
             return (<span>-</span>);
         }
-        const rate = (price - costPrice) * 100 / costPrice;
+        const rate = ((price - costPrice) * 100) / costPrice;
         const mark = this.isMarkable(index, 'price');
-        return (<span className={mark ? "red" : null}>{`${rate.toFixed(2)}%`}</span>);
+        return (<span className={mark ? 'red' : null}>{`${rate.toFixed(2)}%`}</span>);
     }
 
     render() {
@@ -364,7 +373,7 @@ class PriceTable extends PureComponent {
                             onClick={this.handleAdd}
                             disabled={!canAdd}
                         >添加阶梯价格</Button>
-                        : null
+                        : <span>&nbsp;</span>
                 }
                 <Table
                     rowKey="id"
@@ -380,6 +389,7 @@ class PriceTable extends PureComponent {
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     onChange: PropTypes.func,
+    onMarkable: PropTypes.func,
     isReadOnly: PropTypes.bool,
     costPrice: PropTypes.number
 };

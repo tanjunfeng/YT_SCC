@@ -330,6 +330,16 @@ class Utils {
     }
 
     /**
+     * 限制输入整数
+     */
+    static limitPositive = (rule, value, callback) => {
+        if ((value && value < 0) || +(value) === 0) {
+            callback('仅允许正数');
+        }
+        callback();
+    }
+
+    /**
      * 限制输入两位小数校验且不能为零
      */
     static limitTwoDecimalPlacesAndNotZero = (rule, value, callback) => {

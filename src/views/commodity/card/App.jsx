@@ -275,10 +275,6 @@ class Cardline extends Component {
         });
     }
 
-    handlePaginationChange = (go) => {
-        this.props.goto(go)
-    }
-
     handleAddPrice = () => {
     }
 
@@ -398,12 +394,6 @@ class Cardline extends Component {
                             {
                                 this.renderCard(initData.data)
                             }
-                            <Pagination
-                                current={initData.pageNum}
-                                pageSize={PAGE_SIZE}
-                                onChange={this.handlePaginationChange}
-                                total={initData.total}
-                            />
                         </div>
                     }
                 </div>
