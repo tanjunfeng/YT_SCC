@@ -209,7 +209,7 @@ class ImportPurchasePriceList extends PureComponent {
         return (
             <div className="purchase-Price-list">
                 <Form layout="inline">
-                    <Row className="purchase-price-search-box">
+                    <Row className="row-bottom">
                         <Col>
                             {/* 上传ID */}
                             <FormItem label="上传ID">
@@ -333,7 +333,7 @@ class ImportPurchasePriceList extends PureComponent {
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row type="flex" justify="end" className="row-top">
+                    <Row type="flex" justify="end" >
                         <Col >
                             <Button size="default" type="primary" onClick={this.handleQuery}>
                                 查询

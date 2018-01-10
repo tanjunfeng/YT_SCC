@@ -113,7 +113,7 @@ class SearchForm extends PureComponent {
                 className="exchange-goods-search-form"
                 onSubmit={this.handleSearch}
             >
-                <Row gutter={40}>
+                <Row className="row-bottom">
                     <Col>
                         <FormItem label="原订单号">
                             {getFieldDecorator('orderId', {
@@ -199,7 +199,7 @@ class SearchForm extends PureComponent {
                             {getFieldDecorator('state', {
                                 initialValue: data.state ? data.state : ''
                             })(
-                                <Select style={{ width: '200px' }} size="default">
+                                <Select size="default">
                                     {
                                         returnGoodsStatus.data.map((item) => (
                                             <Select.Option key={item.key} value={item.key}>
@@ -216,7 +216,7 @@ class SearchForm extends PureComponent {
                             {getFieldDecorator('productState', {
                                 initialValue: data.productState ? data.productState : ''
                             })(
-                                <Select style={{ width: '200px' }} size="default">
+                                <Select size="default">
                                     {
                                         productStateOption.data.map((item) => (
                                             <Select.Option key={item.key} value={item.key}>
@@ -229,7 +229,7 @@ class SearchForm extends PureComponent {
                         </FormItem>
                     </Col>
                 </Row>
-                <Row gutter={40} type="flex" justify="end">
+                <Row type="flex" justify="end">
                     <Col>
                         <Button type="primary" htmlType="submit">搜索</Button>
                         <Button onClick={this.handleReset}>重置</Button>

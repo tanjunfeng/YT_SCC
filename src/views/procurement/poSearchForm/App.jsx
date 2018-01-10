@@ -232,7 +232,7 @@ class PoSearchForm extends PureComponent {
         const { auth } = this.props;
         return (
             <Form layout="inline" className="po-search-form">
-                <Row gutter={40}>
+                <Row className="row-bottom">
                     <Col>
                         <FormItem label="采购单号" >
                             {getFieldDecorator('purchaseNumber', {
@@ -456,7 +456,7 @@ class PoSearchForm extends PureComponent {
                         </FormItem>
                     </Col>
                 </Row>
-                <Row gutter={40} type="flex" justify="end" className="row-top">
+                <Row type="flex" justify="end">
                     <Col>
                         {auth.new &&
                             <Button size="default" onClick={this.handleCreate}>

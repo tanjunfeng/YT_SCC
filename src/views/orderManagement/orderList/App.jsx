@@ -360,7 +360,7 @@ class OrderManagementList extends Component {
         return (
             <div className="order-list">
                 <Form layout="inline" className="order-list-form">
-                    <Row>
+                    <Row className="row-bottom">
                         <Col>
                             <FormItem label="订单编号">
                                 {getFieldDecorator('id')(<Input placeholder="订单编号" />)}
