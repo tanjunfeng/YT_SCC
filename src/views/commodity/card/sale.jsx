@@ -46,7 +46,8 @@ class SaleCard extends Component {
 
         this.state = {
             checked: true,
-            id: this.props.index
+            id: this.props.index,
+            current: 1,
         }
         this.preHarvestPinStatus = '0'
     }
@@ -112,7 +113,6 @@ class SaleCard extends Component {
             distributeWarehouseId
         }
         this.props.fetchUpdateProdPurchase(data);
-        // this.handlePaginationChange();
     }
 
     /**
@@ -165,6 +165,18 @@ class SaleCard extends Component {
 
     renderCard = (datas) => {
         const { prefixCls, minUnit, getProductById } = this.props;
+        const statusPrice = (status) => {
+            switch (status) {
+                case 1:
+                    return '已提交';
+                case 2:
+                    return '已审核';
+                case 3:
+                    return '已拒绝';
+                default:
+                    return '-';
+            }
+        }
         return datas.map((item) => (
             <div
                 key={item.id}
@@ -256,7 +268,7 @@ class SaleCard extends Component {
                         </p>
                         <p>
                             <span>最新售价状态 : </span>
-                            <span><i className={`new-price-state-${item.state}`} />已提交</span>
+                            <span><i className={`new-price-state-${item.auditStatus}`} />{statusPrice(item.auditStatus)}</span>
                         </p>
                     </div>
                     <div
@@ -287,12 +299,6 @@ class SaleCard extends Component {
                                 {
                                     this.renderCard(initalValue.data)
                                 }
-                                <Pagination
-                                    current={initalValue.pageNumber}
-                                    pageSize={PAGE_SIZE}
-                                    onChange={this.handlePaginationChange}
-                                    total={initalValue.total}
-                                />
                             </Form>
                             : <div className={`${prefixCls}-no-data`}>
                                 暂无数据

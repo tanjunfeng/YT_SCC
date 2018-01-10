@@ -1,38 +1,72 @@
-.ant-table-pagination {
-    margin-right: 15px;
-}
-.change-form {
-    padding-left: 30px;
+.store-adj-list {
     .ant-form {
-        margin-bottom: 15px
+        padding: 40px 0 20px;
+        margin: 10px 0;
+        border: 1px solid #c4c5c9;
     }
-    .manage-form .nameShow {
-        width: 300px;
-        resize: none;
+    .ant-form-item-label {
+        width: 110px;
+        .sc-form-item-label {
+            text-align: right;
+        }
     }
-    .ant-form-explain {
-        padding-left: 73px;
+    .ant-form-item-control-wrapper{
+        display: inline-block;
     }
-    &-label {
-        min-width: 66px;
+    .labelTop {
+        .ant-form-item-label{
+            margin-top: -17px;
+        }
     }
-
-    &-tip {
-        margin-left: 10px;
+    .ant-form-item {
+        float: left;
+        display: block;
+        height: 42px;
+        margin-bottom: 24px;
+        @media screen and (min-width: 0px) and (max-width: 1400px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
+                width: 220px;
+            }
+        }
+        @media screen and (min-width: 1401px) and (max-width: 1600px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
+                width: 230px;
+            }
+        }
+        @media screen and (min-width: 1601px) and (max-width: 1920px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
+                width: 200px;
+            }
+        }
+        @media screen and (min-width: 1921px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ant-calendar-picker-input,
+            .ywc-smind
+            {
+                width: 260px;
+            }
+        }
     }
-    .tr {
-        text-align: right;
+    .ant-btn {
+        margin: 6px 10px;
     }
-}
-.ant-spin-container {
-    .ant-table-thead th,td {
-        text-align: center;
+    .ant-upload-list{
+        display: none
     }
-}
-.manage-form .tjf-css-spfl {
-    line-height: 0;
-}
-.tjf-css-modal-spfl .classify-select-label {
-    display: inline-block;
-    width: 60px;
+    .ant-btn {
+        margin-right: 20px;
+    }
 }

@@ -8,14 +8,20 @@ const getPreferentialValueOfPC = (values) => {
     const {
         purchaseConditionRule,
         purchaseConditionRulePercent,
-        purchaseConditionRuleGive
+        purchaseConditionRuleGive,
+        purchaseConditionRuleAmount,
+        purchaseConditionRulePrice
     } = values;
     let preferentialValue = '';
     switch (purchaseConditionRule) {
         case 'PERCENTAGE': // 折扣百分比
             preferentialValue = purchaseConditionRulePercent;
             break;
+        case 'DISCOUNTAMOUNT': // 折扣金额
+            preferentialValue = purchaseConditionRuleAmount;
+            break;
         case 'FIXEDPRICE': // 固定单价
+            preferentialValue = purchaseConditionRulePrice;
             break;
         case 'GIVESAMEPRODUCT': // 赠送相同商品
             preferentialValue = purchaseConditionRuleGive;
@@ -436,6 +442,10 @@ const forbidden = (state, values) => {
             && purchaseCondition === 'PRODUCT'
             && !purchaseConditionProduct.record) {
             message.error('请选择商品');
+            return true;
+        }
+        if (category === 'EACHCONDITIONGIVEONCE' && eachConditionGivenOne === 'ALL') {
+            message.error('请选择奖励类型');
             return true;
         }
     }

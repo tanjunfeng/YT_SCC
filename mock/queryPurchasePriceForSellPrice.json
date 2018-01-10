@@ -3,6 +3,6 @@
     "code":200,
     "message":"请求成功",
     "exception":null,
-    "data":4.2,
+    "data": null,
     "success":true
 }

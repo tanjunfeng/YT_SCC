@@ -182,101 +182,83 @@ class SearchForm extends PureComponent {
         };
 
         return (
-            <div className="search-box white-list">
-                <Form layout="inline">
-                    <div className="search-conditions">
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem label="加盟商编号" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('franchiseeId')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="加盟商名称">
-                                    {getFieldDecorator('franchinessName')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="所属子公司">
-                                    {getFieldDecorator('branchCompany', {
-                                        initialValue: { id: '', name: '' }
-                                    })(<BranchCompany />)}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem label="门店编号" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('storeId')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="门店名称" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('storeName')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 状态 */}
-                                <FormItem label="状态">
-                                    {getFieldDecorator('scPurchaseFlag', {
-                                        initialValue: 'all'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
-                                        </Select>)}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40} type="flex" justify="end">
-                            <Col span={12} className="export-left">
-                                <FormItem className="upload">
-                                    <Upload {...props}>
-                                        <Button disabled={this.state.isBtnDisabled}>
-                                            <Icon type="upload" /> {uploading ? '上传中' : '点击上传'}
-                                        </Button>
-                                    </Upload>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
-                                </FormItem>
-                                <FormItem>
-                                    <a onClick={this.handleDownload}>下载导入模板</a>
-                                </FormItem>
-                            </Col>
-                            <Col span={12} className="search-right">
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleSearch}>
-                                        查询
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleReset}>
-                                        重置
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button
-                                        type="primary"
-                                        size="default"
-                                        onClick={this.handleGoOnline}
-                                        disabled={this.props.value.selectListlength}
-                                    >
-                                        上线
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button
-                                        type="primary"
-                                        size="default"
-                                        onClick={this.handleOffline}
-                                        disabled={this.props.value.selectListlength}
-                                    >
-                                        下线
-                                    </Button>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                    </div>
+            <div className="white-list-search-box">
+                <Form>
+                    <Row gutter={40}>
+                        <Col>
+                            <FormItem label="加盟商编号" style={{ paddingRight: 10 }}>
+                                {getFieldDecorator('franchiseeId')(<Input size="default" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="加盟商名称">
+                                {getFieldDecorator('franchinessName')(<Input size="default" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="所属子公司" className="labelTop">
+                                {getFieldDecorator('branchCompany', {
+                                    initialValue: { id: '', name: '' }
+                                })(<BranchCompany />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="门店编号" style={{ paddingRight: 10 }}>
+                                {getFieldDecorator('storeId')(<Input size="default" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="门店名称" style={{ paddingRight: 10 }}>
+                                {getFieldDecorator('storeName')(<Input size="default" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 状态 */}
+                            <FormItem label="状态">
+                                {getFieldDecorator('scPurchaseFlag', {
+                                    initialValue: 'all'
+                                })(
+                                    <Select>
+                                        {this.getStatus()}
+                                    </Select>)}
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={40} type="flex" justify="end">
+                        <Col span={12} className="export-left">
+                            <Upload {...props}>
+                                <Button disabled={this.state.isBtnDisabled}>
+                                    <Icon type="upload" /> {uploading ? '上传中' : '点击上传'}
+                                </Button>
+                            </Upload>
+                            <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
+                            <a onClick={this.handleDownload}>下载导入模板</a>
+                        </Col>
+                        <Col span={12} className="search-right">
+                            <Button type="primary" size="default" onClick={this.handleSearch}>
+                                查询
+                            </Button>
+                            <Button size="default" onClick={this.handleReset}>
+                                重置
+                            </Button>
+                            <Button
+                                type="primary"
+                                size="default"
+                                onClick={this.handleGoOnline}
+                                disabled={this.props.value.selectListlength}
+                            >
+                                上线
+                            </Button>
+                            <Button
+                                type="primary"
+                                size="default"
+                                onClick={this.handleOffline}
+                                disabled={this.props.value.selectListlength}
+                            >
+                                下线
+                            </Button>
+                        </Col>
+                    </Row>
                 </Form>
             </div >
         );

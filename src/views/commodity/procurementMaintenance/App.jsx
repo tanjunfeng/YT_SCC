@@ -30,7 +30,6 @@ import {
 } from '../../../actions/producthome';
 import getProdPurchaseById from '../../../actions/fetch/fetchGetProdPurchaseById';
 
-
 @connect(
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
@@ -192,6 +191,7 @@ class ProcurementMaintenance extends PureComponent {
                         initData={this.props.purchaseCardData}
                         proId={match.params.id}
                         onCliked={this.handleChange}
+                        getCardData={this.handleGetCardData}
                     />
                 </div>
                 {

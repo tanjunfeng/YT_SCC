@@ -12,33 +12,38 @@
 }
 
 .orderDetail-message{
-    .abnormalResonse{
-        margin-top: -25px;
+    .resonse-top {
+        margin-top: -30px;
+    }
+    .abnormalResonse-color,.abnormalResonse{
         color: red;
     }
-    .abnormalResonse-color{
-        color: red;
-    }
-}
-.arrowTip {
-    border-right: 30px solid transparent;
-    position: relative;
-    top: -50px;
-    left: 76px;
-    width: 30px;
-    height: 30px;
-    span{
-        position: absolute;
-        top: -30px;
-        left: 2px;
-        color: #fff;
-        font-size: 12px;
-    }
-}
 
-.giftColor {
-    border-top: 30px solid #fd9f2e;
-}
-.packageColor {
-    border-top: 30px solid #38c34c;
+    .arrowTip {
+        border-right: 30px solid transparent;
+        position: relative;
+        top: -50px;
+        left: 52px;
+        width: 30px;
+        height: 30px;
+        span{
+            position: absolute;
+            top: -30px;
+            left: 2px;
+            color: #fff;
+            font-size: 12px;
+        }
+    }
+
+    .giftColor {
+        border-top: 30px solid #fd9f2e;
+    }
+    .packageColor {
+        border-top: 30px solid #38c34c;
+    }
+    .ant-table-row {
+        td {
+            text-align: center;
+        }
+    }
 }

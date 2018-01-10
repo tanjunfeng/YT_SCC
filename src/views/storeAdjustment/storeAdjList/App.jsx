@@ -27,7 +27,6 @@ import { DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const orderML = 'order-management';
 const { RangePicker } = DatePicker;
 
 const columns = [{
@@ -285,236 +284,193 @@ class StoreAdjList extends Component {
         const { data } = storeAdjustData;
         columns[columns.length - 1].render = this.renderOperation;
         return (
-            <div className={orderML}>
-                <div className="manage-form">
-                    <Form layout="inline">
-                        <div className="gutter-example">
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 单据编号 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">单据编号</span>
-                                            {getFieldDecorator('id', {
-                                                rules: [{ max: 10, message: '不能输入超过10个字' }]
-                                            })(
-                                                <Input
-                                                    className="input"
-                                                    placeholder="单据编号"
-                                                />
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 状态 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">状态</span>
-                                            {getFieldDecorator('Status', {
-                                                initialValue: StoreStatus.defaultValue
-                                            })(
-                                                <Select
-                                                    size="default"
+            <div className="store-adj-list">
+                <Form>
+                    <Row>
+                        <Col>
+                            {/* 单据编号 */}
+                            <FormItem label="单据编号">
+                                {getFieldDecorator('id', {
+                                    rules: [{ max: 10, message: '不能输入超过10个字' }]
+                                })(
+                                    <Input
+                                        placeholder="单据编号"
+                                    />
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 状态 */}
+                            <FormItem label="状态">
+                                {getFieldDecorator('Status', {
+                                    initialValue: StoreStatus.defaultValue
+                                })(
+                                    <Select
+                                        size="default"
+                                    >
+                                        {
+                                            StoreStatus.data.map((item) =>
+                                                (<Option
+                                                    key={item.key}
+                                                    value={item.key}
                                                 >
-                                                    {
-                                                        StoreStatus.data.map((item) =>
-                                                            (<Option
-                                                                key={item.key}
-                                                                value={item.key}
-                                                            >
-                                                                {item.value}
-                                                            </Option>)
-                                                        )
-                                                    }
-                                                </Select>
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 调整日期 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">调整日期</span>
-                                            <DatePicker
-                                                value={this.state.setTime}
-                                                placeholder={'调整日期'}
-                                                onChange={this.onEnterTime}
-                                            />
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 调整类型 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">调整类型</span>
-                                            {getFieldDecorator('Type', {
-                                                initialValue: adjustmentType.defaultValue
-                                            })(
-                                                <Select
-                                                    size="default"
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 调整日期 */}
+                            <FormItem label="调整日期">
+                                <DatePicker
+                                    value={this.state.setTime}
+                                    placeholder={'调整日期'}
+                                    onChange={this.onEnterTime}
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 调整类型 */}
+                            <FormItem label="调整类型">
+                                {getFieldDecorator('Type', {
+                                    initialValue: adjustmentType.defaultValue
+                                })(
+                                    <Select
+                                        size="default"
+                                    >
+                                        {
+                                            adjustmentType.data.map((item) =>
+                                                (<Option
+                                                    key={item.key}
+                                                    value={item.key}
                                                 >
-                                                    {
-                                                        adjustmentType.data.map((item) =>
-                                                            (<Option
-                                                                key={item.key}
-                                                                value={item.key}
-                                                            >
-                                                                {item.value}
-                                                            </Option>)
-                                                        )
-                                                    }
-                                                </Select>
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 调整仓库 */}
-                                    <FormItem>
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 调整仓库 */}
+                            <FormItem label="调整库存" className="labelTop">
+                                <SearchMind
+                                    rowKey="franchiseeId"
+                                    compKey="search-mind-joining"
+                                    ref={ref => { this.joiningSearchMind = ref }}
+                                    fetch={(params) =>
+                                        this.props.pubFetchValueList({
+                                            param: params.value,
+                                            pageNum: params.pagination.current || 1,
+                                            pageSize: params.pagination.pageSize
+                                        }, 'getWarehouseLogic')
+                                    }
+                                    onChoosed={this.handleJoiningChoose}
+                                    onClear={this.handleJoiningClear}
+                                    renderChoosedInputRaw={(row) => (
                                         <div>
-                                            <span className="sc-form-item-label">调整仓库</span>
-                                            <SearchMind
-                                                rowKey="franchiseeId"
-                                                compKey="search-mind-joining"
-                                                ref={ref => { this.joiningSearchMind = ref }}
-                                                fetch={(params) =>
-                                                    this.props.pubFetchValueList({
-                                                        param: params.value,
-                                                        pageNum: params.pagination.current || 1,
-                                                        pageSize: params.pagination.pageSize
-                                                    }, 'getWarehouseLogic')
-                                                }
-                                                onChoosed={this.handleJoiningChoose}
-                                                onClear={this.handleJoiningClear}
-                                                renderChoosedInputRaw={(row) => (
-                                                    <div>
-                                                        {row.warehouseCode} - {row.warehouseName}
-                                                    </div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '仓库编码',
-                                                        dataIndex: 'warehouseCode',
-                                                        width: 150,
-                                                    }, {
-                                                        title: '仓库名称',
-                                                        dataIndex: 'warehouseName',
-                                                        width: 200,
-                                                    }
-                                                ]}
-                                            />
+                                            {row.warehouseCode} - {row.warehouseName}
                                         </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 商品 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">商品</span>
-                                            <SearchMind
-                                                compKey="search-mind-sub-company"
-                                                ref={ref => { this.subCompanySearchMind = ref }}
-                                                fetch={(params) =>
-                                                    this.props.pubFetchValueList({
-                                                        teamText: params.value,
-                                                        pageNum: params.pagination.current || 1,
-                                                        pageSize: params.pagination.pageSize
-                                                    }, 'queryProductForSelect')
-                                                }
-                                                onChoosed={this.handleSubCompanyChoose}
-                                                onClear={this.handleSubCompanyClear}
-                                                renderChoosedInputRaw={(row) => (
-                                                    <div>{row.saleName}</div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '商品id',
-                                                        dataIndex: 'productId',
-                                                        width: 150,
-                                                    }, {
-                                                        title: '商品名字',
-                                                        dataIndex: 'saleName',
-                                                        width: 200,
-                                                    }
-                                                ]}
-                                            />
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 外部单据号 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">外部单据号</span>
-                                            {getFieldDecorator('externalBillNo')(
-                                                <Input
-                                                    className="input"
-                                                    placeholder="外部单据号"
-                                                />
-                                            )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={16}>
-                                    {/* 调整日期 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">调整日期</span>
-                                            <RangePicker
-                                                style={{ width: '240px' }}
-                                                className="manage-form-enterTime"
-                                                value={this.state.rengeTime}
-                                                format={DATE_FORMAT}
-                                                placeholder={['开始时间', '结束时间']}
-                                                onChange={this.onEnterTimeChange}
-                                            />
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16} type="flex" justify="end">
-                                <Col className="tr" span={8}>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            type="primary"
-                                            onClick={this.handleOrderSearch}
-                                        >查询</Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            onClick={this.handleOrderReset}
-                                        >重置</Button>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Form>
-                </div>
-                <div className="area-list">
-                    <Table
-                        dataSource={data}
-                        columns={columns}
-                        rowKey="id"
-                        pagination={{
-                            current: storeAdjustData.pageNum,
-                            total: storeAdjustData.total,
-                            pageSize: storeAdjustData.pageSize,
-                            showQuickJumper: true,
-                            onChange: this.handlePaginationChange
-                        }}
-                    />
-                </div>
+                                    )}
+                                    columns={[
+                                        {
+                                            title: '仓库编码',
+                                            dataIndex: 'warehouseCode',
+                                            width: 150,
+                                        }, {
+                                            title: '仓库名称',
+                                            dataIndex: 'warehouseName',
+                                            width: 200,
+                                        }
+                                    ]}
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 商品 */}
+                            <FormItem label="商品" className="labelTop">
+                                <SearchMind
+                                    compKey="search-mind-sub-company"
+                                    ref={ref => { this.subCompanySearchMind = ref }}
+                                    fetch={(params) =>
+                                        this.props.pubFetchValueList({
+                                            teamText: params.value,
+                                            pageNum: params.pagination.current || 1,
+                                            pageSize: params.pagination.pageSize
+                                        }, 'queryProductForSelect')
+                                    }
+                                    onChoosed={this.handleSubCompanyChoose}
+                                    onClear={this.handleSubCompanyClear}
+                                    renderChoosedInputRaw={(row) => (
+                                        <div>{row.productName}</div>
+                                    )}
+                                    columns={[
+                                        {
+                                            title: '商品id',
+                                            dataIndex: 'productId',
+                                            width: 150,
+                                        }, {
+                                            title: '商品名字',
+                                            dataIndex: 'productName',
+                                            width: 200,
+                                        }
+                                    ]}
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 外部单据号 */}
+                            <FormItem label="外部单据号">
+                                {getFieldDecorator('externalBillNo')(
+                                    <Input
+                                        placeholder="外部单据号"
+                                    />
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 调整日期 */}
+                            <FormItem label="调整日期">
+                                <RangePicker
+                                    style={{ width: '240px' }}
+                                    value={this.state.rengeTime}
+                                    format={DATE_FORMAT}
+                                    placeholder={['开始时间', '结束时间']}
+                                    onChange={this.onEnterTimeChange}
+                                />
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={16} type="flex" justify="end">
+                        <Col>
+                            <Button
+                                size="default"
+                                type="primary"
+                                onClick={this.handleOrderSearch}
+                            >查询</Button>
+                            <Button
+                                size="default"
+                                onClick={this.handleOrderReset}
+                            >重置</Button>
+                        </Col>
+                    </Row>
+                </Form>
+                <Table
+                    dataSource={data}
+                    columns={columns}
+                    rowKey="id"
+                    pagination={{
+                        current: storeAdjustData.pageNum,
+                        total: storeAdjustData.total,
+                        pageSize: storeAdjustData.pageSize,
+                        showQuickJumper: true,
+                        onChange: this.handlePaginationChange
+                    }}
+                />
             </div>
         );
     }

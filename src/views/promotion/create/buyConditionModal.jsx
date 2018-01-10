@@ -11,7 +11,7 @@ import {
 } from 'antd';
 
 import { Category } from '../../../container/cascader';
-import { AddingGoodsByTerm } from '../../../container/search';
+import { Commodity } from '../../../container/search';
 import { buyType, getConditionType } from './domHelper';
 import { isCategoryExist } from './dataHelper';
 import Util from '../../../util/util';
@@ -34,7 +34,6 @@ class BuyConditionModal extends PureComponent {
     getBuyCondition = (formData, values) => {
         const { buyCondition, buyConditionProduct } = values;
         const { category } = this.state;
-        console.log(category);
         switch (buyCondition) {
             case 'ALL':
                 break;
@@ -72,13 +71,6 @@ class BuyConditionModal extends PureComponent {
         this.props.form.validateFields((err, values) => {
             const { buyCondition, buyConditionType, buyConditionProduct } = values;
             const { category } = this.state;
-            // if (err) {
-            //     if (buyCondition === 'CATEGORY' && !isCategoryExist(category)) {
-            //         message.error('请选择品类');
-            //         return;
-            //     }
-            //     return;
-            // }
             if (buyCondition === 'CATEGORY' && !isCategoryExist(category)) {
                 message.error('请选择品类');
                 return;
@@ -153,7 +145,7 @@ class BuyConditionModal extends PureComponent {
                                         productCode: '',
                                         productName: ''
                                     }
-                                })(<AddingGoodsByTerm />)}
+                                })(<Commodity api="queryProductByTerm" />)}
                             </FormItem> : null}
                     </Row>
                     <Row>

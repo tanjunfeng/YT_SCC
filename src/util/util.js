@@ -313,7 +313,7 @@ class Utils {
      */
     static getListWidthObj = (dom) => {
         const { childNodes } = dom;
-        const widthArr = Array.prototype.map.call(childNodes,((ele) => ele.offsetWidth));
+        const widthArr = Array.prototype.map.call(childNodes, (ele => ele.offsetWidth));
         return {
             widthArr,
         }
@@ -325,6 +325,16 @@ class Utils {
     static limitTwoDecimalPlaces = (rule, value, callback) => {
         if (value && !/^\d+(\.\d{1,2})?$/.test(value)) {
             callback('仅允许两位小数');
+        }
+        callback();
+    }
+
+    /**
+     * 限制输入整数
+     */
+    static limitPositive = (rule, value, callback) => {
+        if ((value && value < 0) || +(value) === 0) {
+            callback('仅允许正数');
         }
         callback();
     }

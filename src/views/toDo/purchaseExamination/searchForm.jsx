@@ -52,7 +52,7 @@ class SearchForm extends PureComponent {
             status,
             spNo: this.supplierEncoded,
             spAdrNo: this.supplierAdressId,
-            productNo: product.productCode
+            productNo: product.record ? product.record.productCode : ''
         });
     }
 
@@ -131,86 +131,78 @@ class SearchForm extends PureComponent {
         return (
             <Form layout="inline" className="purchase">
                 <Row gutter={40}>
-                    <Col span={8}>
-                        <FormItem label="状态">
-                            {getFieldDecorator('status', { initialValue: purchaseStatus.defaultValue })(
-                                <Select size="default" onChange={this.statusChange}>
-                                    {this.selectMap()}
-                                </Select>
+                    <FormItem label="状态">
+                        {getFieldDecorator('status', { initialValue: purchaseStatus.defaultValue })(
+                            <Select size="default" onChange={this.statusChange}>
+                                {this.selectMap()}
+                            </Select>
+                        )}
+                    </FormItem>
+                    <FormItem label="供应商">
+                        <SearchMind
+                            compKey="comSupplier"
+                            ref={ref => { this.supplier = ref }}
+                            fetch={(param) => this.props.pubFetchValueList({
+                                condition: param.value,
+                                pageNum: param.pagination.current || 1,
+                                pageSize: param.pagination.pageSize
+                            }, 'supplierSearchBox')}
+                            onChoosed={this.handleSupplyChoose}
+                            onClear={this.handleSupplyClear}
+                            renderChoosedInputRaw={(row) => (
+                                <div>{row.spNo}-{row.companyName}</div>
                             )}
-                        </FormItem>
-                    </Col>
-                    <Col span={8}>
-                        <FormItem label="供应商">
-                            <SearchMind
-                                compKey="comSupplier"
-                                ref={ref => { this.supplier = ref }}
-                                fetch={(param) => this.props.pubFetchValueList({
-                                    condition: param.value,
-                                    pageNum: param.pagination.current || 1,
-                                    pageSize: param.pagination.pageSize
-                                }, 'supplierSearchBox')}
-                                onChoosed={this.handleSupplyChoose}
-                                onClear={this.handleSupplyClear}
-                                renderChoosedInputRaw={(row) => (
-                                    <div>{row.spNo}-{row.companyName}</div>
-                                )}
-                                rowKey="spId"
-                                pageSize={6}
-                                columns={[
-                                    {
-                                        title: '供应商编号',
-                                        dataIndex: 'spNo',
-                                        width: 80
-                                    }, {
-                                        title: '供应商名称',
-                                        dataIndex: 'companyName'
-                                    }
-                                ]}
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col span={8}>
-                        <FormItem label="供应商地点">
-                            <SearchMind
-                                compKey="comSupplierLoc"
-                                ref={ref => { this.supplierLoc = ref }}
-                                fetch={(param) => this.props.pubFetchValueList({
-                                    orgId: this.props.employeeCompanyId,
-                                    pId: this.state.spId,
-                                    condition: param.value,
-                                    pageNum: param.pagination.current || 1,
-                                    pageSize: param.pagination.pageSize
-                                }, 'supplierAdrSearchBox')}
-                                onChoosed={this.handleSupplierAdressChoose}
-                                onClear={this.handleSupplierAddressClear}
-                                renderChoosedInputRaw={(row) => (
-                                    <div>{row.providerNo} - {row.providerName}</div>
-                                )}
-                                disabled={this.state.isSupplyAdrDisabled}
-                                rowKey="providerNo"
-                                pageSize={5}
-                                columns={[
-                                    {
-                                        title: '供应商地点编码',
-                                        dataIndex: 'providerNo',
-                                        width: 68
-                                    }, {
-                                        title: '供应商地点名称',
-                                        dataIndex: 'providerName'
-                                    }
-                                ]}
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col span={8}>
-                        <FormItem label="商品">
-                            {getFieldDecorator('product', {
-                                initialValue: { productId: '', saleName: '' }
-                            })(<Commodity />)
-                            }
-                        </FormItem>
-                    </Col>
+                            rowKey="spId"
+                            pageSize={6}
+                            columns={[
+                                {
+                                    title: '供应商编号',
+                                    dataIndex: 'spNo',
+                                    width: 80
+                                }, {
+                                    title: '供应商名称',
+                                    dataIndex: 'companyName'
+                                }
+                            ]}
+                        />
+                    </FormItem>
+                    <FormItem label="供应商地点">
+                        <SearchMind
+                            compKey="comSupplierLoc"
+                            ref={ref => { this.supplierLoc = ref }}
+                            fetch={(param) => this.props.pubFetchValueList({
+                                orgId: this.props.employeeCompanyId,
+                                pId: this.state.spId,
+                                condition: param.value,
+                                pageNum: param.pagination.current || 1,
+                                pageSize: param.pagination.pageSize
+                            }, 'supplierAdrSearchBox')}
+                            onChoosed={this.handleSupplierAdressChoose}
+                            onClear={this.handleSupplierAddressClear}
+                            renderChoosedInputRaw={(row) => (
+                                <div>{row.providerNo} - {row.providerName}</div>
+                            )}
+                            disabled={this.state.isSupplyAdrDisabled}
+                            rowKey="providerNo"
+                            pageSize={5}
+                            columns={[
+                                {
+                                    title: '供应商地点编码',
+                                    dataIndex: 'providerNo',
+                                    width: 68
+                                }, {
+                                    title: '供应商地点名称',
+                                    dataIndex: 'providerName'
+                                }
+                            ]}
+                        />
+                    </FormItem>
+                    <FormItem label="商品">
+                        {getFieldDecorator('product', {
+                            initialValue: { productId: '', productName: '' }
+                        })(<Commodity  api="queryProductForSelect" />)
+                        }
+                    </FormItem>
                 </Row>
                 <Row gutter={40} type="flex" justify="end">
                     <Col>

@@ -16,6 +16,7 @@ import {
 } from '../../../../service';
 import FileCut from '../../fileCut';
 import LinkType from '../../common/linkType';
+import { testURl } from '../../constant';
 
 const FormItem = Form.Item;
 
@@ -392,6 +393,10 @@ function Common(WrappedComponent) {
                                                         && !value.linkId
                                                         && !value.linkKeyword) {
                                                         callback('请完成表单')
+                                                    }
+                                                    const objExp = new RegExp(testURl);
+                                                    if (value.selected === '5' && !objExp.test(value.linkAddress)) {
+                                                        callback('请输入完整链接地址')
                                                     }
                                                     callback()
                                                 }

@@ -1,19 +1,22 @@
 .sell-modal {
     min-width: 950px;
-    .changeBefore{
+    .max-number-input {
+        display: inline;
+    }
+    .changeBefore {
         width: 49%;
         display: inline-block;
     }
-    .last-freightConditions{
+    .last-freightConditions {
         min-height: 235px;
     }
-    .changeAfter{
+    .changeAfter {
         width: 49%;
         margin-left: 1%;
         display: inline-block;
     }
     .ant-modal-content {
-        width: 1020px;
+        width: 1100px;
     }
     .ant-modal-body {
         min-height: 700px;
@@ -21,6 +24,7 @@
     }
     form .ant-input-number {
         margin-right: 0;
+        top: 4px;
     }
     &-item {
         border: 1px solid #eee;
@@ -45,22 +49,23 @@
         display: inline-block;
         height: 30px;
     }
-    &.ant-modal {
-        .ant-form-inline .ant-form-explain {
-            left: 30px;
-        }
-    }
-    .sell-modal-body-width{
-        .sell-modal-item{
+    .sell-modal-body-width {
+        .sell-modal-item {
             min-height: 260px;
         }
     }
     .ant-form-explain {
         width: 160px;
+        left: 0;
     }
     .sell-modal-item {
         width: 461px;
         overflow-y: auto;
+    }
+    .ant-input-number-input{
+        position: absolute;
+        top: 0;
+        left: 0;
     }
     .sell-modal-item:last-child {
         width: 100%;
@@ -73,7 +78,7 @@
     .sell-modal-body-width {
         width: 50%;
     }
-    .sell-modal-body-width:last-child{
+    .sell-modal-body-width:last-child {
         float: right;
     }
     .sell-modal-body-wrap::after {
@@ -85,24 +90,27 @@
     }
     .edit-state-list {
         display: flex;
-        div{
+        div {
             width: 30%;
         }
-        div:first-child{
+        div:first-child {
             margin-left: 10%;
         }
     }
     .sell-modal-border {
         border: 1px solid red;
         padding: 5px 10px;
-        .editable-cell .ant-input-number {
-            width: 60px;
+        .editable-cell {
+            .ant-input-number {
+                width: 60px;
+            }
         }
     }
-    .read-only-footer{
+    .read-only-footer {
         height: 32px;
         line-height: 32px;
-        span{
+        display: inline-block;
+        span {
             padding: 0 5px;
         }
     }
@@ -131,7 +139,7 @@
             display: inline-block;
             vertical-align: middle;
         }
-        .editable-row-operations-true{
+        .editable-row-operations-true {
             display: none;
         }
     }
@@ -168,11 +176,6 @@
             display: inline-block;
             height: 30px;
         }
-        &.ant-modal {
-            .ant-form-inline .ant-form-explain {
-                left: 30px;
-            }
-        }
         .ant-form-explain {
             width: 160px;
         }
@@ -191,13 +194,24 @@
             overflow-y: auto;
         }
     }
-    .ant-message-warning {
+    .ant-message-warning, .diff-price-table span.red {
         color: red;
     }
 }
-.sell-prigce-edit-footer{
-    .ant-row{
+
+.createCls.ant-modal .ant-form-inline .ant-form-explain {
+    left: 0;
+}
+
+.sell-prigce-edit-footer {
+    .ant-row {
         display: inline-flex;
         margin-bottom: 0;
     }
+    .sell-modal-edit-company{
+        width: 250px;
+    }
+}
+.sell-modal-redonly-company{
+    display: block;
 }

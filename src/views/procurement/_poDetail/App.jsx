@@ -1972,7 +1972,7 @@ class PoDetail extends PureComponent {
                                         addonBefore="添加商品"
                                         onChoosed={this.handleChoosedMaterialMap}
                                         renderChoosedInputRaw={(data) => (
-                                            <div>{data.productCode} - {data.saleName}</div>
+                                            <div>{data.productCode} - {data.productName                                            }</div>
                                         )}
                                         pageSize={6}
                                         columns={[
@@ -1982,7 +1982,7 @@ class PoDetail extends PureComponent {
                                                 width: 98
                                             }, {
                                                 title: '商品名称',
-                                                dataIndex: 'saleName',
+                                                dataIndex: 'productName',
                                                 width: 140
                                             }
                                         ]}

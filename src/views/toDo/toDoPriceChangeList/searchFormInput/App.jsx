@@ -48,7 +48,7 @@ class SearchFormInput extends PureComponent {
             branchCompanyId: branchCompany.id,
             spId: supplier.spId,
             spAdrId: supplierAddr.spAdrid,
-            productId: commodity.productId
+            productId: commodity.record ? commodity.record.productId : ''
         };
         this.queryParams = Utils.removeInvalid(queryParams);
     }
@@ -135,7 +135,7 @@ class SearchFormInput extends PureComponent {
                                     providerNo: '',
                                     providerName: '',
                                     spAdrid: ''
-                                }})(<SupplierAdderss disabled={this.props.form.getFieldValue('supplier').spId === ''} />)}
+                                }})(<SupplierAdderss pId={this.props.form.getFieldValue('supplier').spId} disabled={this.props.form.getFieldValue('supplier').spId === ''} />)}
                             </FormItem>
                         </Col>
                     </Row>
@@ -151,7 +151,7 @@ class SearchFormInput extends PureComponent {
                         <Col span={8}>
                             <FormItem {...formItemLayout} label="商品" className="sc-form-item">
                                 {getFieldDecorator('commodity', { initialValue: {
-                                    productId: '', saleName: '' }})(<Commodity />)
+                                    productId: '', productName: '' }})(<Commodity api="queryProductForSelect" />)
                                 }
                             </FormItem>
                         </Col>

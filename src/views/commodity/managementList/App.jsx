@@ -516,326 +516,253 @@ class ManagementList extends PureComponent {
             },
         }
         return (
-            <div className={`${commodityML}`}>
-                <div className="manage-form">
-                    <Form layout="inline">
-                        <div className="gutter-example">
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 商品名称 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">商品名称</span>
-                                            {getFieldDecorator('productName')(
-                                                <Input
-                                                    className="input"
-                                                    style={{ paddingLeft: '10px', paddingRight: '10px' }}
-                                                    placeholder="商品名称"
-                                                />
-                                            )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 商品编号 */}
-                                    <FormItem className="">
-                                        <div>
-                                            <span className="sc-form-item-label">商品编号</span>
-                                            {getFieldDecorator('productCode')(
-                                                <Input
-                                                    className="input"
-                                                    style={{ paddingLeft: '10px', paddingRight: '10px' }}
-                                                    placeholder="商品编号"
-                                                />
-                                            )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row commodityType-wrap" span={8}>
-                                    {/* 商品分类 */}
-                                    <FormItem>
-                                        <div className="commodityType-title">商品分类</div>
-                                        <LevelTree className="levelTree-wrap" />
-                                        <ClassifiedSelect onChange={this.handleSelectChange} />
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 商品条码 */}
-                                    <FormItem className="">
-                                        <div>
-                                            <span className="sc-form-item-label">商品条码</span>
-                                            {getFieldDecorator('internationalCode')(
-                                                <Input
-                                                    className="input"
-                                                    style={{ paddingLeft: '10px', paddingRight: '10px' }}
-                                                    placeholder="商品条码"
-                                                />
-                                            )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 商品状态 */}
-                                    <FormItem className="">
-                                        <div>
-                                            <span className="sc-form-item-label">商品状态</span>
-                                            {getFieldDecorator('supplyChainStatus', {
-                                                initialValue: commodityStatusOptions.defaultValue
-                                            })(
-                                                <Select size="default" >
-                                                    {commodityStatusOptions.data.map((item) => (
-                                                        <Option
-                                                            key={item.key}
-                                                            value={item.key}
-                                                        >
-                                                            {item.value}
-                                                        </Option>
-                                                    ))}
-                                                </Select>
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 品牌 */}
-                                    <FormItem className="">
-                                        <div className="value-list-input">
-                                            <span className="sc-form-item-label">品牌</span>
-                                            <SearchMind
-                                                compKey="search-mind-brand"
-                                                ref={ref => { this.brandSearchMind = ref }}
-                                                fetch={(param) =>
-                                                    this.props.pubFetchValueList({
-                                                        name: param.value,
-                                                        pageSize: param.pagination.pageSize,
-                                                        pageNum: param.pagination.current || 1
-                                                    }, 'queryBrandsByPages')
-                                                }
-                                                onChoosed={this.handleBrandChoose}
-                                                onClear={this.handleBrandClear}
-                                                renderChoosedInputRaw={(brandData) => (
-                                                    <div>{brandData.id}-{brandData.name}</div>
-                                                )}
-                                                pageSize={5}
-                                                columns={[
-                                                    {
-                                                        title: 'id',
-                                                        dataIndex: 'id',
-                                                        width: 98
-                                                    }, {
-                                                        title: '名称',
-                                                        dataIndex: 'name',
-                                                        width: 140
-                                                    }
-                                                ]}
-                                            />
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 供货供应商 */}
-                                    <FormItem className="">
-                                        <div>
-                                            <span className="sc-form-item-label">供货供应商</span>
-                                            <span className="value-list-input">
-                                                <SearchMind
-                                                    style={{ zIndex: 101 }}
-                                                    compKey="search-mind-supply"
-                                                    ref={ref => { this.supplySearchMind = ref }}
-                                                    fetch={(params) =>
-                                                        this.props.pubFetchValueList({
-                                                            condition: params.value,
-                                                            pageSize: params.pagination.pageSize,
-                                                            pageNum: params.pagination.current || 1
-                                                        }, 'supplierAdrSearchBox')
-                                                    }
-                                                    onChoosed={this.handleSupplyChoose}
-                                                    onClear={this.handleSupplyClear}
-                                                    renderChoosedInputRaw={(datas) => (
-                                                        <div>{datas.providerNo} -
+            <div className="commodity-management">
+                <Form layout="inline">
+                    <Row gutter={40}>
+                        <Col span={8}>
+                            <FormItem label="商品名称">
+                                {getFieldDecorator('productName')(
+                                    <Input
+                                        className="input"
+                                        style={{ paddingLeft: '10px', paddingRight: '10px' }}
+                                        placeholder="商品名称"
+                                    />
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <FormItem label="商品编号">
+                                {getFieldDecorator('productCode')(
+                                    <Input
+                                        className="input"
+                                        style={{ paddingLeft: '10px', paddingRight: '10px' }}
+                                        placeholder="商品编号"
+                                    />
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <FormItem label="商品分类">
+                                <LevelTree className="levelTree-wrap" />
+                                <ClassifiedSelect onChange={this.handleSelectChange} />
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={40}>
+                        <Col span={8}>
+                            <FormItem label="商品条码">
+                                {getFieldDecorator('internationalCode')(
+                                    <Input
+                                        className="input"
+                                        style={{ paddingLeft: '10px', paddingRight: '10px' }}
+                                        placeholder="商品条码"
+                                    />
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            {/* 商品状态 */}
+                            <FormItem label="商品状态">
+                                {getFieldDecorator('supplyChainStatus', {
+                                    initialValue: commodityStatusOptions.defaultValue
+                                })(<Select size="default" >
+                                    {commodityStatusOptions.data.map((item) => (
+                                        <Option
+                                            key={item.key}
+                                            value={item.key}
+                                        >
+                                            {item.value}
+                                        </Option>
+                                    ))}
+                                </Select>)}
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <FormItem label="品牌">
+                                <SearchMind
+                                    compKey="search-mind-brand"
+                                    ref={ref => { this.brandSearchMind = ref }}
+                                    fetch={(param) =>
+                                        this.props.pubFetchValueList({
+                                            name: param.value,
+                                            pageSize: param.pagination.pageSize,
+                                            pageNum: param.pagination.current || 1
+                                        }, 'queryBrandsByPages')
+                                    }
+                                    onChoosed={this.handleBrandChoose}
+                                    onClear={this.handleBrandClear}
+                                    renderChoosedInputRaw={(brandData) => (
+                                        <div>{brandData.id}-{brandData.name}</div>
+                                    )}
+                                    pageSize={5}
+                                    columns={[
+                                        {
+                                            title: 'id',
+                                            dataIndex: 'id',
+                                            width: 98
+                                        }, {
+                                            title: '名称',
+                                            dataIndex: 'name',
+                                            width: 140
+                                        }
+                                    ]}
+                                />
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={40}>
+                        <Col span={8}>
+                            {/* 供货供应商 */}
+                            <FormItem label="供货供应商">
+                                <SearchMind
+                                    style={{ zIndex: 101 }}
+                                    compKey="search-mind-supply"
+                                    ref={ref => { this.supplySearchMind = ref }}
+                                    fetch={(params) =>
+                                        this.props.pubFetchValueList({
+                                            condition: params.value,
+                                            pageSize: params.pagination.pageSize,
+                                            pageNum: params.pagination.current || 1
+                                        }, 'supplierAdrSearchBox')
+                                    }
+                                    onChoosed={this.handleSupplyChoose}
+                                    onClear={this.handleSupplyClear}
+                                    renderChoosedInputRaw={(datas) => (
+                                        <div>{datas.providerNo} -
                                                             {datas.providerName}</div>
-                                                    )}
-                                                    rowKey="spAdrid"
-                                                    pageSize={5}
-                                                    columns={[
-                                                        {
-                                                            title: '地点编码',
-                                                            dataIndex: 'providerNo',
-                                                            width: 98,
-                                                        }, {
-                                                            title: '地点名称',
-                                                            dataIndex: 'providerName',
-                                                            width: 140
-                                                        }
-                                                    ]}
-                                                />
-                                            </span>
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 供货状态 */}
-                                    <FormItem className="">
-                                        <div>
-                                            <span className="sc-form-item-label">供货状态</span>
-                                            {getFieldDecorator('supplierInfo', {
-                                                initialValue: deliveryStatusOptions.defaultValue
-                                            })(
-                                                <Select size="default">
-                                                    {deliveryStatusOptions.data.map((item) => (
-                                                        <Option
-                                                            key={item.key}
-                                                            value={item.key}
-                                                        >
-                                                            {item.value}
-                                                        </Option>)
-                                                    )}
-                                                </Select>
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    <FormItem className="">
-                                        <Button
-                                            size="default"
-                                            disabled={this.state.stopBuyDisabled}
-                                            onClick={this.handleStopPurchaseClick}
-                                        >暂停购进</Button>
-                                    </FormItem>
-                                    <FormItem className="">
-                                        <Button
-                                            size="default"
-                                            disabled={this.state.stopBuyDisabled}
-                                            onClick={this.handleResumedPurchaseClick}
-                                        >恢复采购</Button>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 经营子公司 */}
-                                    <FormItem>
-                                        <span className="sc-form-item-label">经营子公司</span>
-                                        <FormItem>
-                                            {getFieldDecorator('branchCompany', {
-                                                initialValue: { id: '', name: '' }
-                                            })(<BranchCompany
-                                                onChange={this.handleBranchCompanyChange}
-                                            />)}
-                                        </FormItem>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 子公司状态 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">子公司状态</span>
-                                            {getFieldDecorator('salesInfo', {
-                                                initialValue: subCompanyStatusOptions.defaultValue
-                                            })(
-                                                <Select size="default" >
-                                                    {subCompanyStatusOptions.data.map((item) => (
-                                                        <Option
-                                                            key={item.key}
-                                                            value={item.key}
-                                                        >
-                                                            {item.value}
-                                                        </Option>)
-                                                    )}
-                                                </Select>
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    <FormItem className="">
-                                        <Button
-                                            size="default"
-                                            disabled={this.state.areaShelvesDisabled}
-                                            onClick={this.handleAreaDownSold}
-                                        >区域下架</Button>
-                                    </FormItem>
-                                    <FormItem className="">
-                                        <Button
-                                            size="default"
-                                            disabled={this.state.areaShelvesDisabled}
-                                            onClick={this.handleAreaUpSold}
-                                        >区域上架</Button>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    <FormItem className="">
-                                        <Button
-                                            size="default"
-                                            disabled={COUNTRY_OFF_THE_SHELF}
-                                            onClick={this.handleNationalDownSold}
-                                        >全国性下架</Button>
-                                    </FormItem>
-                                    <FormItem className="">
-                                        <Button
-                                            size="default"
-                                            disabled={COUNTRY_OFF_THE_SHELF}
-                                            onClick={this.handleNationalUpSold}
-                                        >全国性上架</Button>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 排序 */}
-                                    <FormItem className="">
-                                        <div>
-                                            <span className="sc-form-item-label">排序</span>
-                                            {getFieldDecorator('sort', {
-                                                initialValue: commoditySortOptions.defaultValue
-                                            })(
-                                                <Select
-                                                    className=""
-                                                    size="default"
-                                                    onChange={this.hanldeGetSortType}
-                                                >
-                                                    {
-                                                        commoditySortOptions.data.map((item) =>
-                                                            (<Option
-                                                                key={item.key}
-                                                                value={item.key}
-                                                                data-dataIndex={item.dataIndex}
-                                                            >
-                                                                {item.value}
-                                                            </Option>)
-                                                        )
-                                                    }
-                                                </Select>
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16} type="flex" justify="end">
-                                <Col className="tr" span={4}>
-                                    <FormItem>
-                                        <Button
-                                            type="primary"
-                                            size="default"
-                                            onClick={this.handleFormSearch}
-                                        >查询</Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            onClick={this.handleFormReset}
-                                        >重置</Button>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Form>
-                </div>
+                                    )}
+                                    rowKey="spAdrid"
+                                    pageSize={5}
+                                    columns={[
+                                        {
+                                            title: '地点编码',
+                                            dataIndex: 'providerNo',
+                                            width: 98,
+                                        }, {
+                                            title: '地点名称',
+                                            dataIndex: 'providerName',
+                                            width: 140
+                                        }
+                                    ]}
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <FormItem label="供货状态">
+                                {getFieldDecorator('supplierInfo', {
+                                    initialValue: deliveryStatusOptions.defaultValue
+                                })(<Select size="default">
+                                    {deliveryStatusOptions.data.map((item) => (
+                                        <Option
+                                            key={item.key}
+                                            value={item.key}
+                                        >
+                                            {item.value}
+                                        </Option>)
+                                    )}
+                                </Select>)}
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <Button
+                                size="default"
+                                disabled={this.state.stopBuyDisabled}
+                                onClick={this.handleStopPurchaseClick}
+                            >暂停购进</Button>
+                            <Button
+                                size="default"
+                                disabled={this.state.stopBuyDisabled}
+                                onClick={this.handleResumedPurchaseClick}
+                            >恢复采购</Button>
+                        </Col>
+                    </Row>
+                    <Row gutter={40}>
+                        <Col span={8} className="branch-company">
+                            <FormItem label="经营子公司">
+                                <FormItem>
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany
+                                        onChange={this.handleBranchCompanyChange}
+                                    />)}
+                                </FormItem>
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <FormItem label="子公司状态">
+                                {getFieldDecorator('salesInfo', {
+                                    initialValue: subCompanyStatusOptions.defaultValue
+                                })(<Select size="default" >
+                                    {subCompanyStatusOptions.data.map((item) => (
+                                        <Option
+                                            key={item.key}
+                                            value={item.key}
+                                        >
+                                            {item.value}
+                                        </Option>)
+                                    )}
+                                </Select>)}
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <Button
+                                size="default"
+                                disabled={this.state.areaShelvesDisabled}
+                                onClick={this.handleAreaDownSold}
+                            >区域下架</Button>
+                            <Button
+                                size="default"
+                                disabled={this.state.areaShelvesDisabled}
+                                onClick={this.handleAreaUpSold}
+                            >区域上架</Button>
+                        </Col>
+                    </Row>
+                    <Row gutter={40}>
+                        <Col span={8}>
+                            <Button
+                                size="default"
+                                disabled={COUNTRY_OFF_THE_SHELF}
+                                onClick={this.handleNationalDownSold}
+                            >全国性下架</Button>
+                            <Button
+                                size="default"
+                                disabled={COUNTRY_OFF_THE_SHELF}
+                                onClick={this.handleNationalUpSold}
+                            >全国性上架</Button>
+                        </Col>
+                        <Col span={8}>
+                            <FormItem label="排序">
+                                {getFieldDecorator('sort', {
+                                    initialValue: commoditySortOptions.defaultValue
+                                })(<Select
+                                    className=""
+                                    size="default"
+                                    onChange={this.hanldeGetSortType}
+                                >{commoditySortOptions.data.map((item) =>
+                                    (<Option
+                                        key={item.key}
+                                        value={item.key}
+                                        data-dataIndex={item.dataIndex}
+                                    >
+                                        {item.value}
+                                    </Option>)
+                                )}
+                                </Select>)}
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={40} type="flex" justify="end">
+                        <Button
+                            type="primary"
+                            size="default"
+                            onClick={this.handleFormSearch}
+                        >查询</Button>
+                        <Button
+                            size="default"
+                            onClick={this.handleFormReset}
+                        >重置</Button>
+                    </Row>
+                </Form>
                 <div className="area-list">
                     <Table
                         dataSource={data}
@@ -851,7 +778,7 @@ class ManagementList extends PureComponent {
                         rowKey="productId"
                     />
                 </div>
-            </div>
+            </div >
         );
     }
 }

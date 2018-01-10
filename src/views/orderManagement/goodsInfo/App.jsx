@@ -35,24 +35,24 @@ class GoodsInfo extends PureComponent {
                 let errorTip = null;
                 let arrowTip = null;
 
+                if (record.type === 'promotion') {
+                    message = '赠';
+                    const tipClassName = 'arrowTip giftColor';
+                    arrowTip = <p className={tipClassName}><span>{message}</span></p>;
+                } else if (record.type === 'subItem') {
+                    message = '套';
+                    const tipClassName = 'arrowTip packageColor';
+                    arrowTip = <p className={tipClassName}><span>{message}</span></p>;
+                }
+
                 if (record.abnormalGoods) {
-                    message = record.abnormalResonse || '毛利异常';
-                    className = 'abnormalResonse';
-                    errorTip = <div className={className}>{message}</div>;
+                    message = '毛利异常';
+                    const tipClassName = arrowTip ? 'abnormalResonse resonse-top' : 'abnormalResonse';
+                    errorTip = <div className={tipClassName}>{message}</div>;
                 } else {
-                    className = '';
                     errorTip = '';
                 }
 
-                if (record.type === 'promotion') {
-                    message = '赠';
-                    className = 'arrowTip giftColor';
-                    arrowTip = <p className={className}><span>{message}</span></p>;
-                } else if (record.type === 'bundle') {
-                    message = '套';
-                    className = 'arrowTip packageColor';
-                    arrowTip = <p className={className}><span>{message}</span></p>;
-                }
                 const imgUrl = text || noImage;
                 return (
                     <div>
@@ -202,7 +202,7 @@ class GoodsInfo extends PureComponent {
         }
     }
 
-    onCellChange = record => value => {
+    onCellChange = record => (value, isMultiple) => {
         const goodsList = [...this.state.goodsList];
         const index = goodsList.findIndex(goods => goods.id === record.id);
         let v = value;
@@ -213,7 +213,7 @@ class GoodsInfo extends PureComponent {
             goodsList[index][`sub${this.getLastSubNum(1)}`] = v;
             goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - v;
             this.setState({ goodsList }, () => {
-                this.noticeParent();
+                this.noticeParent(isMultiple);
             });
         }
     }
@@ -242,12 +242,12 @@ class GoodsInfo extends PureComponent {
     /**
      * 回传子订单数据给父组件
      */
-    noticeParent = () => {
+    noticeParent = isMultiple => {
         const arr = [];
         for (let i = 1; i <= this.getLastSubNum(); i++) {
             arr.push(this.getSubObject(i));
         }
-        this.props.onChange(arr);
+        this.props.onChange(arr, isMultiple);
     }
 
     addSubOrders = () => {
@@ -305,7 +305,7 @@ class GoodsInfo extends PureComponent {
             <EditableCell
                 value={value}
                 min={0}
-                step={1}
+                step={record.unitQuantity || 1}
                 max={record.quantityLeft}
                 onChange={this.onCellChange(record)}
             />

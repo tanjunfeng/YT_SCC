@@ -262,24 +262,34 @@ class Cardline extends Component {
                     productId: proId,
                     id,
                 })
-                    .then(() => {
-                        message.success('删除成功')
-                        this.props.goto()
-                    }).catch(() => {
-                        message.error('操作失败')
+                    .then(res => {
+                        if (res.code === 200) {
+                            message.success('删除成功')
+                            this.props.goto()
+                        } else {
+                            message.error(res.message)
+                        }
                     })
             },
             onCancel() { },
         });
     }
 
-    handlePaginationChange = (go) => {
-        this.props.goto(go)
-    }
-
     handleAddPrice = () => {
     }
 
+    catchAuditstate = (value) => {
+        switch (value) {
+            case 1:
+                return '已提交';
+            case 2:
+                return '已审核';
+            case 3:
+                return '已拒绝';
+            default:
+                return null;
+        }
+    }
 
     renderCard = (datas) => {
         const {
@@ -341,6 +351,13 @@ class Cardline extends Component {
                                 <span>采购价格 / 元 : </span>
                                 <span>{item.purchasePrice}</span>
                             </p>
+                            <p>
+                                <span>最新采购价格状态 : </span>
+                                <span>
+                                    <i className={`new-price-state-${item.auditStatus}`} />
+                                    {this.catchAuditstate(item.auditStatus)}
+                                </span>
+                            </p>
                         </div>
                         <div className={`${prefixCls}-checkboxGroup`} >
                             <Checkbox
@@ -377,12 +394,6 @@ class Cardline extends Component {
                             {
                                 this.renderCard(initData.data)
                             }
-                            <Pagination
-                                current={initData.pageNum}
-                                pageSize={PAGE_SIZE}
-                                onChange={this.handlePaginationChange}
-                                total={initData.total}
-                            />
                         </div>
                     }
                 </div>

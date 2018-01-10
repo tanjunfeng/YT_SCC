@@ -10,7 +10,7 @@ import { Form, Row, InputNumber, Select } from 'antd';
 import Util from '../../../util/util';
 import { MAX_AMOUNT_OF_ORDER } from '../../../constant';
 import { Category } from '../../../container/cascader';
-import { AddingGoodsByTerm } from '../../../container/search';
+import { Commodity } from '../../../container/search';
 import BuyConditionList from './buyConditionList';
 
 const Option = Select.Option;
@@ -43,13 +43,17 @@ export const getRulesColumn = (form, licence, type = '') => {
                 rules: [{ required: true, message: '请选择优惠方式' }]
             })(<Select size="default" className="wd-90">
                 <Option key={-1} value="">- 请选择 -</Option>
-                <Option key={0} value="PERCENTAGE">折扣百分比</Option>
-                <Option key={1} value="DISCOUNTAMOUNT">折扣金额</Option>
-                {type === 'PRODUCT' ?
+                {licence !== 'eachConditionGivenOne' &&
+                    <Option key={0} value="PERCENTAGE">折扣百分比</Option>
+                }
+                {licence !== 'eachConditionGivenOne' &&
+                    <Option key={1} value="DISCOUNTAMOUNT">折扣金额</Option>
+                }
+                {type === 'PRODUCT' && licence !== 'eachConditionGivenOne' ?
                     <Option key={'FIXEDPRICE'} value="FIXEDPRICE">
                         固定单价
                     </Option> : null}
-                {type === 'PRODUCT' ?
+                {type === 'PRODUCT' || (licence === 'eachConditionGivenOne' && type === 'ALL') ?
                     <Option key={'GIVESAMEPRODUCT'} value="GIVESAMEPRODUCT">
                         赠送相同商品
                     </Option> : null}
@@ -135,7 +139,7 @@ export const buyType = (form, licence) => {
                 {getFieldDecorator(licence, {
                     initialValue: 'ALL'
                 })(<Select size="default" className="wd-90">
-                    <Option key={'ALL'} value="ALL">全部</Option>
+                    <Option key={'ALL'} value="ALL">{licence === 'eachConditionGivenOne' ? '请选择' : '全部'}</Option>
                     {/* 每满类型不能按品类添加 */}
                     {
                         licence !== 'eachConditionGivenOne' &&
@@ -228,7 +232,7 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
                                 productCode: '',
                                 productName: ''
                             }
-                        })(<AddingGoodsByTerm />)}
+                        })(<Commodity api="queryProductByTerm" />)}
                     </FormItem> : null}
             </div>
             {licence === 'purchaseCondition' &&
