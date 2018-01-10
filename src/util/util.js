@@ -333,7 +333,7 @@ class Utils {
      * 限制输入整数
      */
     static limitPositive = (rule, value, callback) => {
-        if (value && value < 0 || +(value) === 0) {
+        if ((value && value < 0) || +(value) === 0) {
             callback('仅允许正数');
         }
         callback();
