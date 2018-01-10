@@ -7,15 +7,10 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-<<<<<<< HEAD
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Menu, Icon, Carousel, Dropdown } from 'antd';
 import { CODE } from '../../constants';
-=======
-import { Menu, Icon, Dropdown } from 'antd';
-import { CODE } from '../../constant';
->>>>>>> 3b6aec9a3c3492e2db853cd7e7e8066012bf1cc5
 import Utils from '../../util/util';
 import './topMenu.scss';
 
@@ -40,7 +35,6 @@ class TopMenu extends Component {
         this.topMenuWidth = parseInt(this.winWidth, 10) - 200 - 140;
         const ul = document.querySelector('.top-menu-warp .ant-menu');
         const { widthArr } = Utils.getListWidthObj(ul);
-<<<<<<< HEAD
         this.count = 1;
         this.totalWidth = widthArr.reduce(this.reduceCallback);
         delete this.count;
@@ -48,23 +42,6 @@ class TopMenu extends Component {
         const newArr = this.props.topMenus.menu.slice(this.menuIndex - 1);
         const topMenuWidthArr = widthArr.slice(0, this.menuIndex - 1);
         if(this.showDropdown){
-=======
-        let count = 1
-        this.totalWidth = widthArr.reduce(function (sum, value, index) {
-            const difference = (sum + value) - this.topMenuWidth;
-            if (difference > 0) {
-                if (count === 1) {
-                    this.menuIndex = index;
-                    count++;
-                }
-            }
-            return sum + value;
-        }.bind(this), 0);
-        this.showDropdown = this.totalWidth > this.topMenuWidth;
-        const newArr = this.props.topMenus.menu.slice(this.menuIndex);
-        const newWidthArr = widthArr.slice(this.menuIndex);
-        if (this.showDropdown) {
->>>>>>> 3b6aec9a3c3492e2db853cd7e7e8066012bf1cc5
             this.setState({
                 dropDownMenu: newArr,
                 menuStyle: {
@@ -158,13 +135,8 @@ class TopMenu extends Component {
     }
     render() {
         return (
-<<<<<<< HEAD
             <div className={this.showDropdown ? "top-menu-warp on" : "top-menu-warp"} style={this.state.totalStyle}>
                 <div className="ant-menu-warp">
-=======
-            <div className="top-menu-warp">
-                <div className={this.showDropdown ? 'ant-menu-warp on' : 'ant-menu-warp'}>
->>>>>>> 3b6aec9a3c3492e2db853cd7e7e8066012bf1cc5
                     <Menu
                         onClick={this.handleClick}
                         selectedKeys={[`${this.defaultSelect.id},${this.defaultSelect.url}`]}
