@@ -1,0 +1,44 @@
+{
+    "timestamp": 1515566250551, 
+    "code": 200, 
+    "message": { }, 
+    "exception": null, 
+    "data": {
+        "pageNum": 1, 
+        "pageSize": 5, 
+        "total": 2933, 
+        "data": [
+            {
+                "id": "xbrand1222", 
+                "name": "测试哈哈哈", 
+                "brandLabel": "12321324", 
+                "logoUrl": null
+            }, 
+            {
+                "id": "xbrand1221", 
+                "name": "测试哈哈哈", 
+                "brandLabel": "12321324", 
+                "logoUrl": null
+            }, 
+            {
+                "id": "xbrand1163", 
+                "name": "1111111111111111111111111111111111111111", 
+                "brandLabel": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111", 
+                "logoUrl": null
+            }, 
+            {
+                "id": "xbrand1161", 
+                "name": "测试哈哈哈", 
+                "brandLabel": "撒旦撒多所多", 
+                "logoUrl": null
+            }, 
+            {
+                "id": "xbrand971", 
+                "name": "康师傅", 
+                "brandLabel": "方便面", 
+                "logoUrl": null
+            }
+        ]
+    }, 
+    "success": true
+}

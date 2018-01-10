@@ -1,0 +1,42 @@
+{
+    "timestamp":1513748957452,
+    "code":200,
+    "message":"请求成功",
+    "exception":null,
+    "data":{
+        "pageNum":1,
+        "pageSize":2,
+        "total":21,
+        "data":[
+            {
+                "firstLevelCategoryName": "休闲",
+                "secondLevelCategoryName": "饮料",
+                "thirdLevelCategoryName": "水饮料",
+                "fourthLevelCategoryName": "碳酸饮料",
+                "brand": "百事可乐",
+                "saleName": "123456-百事可乐",
+                "companyCode": "10001",
+                "subCompany": "四川子公司",
+                "storeName": "四川子公司玉林菜市场店",
+                "supplier": "100001-红太阳商贸有限公司",
+                "supplierAddr": "1000011-红太阳商贸有限公司-四川",
+                "logisticsMode": "直送"
+            },
+            {
+                "firstLevelCategoryName": "休闲",
+                "secondLevelCategoryName": "饮料",
+                "thirdLevelCategoryName": "水饮料",
+                "fourthLevelCategoryName": "碳酸饮料",
+                "brand": "百事可乐",
+                "saleName": "123456-百事可乐",
+                "companyCode": "10001",
+                "subCompany": "四川子公司",
+                "storeName": "四川子公司玉林菜市场店",
+                "supplier": "100001-红太阳商贸有限公司",
+                "supplierAddr": "1000011-红太阳商贸有限公司-四川",
+                "logisticsMode": "直送"
+            }
+        ]
+    },
+    "success":true
+}

@@ -26,6 +26,10 @@ import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDeta
 import importPurchasePriceList from 'bundle-loader?lazy!../views/commodity/importPurchasePriceList';
 // 售价导入
 import PriceImport from 'bundle-loader?lazy!../views/commodity/priceImport';
+// 商品地点管理
+import SitesManage from 'bundle-loader?lazy!../views/commodity/sitesManage';
+// 地区组管理
+import RegionManage from 'bundle-loader?lazy!../views/commodity/regionManage';
 // 分类列表页商品排序管理
 import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
@@ -298,6 +302,44 @@ const routes = [
                         exact
                         render={() => <Bundle load={PriceImport}>{(App) => <App />}</Bundle>}
                     />
+                ),
+            },
+            // 商品地点管理
+            {
+                path: '/sitesManage',
+                parent: 'gylspgl',
+                key: 'sitesManage',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/sitesManage"
+                            exact
+                            render={() => <Bundle load={SitesManage}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/sitesManage/add"
+                            render={() => <Bundle load={SitesManage}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                ),
+            },
+            // 区域组管理
+            {
+                path: '/regionManage',
+                parent: 'gylspgl',
+                key: 'regionManage',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/regionManage"
+                            exact
+                            render={() => <Bundle load={RegionManage}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/regionManage/add"
+                            render={() => <Bundle load={RegionManage}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
                 ),
             }
         ]
