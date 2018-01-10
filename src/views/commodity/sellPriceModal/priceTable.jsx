@@ -10,7 +10,6 @@ import { Table, Popconfirm, Button } from 'antd';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import { bindActionCreators } from 'redux';
-import cs from 'classnames';
 
 import {
     getCostPrice
@@ -59,9 +58,19 @@ class PriceTable extends PureComponent {
         }
     }
 
+    /**
+     * 只读表格去除操作列，可编辑表格显示操作列
+     */
+    getColumns = () => {
+        const { isReadOnly } = this.props.value;
+        return isReadOnly
+            ? columns.filter((c, index) => index < 4)
+            : columns
+    }
+
     markTable = () => {
         const { value, onMarkable } = this.props;
-        const { isReadOnly, currentPrices, list, isEdit, markList = [] } = value;
+        const { currentPrices, list, isEdit, markList = [] } = value;
         const ml = [...markList];
         if (isEdit) {
             currentPrices.forEach((currentRecord, index) => {
@@ -77,16 +86,6 @@ class PriceTable extends PureComponent {
                 onMarkable(ml);
             }
         }
-    }
-
-    /**
-     * 只读表格去除操作列，可编辑表格显示操作列
-     */
-    getColumns = () => {
-        const { isReadOnly } = this.props.value;
-        return isReadOnly
-            ? columns.filter((c, index) => index < 4)
-            : columns
     }
 
     edit = (id) => {
@@ -358,9 +357,9 @@ class PriceTable extends PureComponent {
         if (costPrice === null || isNaN(costPrice)) {
             return (<span>-</span>);
         }
-        const rate = (price - costPrice) * 100 / costPrice;
+        const rate = ((price - costPrice) * 100) / costPrice;
         const mark = this.isMarkable(index, 'price');
-        return (<span className={mark ? "red" : null}>{`${rate.toFixed(2)}%`}</span>);
+        return (<span className={mark ? 'red' : null}>{`${rate.toFixed(2)}%`}</span>);
     }
 
     render() {
@@ -390,6 +389,7 @@ class PriceTable extends PureComponent {
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     onChange: PropTypes.func,
+    onMarkable: PropTypes.func,
     isReadOnly: PropTypes.bool,
     costPrice: PropTypes.number
 };

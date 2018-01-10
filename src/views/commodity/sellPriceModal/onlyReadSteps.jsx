@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, InputNumber, message, Select, Table } from 'antd';
+import { Form } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -74,7 +74,11 @@ class OnlyReadSteps extends Component {
 }
 
 OnlyReadSteps.propTypes = {
-    prefixCls: PropTypes.string
+    prefixCls: PropTypes.string,
+    isEdit: PropTypes.bool,
+    newDatas: PropTypes.objectOf(PropTypes.any),
+    startNumber: PropTypes.number,
+    isReadOnly: PropTypes.bool
 };
 
 OnlyReadSteps.defaultProps = {
