@@ -6,10 +6,10 @@ export const poStatus = {
         value: '请选择'
     }, {
         key: '0',
-        value: '制单'
+        value: '草稿'
     }, {
         key: '1',
-        value: '已提交'
+        value: '待审核'
     }, {
         key: '2',
         value: '已审核'
@@ -19,6 +19,9 @@ export const poStatus = {
     }, {
         key: '4',
         value: '已关闭'
+    }, {
+        key: '5',
+        value: '已取消'
     }]
 }
 
@@ -145,6 +148,9 @@ export const businessModeType = {
     }, {
         key: '1',
         value: '代销'
+    }, {
+        key: '2',
+        value: '寄售'
     }]
 }
 

@@ -39,7 +39,7 @@ class PoSearchForm extends PureComponent {
         this.handleCreate = this.handleCreate.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.state = {
-            spId: '',   // 供应商ID
+            spId: '', // 供应商ID
             isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,
             locationData: {}
@@ -231,7 +231,7 @@ class PoSearchForm extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { auth } = this.props;
         return (
-            <Form layout="inline" className="po-mng-list">
+            <Form layout="inline" className="po-search-form">
                 <Row gutter={40}>
                     <Col>
                         <FormItem label="采购单号" >
@@ -298,7 +298,7 @@ class PoSearchForm extends PureComponent {
                                         ))
                                     }
                                 </Select>
-                                )}
+                            )}
                         </FormItem>
                     </Col>
                     <Col>
@@ -429,8 +429,6 @@ class PoSearchForm extends PureComponent {
                         <FormItem label="创建日期">
                             {getFieldDecorator('createTime')(
                                 <RangePicker
-                                    className="date-range-picker"
-                                    style={{ width: 250 }}
                                     format={dateFormat}
                                     showTime={{
                                         hideDisabledOptions: true,
@@ -446,8 +444,6 @@ class PoSearchForm extends PureComponent {
                         <FormItem label="审批日期">
                             {getFieldDecorator('auditTime')(
                                 <RangePicker
-                                    className="date-range-picker"
-                                    style={{ width: 250 }}
                                     format={dateFormat}
                                     showTime={{
                                         hideDisabledOptions: true,
@@ -460,12 +456,12 @@ class PoSearchForm extends PureComponent {
                         </FormItem>
                     </Col>
                 </Row>
-                <Row gutter={40} type="flex" justify="end">
+                <Row gutter={40} type="flex" justify="end" className="row-top">
                     <Col>
                         {auth.new &&
                             <Button size="default" onClick={this.handleCreate}>
                                 新建
-                                        </Button>
+                            </Button>
                         }
                         {auth.delete &&
                             <Button size="default" onClick={this.handleDelete}>

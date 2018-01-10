@@ -208,7 +208,7 @@ class ImportPurchasePriceList extends PureComponent {
         }
         return (
             <div className="purchase-Price-list">
-                <Form>
+                <Form layout="inline">
                     <Row className="purchase-price-search-box">
                         <Col>
                             {/* 上传ID */}
@@ -221,7 +221,7 @@ class ImportPurchasePriceList extends PureComponent {
                         </Col>
                         <Col>
                             {/* 供应商 */}
-                            <FormItem label="供应商" className="label-top">
+                            <FormItem label="供应商" >
                                 {getFieldDecorator('supplier', {
                                     initialValue: { spId: '', spNo: '', companyName: '' }
                                 })(<Supplier onChange={this.handleSupplierChange} />)}
@@ -229,7 +229,7 @@ class ImportPurchasePriceList extends PureComponent {
                         </Col>
                         <Col>
                             {/* 供应商地点 */}
-                            <FormItem label="供应商地点" className="label-top">
+                            <FormItem label="供应商地点" >
                                 <SearchMind
                                     compKey="providerNo"
                                     rowKey="providerNo"
@@ -269,7 +269,7 @@ class ImportPurchasePriceList extends PureComponent {
                         </Col>
                         <Col>
                             {/* 商品 */}
-                            <FormItem className="label-top" label="商品">
+                            <FormItem label="商品">
                                 <SearchMind
                                     style={{ zIndex: 6000, marginBottom: 5 }}
                                     compKey="productCode"
@@ -333,7 +333,7 @@ class ImportPurchasePriceList extends PureComponent {
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row gutter={40} type="flex" justify="end">
+                    <Row type="flex" justify="end" className="row-top">
                         <Col >
                             <Button size="default" type="primary" onClick={this.handleQuery}>
                                 查询
