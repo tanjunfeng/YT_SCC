@@ -13,7 +13,9 @@ import {
     updateSellPriceStatus,
     getSellPriceInfoByIdAction as getSellPriceInfoByIdService,
     getCostPrice as getCostPriceService,
-    queryGoodsSitesManageList
+    queryGoodsSitesManageList,
+    deleteSiteManages,
+    deleteSiteManagesByIds
 } from '../service';
 
 /**
@@ -130,21 +132,58 @@ export const clearCostPrice = () => dispatch => (dispatch({
     payload: null
 }));
 
-/**
- * 商品地点关系列表
- *
- * @param {Object} params 传参
- */
 const getSitesManageListAction = data => ({
     type: ActionType.RECEIVE_SITES_MANAGE_LIST,
     payload: data
 });
 
+/**
+ * 商品地点关系列表
+ *
+ * @param {Object} params 传参
+ */
 export const getSitesManageList = params => dispatch => (
     new Promise((resolve, reject) => {
         queryGoodsSitesManageList(params)
             .then(res => {
                 dispatch(getSitesManageListAction(res.data));
+                resolve(res);
             })
             .catch(err => reject(err))
     }));
+/**
+ * 删除商品地点关系列表全部记录
+ *
+ * @param {Object} params 传参
+ */
+const deleteSiteManagesAction = data => ({
+    type: ActionType.DELETE_SITEMANAGES,
+    payload: data
+});
+
+export const removeSiteManages = () => dispatch => (
+    new Promise((resolve, reject) => {
+        deleteSiteManages()
+            .then(res => {
+                dispatch(deleteSiteManagesAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+const deleteSiteManagesByIdsAction = data => ({
+    type: ActionType.DELETE_SITEMANAGES_BY_IDS,
+    payload: data
+});
+
+export const removeSiteManagesByIds = params => dispatch => (
+    new Promise((resolve, reject) => {
+        deleteSiteManagesByIds(params)
+            .then(res => {
+                dispatch(deleteSiteManagesByIdsAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);

@@ -475,8 +475,8 @@ class CouponCreate extends PureComponent {
                                     <Col span={16}>
                                         <FormItem className="category" label="使用品类">
                                             {getFieldDecorator('category', {
-                                                initialValue: this.param.category
-                                                // rules: [{ required: true, message: '请选择使用品类' }]
+                                                initialValue: this.param.category,
+                                                rules: [{ required: true, message: '请选择使用品类' }]
                                             })(
                                                 <RadioGroup onChange={this.handleCategoryChange}>
                                                     <Radio className="default" value={0}>全部品类</Radio>

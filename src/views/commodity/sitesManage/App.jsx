@@ -4,20 +4,29 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
     Form,
-    Table
-    // message
+    Table,
+    Button,
+    Modal,
+    message
 } from 'antd';
 import { pubFetchValueList } from '../../../actions/pub';
-import { getSitesManageList } from '../../../actions/commodity';
+import { 
+    getSitesManageList,
+    removeSiteManagesByIds,
+    removeSiteManages
+} from '../../../actions/commodity';
 import SearchForm from './searchForm';
 import { sitesManageColumns } from './columns';
 import { PAGE_SIZE } from '../../../constant';
+const confirm = Modal.confirm
 
 @connect(state => ({
     goodsSitesManageList: state.toJS().commodity.goodsSitesManageList,
 }), dispatch => bindActionCreators({
     pubFetchValueList,
-    getSitesManageList
+    getSitesManageList,
+    removeSiteManagesByIds,
+    removeSiteManages
 }, dispatch))
 class SiteManage extends PureComponent {
     state = {
@@ -65,6 +74,7 @@ class SiteManage extends PureComponent {
         getSitesManageList(this.queryParams);
 
     }
+
     /**
      * 编辑商品地点关系
     */
@@ -72,9 +82,61 @@ class SiteManage extends PureComponent {
         alert(id);
     }
 
+    /**
+     * 选择商品分类
+    */
     handleCategorysChange = val => {
         console.log(val);
     }
+
+    /**
+     * 选择全部记录
+    */
+    deleteAll = () => {
+        const { removeSiteManages } = this.props;
+        confirm({
+            title: '',
+            content: '数据删除不可恢复，确认删除全部商品地点关系?',
+            onOk() {
+                removeSiteManages().then(res => {
+                    console.log(res)
+                    if (res.success) {
+                        message.success('删除成功');
+                    } else {
+                        message.error('删除失败');
+                    }
+                });
+            },
+            onCancel() {}
+        });
+    }
+
+    /**
+     * 批量自定义删除
+    */
+    customDelete = () => {
+        const { removeSiteManagesByIds } = this.props;
+        const { selectedRows } = this.state;
+        /**
+         * ToDo: id替换为实际字段
+         */
+        const selectedIds = selectedRows.map(item => item.id);
+        confirm({
+            title: '',
+            content: '数据删除不可恢复，确认删除选中的商品地点关系?',
+            onOk() {
+                removeSiteManagesByIds(selectedIds).then(res => {
+                    if (res.success) {
+                        message.success('删除成功');
+                    } else {
+                        message.error('删除失败');
+                    }
+                });
+            },
+            onCancel() {}
+        });
+    }
+
     /**
      * goodsSitesManageList: 列表,
      * getSitesManageList: 获取列表方法
@@ -94,19 +156,25 @@ class SiteManage extends PureComponent {
                     queryList={ this.queryList }
                     selectedIds={selectedIds}
                 />
-                <Table
-                    rowKey={record => record.id}
-                    rowSelection={this.rowSelection}
-                    dataSource={data}
-                    columns={sitesManageColumns}
-                    pagination={{
-                        current: pageNum,
-                        total,
-                        pageSize: PAGE_SIZE,
-                        showQuickJumper: true,
-                        onChange: this.handlePaginationChange
-                    }}
-                />
+                <div className="sites-manage-tab">
+                    <div className="table-operations">
+                        <Button onClick={this.deleteAll}>全部删除</Button>
+                        <Button  disabled={selectedRows.length === 0} onClick={this.customDelete}>批量删除</Button>
+                    </div>
+                    <Table
+                        rowKey={record => record.id}
+                        rowSelection={this.rowSelection}
+                        dataSource={data}
+                        columns={sitesManageColumns}
+                        pagination={{
+                            current: pageNum,
+                            total,
+                            pageSize: PAGE_SIZE,
+                            showQuickJumper: true,
+                            onChange: this.handlePaginationChange
+                        }}
+                    />
+                </div>
             </div>
         );
     }

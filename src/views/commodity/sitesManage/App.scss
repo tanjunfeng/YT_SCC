@@ -50,4 +50,19 @@
     .ant-btn {
         margin-right: 20px;
     }
+    &-tab {
+        border: 1px solid #c4c5c9;
+    }
 }
+
+.table-operations {
+    margin-bottom: 16px;
+    margin-top: 16px;
+}
+
+.table-operations > button {
+    margin-right: 8px;
+  }
+  .table-operations > :first-child {
+    margin-left: 8px;
+  }

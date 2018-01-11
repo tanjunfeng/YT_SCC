@@ -973,4 +973,10 @@ export const processImageByBusi = params => http.get('/bpm/processImageByBusi', 
 export const queryCommentHisByBusi = params => http.get('/bpm/queryCommentHisByBusi', params);
 // 价格变更记录模块
 export const queryProdPriceChangeList = params => http.get('/prodSell/queryProdPriceChangeList', params);
+/**
+ *商品地点管理
+*/
+// 批量删除
+export const deleteSiteManages = params => http.get('/product/deleteSiteManages', params);
+export const deleteSiteManagesByIds = params => http.get('/product/deleteSiteManagesByIds', params);
 

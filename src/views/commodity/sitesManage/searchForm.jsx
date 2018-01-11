@@ -45,11 +45,6 @@ class SearchForm extends PureComponent {
         this.props.history.push('/sitesManage/add');
     }
 
-    handleDelete = () => {
-        const { selectedIds } = this.props;
-        console.log(selectedIds);
-    }
-
     handleCategorySelect = categoryObj => {
         // this.setState({ categoryObj });
         console.log(categoryObj)
@@ -63,8 +58,7 @@ class SearchForm extends PureComponent {
                         <Col>
                             <FormItem label="商品分类">
                                 {getFieldDecorator('category', {
-                                    initialValue: this.state.category,
-                                    rules: [{ required: true, message: '请选择使用品类' }]
+                                    initialValue: this.state.category
                                 })(<Category onChange={this.handleCategorySelect} />)}
                             </FormItem>
                         </Col>
@@ -167,10 +161,6 @@ class SearchForm extends PureComponent {
                                 size="default"
                                 onClick={this.handleAdd}
                             >新增</Button>
-                            <Button
-                                onClick={this.handleDelete}
-                                size="default"
-                            >删除</Button>
                         </Col>
                     </Row>
                 </Form>
@@ -182,7 +172,6 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     queryList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    selectedIds: PropTypes.arrayOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any)
 };
 
