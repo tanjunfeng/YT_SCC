@@ -18,9 +18,9 @@
     .ant-menu-warp{
         overflow: hidden;
         height: 50px;
-        &.on{
-            margin: 0 40px 0 0;
-        }
+    }
+    &.on{
+        padding: 0 57px 0 0;
     }
 }
 .ant-dropdown{

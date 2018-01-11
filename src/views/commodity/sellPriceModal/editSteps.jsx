@@ -80,21 +80,20 @@ class EditSteps extends Component {
         this.props.onCreateComChange(record);
     }
 
-    handleValueFormat = (text) => {
-        return Number(text).toFixed(2);
-    }
+    handleValueFormat = (text) => Number(text).toFixed(2)
 
     render() {
         const { prefixCls, form, newDatas = {}, values = {}, isEdit, isSub } = this.props;
         const { sellPricesInReview = {} } = newDatas;
         const { getFieldDecorator } = form;
+        const hasMarginLeft = isEdit ? 'sell-modal-edit-company' : '';
         return (
             <div className={`${prefixCls}-item item-max-height`}>
                 <div className={`${prefixCls}-item-title`}>
                     添加阶梯价格
-                        <span className={`${prefixCls}-item-tip`}>
+                    <span className={`${prefixCls}-item-tip`}>
                         &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
-                        </span>
+                    </span>
                 </div>
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem className="diff-price-table">
@@ -122,38 +121,37 @@ class EditSteps extends Component {
                                             validator: Util.limitTwoDecimalPlaces,
                                             message: '建议零售价必须是两位以内小数'
                                         }],
-                                    initialValue: sellPricesInReview.suggestPrice || values.suggestPrice
-                                })(
-                                    <InputNumber
-                                        step={0.01}
-                                        className={sellPricesInReview.suggestPrice
-                                            !== newDatas.suggestPrice
-                                            ? 'sell-modal-border' : null}
-                                        disabled={isSub}
-                                        // onBlur={this.handleSugeestPriceBlur}
-                                        onChange={this.handleNewestPriceChange}
-                                    />
-                                    )}
+                                    initialValue: sellPricesInReview.suggestPrice
+                                        || values.suggestPrice
+                                })(<InputNumber
+                                    step={0.01}
+                                    className={sellPricesInReview.suggestPrice
+                                        !== newDatas.suggestPrice
+                                        ? 'sell-modal-border' : null}
+                                    disabled={isSub}
+                                    onChange={this.handleNewestPriceChange}
+                                />)}
                             </span>
                         </FormItem>
                         <FormItem label="商品采购价格：">
                             <span className={
-                                sellPricesInReview.suggestPrice
-                                    !== newDatas.suggestPrice
-                                    ? 'sell-modal-border' : null
-                            }>
+                                sellPricesInReview.purchasePrice
+                                    !== newDatas.purchasePrice
+                                    ? 'sell-modal-border' : null}
+                            >
                                 {sellPricesInReview.purchasePrice || '-'}
                             </span>
                         </FormItem>
                         {
                             isEdit ?
-                                <FormItem label="子公司：">
+                                <FormItem className={hasMarginLeft} label="子公司：">
                                     <span className={
                                         sellPricesInReview.branchCompanyId
                                             !== newDatas.branchCompanyId
-                                            ? 'sell-modal-border' : null
-                                    }>
-                                        {sellPricesInReview.branchCompanyId} - {sellPricesInReview.branchCompanyName}
+                                            ? 'sell-modal-border' : null}
+                                    >
+                                        {sellPricesInReview.branchCompanyId} - {
+                                            sellPricesInReview.branchCompanyName}
                                     </span>
                                 </FormItem> :
                                 <FormItem label="子公司：">

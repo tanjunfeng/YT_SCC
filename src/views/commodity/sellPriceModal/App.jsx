@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import { Modal, Form, message, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import moment from 'moment';
-import {
-} from '../../../constant/searchParams';
 import {
     getCostPrice, clearCostPrice
 } from '../../../actions/commodity';
@@ -117,7 +114,8 @@ class SellPriceModal extends Component {
                 suggestPrice: this.state.suggestPrice || suggestPrice,
                 productId: this.newDatas.productId,
                 auditStatus: this.newDatas.auditStatus,
-                sellSectionPrices: sellSectionPrices.length === 0 ? noChangePrices : sellSectionPrices,
+                sellSectionPrices: sellSectionPrices.length === 0
+                    ? noChangePrices : sellSectionPrices,
                 deliveryDay,
                 minNumber,
                 salesInsideNumber,
@@ -126,9 +124,9 @@ class SellPriceModal extends Component {
                 ...freCondit
             })
         }
-        validateFields((err, values) => {
+        validateFields((err, fieldValues) => {
             if (err) return null;
-            const result = values;
+            const result = fieldValues;
             result.productId = datas.id || datas.productId;
             if (!isEdit && (!branchCompanyId || !branchCompanyName)) {
                 message.error('请选择子公司！');
@@ -139,7 +137,7 @@ class SellPriceModal extends Component {
                 return null;
             }
             if (!editIsContinue) {
-                message.error('阶梯价格不连续!');
+                message.error('请检查阶梯价格！');
                 return null;
             }
             if (isEdit) {
@@ -420,7 +418,9 @@ class SellPriceModal extends Component {
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
     productId: PropTypes.string,
+    isEdit: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
+    values: PropTypes.objectOf(PropTypes.any),
     handlePostAdd: PropTypes.func,
     getCostPrice: PropTypes.func,
     clearCostPrice: PropTypes.func,
