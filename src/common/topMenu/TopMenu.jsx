@@ -131,7 +131,7 @@ class TopMenu extends Component {
     }
     render() {
         return (
-            <div className={this.totalWidth > this.topMenuWidth ? 'top-menu-warp on' : 'top-menu-warp'} style={this.state.totalStyle}>
+            <div className={`top-menu-warp ${this.totalWidth > this.topMenuWidth ? 'on' : ''}`} style={this.state.totalStyle}>
                 <div className="ant-menu-warp">
                     <Menu
                         onClick={this.handleClick}
