@@ -6,28 +6,21 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Form, Row, Modal, Col, DatePicker, Select, Button  } from 'antd';
+import { Input, Form, Row, Col, DatePicker, Select, Button  } from 'antd';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { DirectStores } from '../../../container/search';
 import { BranchCompany } from '../../../container/search';
+import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import Util from '../../../util/util';
 import {
     queryDirectInfo,
     clearDirectInfo
 } from '../../../actions/procurement';
 import { processingState } from '../../../constant/procurement';
-import { PAGE_SIZE } from '../../../constant/index';
-import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 const Option = Select.Option;
-
-@connect(state => ({
-}), dispatch => bindActionCreators({
-}, dispatch))
 
 class SearchForm extends PureComponent {
     constructor(props) {
@@ -159,11 +152,9 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     directInfo: PropTypes.objectOf(PropTypes.any),
-    value: PropTypes.objectOf(PropTypes.any),
-    shouldClear: PropTypes.bool,
-    queryDirectInfo: PropTypes.func,
-    clearDirectInfo: PropTypes.func,
-    onChange: PropTypes.func
+    onAreaListSearch: PropTypes.func,
+    onAreaListReset: PropTypes.func,
+    exportList: PropTypes.func,
 };
 
 export default withRouter(Form.create()(SearchForm));

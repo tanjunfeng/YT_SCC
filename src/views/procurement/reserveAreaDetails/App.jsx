@@ -3,7 +3,7 @@
  * @Description: 预定专区详情
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-11 19:57:30
+ * @Last Modified time: 2018-01-11 20:13:02
  */
 
 import React, { PureComponent } from 'react';
@@ -98,12 +98,6 @@ class ReserveAreaDetails extends PureComponent {
         };
     }
 
-    handleSelect = (record, index) => {
-        if (index.key === '1') {
-            console.log(record)
-        }
-    }
-
     /**
      * 下载导入结果的回调
     */
@@ -113,8 +107,7 @@ class ReserveAreaDetails extends PureComponent {
 
     render() {
         const { reserveAreaDetaiData = {} } = this.props;
-        const { data = [] } = reserveAreaDetaiData;
-        const { pageNum, total } = data;
+        const { data = [], pageNum, total } = reserveAreaDetaiData;
         return (
             <div>
                 <SearchForm
@@ -141,6 +134,8 @@ class ReserveAreaDetails extends PureComponent {
     }
 }
 ReserveAreaDetails.propTypes = {
-    form: PropTypes.objectOf(PropTypes.any),
+    queryReserAreaDetail: PropTypes.objectOf(PropTypes.any),
+    reserveAreaDetaiData: PropTypes.objectOf(PropTypes.array),
+    clearReserAreaDetail: PropTypes.func
 }
 export default withRouter(Form.create()(ReserveAreaDetails));

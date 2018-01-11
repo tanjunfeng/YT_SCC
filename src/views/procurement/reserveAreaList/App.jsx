@@ -3,17 +3,17 @@
  * @Description: 预定专区
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-11 19:57:23
+ * @Last Modified time: 2018-01-11 20:11:15
  */
 
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import {
     Form, Icon, Table, message, Menu, Dropdown, Modal
 } from 'antd';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { PAGE_SIZE } from '../../../constant';
 import Util from '../../../util/util';
@@ -142,7 +142,6 @@ class ReserveAreaList extends PureComponent {
      * 下载导入结果的回调
     */
     handleExportList = () => {
-        console.log(this.param)
         Util.exportExcel(wishListsForExcel, Util.removeInvalid(this.param));
     }
 
@@ -157,7 +156,7 @@ class ReserveAreaList extends PureComponent {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key={0}>
-                    <Link to={`${pathname}/reserveAreaDetails/${id}`}>查看详情</Link>
+                    <Link target="_blank" to={`${pathname}/reserveAreaDetails/${id}`}>查看详情</Link>
                 </Menu.Item>
                 <Menu.Item key={'complete'}>
                     <a target="_blank" rel="noopener noreferrer">
@@ -210,6 +209,10 @@ class ReserveAreaList extends PureComponent {
     }
 }
 ReserveAreaList.propTypes = {
-    form: PropTypes.objectOf(PropTypes.any),
+    clearReserveAreaList: PropTypes.func,
+    queryReserveAreaList: PropTypes.func,
+    comleteOrCloseWishList: PropTypes.func,
+    location: PropTypes.objectOf(PropTypes.any),
+    reserveAreaData: PropTypes.objectOf(PropTypes.any)
 }
 export default withRouter(Form.create()(ReserveAreaList));

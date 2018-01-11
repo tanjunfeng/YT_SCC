@@ -3,32 +3,20 @@
  * @Description: 预定专区详情searchForm
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-11 19:57:03
+ * @Last Modified time: 2018-01-11 20:12:16
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Form, Row, Modal, Col, DatePicker, Select, Button } from 'antd';
+import { Form, Row, Col, Button } from 'antd';
 import { withRouter } from 'react-router';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import { DirectStores } from '../../../container/search';
-import { BranchCompany } from '../../../container/search';
 import Util from '../../../util/util';
-import { PAGE_SIZE } from '../../../constant/index';
-import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import {
     queryDirectInfo,
     clearDirectInfo
 } from '../../../actions/procurement';
-import { processingState } from '../../../constant/procurement';
 
 const FormItem = Form.Item;
-const { RangePicker } = DatePicker;
-const Option = Select.Option;
-
-@connect(state => ({
-}), dispatch => bindActionCreators({
-}, dispatch))
 
 class SearchForm extends PureComponent {
     constructor(props) {
@@ -88,7 +76,7 @@ class SearchForm extends PureComponent {
     }
 
     render() {
-        const { form, directInfo = {} } = this.props;
+        const { form } = this.props;
         const { getFieldDecorator } = form;
         return (
             <div className="wisharea-List">
@@ -120,12 +108,10 @@ class SearchForm extends PureComponent {
 
 SearchForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    directInfo: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),
-    shouldClear: PropTypes.bool,
-    queryDirectInfo: PropTypes.func,
-    clearDirectInfo: PropTypes.func,
-    onChange: PropTypes.func
+    exportList: PropTypes.func,
+    onAreaListReset: PropTypes.func,
+    onAreaListSearch: PropTypes.func
 };
 
 export default withRouter(Form.create()(SearchForm));
