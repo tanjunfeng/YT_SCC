@@ -22,11 +22,11 @@ import {
     fetchNewPmPurchaseOrderItem,
 } from '../../../actions/procurement';
 import { pubFetchValueList } from '../../../actions/pub';
-import { locType, poType, poNo, businessModeType } from '../../../constant/procurement';
+import { locType, poType, poNo } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { Supplier } from '../../../container/search';
-import { renderPayType, renderPayCondition, renderPeriod} from '../constants'
+import { renderPayType, renderPayCondition, renderPeriod, supplierOrderStatus} from '../constants'
 
 const FormItem = Form.Item;
 
@@ -85,6 +85,22 @@ class BasicInfo extends PureComponent {
             // 经营模式
             businessMode: '',
             status: 0,
+            // 供应商接单状态
+            supOrderStatus: 2,
+        }
+        // 因为新增和编辑的经营模式没有寄售选项，所以没有引用公共的
+        this.businessModeType = {
+            defaultValue: '',
+            data: [{
+                key: '',
+                value: '请选择'
+            }, {
+                key: '0',
+                value: '经销'
+            }, {
+                key: '1',
+                value: '代销'
+            }]
         }
     }
 
@@ -99,7 +115,7 @@ class BasicInfo extends PureComponent {
                 adrType, settlementPeriod, payType, payCondition, spAdrId, spAdrName,
                 estimatedDeliveryDate, purchaseOrderType, currencyCode,
                 businessMode, createdByName, createdAt, spId, spName, adrTypeCode, adrTypeName,
-                status,
+                status, supOrderStatus,
             } = nextProps.basicInfo;
             this.setState({
                 locDisabled: !(adrType === 0 || adrType === 1),
@@ -121,7 +137,8 @@ class BasicInfo extends PureComponent {
                 spName,
                 adrTypeCode,
                 adrTypeName,
-                status
+                status,
+                supOrderStatus
             })
         }
     }
@@ -796,7 +813,7 @@ class BasicInfo extends PureComponent {
                                 })(
                                     <Select size="default" onChange={this.businessModeTypeChange}>
                                         {
-                                            businessModeType.data.map((item) =>
+                                            this.businessModeType.data.map((item) =>
                                                 (<Option
                                                     key={item.key}
                                                     value={item.key}
@@ -804,6 +821,14 @@ class BasicInfo extends PureComponent {
                                                 ))
                                         }
                                     </Select>)}
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            {/* 供应商接单状态 */}
+                            <FormItem label="供应商接单状态">
+                                <span>
+                                    {supplierOrderStatus(state.supOrderStatus)}
+                                </span>
                             </FormItem>
                         </Col>
                     </Row>

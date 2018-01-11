@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../../util/util';
-import { poStatus, locType, poType, businessModeType } from '../../../constant/procurement';
+import { poStatus, locType, poType, businessModeType, supplierOrderStatus } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import {
     getWarehouseAddressMap,
@@ -418,6 +418,20 @@ class PoSearchForm extends PureComponent {
                             })(
                                 <Select size="default" >
                                     {businessModeType.data.map((item) => (
+                                        <Option key={item.key} value={item.key}>
+                                            {item.value}
+                                        </Option>
+                                    ))}
+                                </Select>)}
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="供应商接单状态">
+                            {getFieldDecorator('businessModeCode', {
+                                initialValue: supplierOrderStatus.defaultValue
+                            })(
+                                <Select size="default" >
+                                    {supplierOrderStatus.data.map((item) => (
                                         <Option key={item.key} value={item.key}>
                                             {item.value}
                                         </Option>
