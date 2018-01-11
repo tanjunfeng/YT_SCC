@@ -154,6 +154,20 @@ export const businessModeType = {
     }]
 }
 
+// 供应商接单状态
+export const supplierOrderStatus = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '请选择'
+    }, {
+        key: '0',
+        value: '未接单'
+    }, {
+        key: '1',
+        value: '已接单'
+    }]
+}
 export const locTypeCodes = {
     warehouse: '0000',
     shop: '0001'

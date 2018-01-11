@@ -24,7 +24,7 @@ import {
 import { pubFetchValueList } from '../../../actions/pub';
 import { exportProcurementPdf } from '../../../service';
 import { renderPayType, renderPayCondition, renderPeriod, purchaseOrderType,
-    businessMode, purchaseOrderState, purchaseOrderAdrType} from '../constants'
+    businessMode, purchaseOrderState, purchaseOrderAdrType, supplierOrderStatus} from '../constants'
 
 const FormItem = Form.Item;
 
@@ -272,6 +272,14 @@ class PoDetail extends PureComponent {
                             <FormItem label="付款条件">
                                 <span>
                                     {renderPayCondition(basicInfo.payCondition)}
+                                </span>
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            {/* 供应商接单状态 */}
+                            <FormItem label="供应商接单状态">
+                                <span>
+                                    {supplierOrderStatus(basicInfo.supOrderStatus)}
                                 </span>
                             </FormItem>
                         </Col>
