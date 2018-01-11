@@ -19,7 +19,7 @@ export default (prop) => {
     }
     const procurementModel = (item) => {
         if (item) {
-            return item.preHarvestPinStatus === '0' ? '先销后采' : '先采后销'
+            return item.preHarvestPinStatus === 0 ? '先销后采' : '先采后销'
         }
         return '-'
     }
@@ -114,6 +114,13 @@ export default (prop) => {
                                         data && data.minNumber !== newDatas.minNumber ?
                                             'sell-modal-border' : null}
                                     >{data ? data.minNumber : '-'}</span>
+                                </FormItem>
+                                <FormItem>
+                                    <span>*最大销售数量：</span>
+                                    <span className={
+                                        data && data.maxNumber !== newDatas.maxNumber ?
+                                            'sell-modal-border' : null}
+                                    >{data ? data.maxNumber : '-'}</span>
                                 </FormItem>
                                 <FormItem>
                                     <span>*承诺发货时间：下单后</span>
