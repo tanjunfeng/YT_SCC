@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-09 15:05:46
+ * @Last Modified time: 2018-01-11 19:59:51
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -636,7 +636,7 @@ class ReturnManagementList extends PureComponent {
         return (
             <div className="po-return-mng-list">
                 <Form layout="inline">
-                    <Row gutter={40}>
+                    <Row className="row-bottom">
                         <Col>
                             {/* 退货单号 */}
                             <FormItem label="退货单号" >
@@ -659,7 +659,7 @@ class ReturnManagementList extends PureComponent {
                             </FormItem>
                         </Col>
                         <Col>
-                            <FormItem label="供应商类型">
+                            <FormItem label="供应商类型" className="itemTop">
                                 {getFieldDecorator('supplier', {
                                     initialValue: { spId: '', spNo: '', companyName: '' }
                                 })(<Supplier />)}
@@ -667,7 +667,7 @@ class ReturnManagementList extends PureComponent {
                         </Col>
                         {/* 供应商地点 */}
                         <Col>
-                            <FormItem label="供应商地点">
+                            <FormItem label="供应商地点" className="itemTop">
                                 <SearchMind
                                     compKey="providerNo"
                                     disabled={getFieldValue('supplier').spId === ''}
@@ -716,13 +716,13 @@ class ReturnManagementList extends PureComponent {
                                             </Option>
                                         ))}
                                     </Select>
-                                    )}
+                                )}
                             </FormItem>
                         </Col>
                         {/* 退货地点 */}
                         <Col>
                             {/* 地点 */}
-                            <FormItem label="对货地点">
+                            <FormItem label="对货地点" className="itemTop">
                                 <SearchMind
                                     compKey="search-mind-key1"
                                     rowKey="id"
@@ -769,7 +769,7 @@ class ReturnManagementList extends PureComponent {
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row gutter={40} type="flex" justify="end">
+                    <Row type="flex" justify="end">
                         <Col >
                             <Button size="default" type="primary" onClick={this.handleCreact}>
                                 新建

@@ -84,25 +84,25 @@ class SearchForm extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         return (
             <Form layout="inline" className="promotion">
-                <Row>
-                    <Col span={8}>
+                <Row className="row-bottom">
+                    <Col>
                         <FormItem label="券ID">
                             {getFieldDecorator('id')(<Input size="default" />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="券名称">
                             {getFieldDecorator('promotionName')(<Input size="default" />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
-                        <FormItem label="使用区域">
+                    <Col>
+                        <FormItem label="使用区域" className="itemTop">
                             {getFieldDecorator('branchCompany', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         {/* 状态 */}
                         <FormItem label="状态">
                             {getFieldDecorator('statusCode', {
@@ -112,7 +112,7 @@ class SearchForm extends PureComponent {
                             </Select>)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         {/* 类型 */}
                         <FormItem label="类型">
                             {getFieldDecorator('couponType', {
@@ -122,7 +122,7 @@ class SearchForm extends PureComponent {
                             </Select>)}
                         </FormItem>
                     </Col>
-                    <Col span={16}>
+                    <Col>
                         <FormItem label="有效日期">
                             {getFieldDecorator('promotionDateRange', {
                                 initialValue: ''
