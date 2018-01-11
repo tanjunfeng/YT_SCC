@@ -93,38 +93,36 @@ class SearchForm extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         return (
             <Form layout="inline" className="grant-coupons">
-                <Row gutter={40}>
-                    <Col span={8}>
+                <Row className="row-bottom">
+                    <Col>
                         <FormItem label="加盟商编号">
                             {getFieldDecorator('franchiseeId')(<Input size="default" />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="加盟商名称">
                             {getFieldDecorator('franchinessController')(<Input size="default" />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
-                        <FormItem label="所属子公司">
+                    <Col>
+                        <FormItem label="所属子公司" className="itemTop">
                             {getFieldDecorator('branchCompany', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
                         </FormItem>
                     </Col>
-                </Row>
-                <Row gutter={40}>
-                    <Col span={8}>
-                        <FormItem label="门店编号" style={{ paddingRight: 10 }}>
+                    <Col>
+                        <FormItem label="门店编号">
                             {getFieldDecorator('storeId')(<Input size="default" />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="门店名称">
                             {getFieldDecorator('storeName')(<Input size="default" />)}
                         </FormItem>
                     </Col>
                 </Row>
-                <Row gutter={40} type="flex" justify="end">
+                <Row type="flex" justify="end">
                     <Col>
                         <Button type="primary" size="default" onClick={this.handleSearch}>
                             查询

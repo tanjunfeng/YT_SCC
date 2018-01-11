@@ -3,7 +3,7 @@
  * @Description: 供应商结算
  * @CreateDate: 2017-09-06 17:54:20
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-08 11:26:25
+ * @Last Modified time: 2018-01-11 10:46:19
  */
 
 import React, { Component } from 'react';
@@ -211,8 +211,8 @@ class SimpleOrderList extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <Form layout="inline" className="promotion">
-                <Row gutter={40}>
-                    <Col span={8}>
+                <Row className="row-bottom">
+                    <Col>
                         <FormItem label="收货日期">
                             {getFieldDecorator('receiveDate', {
                                 initialValue: ''
@@ -224,18 +224,18 @@ class SimpleOrderList extends Component {
                                     placeholder={['开始时间', '结束时间']}
                                     onChange={this.onEnterTimeChange}
                                 />
-                                )}
+                            )}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
-                        <FormItem label="供应商">
+                    <Col>
+                        <FormItem label="供应商" className="itemTop">
                             {getFieldDecorator('supplier', {
                                 initialValue: { spId: '', spNo: '', companyName: '' }
                             })(<Supplier />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
-                        <FormItem label="供应商地点">
+                    <Col>
+                        <FormItem label="供应商地点" className="itemTop">
                             <SearchMind
                                 style={{ zIndex: 9 }}
                                 compKey="providerNo"
@@ -247,12 +247,12 @@ class SimpleOrderList extends Component {
                                             pageSize: params.pagination.pageSize,
                                             pageNum: params.pagination.current || 1
                                         }), 'supplierAdrSearchBox').then((res) => {
-                                            const dataArr = res.data.data || [];
-                                            if (!dataArr || dataArr.length === 0) {
-                                                message.warning('没有可用的数据');
-                                            }
-                                            return res;
-                                        })
+                                        const dataArr = res.data.data || [];
+                                        if (!dataArr || dataArr.length === 0) {
+                                            message.warning('没有可用的数据');
+                                        }
+                                        return res;
+                                    })
                                 }
                                 onChoosed={this.handleAdressChoose}
                                 onClear={this.handleAdressClear}
@@ -273,7 +273,7 @@ class SimpleOrderList extends Component {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="账期">
                             {getFieldDecorator('settlementPeriod', {
                                 initialValue: accountPeriod.defaultValue
@@ -293,14 +293,14 @@ class SimpleOrderList extends Component {
                             </Select>)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
-                        <FormItem label="子公司">
+                    <Col>
+                        <FormItem label="子公司" className="itemTop">
                             {getFieldDecorator('branchCompany', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="采购订单">
                             {getFieldDecorator('purchaseOrderNo')(
                                 <Input className="input" />
@@ -308,7 +308,7 @@ class SimpleOrderList extends Component {
                         </FormItem>
                     </Col>
                 </Row>
-                <Row gutter={40} type="flex" justify="end">
+                <Row type="flex" justify="end">
                     <Col>
                         <Button
                             type="primary"
