@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 加盟商结算
  * @CreateDate: 2017-09-06 17:53:59
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-03 18:04:20
+ * @Last Modified by: chenghaojie
+ * @Last Modified time: 2018-01-11 11:17:10
  */
 
 import React, { Component } from 'react';
@@ -297,148 +297,113 @@ class FranchiseeSettlement extends Component {
             <div className={orderML}>
                 <div className="manage-form">
                     <Form layout="inline">
-                        <div className="gutter-example">
-                            <Row gutter={16}>
-                                <Col className="gutter-row franchiseeSettlement-errPlace" span={8}>
-                                    {/* 签收日期 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">签收日期</span>
-                                            {getFieldDecorator('completeDate')(
-                                                <RangePicker
-                                                    style={{ width: '240px' }}
-                                                    className="manage-form-enterTime"
-                                                    format={DATE_FORMAT}
-                                                    placeholder={['开始时间', '结束时间']}
-                                                    onChange={this.onCompleteTimeChange}
-                                                    id="completeDate"
-                                                />
-                                            )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row franchiseeSettlement-errPlace" span={8}>
-                                    {/* 付款日期 */}
-                                    <FormItem>
-                                        <div className="franchiseeSettlement-errPlace">
-                                            <span className="sc-form-item-label">付款日期</span>
-                                            {getFieldDecorator('payDate', {
-                                                initialValue: ''
-                                            })(
-                                                <RangePicker
-                                                    style={{ width: '240px' }}
-                                                    className="manage-form-enterTime"
-                                                    format={DATE_FORMAT}
-                                                    placeholder={['开始时间', '结束时间']}
-                                                    onChange={this.onPayTimeChange}
-                                                />
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row franchiseeSettlement-errPlace" span={8}>
-                                    {/* 退款日期 */}
-                                    <FormItem>
-                                        <div className="franchiseeSettlement-errPlace">
-                                            <span className="sc-form-item-label">退款日期</span>
-                                            {getFieldDecorator('refundDate', {
-                                                initialValue: ''
-                                            })(
-                                                <RangePicker
-                                                    style={{ width: '240px' }}
-                                                    className="manage-form-enterTime"
-                                                    format={DATE_FORMAT}
-                                                    placeholder={['开始时间', '结束时间']}
-                                                    onChange={this.onRefundTimeChange}
-                                                />
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 加盟商 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">加盟商</span>
-                                            {getFieldDecorator('franchisee', {
-                                                initialValue: { franchiseeId: '', franchiseeName: '' }
-                                            })(<Franchisee />)}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row  franchiseeSettlement-gutter-Row" span={8}>
-                                    {/* 子公司 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">子公司</span>
-                                            {getFieldDecorator('branchCompany', {
-                                                initialValue: { id: '', name: '' }
-                                            })(<BranchCompany />)}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row franchiseeSettlement-gutter-row" span={8}>
-                                    {/* 已支付、已退款 */}
+                        <Row className="row-bottom">
+                            <Col>
+                                {/* 签收日期 */}
+                                <FormItem label="签收日期">
+                                    {getFieldDecorator('completeDate')(
+                                        <RangePicker
+                                            className="manage-form-enterTime"
+                                            format={DATE_FORMAT}
+                                            placeholder={['开始时间', '结束时间']}
+                                            onChange={this.onCompleteTimeChange}
+                                            id="completeDate"
+                                        />
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                {/* 付款日期 */}
+                                <FormItem label="付款日期">
+                                    {getFieldDecorator('payDate', {
+                                        initialValue: ''
+                                    })(
+                                        <RangePicker
+
+                                            className="manage-form-enterTime"
+                                            format={DATE_FORMAT}
+                                            placeholder={['开始时间', '结束时间']}
+                                            onChange={this.onPayTimeChange}
+                                        />
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                {/* 退款日期 */}
+                                <FormItem label="退款日期">
+                                    {getFieldDecorator('refundDate', {
+                                        initialValue: ''
+                                    })(
+                                        <RangePicker
+
+                                            className="manage-form-enterTime"
+                                            format={DATE_FORMAT}
+                                            placeholder={['开始时间', '结束时间']}
+                                            onChange={this.onRefundTimeChange}
+                                        />
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col >
+                                {/* 加盟商 */}
+                                <FormItem label="加盟商" className="itemTop">
+                                    {getFieldDecorator('franchisee', {
+                                        initialValue: { franchiseeId: '', franchiseeName: '' }
+                                    })(<Franchisee />)}
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                {/* 子公司 */}
+                                <FormItem label="子公司" className="itemTop">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                {/* 采购订单 */}
+                                <FormItem label="订单编号">
+                                    {getFieldDecorator('orderId', {
+                                        rules: [{
+                                            max: 20,
+                                            message: '请输入20位以内的订单编号'
+                                        }]
+                                    })(
+                                        <Input
+                                            className="input"
+                                            placeholder="请输入订单编号"
+                                        />
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                {/* 已支付、已退款 */}
+                                <FormItem className="franchiseeSettlement-gutter-Row">
                                     <CheckboxGroup
                                         options={plainOptions}
                                         value={this.state.checkedList}
                                         onChange={this.onChange}
                                     />
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col
-                                    className="gutter-row"
-                                    span={8}
-                                    style={{ paddingRight: 8, paddingLeft: 8 }}
-                                >
-                                    {/* 采购订单 */}
-                                    <FormItem>
-                                        <div>
-                                            <span
-                                                className="sc-form-item-label"
-                                            >订单编号</span>
-                                            {getFieldDecorator('orderId', {
-                                                rules: [{
-                                                    max: 20,
-                                                    message: '请输入20位以内的订单编号'
-                                                }]
-                                            })(
-                                                <Input
-                                                    className="input"
-                                                    placeholder="请输入订单编号"
-                                                />
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={24} type="flex" justify="end">
-                                <Col className="tr" span={16}>
-                                    <FormItem>
-                                        <Button
-                                            type="primary"
-                                            size="default"
-                                            onClick={this.handleOrderOutput}
-                                        >下载加盟商结算数据</Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            onClick={this.handlePaymentOutput}
-                                        >下载加盟商支付数据</Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            onClick={this.handleOrderReset}
-                                        >重置</Button>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                        </div>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row type="flex" justify="end">
+                            <Col>
+                                <Button
+                                    type="primary"
+                                    size="default"
+                                    onClick={this.handleOrderOutput}
+                                >下载加盟商结算数据</Button>
+                                <Button
+                                    size="default"
+                                    onClick={this.handlePaymentOutput}
+                                >下载加盟商支付数据</Button>
+                                <Button
+                                    size="default"
+                                    onClick={this.handleOrderReset}
+                                >重置</Button>
+                            </Col>
+                        </Row>
                     </Form>
                 </div>
             </div>

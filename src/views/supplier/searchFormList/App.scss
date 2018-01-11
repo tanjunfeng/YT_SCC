@@ -14,11 +14,13 @@
     .ant-form-item-control-wrapper{
         display: inline-block;
     }
+    .row-bottom {
+        margin-bottom: 24px;
+    }
     .ant-form-item {
         float: left;
         display: block;
         height: 42px;
-        margin-bottom: 24px;
         @media screen and (min-width: 0px) and (max-width: 1400px) {
             .ant-form-item-control-wrapper,
             .ant-select,

@@ -182,7 +182,7 @@ class SearchForm extends PureComponent {
         const { uploading, isBtnDisabled } = this.state;
         return (
             <Form layout="inline" className="price-import">
-                <Row gutter={40}>
+                <Row className="row-bottom">
                     <Col>
                         <FormItem label="上传ID">
                             {getFieldDecorator('importsId')(
@@ -228,7 +228,7 @@ class SearchForm extends PureComponent {
                         </FormItem>
                     </Col>
                 </Row>
-                <Row gutter={40} type="flex" justify="end">
+                <Row type="flex" justify="end">
                     <Col className="price-import-btn">
                         <Button type="primary" size="default" onClick={this.handleSearch}>
                             查询
