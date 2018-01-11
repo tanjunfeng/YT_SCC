@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2018-01-04 11:14:58
+ * @Last Modified time: 2018-01-10 18:46:41
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -650,9 +650,9 @@ class toDoReturnList extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.processMsgInfo;
         return (
-            <Form className="to-do-return-list">
+            <Form className="to-do-return-list" layout="inline">
                 <div className="search-box">
-                    <Row>
+                    <Row className="row-bottom">
                         <Col>
                             {/* 退货单号 */}
                             <FormItem label="退货单号" >
@@ -663,7 +663,7 @@ class toDoReturnList extends PureComponent {
                             {/* 流程状态 */}
                             <FormItem label="流程状态">
                                 {getFieldDecorator('auditStatus', { initialValue: '进行中' })(
-                                    <Select style={{ width: '153px' }} size="default" onChange={this.statusChange}>
+                                    <Select size="default" onChange={this.statusChange}>
                                         {
                                             auditStatusOption.data.map((item) => (
                                                 <Option key={item.key} value={item.key}>
@@ -794,7 +794,7 @@ class toDoReturnList extends PureComponent {
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row gutter={40} type="flex" justify="end">
+                    <Row type="flex" justify="end">
                         <Col>
                             <Button size="default" onClick={this.handleResetValue}>
                                 重置

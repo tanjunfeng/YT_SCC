@@ -195,7 +195,7 @@ class SearchForm extends PureComponent {
         return (
             <div className="search-form-list-manage">
                 <Form layout="inline">
-                    <Row gutter={40}>
+                    <Row className="row-bottom">
                         {/* 供应商编码 */}
                         <Col>
                             <FormItem label="供应商编码">
@@ -324,7 +324,7 @@ class SearchForm extends PureComponent {
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row gutter={40} type="flex" justify="end">
+                    <Row type="flex" justify="end">
                         <Col>
                             <Button
                                 type="primary"

@@ -81,25 +81,25 @@ class SearchForm extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         return (
             <Form layout="inline" className="promotion">
-                <Row gutter={40}>
-                    <Col span={8}>
+                <Row className="row-bottom">
+                    <Col>
                         <FormItem label="活动ID">
                             {getFieldDecorator('id')(<Input size="default" />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="活动名称">
                             {getFieldDecorator('promotionName')(<Input size="default" />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
-                        <FormItem label="使用范围">
+                    <Col>
+                        <FormItem label="使用范围" className="itemTop">
                             {getFieldDecorator('branchCompany', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         {/* 状态 */}
                         <FormItem label="状态">
                             {getFieldDecorator('statusCode', {
@@ -109,7 +109,7 @@ class SearchForm extends PureComponent {
                             </Select>)}
                         </FormItem>
                     </Col>
-                    <Col span={16}>
+                    <Col>
                         <FormItem label="活动时间">
                             {getFieldDecorator('promotionDateRange', {
                                 initialValue: []
@@ -123,7 +123,7 @@ class SearchForm extends PureComponent {
                         </FormItem>
                     </Col>
                 </Row>
-                <Row gutter={40} type="flex" justify="end">
+                <Row type="flex" justify="end">
                     <Col>
                         <Button type="primary" size="default" onClick={this.handleSearch}>
                             查询

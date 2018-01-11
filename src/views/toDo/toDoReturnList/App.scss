@@ -14,15 +14,18 @@
         display: inline-block;
     }
     .labelTop {
+        padding-top: 5px;
         .ant-form-item-label{
-            margin-top: -17px;
+            margin-top: -10px;
         }
+    }
+    .row-bottom {
+        margin-bottom: 24px;
     }
     .ant-form-item {
         float: left;
         display: block;
         height: 42px;
-        margin-bottom: 24px;
         @media screen and (min-width: 0px) and (max-width: 1400px) {
             .ant-form-item-control-wrapper,
             .ant-select,

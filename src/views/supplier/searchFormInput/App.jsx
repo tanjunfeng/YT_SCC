@@ -191,8 +191,8 @@ class SearchForm extends Component {
                 : firstSupplierStatusOptions;
         return (
             <div className="supplier-manage-form">
-                <Form >
-                    <Row gutter={40}>
+                <Form layout="inline">
+                    <Row className="row-bottom">
                         {/* 供应商编码 */}
                         <Col>
                             <FormItem label="供应商编码">
@@ -323,8 +323,8 @@ class SearchForm extends Component {
                             </Col>)
                         }
                     </Row>
-                    <Row gutter={40} type="flex" justify="end">
-                        <Col className="tr">
+                    <Row type="flex" justify="end">
+                        <Col>
                             <Button
                                 type="primary"
                                 onClick={this.handleGetValue}

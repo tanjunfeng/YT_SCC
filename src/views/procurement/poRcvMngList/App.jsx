@@ -508,7 +508,7 @@ class PoRcvMngList extends PureComponent {
         return (
             <div className="po-rcv-mng-list">
                 <Form layout="inline">
-                    <Row gutter={40} className="po-rcv-search-box">
+                    <Row className="row-bottom">
                         <Col>
                             {/* 采购单号 */}
                             <FormItem label="采购单号" >
@@ -538,7 +538,7 @@ class PoRcvMngList extends PureComponent {
                         </Col>
                         <Col>
                             {/* 供应商 */}
-                            <FormItem label="供应商">
+                            <FormItem label="供应商" className="itemTop">
                                 {getFieldDecorator('supplier', {
                                     initialValue: { spId: '', spNo: '', companyName: '' }
                                 })(<Supplier
@@ -548,7 +548,7 @@ class PoRcvMngList extends PureComponent {
                         </Col>
                         {/* 供应商地点 */}
                         <Col>
-                            <FormItem label="供应商地点">
+                            <FormItem label="供应商地点" className="itemTop">
                                 <SearchMind
                                     rowKey="providerNo"
                                     compKey="search-mind-supply-address"
@@ -613,7 +613,7 @@ class PoRcvMngList extends PureComponent {
                         </Col>
                         <Col>
                             {/* 地点 */}
-                            <FormItem label="地点">
+                            <FormItem label="地点" className="itemTop">
                                 <SearchMind
                                     style={{ zIndex: 7 }}
                                     compKey="search-mind-key1"
@@ -663,7 +663,6 @@ class PoRcvMngList extends PureComponent {
                             <FormItem label="收货日期">
                                 {getFieldDecorator('receivedDuring', {})(
                                     <RangePicker
-                                        style={{ width: 250 }}
                                         onChange={this.onEnterTimeChange}
                                         format={dateFormat}
                                         showTime={{
@@ -682,7 +681,6 @@ class PoRcvMngList extends PureComponent {
                                 {
                                     getFieldDecorator('auditDuring', {})(
                                         <RangePicker
-                                            style={{ width: 250 }}
                                             format={dateFormat}
                                             showTime={{
                                                 hideDisabledOptions: true,
@@ -695,7 +693,7 @@ class PoRcvMngList extends PureComponent {
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row gutter={40} type="flex" justify="end">
+                    <Row type="flex" justify="end">
                         <Col>
                             <Button type="primary" onClick={this.handleDownload} size="default">
                                 导出EXCEL
