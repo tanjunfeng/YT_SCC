@@ -61,7 +61,7 @@ import ReturnManagementList from 'bundle-loader?lazy!../views/procurement/return
 import ReturnManagementDetail from 'bundle-loader?lazy!../views/procurement/returnManagementDetail';
 import ReturnManagementCreat from 'bundle-loader?lazy!../views/procurement/returnManagementCreat';
 import ReserveAreaList from 'bundle-loader?lazy!../views/procurement/reserveAreaList';
-// import WishAreaListDetail from 'bundle-loader?lazy!../views/procurement/wishAreaListDetail';
+import ReserveAreaDetails from 'bundle-loader?lazy!../views/procurement/reserveAreaDetails';
 
 // 商品采购关系维护
 import ProcurementMaintenance from 'bundle-loader?lazy!../views/commodity/procurementMaintenance';
@@ -717,17 +717,17 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
-                        {/* <Route
-                            path="/wishAreaList/wishAreaDetail/:id"
+                        <Route
+                            path="/reserveAreaList/reserveAreaDetails/:id"
                             exact
                             render={
                                 () => (
-                                    <Bundle load={WishAreaDetail}>
+                                    <Bundle load={ReserveAreaDetails}>
                                         {(App) => <App />}
                                     </Bundle>
                                 )
                             }
-                        /> */}
+                        />
                     </Switch>
                 )
             }

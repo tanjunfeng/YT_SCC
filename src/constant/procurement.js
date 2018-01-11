@@ -178,14 +178,14 @@ export const processingState = {
         key: '',
         value: '全部'
     }, {
-        key: '0',
-        value: '发货成功'
+        key: 'init',
+        value: '待处理'
     }, {
-        key: '1',
-        value: '缺货处理'
+        key: 'complete',
+        value: '已完成'
     }, {
-        key: '2',
-        value: '未开始'
+        key: 'close',
+        value: '关闭'
     }]
 }
 

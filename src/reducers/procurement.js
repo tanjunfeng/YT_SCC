@@ -73,7 +73,9 @@ const initState = fromJS({
     // 采购单审批列表
     approvalList: [],
     // 预定专区
-    reserveAreaData: {}
+    reserveAreaData: {},
+    // 预定详情
+    reserveAreaDetaiData: {}
 });
 
 export default function (state = initState, action) {
@@ -181,6 +183,9 @@ export default function (state = initState, action) {
 
         case ActionType.QUERY_RESERVE_LIST:// 预定专区列表
             return state.set('reserveAreaData', fromJS(action.payload));
+
+        case ActionType.QUERY_RESERVE_DETAIL:// 预定专区列表
+            return state.set('reserveAreaDetaiData', fromJS(action.payload));
 
         case ActionType.RECEIVE_PO_RCV_INIT:// 初始收货单详情
             payload = action.payload || {};

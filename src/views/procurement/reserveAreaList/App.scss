@@ -2,6 +2,31 @@
     margin-right: 15px;
 }
 
+.reserve-area-modal{
+    .success{
+        background-color: #2BDF2B;
+        display: inline-block;
+        padding: 2px;
+        border-radius: 50%;
+        vertical-align: middle;
+    }
+    .error{
+        background-color: #D31C1F;
+        display: inline-block;
+        padding: 2px;
+        border-radius: 50%;
+        vertical-align: middle;
+    }
+    .radio-group{
+        width: 100%;
+        text-align: left;
+        margin-left: 55px;
+    }
+    .ant-radio-wrapper{
+        margin-left: 30px;
+    }
+}
+
 .wisharea-List {
     .ant-calendar-picker{
         width: 250px !important;

@@ -16,6 +16,8 @@ import {
     queryProdPriceChangeList as queryProdPriceChangeListService,
     auditInfo as auditInfoService,
     queryReserveAreaList as queryReserveAreaListService,
+    comleteOrCloseWishList as comleteOrCloseWishListService,
+    queryReserAreaDetail as queryReserAreaDetailService,
 } from '../service';
 
 // 流程管理下获取所有流程信息
@@ -30,6 +32,23 @@ export const queryProcessData = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     queryProcessListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+// 完成或关闭心愿单
+const comleteOrCloseWishListAction = (data) => ({
+    type: ActionType.COMLETE_OR_CLOSE_WISH,
+    payload: data
+});
+
+export const comleteOrCloseWishList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        comleteOrCloseWishListService(params)
+            .then(res => {
+                dispatch(
+                    comleteOrCloseWishListAction(res.data));
                 resolve(res);
             })
             .catch(err => reject(err));
@@ -57,6 +76,30 @@ export const queryReserveAreaList = (params) => dispatch => (
  */
 export const clearReserveAreaList = () => dispatch => (dispatch({
     type: ActionType.CLEAR_RESERVE_LIST,
+    payload: []
+}));
+// 预定详情列表
+const queryReserAreaDetailAction = (data) => ({
+    type: ActionType.QUERY_RESERVE_DETAIL,
+    payload: data
+});
+
+export const queryReserAreaDetail = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryReserAreaDetailService(params).then(res => {
+            dispatch(
+                queryReserAreaDetailAction(res.data));
+            resolve(res);
+        })
+        .catch(err => reject(err));
+    })
+);
+
+/**
+ * 清空预定详情列表
+ */
+export const clearReserAreaDetail = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_RESERVE_DETAIL,
     payload: []
 }));
 // 流程管理下根据ID删除一条流程信息

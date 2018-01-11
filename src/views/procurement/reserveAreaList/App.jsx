@@ -3,7 +3,7 @@
  * @Description: 预定专区
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-09 22:33:08
+ * @Last Modified time: 2018-01-11 19:57:23
  */
 
 import React, { PureComponent } from 'react';
@@ -12,37 +12,34 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
-    Form, Input, Button, Row, Col, Select,
-    Icon, Table, message, Upload, Menu,
-    DatePicker, Dropdown
+    Form, Icon, Table, message, Menu, Dropdown, Modal
 } from 'antd';
-import moment from 'moment';
+import { Link } from 'react-router-dom';
 import { PAGE_SIZE } from '../../../constant';
+import Util from '../../../util/util';
 import SearchForm from './searchForm';
 import { wishAreaColumns } from '../columns';
 import {
     queryReserveAreaList,
+    comleteOrCloseWishList,
     clearReserveAreaList
 } from '../../../actions/process';
-import { Link } from 'react-router-dom';
-import { sellPriceChangeExport } from '../../../service'
+import { wishListsForExcel } from '../../../service';
 
-const FormItem = Form.Item;
-const dateFormat = 'YYYY-MM-DD';
-const Option = Select.Option;
+const confirm = Modal.confirm;
 
 @connect(state => ({
     reserveAreaData: state.toJS().procurement.reserveAreaData,
 }), dispatch => bindActionCreators({
     queryReserveAreaList,
-    clearReserveAreaList
+    clearReserveAreaList,
+    comleteOrCloseWishList
 }, dispatch))
 
 class ReserveAreaList extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.param = {};
         this.state = {
         }
     }
@@ -63,9 +60,15 @@ class ReserveAreaList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        Object.assign(this.param, { pageNum, current: pageNum });
+        Object.assign(this.param, { pageNum, current: pageNum, pageSize: PAGE_SIZE});
         this.query();
     }
+
+    param = {
+        pageNum: 1,
+        pageSize: PAGE_SIZE,
+        current: 1
+    };
 
     /**
      * 列表页查询
@@ -82,9 +85,10 @@ class ReserveAreaList extends PureComponent {
      * @param {Object} param
      */
     handleAreaListSearch = (param) => {
-        this.onAreaListReset();
+        this.handleAreaListReset();
         this.param = {
-            current: 1,
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
             ...param
         };
         this.query();
@@ -101,16 +105,45 @@ class ReserveAreaList extends PureComponent {
     }
 
     handleSelect = (record, index) => {
-        if (index.key === '1') {
-            console.log(record)
+        const { comleteOrCloseWishList } = this.props;
+        const { key } = index;
+        const { id } = record;
+        switch (key) {
+            case 'complete':
+                confirm({
+                    title: '到货处理',
+                    content: '确认此到货处理操作？',
+                    onOk: () => {
+                        comleteOrCloseWishList({wishListId: id, status: key}).then(res => {
+                            if (res.code === 200) message.success(res.message);
+                        })
+                    },
+                    onCancel() { }
+                });
+                break;
+            case 'close':
+                confirm({
+                    title: '无货处理',
+                    content: '确认此无货处理操作？',
+                    onOk: () => {
+                        comleteOrCloseWishList({wishListId: id, status: key}).then(res => {
+                            if (res.code === 200) message.success(res.message);
+                        })
+                    },
+                    onCancel() { }
+                });
+                break;
+            default:
+                break;
         }
     }
 
     /**
      * 下载导入结果的回调
     */
-    exportList = () => {
-        Utils.exportExcel(sellPriceChangeExport, Utils.removeInvalid(this.param));
+    handleExportList = () => {
+        console.log(this.param)
+        Util.exportExcel(wishListsForExcel, Util.removeInvalid(this.param));
     }
 
     /**
@@ -119,19 +152,19 @@ class ReserveAreaList extends PureComponent {
      * @param {object} record 单行数据
     */
     renderOperation = (text, record) => {
-        const { productId } = record;
+        const { id } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key={0}>
-                    <Link to={`/commodifyList/${productId}`}>查看详情</Link>
+                    <Link to={`${pathname}/reserveAreaDetails/${id}`}>查看详情</Link>
                 </Menu.Item>
-                <Menu.Item key={1}>
+                <Menu.Item key={'complete'}>
                     <a target="_blank" rel="noopener noreferrer">
                                 到货通知
                     </a>
                 </Menu.Item>
-                <Menu.Item key={2}>
+                <Menu.Item key={'close'}>
                     <a target="_blank" rel="noopener noreferrer">
                                 无货处理
                     </a>
@@ -149,8 +182,7 @@ class ReserveAreaList extends PureComponent {
 
     render() {
         const { reserveAreaData = {} } = this.props;
-        const { data = [] } = reserveAreaData;
-        const { pageNum, total } = data;
+        const { data = [], pageNum, total } = reserveAreaData;
         wishAreaColumns[wishAreaColumns.length - 1].render = this.renderOperation;
         return (
             <div>
@@ -162,16 +194,13 @@ class ReserveAreaList extends PureComponent {
                 <Table
                     dataSource={data}
                     columns={wishAreaColumns}
-                    rowKey="productCode"
-                    scroll={{
-                        x: 1400
-                    }}
+                    rowKey="id"
                     bordered
                     pagination={{
                         current: this.param.current,
-                        pageNum: pageNum,
+                        pageNum,
                         pageSize: PAGE_SIZE,
-                        total: total,
+                        total,
                         showQuickJumper: true,
                         onChange: this.onPaginate
                     }}

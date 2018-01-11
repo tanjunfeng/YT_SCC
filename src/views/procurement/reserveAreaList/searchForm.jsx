@@ -43,38 +43,39 @@ class SearchForm extends PureComponent {
     * @return {object}  返回所有填写了有效的表单值
     */
     getFormVulue = () => {
-        const { supplierId, classify, brandName, sortType } = this.state;
         const {
             company,
-            processingState,
+            gbCode,
+            status,
             orderDate
         } = this.props.form.getFieldsValue();
-
+        const createTimeStart = orderDate.length > 1 ? orderDate[0].valueOf() : '';
+        const createTimeEnd = orderDate.length > 1 ? orderDate[1].valueOf() : '';
         return Util.removeInvalid({
             branchCompanyId: company.id,
-            processingState,
-            orderDate
+            gbCode,
+            status,
+            createTimeStart,
+            createTimeEnd
         });
-    }
-
-    handleComChange = (record) => {
-        console.log(record)
     }
 
     /**
      * 点击搜索的回调
      */
     handleWishSearch = () => {
-        console.log(this.getFormVulue())
         this.props.onAreaListSearch(this.getFormVulue())
     }
 
     /**
      * 点击重置的回调
      */
-    handleReset() {
+    handleWishReset = () => {
         this.props.form.resetFields(); // 清除当前查询条件
         this.props.onAreaListReset(); // 通知查询条件已清除
+        this.props.form.setFieldsValue({
+            company: { reset: true }
+        });
     }
 
     /**
@@ -100,6 +101,17 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col>
+                                <FormItem label="商品条码">
+                                    {getFieldDecorator('gbCode')(
+                                        <Input
+                                            className="input"
+                                            style={{ paddingLeft: '10px', paddingRight: '10px' }}
+                                            placeholder="商品条码"
+                                        />
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col>
                                 <FormItem label="订单日期">
                                     {getFieldDecorator('orderDate', {
                                         initialValue: []
@@ -114,7 +126,7 @@ class SearchForm extends PureComponent {
                             <Col>
                                 {/* 采购单类型 */}
                                 <FormItem label="处理状态">
-                                    {getFieldDecorator('processingState', {
+                                    {getFieldDecorator('status', {
                                         initialValue: processingState.defaultValue
                                     })(
                                         <Select size="default">
@@ -139,12 +151,6 @@ class SearchForm extends PureComponent {
                         </Row>
                     </div>
                 </Form>
-                <Modal
-                    title="重新选择门店"
-                    /* visible={this.state.modalRechooseVisible} */
-                    onOk={this.handleRechooseOk}
-                    onCancel={this.handleRechooseCancel}
-                />
             </div>
         );
     }

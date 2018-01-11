@@ -177,23 +177,23 @@ export const wishAreaColumns = [{
     key: 'productCode',
     render: text => {
         if (!text) {
-            return '-';
+            return <span className="'wishList-red'">供应链无此商品</span>;
         }
         return (
-            <span className={!text ? 'wishList-red' : ''}>{text}</span>
+            <span>{text}</span>
         );
     }
 }, {
     title: '商品条码',
-    dataIndex: 'internationalCode',
-    key: 'internationalCode'
+    dataIndex: 'gbCode',
+    key: 'gbCode'
 }, {
     title: '商品名称',
     dataIndex: 'productName',
     key: 'productName',
     render: text => {
         if (!text) {
-            return '-';
+            return '暂无商品信息';
         }
         return (
             <span className={!text ? 'wishList-red' : ''}>{text}</span>
@@ -201,12 +201,12 @@ export const wishAreaColumns = [{
     }
 }, {
     title: '需求数量',
-    dataIndex: 'purchaseNumber',
-    key: 'purchaseNumber'
+    dataIndex: 'totalQuantity',
+    key: 'totalQuantity'
 }, {
     title: '第一次提交时间',
-    dataIndex: 'packingSpecifications',
-    key: 'packingSpecifications',
+    dataIndex: 'createTime',
+    key: 'createTime',
     render: timestamp => ({
         children: Util.getTime(timestamp)
     })
@@ -216,11 +216,11 @@ export const wishAreaColumns = [{
     key: 'status',
     render: (status) => {
         switch (status) {
-            case 0:
+            case 'init':
                 return <span className="wishList-gray">未开始</span>;
-            case 1:
+            case 'complete':
                 return <span className="wishList-green">到货处理</span>;
-            case 2:
+            case 'close':
                 return <span className="wishList-blue">无货处理</span>;
             default:
                 return '-';
@@ -231,4 +231,32 @@ export const wishAreaColumns = [{
     dataIndex: 'operation',
     key: 'operation',
     render: this.renderOperation
+}];
+
+export const wishAreaDetailsColumns = [{
+    title: '商品条码',
+    dataIndex: 'gbCode',
+    key: 'gbCode'
+}, {
+    title: '门店编号',
+    dataIndex: 'storeId',
+    key: 'storeId'
+}, {
+    title: '门店名称',
+    dataIndex: 'storeName',
+    key: 'storeName'
+}, {
+    title: '需求数量',
+    dataIndex: 'quantity',
+    key: 'quantity'
+}, {
+    title: '提交时间',
+    dataIndex: 'createTime',
+    key: 'createTime',
+    render: timestamp => {
+        if (!timestamp) {
+            return '-';
+        }
+        return <span>{Util.getTime(timestamp)}</span>
+    }
 }];
