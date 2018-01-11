@@ -60,6 +60,8 @@ import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/poRcvDetail';
 import ReturnManagementList from 'bundle-loader?lazy!../views/procurement/returnManagementList';
 import ReturnManagementDetail from 'bundle-loader?lazy!../views/procurement/returnManagementDetail';
 import ReturnManagementCreat from 'bundle-loader?lazy!../views/procurement/returnManagementCreat';
+import ReserveAreaList from 'bundle-loader?lazy!../views/procurement/reserveAreaList';
+import ReserveAreaDetails from 'bundle-loader?lazy!../views/procurement/reserveAreaDetails';
 
 // 商品采购关系维护
 import ProcurementMaintenance from 'bundle-loader?lazy!../views/commodity/procurementMaintenance';
@@ -694,6 +696,33 @@ const routes = [
                             render={
                                 () => (
                                     <Bundle load={ReturnGoodsModify}>
+                                        {(App) => <App />}
+                                    </Bundle>
+                                )
+                            }
+                        />
+                    </Switch>
+                )
+            },
+            {
+                path: '/reserveAreaList',
+                parent: 'procurementMng',
+                key: 'xyzq',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/reserveAreaList"
+                            exact
+                            render={() => (<Bundle load={ReserveAreaList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/reserveAreaList/reserveAreaDetails/:id"
+                            exact
+                            render={
+                                () => (
+                                    <Bundle load={ReserveAreaDetails}>
                                         {(App) => <App />}
                                     </Bundle>
                                 )

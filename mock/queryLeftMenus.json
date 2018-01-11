@@ -245,6 +245,12 @@
                     "authorityCode": "cgthdgllb",
                     "displayName": "退货单管理列表",
                     "menuList": []
+                },
+                {
+                    "authorityId": 369,
+                    "authorityCode": "xyzq",
+                    "displayName": "预定专区",
+                    "menuList": []
                 }
             ]
         },
