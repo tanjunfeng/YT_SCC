@@ -7,13 +7,13 @@ import {
     Col,
     Input,
     Select,
-    Button
-    // Table,
-    // message
+    Button,
+    message
 } from 'antd';
 import Commodity from '../../../container/search/Commodity';
 import { Category } from '../../../container/cascader';
 import Brands from '../../../container/search/Brands';
+import Sites from '../../../container/search/Sites';
 import { logisticsList, siteTypeList } from './constant';
 
 const FormItem = Form.Item;
@@ -38,19 +38,48 @@ class SearchForm extends PureComponent {
     }
 
     handleSearch = () => {
+        const { getFieldsValue } = this.props.form;
+        const { categoryObj } = this.state;
+        const {
+            barCode,
+            brand,
+            commodity,
+            logisticsModel,
+            site,
+            siteType
+        } = getFieldsValue();
+        const queryParams = {
+            barCode,
+            brand: brand.record.id,
+            commodity: commodity.record.productId,
+            logisticsModel,
+            /**
+             * 根据不同的值清单取site.record对应字段
+             */
+            site: site.record.id,
+            siteType,
+            category: categoryObj
+        }
 
+        if (categoryObj.length > 0 && categoryObj.length < 3) {
+            message.error('请选择至少三级商品分类');
+            return;
+        }
+        this.props.queryList(queryParams);
     }
 
     handleAdd = () => {
-        this.props.history.push('/sitesManage/add');
+        console.log(this.state.categoryObj)
+        // this.props.history.push('/sitesManage/add');
     }
 
-    handleCategorySelect = categoryObj => {
-        // this.setState({ categoryObj });
-        console.log(categoryObj)
+    handleCategorySelect = (val) => {
+        // alert('ok')
+        // console.log("this.state.categoryObj");
+        console.log(val);
     }
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
         return (
             <div className="sites-manage">
                 <Form layout="inline" className="sites-manage-form">
@@ -59,7 +88,9 @@ class SearchForm extends PureComponent {
                             <FormItem label="商品分类">
                                 {getFieldDecorator('category', {
                                     initialValue: this.state.category
-                                })(<Category onChange={this.handleCategorySelect} />)}
+                                })(<Category
+                                    onChange={this.handleCategorySelect}
+                                />)}
                             </FormItem>
                         </Col>
                         <Col>
@@ -132,20 +163,11 @@ class SearchForm extends PureComponent {
                         <Col>
                             <FormItem label="地点" >
                                 {getFieldDecorator('site', {
-                                    initialValue: siteTypeList.defaultValue
+                                    initialValue: {
+                                        
+                                    }
                                 })(
-                                    <Select
-                                        size="large"
-                                        onChange={this.handleChangeSiteType}
-                                    >
-                                        {
-                                            siteTypeList.data.map(item => (
-                                                <Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>
-                                            ))
-                                        }
-                                    </Select>
+                                    <Sites disabled={getFieldValue('siteType') === ''} siteTypeCode={getFieldValue('siteType')} />
                                 )}
                             </FormItem>
                         </Col>

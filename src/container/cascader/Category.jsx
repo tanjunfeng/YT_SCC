@@ -54,6 +54,7 @@ class Category extends PureComponent {
      */
     handleChange = (value, selectedOptions) => {
         console.log(value, selectedOptions);
+        console.log(this.props.onChange)
         if (selectedOptions.length === 0) {
             this.props.onChange(null, selectedOptions);
         } else {

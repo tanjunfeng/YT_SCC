@@ -145,16 +145,11 @@ class SiteManage extends PureComponent {
         const { pubFetchValueList, goodsSitesManageList } = this.props;
         const { data, total, pageNum } = goodsSitesManageList;
         const { selectedRows } = this.state;
-        /**
-         * ToDo: id替换为实际字段
-         */
-        const selectedIds = selectedRows.map(item => item.id);
         return (
             <div>
                 <SearchForm
                     pubFetchValueList={ pubFetchValueList }
                     queryList={ this.queryList }
-                    selectedIds={selectedIds}
                 />
                 <div className="sites-manage-tab">
                     <div className="table-operations">

@@ -19,12 +19,9 @@ export const siteTypeList = {
         value: '全部'
     }, {
         key: '0',
-        value: '子公司'
+        value: '仓库'
     }, {
         key: '1',
-        value: '区域组'
-    }, {
-        key: '2',
         value: '门店'
     }]
 };
