@@ -1,5 +1,5 @@
 /**
- * @file SiderMenu
+ * @file TopMenu
  * @author wuxinwei
  *
  * 顶部菜单根据 后端数据进行 render
@@ -7,10 +7,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Menu, Icon, Carousel, Dropdown } from 'antd';
-import { CODE } from '../../constants';
+import { Menu, Icon, Dropdown } from 'antd';
+import { CODE } from '../../constant';
 import Utils from '../../util/util';
 import './topMenu.scss';
 
@@ -25,7 +23,6 @@ class TopMenu extends Component {
 
         const { topMenus } = props;
         this.defaultSelect = topMenus.menu.find((item) => item.code === CODE);
-        this.showDropdown = false;
     }
 
     componentDidMount() {
@@ -38,10 +35,9 @@ class TopMenu extends Component {
         this.count = 1;
         this.totalWidth = widthArr.reduce(this.reduceCallback);
         delete this.count;
-        this.showDropdown = this.totalWidth > this.topMenuWidth ? true : false;
         const newArr = this.props.topMenus.menu.slice(this.menuIndex - 1);
         const topMenuWidthArr = widthArr.slice(0, this.menuIndex - 1);
-        if(this.showDropdown){
+        if (this.totalWidth > this.topMenuWidth) {
             this.setState({
                 dropDownMenu: newArr,
                 menuStyle: {
@@ -61,10 +57,10 @@ class TopMenu extends Component {
      */
     reduceCallback = (sum, value, index) => {
         const difference = (sum + value) - this.topMenuWidth;
-        if(difference > 0){
-            if(this.count === 1){
+        if (difference > 0) {
+            if (this.count === 1) {
                 this.menuIndex = index;
-                this.count++; 
+                this.count++
             }
         }
         return sum + value;
@@ -135,7 +131,7 @@ class TopMenu extends Component {
     }
     render() {
         return (
-            <div className={this.showDropdown ? "top-menu-warp on" : "top-menu-warp"} style={this.state.totalStyle}>
+            <div className={this.totalWidth > this.topMenuWidth ? 'top-menu-warp on' : 'top-menu-warp'} style={this.state.totalStyle}>
                 <div className="ant-menu-warp">
                     <Menu
                         onClick={this.handleClick}
@@ -150,7 +146,7 @@ class TopMenu extends Component {
 
                 </div>
                 {
-                    this.showDropdown && this.renderDropDown()
+                    this.totalWidth > this.topMenuWidth && this.renderDropDown()
                 }
             </div>
         );
