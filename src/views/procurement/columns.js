@@ -6,7 +6,6 @@
  */
 import React from 'react';
 import moment from 'moment';
-import Util from '../../util/util';
 import { locType, poStatus, businessModeType, poType, supplierOrderStatus } from '../../constant/procurement';
 
 // 供应商列表
@@ -180,94 +179,4 @@ export const printColumns = [{
     dataIndex: 'totalAmount',
     key: 'totalAmount',
     width: 100
-}];
-
-export const wishAreaColumns = [{
-    title: '商品编码',
-    dataIndex: 'productCode',
-    key: 'productCode',
-    render: text => {
-        if (!text) {
-            return <span className="'wishList-red'">供应链无此商品</span>;
-        }
-        return (
-            <span>{text}</span>
-        );
-    }
-}, {
-    title: '商品条码',
-    dataIndex: 'gbCode',
-    key: 'gbCode'
-}, {
-    title: '商品名称',
-    dataIndex: 'productName',
-    key: 'productName',
-    render: text => {
-        if (!text) {
-            return '暂无商品信息';
-        }
-        return (
-            <span className={!text ? 'wishList-red' : ''}>{text}</span>
-        );
-    }
-}, {
-    title: '需求数量',
-    dataIndex: 'totalQuantity',
-    key: 'totalQuantity'
-}, {
-    title: '第一次提交时间',
-    dataIndex: 'createTime',
-    key: 'createTime',
-    render: timestamp => ({
-        children: Util.getTime(timestamp)
-    })
-}, {
-    title: '处理状态',
-    dataIndex: 'status',
-    key: 'status',
-    render: (status) => {
-        switch (status) {
-            case 'init':
-                return <span className="wishList-gray">未开始</span>;
-            case 'complete':
-                return <span className="wishList-green">到货处理</span>;
-            case 'close':
-                return <span className="wishList-blue">无货处理</span>;
-            default:
-                return '-';
-        }
-    }
-}, {
-    title: '操作',
-    dataIndex: 'operation',
-    key: 'operation',
-    render: this.renderOperation
-}];
-
-export const wishAreaDetailsColumns = [{
-    title: '商品条码',
-    dataIndex: 'gbCode',
-    key: 'gbCode'
-}, {
-    title: '门店编号',
-    dataIndex: 'storeId',
-    key: 'storeId'
-}, {
-    title: '门店名称',
-    dataIndex: 'storeName',
-    key: 'storeName'
-}, {
-    title: '需求数量',
-    dataIndex: 'quantity',
-    key: 'quantity'
-}, {
-    title: '提交时间',
-    dataIndex: 'createTime',
-    key: 'createTime',
-    render: timestamp => {
-        if (!timestamp) {
-            return '-';
-        }
-        return <span>{Util.getTime(timestamp)}</span>
-    }
 }];

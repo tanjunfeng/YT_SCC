@@ -89,6 +89,12 @@
                     "authorityCode": "zydxd",
                     "displayName": "直营店下单",
                     "menuList": []
+                },
+                {
+                    "authorityId": 369,
+                    "authorityCode": "xyzq",
+                    "displayName": "预定专区",
+                    "menuList": []
                 }
             ]
         },
@@ -244,12 +250,6 @@
                     "authorityId": 367,
                     "authorityCode": "cgthdgllb",
                     "displayName": "退货单管理列表",
-                    "menuList": []
-                },
-                {
-                    "authorityId": 369,
-                    "authorityCode": "xyzq",
-                    "displayName": "预定专区",
                     "menuList": []
                 }
             ]
