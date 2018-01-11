@@ -60,8 +60,6 @@ import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/poRcvDetail';
 import ReturnManagementList from 'bundle-loader?lazy!../views/procurement/returnManagementList';
 import ReturnManagementDetail from 'bundle-loader?lazy!../views/procurement/returnManagementDetail';
 import ReturnManagementCreat from 'bundle-loader?lazy!../views/procurement/returnManagementCreat';
-import ReserveAreaList from 'bundle-loader?lazy!../views/procurement/reserveAreaList';
-import ReserveAreaDetails from 'bundle-loader?lazy!../views/procurement/reserveAreaDetails';
 
 // 商品采购关系维护
 import ProcurementMaintenance from 'bundle-loader?lazy!../views/commodity/procurementMaintenance';
@@ -75,6 +73,9 @@ import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/
 import BackstageBack from 'bundle-loader?lazy!../views/orderManagement/backstageBack';
 // 订单管理 - 直营店下单
 import DirectStoreOrder from 'bundle-loader?lazy!../views/orderManagement/directSalesOrders';
+// 预定专区
+import ReserveAreaList from 'bundle-loader?lazy!../views/orderManagement/reserveAreaList';
+import ReserveAreaDetails from 'bundle-loader?lazy!../views/orderManagement/reserveAreaDetails';
 
 // 销售管理
 
@@ -703,33 +704,6 @@ const routes = [
                         />
                     </Switch>
                 )
-            },
-            {
-                path: '/reserveAreaList',
-                parent: 'procurementMng',
-                key: 'xyzq',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/reserveAreaList"
-                            exact
-                            render={() => (<Bundle load={ReserveAreaList}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
-                        <Route
-                            path="/reserveAreaList/reserveAreaDetails/:id"
-                            exact
-                            render={
-                                () => (
-                                    <Bundle load={ReserveAreaDetails}>
-                                        {(App) => <App />}
-                                    </Bundle>
-                                )
-                            }
-                        />
-                    </Switch>
-                )
             }
         ]
     },
@@ -830,6 +804,33 @@ const routes = [
                             render={() => (<Bundle load={DirectStoreOrder}>
                                 {(App) => <App />}
                             </Bundle>)}
+                        />
+                    </Switch>
+                )
+            },
+            {
+                path: '/reserveAreaList',
+                parent: 'ordergl',
+                key: 'xyzq',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/reserveAreaList"
+                            exact
+                            render={() => (<Bundle load={ReserveAreaList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/reserveAreaList/reserveAreaDetails/:id"
+                            exact
+                            render={
+                                () => (
+                                    <Bundle load={ReserveAreaDetails}>
+                                        {(App) => <App />}
+                                    </Bundle>
+                                )
+                            }
                         />
                     </Switch>
                 )
