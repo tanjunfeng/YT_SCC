@@ -46,13 +46,18 @@ const pathListener = (location, history) => {
  */
 const findIdByCode = (code, data) => {
     if (!data || !code) {
-        return -1;
+        return;
     }
-    return data.find(value => {
-        if (value.subMenu.length > 0) {
-            return value.submenu.find(subMenu => (subMenu.code === code));
+    let id = -1;
+    data.forEach(value => {
+        if (value.submenu.length > 0) {
+            return value.submenu.forEach((subMenu) => {
+                if (subMenu.code === code) {
+                    id = subMenu.id;
+                }
+            });
         }
-        return -1;
+        return id;
     });
 }
 

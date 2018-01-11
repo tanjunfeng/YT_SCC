@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2018-01-04 11:13:17
+ * @Last Modified time: 2018-01-10 18:30:16
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -566,7 +566,7 @@ class toDoPurchaseList extends PureComponent {
         const { data, total, pageNum, pageSize } = this.props.processMsgInfo;
         return (
             <div className="to-do-purchase-list">
-                <Form>
+                <Form layout="inline">
                     <div className="search-box">
                         <Row>
                             <Col>

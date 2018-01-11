@@ -285,8 +285,8 @@ class StoreAdjList extends Component {
         columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className="store-adj-list">
-                <Form>
-                    <Row>
+                <Form layout="inline">
+                    <Row className="row-bottom">
                         <Col>
                             {/* 单据编号 */}
                             <FormItem label="单据编号">
@@ -445,7 +445,7 @@ class StoreAdjList extends Component {
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row gutter={16} type="flex" justify="end">
+                    <Row type="flex" justify="end">
                         <Col>
                             <Button
                                 size="default"

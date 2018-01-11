@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import { Form, Row, Col, Table } from 'antd';
-import { stepPriceColumns as columns } from './columns';
+import { stepPriceColumns, stepPriceColumnsAfter } from './columns';
 
 const FormItem = Form.Item;
 
@@ -14,8 +14,15 @@ export default (prop) => {
     const { newDatas = {}, isAfter } = prop;
     const data = newDatas.sellPricesInReview;
     const { sellSectionPrices = [] } = newDatas;
-    const sellSectionPricesAfter = data ? data.sellSectionPrices : []
-
+    const sellSectionPricesAfter = data ? data.sellSectionPrices : [];
+    const forAfterColumns = () => {
+        stepPriceColumnsAfter.forEach((val, i) => {
+            stepPriceColumnsAfter[i].render = (text, record, index) => (
+                <span className={sellSectionPrices[index] && sellSectionPrices[index][val.dataIndex] !== text ? 'sell-modal-color' : null} > {text}</span>
+            )
+        })
+    }
+    forAfterColumns()
     return (
         <div className="sell-modal-item item-max-height">
             {
@@ -26,7 +33,7 @@ export default (prop) => {
                         <div className="sell-modal-item-content">
                             <Table
                                 rowKey="id"
-                                columns={columns}
+                                columns={stepPriceColumns}
                                 dataSource={sellSectionPrices}
                                 pagination={false}
                             />
@@ -55,7 +62,7 @@ export default (prop) => {
                         <div className="sell-modal-item-content">
                             <Table
                                 rowKey="id"
-                                columns={columns}
+                                columns={stepPriceColumnsAfter}
                                 dataSource={sellSectionPricesAfter}
                                 pagination={false}
                             />

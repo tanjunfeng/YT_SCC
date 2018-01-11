@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../../util/util';
-import { poStatus, locType, poType, businessModeType } from '../../../constant/procurement';
+import { poStatus, locType, poType, businessModeType, supplierOrderStatus } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import {
     getWarehouseAddressMap,
@@ -39,7 +39,7 @@ class PoSearchForm extends PureComponent {
         this.handleCreate = this.handleCreate.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.state = {
-            spId: '',   // 供应商ID
+            spId: '', // 供应商ID
             isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,
             locationData: {}
@@ -231,8 +231,8 @@ class PoSearchForm extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { auth } = this.props;
         return (
-            <Form layout="inline" className="po-mng-list">
-                <Row gutter={40}>
+            <Form layout="inline" className="po-search-form">
+                <Row className="row-bottom">
                     <Col>
                         <FormItem label="采购单号" >
                             {getFieldDecorator('purchaseNumber', {
@@ -298,7 +298,7 @@ class PoSearchForm extends PureComponent {
                                         ))
                                     }
                                 </Select>
-                                )}
+                            )}
                         </FormItem>
                     </Col>
                     <Col>
@@ -426,11 +426,23 @@ class PoSearchForm extends PureComponent {
                         </FormItem>
                     </Col>
                     <Col>
+                        <FormItem label="供应商接单状态">
+                            {getFieldDecorator('businessModeCode', {
+                                initialValue: supplierOrderStatus.defaultValue
+                            })(
+                                <Select size="default" >
+                                    {supplierOrderStatus.data.map((item) => (
+                                        <Option key={item.key} value={item.key}>
+                                            {item.value}
+                                        </Option>
+                                    ))}
+                                </Select>)}
+                        </FormItem>
+                    </Col>
+                    <Col>
                         <FormItem label="创建日期">
                             {getFieldDecorator('createTime')(
                                 <RangePicker
-                                    className="date-range-picker"
-                                    style={{ width: 250 }}
                                     format={dateFormat}
                                     showTime={{
                                         hideDisabledOptions: true,
@@ -446,8 +458,6 @@ class PoSearchForm extends PureComponent {
                         <FormItem label="审批日期">
                             {getFieldDecorator('auditTime')(
                                 <RangePicker
-                                    className="date-range-picker"
-                                    style={{ width: 250 }}
                                     format={dateFormat}
                                     showTime={{
                                         hideDisabledOptions: true,
@@ -460,7 +470,7 @@ class PoSearchForm extends PureComponent {
                         </FormItem>
                     </Col>
                 </Row>
-                <Row gutter={40} type="flex" justify="end">
+                <Row type="flex" justify="end">
                     <Col>
                         {auth.new &&
                             <Button size="default" onClick={this.handleCreate}>
