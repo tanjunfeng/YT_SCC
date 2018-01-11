@@ -191,6 +191,7 @@ class ProcurementMaintenance extends PureComponent {
                         initData={this.props.purchaseCardData}
                         proId={match.params.id}
                         onCliked={this.handleChange}
+                        getCardData={this.handleGetCardData}
                     />
                 </div>
                 {

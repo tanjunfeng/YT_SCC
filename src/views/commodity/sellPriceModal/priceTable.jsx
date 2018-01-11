@@ -18,10 +18,6 @@ import {
 import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
 
-function getNewData(list) {
-    return Immutable.fromJS(list).toJS();
-}
-
 @connect(
     state => ({
         costPrice: state.toJS().commodity.costPrice
@@ -34,23 +30,23 @@ function getNewData(list) {
 class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
-        this.mark = [];
-        const newData = getNewData(props.value.list);
         this.state = {
-            prices: newData,
+            prices: Immutable.fromJS(props.value.list).toJS(),
             canAdd: true // 是否可继续添加价格
         }
-        this.cacheData = newData.map(item => ({ ...item }));
-        this.notify(newData);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.markTable();
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, index, 'startNumber')
         columns[1].render = (text, record, index) => this.renderColumnsNum(text, record, index, 'endNumber')
         columns[2].render = (text, record, index) => this.renderColumnsPrice(text, record, index, 'price')
         columns[3].render = (text, record, index) => this.renderGrossProfit(text, record, index)
         columns[4].render = (text, record, index) => this.renderOptions(text, record, index)
+
+        const { prices } = this.state;
+        this.cacheData = prices.map(item => ({ ...item }));
+        this.notify(prices);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -64,17 +60,22 @@ class PriceTable extends PureComponent {
     }
 
     markTable = () => {
-        const { isReadOnly, currentPrices, list, isEdit } = this.props.value;
-        if (isReadOnly && isEdit) {
+        const { value, onMarkable } = this.props;
+        const { isReadOnly, currentPrices, list, isEdit, markList = [] } = value;
+        const ml = [...markList];
+        if (isEdit) {
             currentPrices.forEach((currentRecord, index) => {
                 const { startNumber, endNumber, price } = currentRecord;
                 const record = list[index];
-                this.mark.push({
+                ml.push({
                     startNumber: startNumber !== record.startNumber,
                     endNumber: endNumber !== record.endNumber,
                     price: price !== record.price
                 });
-            })
+            });
+            if (typeof onMarkable === 'function') {
+                onMarkable(ml);
+            }
         }
     }
 
@@ -144,6 +145,9 @@ class PriceTable extends PureComponent {
         const len = prices.length;
         const lastPrice = prices[len - 1];
         if (this.isPriceInvalid(lastPrice)) {
+            return false;
+        }
+        if (lastPrice && (lastPrice.endNumber > this.props.value.MAXGOODS)) {
             return false;
         }
         for (let i = 0; i < len - 1; i++) {
@@ -281,8 +285,11 @@ class PriceTable extends PureComponent {
     }
 
     isMarkable = (index, column) => {
-        if (this.mark.length === 0) return false;
-        return this.mark[index][column];
+        const { markList } = this.props.value;
+        if (markList.length === 0 || !markList[index]) {
+            return false;
+        }
+        return markList[index][column];
     }
 
     renderColumnsNum = (text = '', record, index, column) => {
@@ -345,14 +352,14 @@ class PriceTable extends PureComponent {
      * 获取毛利率
      */
     renderGrossProfit = (text, record, index) => {
-        const { isEdit, grossProfit, shouldMark } = this.props.value;
+        const { isEdit, grossProfit } = this.props.value;
         const { price } = record;
         const costPrice = isEdit ? grossProfit : this.props.costPrice;
         if (costPrice === null || isNaN(costPrice)) {
             return (<span>-</span>);
         }
         const rate = (price - costPrice) * 100 / costPrice;
-        const mark = this.isMarkable(index, 'price') && shouldMark;
+        const mark = this.isMarkable(index, 'price');
         return (<span className={mark ? "red" : null}>{`${rate.toFixed(2)}%`}</span>);
     }
 
@@ -367,7 +374,7 @@ class PriceTable extends PureComponent {
                             onClick={this.handleAdd}
                             disabled={!canAdd}
                         >添加阶梯价格</Button>
-                        : null
+                        : <span>&nbsp;</span>
                 }
                 <Table
                     rowKey="id"

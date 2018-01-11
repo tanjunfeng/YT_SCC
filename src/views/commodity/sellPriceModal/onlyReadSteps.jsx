@@ -25,28 +25,6 @@ const FormItem = Form.Item;
     }, dispatch)
 )
 class OnlyReadSteps extends Component {
-    constructor(props) {
-        super(props)
-
-        this.columns = [{
-            title: '起始数量',
-            dataIndex: 'startNumber',
-            key: 'startNumber',
-        }, {
-            title: '终止数量',
-            dataIndex: 'endNumber',
-            key: 'endNumber',
-        }, {
-            title: '最新售价/元',
-            dataIndex: 'price',
-            key: 'price',
-        }, {
-            title: '商品毛利率',
-            dataIndex: 'percentage',
-            key: 'percentage',
-        }];
-    }
-
     getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber, isReadOnly } = this.props;
         const { sellPricesInReview, sellSectionPrices = [] } = newDatas;
@@ -58,7 +36,6 @@ class OnlyReadSteps extends Component {
             data: newDatas.sellSectionPrices,
             isReadOnly,
             isSub: auditStatus === 1,
-            shouldMark: false,
             grossProfit: sellPricesInReview.purchasePrice || null
         };
     }
@@ -86,7 +63,9 @@ class OnlyReadSteps extends Component {
                     <span>{newDatas.suggestPrice}</span>
                     <span>商品采购价格：</span>
                     <span>{newDatas.purchasePrice || '-'}</span>
-                    <span className="edit-input">子公司:</span>
+                </div>
+                <div className="sell-modal-redonly-company">
+                    <span>子公司:</span>
                     <span>{newDatas.branchCompanyId} - {newDatas.branchCompanyName}</span>
                 </div>
             </div>

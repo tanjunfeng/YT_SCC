@@ -430,7 +430,14 @@ export const seeModalColumns = [
     {
         title: '审批意见',
         dataIndex: 'content',
-        key: 'content'
+        key: 'content',
+        render: (text) => {
+            return text ?
+                <span>
+                    {text}
+                </span>
+                : '-'
+        }
     }
 ]
 

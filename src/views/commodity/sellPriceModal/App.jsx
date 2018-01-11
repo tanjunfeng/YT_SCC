@@ -139,7 +139,7 @@ class SellPriceModal extends Component {
                 return null;
             }
             if (!editIsContinue) {
-                message.error('阶梯价格不连续!');
+                message.error('请检查阶梯价格！');
                 return null;
             }
             if (isEdit) {

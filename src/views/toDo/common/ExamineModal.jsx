@@ -9,6 +9,7 @@ import { Form, Modal, Radio, Input, message } from 'antd';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Util from '../../../util/util';
 import { returnAuditInfo } from '../../../actions/process';
 
 const FormItem = Form.Item;
@@ -39,7 +40,7 @@ class ExamineModal extends PureComponent {
                 });
                 const { taskId, type } = this.props;
                 const submitObj = Object.assign(values, { taskId, type })
-                this.props.returnAuditInfo(submitObj)
+                this.props.returnAuditInfo(Util.removeInvalid(submitObj))
                     .then(res => {
                         if (res.code === 200) {
                             message.success('保存成功');
@@ -59,6 +60,9 @@ class ExamineModal extends PureComponent {
      * 点击取消
      */
     handleCancel = () => {
+        this.setState({
+            isValidate: true
+        })
         this.props.closeModal()
         this.props.form.resetFields();
     }
