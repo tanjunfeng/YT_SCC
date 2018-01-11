@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
- * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-05 13:45:57
+ * @Last Modified by: zhoucl
+ * @Last Modified time: 2018-01-11 11:45:35
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -475,8 +475,8 @@ class CouponCreate extends PureComponent {
                                     <Col span={16}>
                                         <FormItem className="category" label="使用品类">
                                             {getFieldDecorator('category', {
-                                                initialValue: this.param.category,
-                                                rules: [{ required: true, message: '请选择使用品类' }]
+                                                initialValue: this.param.category
+                                                // rules: [{ required: true, message: '请选择使用品类' }]
                                             })(
                                                 <RadioGroup onChange={this.handleCategoryChange}>
                                                     <Radio className="default" value={0}>全部品类</Radio>

@@ -11,9 +11,9 @@ import {
     // Table,
     // message
 } from 'antd';
-import ClassifiedSelect from '../../../components/threeStageClassification';
-import SearchMind from '../../../components/searchMind';
 import Commodity from '../../../container/search/Commodity';
+import { Category } from '../../../container/cascader';
+import Brands from '../../../container/search/Brands';
 import { logisticsList, siteTypeList } from './constant';
 
 const FormItem = Form.Item;
@@ -21,27 +21,12 @@ const Option = Select.Option;
 
 class SearchForm extends PureComponent {
     state = {
-        classify: {}
+        classify: {},
+        categoryObj: null,
+        category: 0
     }
-    componentDidMount() {}
-
-    /**
-     * 三级下拉菜单
-     * @param {Object} data 各级
-     * @param {string} that 回显信息1
-     */
-    handleSelectChange = (selectData, that) => {
-        this.slect = that;
-        const { first, second, third, fourth } = selectData;
-        const NOT_SELECT = -1;
-        this.setState({
-            classify: {
-                firstLevelCategoryId: first.categoryId !== NOT_SELECT ? first.categoryId : '',
-                secondLevelCategoryId: second.categoryId !== NOT_SELECT ? second.categoryId : '',
-                thirdLevelCategoryId: third.categoryId !== NOT_SELECT ? third.categoryId : '',
-                fourthLevelCategoryId: fourth.categoryId !== NOT_SELECT ? fourth.categoryId : '',
-            }
-        })
+    componentDidMount() {
+        this.props.queryList();
     }
 
     handleChangeSiteType = val => {
@@ -57,54 +42,37 @@ class SearchForm extends PureComponent {
     }
 
     handleAdd = () => {
-
+        this.props.history.push('/sitesManage/add');
     }
 
     handleDelete = () => {
+        const { selectedIds } = this.props;
+        console.log(selectedIds);
+    }
 
+    handleCategorySelect = categoryObj => {
+        // this.setState({ categoryObj });
+        console.log(categoryObj)
     }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { pubFetchValueList } = this.props;
         return (
             <div className="sites-manage">
                 <Form layout="inline" className="sites-manage-form">
                     <Row gutter={40}>
                         <Col>
                             <FormItem label="商品分类">
-                                <ClassifiedSelect onChange={this.handleSelectChange} />
+                                {getFieldDecorator('category', {
+                                    initialValue: this.state.category,
+                                    rules: [{ required: true, message: '请选择使用品类' }]
+                                })(<Category onChange={this.handleCategorySelect} />)}
                             </FormItem>
                         </Col>
                         <Col>
                             <FormItem label="品牌">
-                                <SearchMind
-                                    compKey="search-mind-brand"
-                                    ref={ref => { this.brandSearchMind = ref }}
-                                    fetch={(param) =>
-                                        pubFetchValueList({
-                                            name: param.value,
-                                            pageSize: param.pagination.pageSize,
-                                            pageNum: param.pagination.current || 1
-                                        }, 'queryBrandsByPages')
-                                    }
-                                    onChoosed={this.handleBrandChoose}
-                                    onClear={this.handleBrandClear}
-                                    renderChoosedInputRaw={(brandData) => (
-                                        <div>{brandData.id}-{brandData.name}</div>
-                                    )}
-                                    pageSize={5}
-                                    columns={[
-                                        {
-                                            title: 'id',
-                                            dataIndex: 'id',
-                                            width: 98
-                                        }, {
-                                            title: '名称',
-                                            dataIndex: 'name',
-                                            width: 140
-                                        }
-                                    ]}
-                                />
+                                {getFieldDecorator('brand', { initialValue: {
+                                    id: '', name: '' }})(<Brands />)
+                                }
                             </FormItem>
                         </Col>
                         <Col>
@@ -212,8 +180,10 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    pubFetchValueList: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any)
+    queryList: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any),
+    selectedIds: PropTypes.arrayOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(SearchForm));

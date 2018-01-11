@@ -12,7 +12,8 @@ import {
     updateStepSellPrice,
     updateSellPriceStatus,
     getSellPriceInfoByIdAction as getSellPriceInfoByIdService,
-    getCostPrice as getCostPriceService
+    getCostPrice as getCostPriceService,
+    queryGoodsSitesManageList
 } from '../service';
 
 /**
@@ -128,3 +129,22 @@ export const clearCostPrice = () => dispatch => (dispatch({
     type: ActionType.CLEAR_COST_PRICE,
     payload: null
 }));
+
+/**
+ * 商品地点关系列表
+ *
+ * @param {Object} params 传参
+ */
+const getSitesManageListAction = data => ({
+    type: ActionType.RECEIVE_SITES_MANAGE_LIST,
+    payload: data
+});
+
+export const getSitesManageList = params => dispatch => (
+    new Promise((resolve, reject) => {
+        queryGoodsSitesManageList(params)
+            .then(res => {
+                dispatch(getSitesManageListAction(res.data));
+            })
+            .catch(err => reject(err))
+    }));

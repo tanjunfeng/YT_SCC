@@ -410,4 +410,7 @@ export default {
     QUERY_COMMENT_HIS: 'QUERY_COMMENT_HIS',
     // 待办事项 审批代办任务
     RETURN_AUDIT_INFO: 'RETURN_AUDIT_INFO',
+    // 商品地点管理模块
+    // 商品地点关系列表
+    RECEIVE_SITES_MANAGE_LIST: 'RECEIVE_SITES_MANAGE_LIST'
 }

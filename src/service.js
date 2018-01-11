@@ -745,7 +745,7 @@ export const prodBatchUpdate = (params) => http.post('prodSell/prodBatchUpdate',
 // 批量全国上下架
 export const availablProducts = (params) => http.post('product/availablProducts', params);
 // 商品地点管理模块
-export const goodsSitesManageList = params => http.get('/product/goodsSitesManageList', params);
+export const queryGoodsSitesManageList = params => http.get('/product/queryGoodsSitesManageList', params);
 
 
 // 商品管理，导入采购进价，查询采购价格变更申请列表

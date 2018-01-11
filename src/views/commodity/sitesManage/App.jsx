@@ -8,41 +8,104 @@ import {
     // message
 } from 'antd';
 import { pubFetchValueList } from '../../../actions/pub';
+import { getSitesManageList } from '../../../actions/commodity';
 import SearchForm from './searchForm';
 import { sitesManageColumns } from './columns';
-
-const dataSource = [
-        {
-            firstLevelCategoryName: '休闲',
-            secondLevelCategoryName: '饮料',
-            thirdLevelCategoryName: '水饮料',
-            fourthLevelCategoryName: '碳酸饮料',
-            brand: '百事可乐',
-            saleName: '123456-百事可乐',
-            companyCode: '10001',
-            subCompany: '四川子公司',
-            storeName: '四川子公司玉林菜市场店',
-            supplier: '100001-红太阳商贸有限公司',
-            supplierAddr: '1000011-红太阳商贸有限公司-四川',
-            logisticsMode: '直送'
-        }
-];
+import { PAGE_SIZE } from '../../../constant';
 
 @connect(state => ({
-    priceImportlist: state.toJS().priceImport.priceImportlist,
+    goodsSitesManageList: state.toJS().commodity.goodsSitesManageList,
 }), dispatch => bindActionCreators({
-    pubFetchValueList
+    pubFetchValueList,
+    getSitesManageList
 }, dispatch))
 class SiteManage extends PureComponent {
-    componentDidMount() {}
+    state = {
+        selectedRows: []
+    }
+
+    componentDidMount() {
+        // rowSelection object indicates the need for row selection
+        /**
+         * 选择删除行
+         */
+        this.rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                this.setState({
+                    selectedRows
+                });
+            }
+        };
+
+        const operation = {
+            title: '操作',
+            dataIndex: 'action',
+            key: 'action',
+            render: (text, record) => (
+                <a onClick={ () => {this.handleEdit (record.id)} }>编辑</a>
+            ),
+        };
+        sitesManageColumns.push(operation);
+    }
+    
+     /**
+     * 分页查询商品地点关系列表
+     */
+    handlePaginationChange = pageIndex => {
+        this.queryParams.pageIndex = pageIndex;
+        this.queryList(this.queryParams);
+    }
+
+    /**
+     * 查询商品地点关系列表
+     */
+    queryList = queryParams => {
+        const { getSitesManageList } = this.props;
+        this.queryParams = queryParams;
+        getSitesManageList(this.queryParams);
+
+    }
+    /**
+     * 编辑商品地点关系
+    */
+    handleEdit = id => {
+        alert(id);
+    }
+
+    handleCategorysChange = val => {
+        console.log(val);
+    }
+    /**
+     * goodsSitesManageList: 列表,
+     * getSitesManageList: 获取列表方法
+     */
     render() {
-        const { pubFetchValueList } = this.props;
+        const { pubFetchValueList, goodsSitesManageList } = this.props;
+        const { data, total, pageNum } = goodsSitesManageList;
+        const { selectedRows } = this.state;
+        /**
+         * ToDo: id替换为实际字段
+         */
+        const selectedIds = selectedRows.map(item => item.id);
         return (
             <div>
-                <SearchForm pubFetchValueList={ pubFetchValueList }/>
+                <SearchForm
+                    pubFetchValueList={ pubFetchValueList }
+                    queryList={ this.queryList }
+                    selectedIds={selectedIds}
+                />
                 <Table
-                    dataSource={dataSource}
+                    rowKey={record => record.id}
+                    rowSelection={this.rowSelection}
+                    dataSource={data}
                     columns={sitesManageColumns}
+                    pagination={{
+                        current: pageNum,
+                        total,
+                        pageSize: PAGE_SIZE,
+                        showQuickJumper: true,
+                        onChange: this.handlePaginationChange
+                    }}
                 />
             </div>
         );

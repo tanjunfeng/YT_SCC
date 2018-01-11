@@ -90,7 +90,9 @@ const initState = Immutable.fromJS({
     getSellPriceInfoById: {},
 
     // 成本价
-    costPrice: null
+    costPrice: null,
+    // 商品地点关系列表
+    goodsSitesManageList: {}
 });
 
 export default function (state = initState, action) {
@@ -202,7 +204,8 @@ export default function (state = initState, action) {
         case ActionType.GET_COST_PRICE:
         case ActionType.CLEAR_COST_PRICE:
             return state.set('costPrice', action.payload);
-
+        case ActionType.RECEIVE_SITES_MANAGE_LIST:
+            return state.set('goodsSitesManageList', action.payload);
         default:
             return state;
     }
