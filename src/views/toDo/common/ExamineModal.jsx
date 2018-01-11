@@ -60,6 +60,9 @@ class ExamineModal extends PureComponent {
      * 点击取消
      */
     handleCancel = () => {
+        this.setState({
+            isValidate: true
+        })
         this.props.closeModal()
         this.props.form.resetFields();
     }
