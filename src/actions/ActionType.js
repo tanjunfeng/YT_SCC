@@ -65,6 +65,9 @@ export default {
     // 查询成本价
     GET_COST_PRICE: 'GET_COST_PRICE',
     CLEAR_COST_PRICE: 'CLEAR_COST_PRICE',
+    // 获取区域组列表
+    RECEIVE_AREA_GROUP: 'RECEIVE_AREA_GROUP',
+    CLEAR_AREA_GROUP: 'CLEAR_AREA_GROUP',
     // 跳转到修改销售价格页面
     RECEIVE_TO_UPDATE_SELL_PRICE: 'RECEIVE_TO_UPDATE_SELL_PRICE',
     // 修改销售价格

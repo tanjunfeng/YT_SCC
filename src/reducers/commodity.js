@@ -90,7 +90,10 @@ const initState = Immutable.fromJS({
     getSellPriceInfoById: {},
 
     // 成本价
-    costPrice: null
+    costPrice: null,
+
+    // 区域组
+    areaGroup: null
 });
 
 export default function (state = initState, action) {
@@ -202,6 +205,10 @@ export default function (state = initState, action) {
         case ActionType.GET_COST_PRICE:
         case ActionType.CLEAR_COST_PRICE:
             return state.set('costPrice', action.payload);
+
+        case ActionType.RECEIVE_AREA_GROUP:
+        case ActionType.CLEAR_AREA_GROUP:
+            return state.set('areaGroup', action.payload);
 
         default:
             return state;

@@ -350,6 +350,9 @@ export const toAddSellPrice = (params) => http.post('/price/addSellPrice', param
 // 查询商品成本价
 export const getCostPrice = (params) => http.get('/prodPurchase/queryPurchasePriceForSellPrice', params);
 
+// 查询区域分组
+export const getAreaGroup = (params) => http.get('/prodPurchase/queryAreaGroup', params);
+
 // 修改采购价格
 export const updatePurchasePrice = (params) => http.post('/price/updatePurchasePrice', params);
 

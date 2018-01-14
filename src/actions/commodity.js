@@ -12,7 +12,8 @@ import {
     updateStepSellPrice,
     updateSellPriceStatus,
     getSellPriceInfoByIdAction as getSellPriceInfoByIdService,
-    getCostPrice as getCostPriceService
+    getCostPrice as getCostPriceService,
+    getAreaGroup as getAreaGroupService
 } from '../service';
 
 /**
@@ -126,5 +127,33 @@ export const getCostPrice = params => dispatch => (
 
 export const clearCostPrice = () => dispatch => (dispatch({
     type: ActionType.CLEAR_COST_PRICE,
+    payload: null
+}));
+
+/**
+ * 查询所有区域组
+ *
+ * @param {Object} params 传参
+ */
+const getAreaGroupActionType = data => ({
+    type: ActionType.RECEIVE_AREA_GROUP,
+    payload: data
+});
+
+export const getAreaGroup = params => dispatch => (
+    new Promise((resolve, reject) => {
+        getAreaGroupService(params)
+            .then(res => {
+                dispatch(
+                    getAreaGroupActionType(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+export const clearAreaGroup = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_AREA_GROUP,
     payload: null
 }));
