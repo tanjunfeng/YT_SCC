@@ -42,6 +42,7 @@
         "numberToCN": null,
         "totalNumber": null,
         "isValid": null,
+        "supOrderStatus": 1,
         "pmPurchaseOrderItems": [
             {
                 "id": 53,

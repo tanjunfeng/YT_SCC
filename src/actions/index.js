@@ -73,6 +73,9 @@ import {
     queryAuditPurReList,
     queryProcessDefinitions,
     queryPoDetail,
+    queryReserveAreaList,
+    comleteOrCloseWishList,
+    queryReserAreaDetail,
     approveRefund,
     cancelRefund
 } from './procurement';
@@ -266,6 +269,10 @@ export {
     returnGoodsListFormDataClear,
     // 采购退货列表
     fetchReturnMngList,
+    // 预定专区
+    queryReserveAreaList,
+    comleteOrCloseWishList,
+    queryReserAreaDetail,
     // 采购退货详情
     fetchReturnPoRcvDetail,
     // 查询退货流水号

@@ -101,6 +101,12 @@
                     "authorityCode": "zydxd",
                     "displayName": "直营店下单",
                     "menuList": []
+                },
+                {
+                    "authorityId": 369,
+                    "authorityCode": "xyzq",
+                    "displayName": "预定专区",
+                    "menuList": []
                 }
             ]
         },

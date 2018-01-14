@@ -79,6 +79,9 @@ import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/
 import BackstageBack from 'bundle-loader?lazy!../views/orderManagement/backstageBack';
 // 订单管理 - 直营店下单
 import DirectStoreOrder from 'bundle-loader?lazy!../views/orderManagement/directSalesOrders';
+// 预定专区
+import ReserveAreaList from 'bundle-loader?lazy!../views/orderManagement/reserveAreaList';
+import ReserveAreaDetails from 'bundle-loader?lazy!../views/orderManagement/reserveAreaDetails';
 
 // 销售管理
 
@@ -847,6 +850,33 @@ const routes = [
                             render={() => (<Bundle load={DirectStoreOrder}>
                                 {(App) => <App />}
                             </Bundle>)}
+                        />
+                    </Switch>
+                )
+            },
+            {
+                path: '/reserveAreaList',
+                parent: 'ordergl',
+                key: 'xyzq',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/reserveAreaList"
+                            exact
+                            render={() => (<Bundle load={ReserveAreaList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/reserveAreaList/reserveAreaDetails/:id"
+                            exact
+                            render={
+                                () => (
+                                    <Bundle load={ReserveAreaDetails}>
+                                        {(App) => <App />}
+                                    </Bundle>
+                                )
+                            }
                         />
                     </Switch>
                 )

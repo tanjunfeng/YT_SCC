@@ -141,7 +141,12 @@ export default (prop) => {
                                 {/* 采购模式 */}
                                 <FormItem className="sell-modal-qy">
                                     <span className="sell-modal-select"> 采购模式 : </span>
-                                    <span>{procurementModel(data)}</span>
+                                    <span className={
+                                        data && data.preHarvestPinStatus
+                                            !== newDatas.preHarvestPinStatus
+                                            ? 'sell-modal-border' : null}
+                                    >
+                                        {procurementModel(data)}</span>
                                 </FormItem>
                             </div>
                         </div>

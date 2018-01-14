@@ -20,6 +20,9 @@ class DirectStores extends PureComponent {
         if (this.props.value.storeId !== '' && nextProps.value.storeId === '') {
             this.handleClear();
         }
+        if (nextProps.value.reset && !this.props.value.reset) {
+            this.handleClear();
+        }
     }
 
     /**
