@@ -979,4 +979,7 @@ export const queryProdPriceChangeList = params => http.get('/prodSell/queryProdP
 // 批量删除
 export const deleteSiteManages = params => http.get('/product/deleteSiteManages', params);
 export const deleteSiteManagesByIds = params => http.get('/product/deleteSiteManagesByIds', params);
+export const editSiteManageById = params => http.post('/product/editSiteManagesById', params);
+export const queryProductsByCondition = params => http.get('/product/queryProductsByCondition', params);
+export const createProductSiteRelations = params => http.get('/product/createProductSiteRelations', params);
 

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
     Form,
     Table,
@@ -9,28 +10,32 @@ import {
     Modal,
     message
 } from 'antd';
-import { pubFetchValueList } from '../../../actions/pub';
-import { 
+import {
     getSitesManageList,
     removeSiteManagesByIds,
-    removeSiteManages
+    removeSiteManages,
+    editSiteManageById
 } from '../../../actions/commodity';
 import SearchForm from './searchForm';
+import EditModal from './editModal';
 import { sitesManageColumns } from './columns';
 import { PAGE_SIZE } from '../../../constant';
+
 const confirm = Modal.confirm
 
 @connect(state => ({
     goodsSitesManageList: state.toJS().commodity.goodsSitesManageList,
 }), dispatch => bindActionCreators({
-    pubFetchValueList,
     getSitesManageList,
     removeSiteManagesByIds,
-    removeSiteManages
+    removeSiteManages,
+    editSiteManageById
 }, dispatch))
 class SiteManage extends PureComponent {
     state = {
-        selectedRows: []
+        selectedRows: [],
+        editId: '',
+        visible: false
     }
 
     componentDidMount() {
@@ -51,12 +56,12 @@ class SiteManage extends PureComponent {
             dataIndex: 'action',
             key: 'action',
             render: (text, record) => (
-                <a onClick={ () => {this.handleEdit (record.id)} }>编辑</a>
+                <a onClick={() => { this.handleEdit(record.id) }}>编辑</a>
             ),
         };
         sitesManageColumns.push(operation);
     }
-    
+
      /**
      * 分页查询商品地点关系列表
      */
@@ -69,37 +74,38 @@ class SiteManage extends PureComponent {
      * 查询商品地点关系列表
      */
     queryList = queryParams => {
-        const { getSitesManageList } = this.props;
         this.queryParams = queryParams;
-        getSitesManageList(this.queryParams);
-
+        this.props.getSitesManageList(this.queryParams);
     }
 
     /**
      * 编辑商品地点关系
     */
-    handleEdit = id => {
-        alert(id);
+    handleEdit = editId => {
+        this.setState({
+            editId,
+            visible: true
+        });
     }
 
     /**
-     * 选择商品分类
+     * 关闭编辑弹窗
     */
-    handleCategorysChange = val => {
-        console.log(val);
+    closeModal = () => {
+        this.setState({
+            visible: false
+        });
     }
 
     /**
      * 选择全部记录
     */
     deleteAll = () => {
-        const { removeSiteManages } = this.props;
         confirm({
             title: '',
             content: '数据删除不可恢复，确认删除全部商品地点关系?',
             onOk() {
-                removeSiteManages().then(res => {
-                    console.log(res)
+                this.props.removeSiteManages().then(res => {
                     if (res.success) {
                         message.success('删除成功');
                     } else {
@@ -115,7 +121,6 @@ class SiteManage extends PureComponent {
      * 批量自定义删除
     */
     customDelete = () => {
-        const { removeSiteManagesByIds } = this.props;
         const { selectedRows } = this.state;
         /**
          * ToDo: id替换为实际字段
@@ -125,7 +130,7 @@ class SiteManage extends PureComponent {
             title: '',
             content: '数据删除不可恢复，确认删除选中的商品地点关系?',
             onOk() {
-                removeSiteManagesByIds(selectedIds).then(res => {
+                this.props.removeSiteManagesByIds(selectedIds).then(res => {
                     if (res.success) {
                         message.success('删除成功');
                     } else {
@@ -142,19 +147,21 @@ class SiteManage extends PureComponent {
      * getSitesManageList: 获取列表方法
      */
     render() {
-        const { pubFetchValueList, goodsSitesManageList } = this.props;
+        const { goodsSitesManageList } = this.props;
         const { data, total, pageNum } = goodsSitesManageList;
-        const { selectedRows } = this.state;
+        const { selectedRows, editId, visible } = this.state;
         return (
             <div>
                 <SearchForm
-                    pubFetchValueList={ pubFetchValueList }
-                    queryList={ this.queryList }
+                    queryList={this.queryList}
                 />
                 <div className="sites-manage-tab">
                     <div className="table-operations">
                         <Button onClick={this.deleteAll}>全部删除</Button>
-                        <Button  disabled={selectedRows.length === 0} onClick={this.customDelete}>批量删除</Button>
+                        <Button
+                            disabled={selectedRows.length === 0}
+                            onClick={this.customDelete}
+                        >批量删除</Button>
                     </div>
                     <Table
                         rowKey={record => record.id}
@@ -169,10 +176,24 @@ class SiteManage extends PureComponent {
                             onChange: this.handlePaginationChange
                         }}
                     />
+                    <EditModal
+                        editId={editId}
+                        visible={visible}
+                        closeModal={this.closeModal}
+                        editSiteRelation={this.props.editSiteManageById}
+                    />
                 </div>
             </div>
         );
     }
 }
+
+SiteManage.propTypes = {
+    getSitesManageList: PropTypes.func,
+    editSiteManageById: PropTypes.func,
+    removeSiteManagesByIds: PropTypes.func,
+    removeSiteManages: PropTypes.func,
+    goodsSitesManageList: PropTypes.objectOf(PropTypes.any)
+};
 
 export default withRouter(Form.create()(SiteManage));

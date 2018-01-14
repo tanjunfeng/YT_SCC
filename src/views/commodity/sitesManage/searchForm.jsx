@@ -15,6 +15,7 @@ import { Category } from '../../../container/cascader';
 import Brands from '../../../container/search/Brands';
 import Sites from '../../../container/search/Sites';
 import { logisticsList, siteTypeList } from './constant';
+import Utils from '../../../util/util';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -22,24 +23,16 @@ const Option = Select.Option;
 class SearchForm extends PureComponent {
     state = {
         classify: {},
-        categoryObj: null,
+        selectedOptions: [],
         category: 0
     }
     componentDidMount() {
         this.props.queryList();
     }
 
-    handleChangeSiteType = val => {
-
-    }
-
-    handleChangeLogisticsModel = val => {
-
-    }
-
     handleSearch = () => {
         const { getFieldsValue } = this.props.form;
-        const { categoryObj } = this.state;
+        const { selectedOptions } = this.state;
         const {
             barCode,
             brand,
@@ -50,33 +43,32 @@ class SearchForm extends PureComponent {
         } = getFieldsValue();
         const queryParams = {
             barCode,
-            brand: brand.record.id,
-            commodity: commodity.record.productId,
+            brand: brand.record ? brand.record.id : '',
+            commodity: commodity.record ? commodity.record.productId : '',
             logisticsModel,
             /**
              * 根据不同的值清单取site.record对应字段
              */
-            site: site.record.id,
+            site: site.record ? site.record.id : '',
             siteType,
-            category: categoryObj
+            selectedOptions
         }
 
-        if (categoryObj.length > 0 && categoryObj.length < 3) {
+        if (selectedOptions.length > 0 && selectedOptions.length < 3) {
             message.error('请选择至少三级商品分类');
             return;
         }
-        this.props.queryList(queryParams);
+        this.props.queryList(Utils.removeInvalid(queryParams));
     }
 
     handleAdd = () => {
-        console.log(this.state.categoryObj)
-        // this.props.history.push('/sitesManage/add');
+        this.props.history.push('/sitesManage/create');
     }
 
-    handleCategorySelect = (val) => {
-        // alert('ok')
-        // console.log("this.state.categoryObj");
-        console.log(val);
+    handleCategorySelect = (category, selectedOptions) => {
+        this.setState({
+            selectedOptions: selectedOptions.map(item => item.value)
+        });
     }
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -86,11 +78,7 @@ class SearchForm extends PureComponent {
                     <Row gutter={40}>
                         <Col>
                             <FormItem label="商品分类">
-                                {getFieldDecorator('category', {
-                                    initialValue: this.state.category
-                                })(<Category
-                                    onChange={this.handleCategorySelect}
-                                />)}
+                                <Category onChange={this.handleCategorySelect} />
                             </FormItem>
                         </Col>
                         <Col>
@@ -127,7 +115,6 @@ class SearchForm extends PureComponent {
                                 })(
                                     <Select
                                         size="large"
-                                        onChange={this.handleChangeLogisticsModel}
                                     >
                                         {
                                             logisticsList.data.map(item => (
@@ -147,7 +134,6 @@ class SearchForm extends PureComponent {
                                 })(
                                     <Select
                                         size="large"
-                                        onChange={this.handleChangeSiteType}
                                     >
                                         {
                                             siteTypeList.data.map(item => (
@@ -163,9 +149,7 @@ class SearchForm extends PureComponent {
                         <Col>
                             <FormItem label="地点" >
                                 {getFieldDecorator('site', {
-                                    initialValue: {
-                                        
-                                    }
+                                    initialValue: {}
                                 })(
                                     <Sites disabled={getFieldValue('siteType') === ''} siteTypeCode={getFieldValue('siteType')} />
                                 )}

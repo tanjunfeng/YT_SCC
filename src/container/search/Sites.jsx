@@ -34,22 +34,6 @@ class Sites extends PureComponent {
     }
 
     /**
-     * 清除
-    */
-    handleClear = () => {
-        const { loactionColumn: { code, name} } = this.state;
-        this.siteSearchMind.reset();
-        this.props.onChange({ [code]: '', [name]: '' });
-    }
-
-    /**
-     * 值清单
-    */
-    handleChoose = (val) => {
-        this.props.onChange(val);
-    }
-
-    /**
      * 获取地点查询类型
     */
     getSiteQueryType = siteTypeCode => {
@@ -76,14 +60,33 @@ class Sites extends PureComponent {
         return SiteQueryType;
     }
 
+    /**
+     * 清除
+    */
+    handleClear = () => {
+        const { loactionColumn: { code, name} } = this.state;
+        this.siteSearchMind.reset();
+        this.props.onChange({ [code]: '', [name]: '' });
+    }
+
+    /**
+    * 值清单
+    */
+    handleChoose = (val) => {
+        this.props.onChange(val);
+    }
+
     query = (params) => {
-        const {siteTypeCode} = this.props;
+        const { siteTypeCode } = this.props;
         const conditions = {
             param: params.value,
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
         };
-        return this.props.pubFetchValueList(Utils.removeInvalid(conditions), this.getSiteQueryType(siteTypeCode));
+        return this.props.pubFetchValueList(
+            Utils.removeInvalid(conditions),
+            this.getSiteQueryType(siteTypeCode)
+        );
     }
 
     render() {
@@ -124,7 +127,7 @@ Sites.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
     initialValue: PropTypes.string,
-    siteType: PropTypes.string
+    siteTypeCode: PropTypes.string,
 };
 
 Sites.defaultProps = {

@@ -92,7 +92,9 @@ const initState = Immutable.fromJS({
     // 成本价
     costPrice: null,
     // 商品地点关系列表
-    goodsSitesManageList: {}
+    goodsSitesManageList: {},
+    // 商品信息列表
+    productsData: {}
 });
 
 export default function (state = initState, action) {
@@ -206,6 +208,8 @@ export default function (state = initState, action) {
             return state.set('costPrice', action.payload);
         case ActionType.RECEIVE_SITES_MANAGE_LIST:
             return state.set('goodsSitesManageList', action.payload);
+        case ActionType.QUERY_PRODUCTS_BY_CONDITION:
+            return state.set('productsData', action.payload);
         default:
             return state;
     }

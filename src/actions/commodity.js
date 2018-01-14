@@ -15,7 +15,10 @@ import {
     getCostPrice as getCostPriceService,
     queryGoodsSitesManageList,
     deleteSiteManages,
-    deleteSiteManagesByIds
+    deleteSiteManagesByIds,
+    editSiteManageById as updateSiteManageById,
+    queryProductsByCondition as searchProductsByCondition,
+    createProductSiteRelations as createRelations
 } from '../service';
 
 /**
@@ -172,6 +175,10 @@ export const removeSiteManages = () => dispatch => (
     })
 );
 
+/**
+ * 批量删除商品地点关系
+ * @param {Object} data
+ */
 const deleteSiteManagesByIdsAction = data => ({
     type: ActionType.DELETE_SITEMANAGES_BY_IDS,
     payload: data
@@ -182,6 +189,66 @@ export const removeSiteManagesByIds = params => dispatch => (
         deleteSiteManagesByIds(params)
             .then(res => {
                 dispatch(deleteSiteManagesByIdsAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 编辑商品地点关系
+ * @param {Object} data
+ */
+const editSiteManageByIdAction = data => ({
+    type: ActionType.EDIT_SITE_MANAGE_BY_ID,
+    payload: data
+});
+
+export const editSiteManageById = params => dispatch => (
+    new Promise((resolve, reject) => {
+        updateSiteManageById(params)
+            .then(res => {
+                dispatch(editSiteManageByIdAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ *查询商品
+ * @param {Object} data
+ */
+const queryProductsByConditionAction = data => ({
+    type: ActionType.QUERY_PRODUCTS_BY_CONDITION,
+    payload: data
+});
+
+export const queryProductsByCondition = params => dispatch => (
+    new Promise((resolve, reject) => {
+        searchProductsByCondition(params)
+            .then(res => {
+                dispatch(queryProductsByConditionAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 创建商品地点关系
+ * @param {Object} data
+ */
+const createProductSiteRelationsAction = data => ({
+    type: ActionType.CREATE_PRODUCT_SITE_RELATIONS,
+    payload: data
+});
+
+export const createProductSiteRelations = params => dispatch => (
+    new Promise((resolve, reject) => {
+        createRelations(params)
+            .then(res => {
+                dispatch(createProductSiteRelationsAction(res.data));
                 resolve(res);
             })
             .catch(err => reject(err))

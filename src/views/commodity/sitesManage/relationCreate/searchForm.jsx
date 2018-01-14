@@ -1,0 +1,146 @@
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
+import {
+    Form,
+    Row,
+    Col,
+    Input,
+    Button,
+    message
+} from 'antd';
+import Commodity from '../../../../container/search/Commodity';
+import { Category } from '../../../../container/cascader';
+import Brands from '../../../../container/search/Brands';
+import Utils from '../../../../util/util';
+
+const FormItem = Form.Item;
+class SearchForm extends PureComponent {
+    state = {
+        selectedOptions: null
+    }
+    componentDidMount() {
+        const { queryProducts } = this.props;
+        queryProducts();
+    }
+
+    /**
+     * 选择商品分类
+    */
+    handleCategorySelect = (catogory, selectedOptions) => {
+        this.setState({
+            selectedOptions: selectedOptions.map(item => item.value)
+        });
+    }
+    /**
+     * 查询
+    */
+    handleSearch = () => {
+        const { getFieldsValue } = this.props.form;
+        const { selectedOptions } = this.state;
+        const {
+            brand,
+            commodity,
+            barCode
+        } = getFieldsValue();
+        const queryParams = {
+            barCode,
+            selectedOptions,
+            brand: brand.record ? brand.record.id : '',
+            commodity: commodity.record ? commodity.record.productId : '',
+        };
+        if (selectedOptions && selectedOptions.length > 0 && selectedOptions.length < 3) {
+            message.error('请选择至少三级商品分类');
+            return;
+        }
+        this.props.queryProducts(Utils.removeInvalid(queryParams));
+    }
+
+    /**
+     * 重置
+    */
+    handleReset = () => {
+        this.setState({
+            selectedOptions: null
+        });
+        this.props.form.resetFields();
+    }
+
+    /**
+     * 创建商品地点关系
+    */
+    handleCreateSiteRelation = () => {
+        this.props.openModal();
+    }
+
+    render() {
+        const { getFieldDecorator } = this.props.form;
+        const { isCreateRelation } = this.props;
+        return (
+            <div className="site-relation-create">
+                <Form layout="inline" className="site-relation-create-form">
+                    <Row gutter={40}>
+                        <Col>
+                            <FormItem label="商品分类">
+                                <Category onChange={this.handleCategorySelect} />
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="品牌">
+                                {getFieldDecorator('brand', { initialValue: {
+                                    id: '', name: '' }})(<Brands />)
+                                }
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="商品" >
+                                {getFieldDecorator('commodity', { initialValue: {
+                                    productId: '', productName: '' }})(<Commodity api="queryProductForSelect" />)
+                                }
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="商品条码" >
+                                {getFieldDecorator('barCode')(
+                                    <Input
+                                        className="input"
+                                        style={{ paddingLeft: '10px', paddingRight: '10px' }}
+                                        placeholder="商品条码"
+                                    />
+                                )}
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={40} type="flex" justify="end" className="sites-manage-search-container">
+                        <Col>
+                            <Button
+                                type="primary"
+                                onClick={this.handleSearch}
+                                size="default"
+                            >查询</Button>
+                            <Button
+                                size="default"
+                                onClick={this.handleReset}
+                            >重置</Button>
+                            <Button
+                                type="primary"
+                                size="default"
+                                disabled={!isCreateRelation}
+                                onClick={this.handleCreateSiteRelation}
+                            >创建商品地点关系</Button>
+                        </Col>
+                    </Row>
+                </Form>
+            </div>
+        );
+    }
+}
+
+SearchForm.propTypes = {
+    form: PropTypes.objectOf(PropTypes.any),
+    queryProducts: PropTypes.func,
+    openModal: PropTypes.func,
+    isCreateRelation: PropTypes.bool
+};
+
+export default withRouter(Form.create()(SearchForm));

@@ -26,8 +26,10 @@ import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDeta
 import importPurchasePriceList from 'bundle-loader?lazy!../views/commodity/importPurchasePriceList';
 // 售价导入
 import PriceImport from 'bundle-loader?lazy!../views/commodity/priceImport';
-// 商品地点管理
+// 商品地点关系管理
 import SitesManage from 'bundle-loader?lazy!../views/commodity/sitesManage';
+// 商品地点关系创建
+import SiteRelationCreate from 'bundle-loader?lazy!../views/commodity/sitesManage/relationCreate';
 // 地区组管理
 import RegionManage from 'bundle-loader?lazy!../views/commodity/regionManage';
 // 分类列表页商品排序管理
@@ -317,8 +319,10 @@ const routes = [
                             render={() => <Bundle load={SitesManage}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/sitesManage/add"
-                            render={() => <Bundle load={SitesManage}>{(App) => <App />}</Bundle>}
+                            path="/sitesManage/create"
+                            render={() => <Bundle load={SiteRelationCreate}>
+                                {(App) => <App />}
+                            </Bundle>}
                         />
                     </Switch>
                 ),
