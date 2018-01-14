@@ -12,23 +12,22 @@ import { withRouter } from 'react-router';
 import { Table, Form } from 'antd';
 
 import {
-    getPromotionList,
-    clearPromotionList,
-    updatePromotionStatus
-} from '../../../actions/promotion';
+    getAreaGroup,
+    clearAreaGroup
+} from '../../../actions/commodity';
 import SearchForm from './searchForm';
+import columns from './columns';
 
 @connect(state => ({
-    promotionList: state.toJS().promotion.list
+    areaGroup: state.toJS().commodity.areaGroup
 }), dispatch => bindActionCreators({
-    getPromotionList,
-    clearPromotionList,
-    updatePromotionStatus
+    getAreaGroup,
+    clearAreaGroup
 }, dispatch))
 
 class AreaGroup extends PureComponent {
     render() {
-        const { data, total, pageNum, pageSize } = this.props.promotionList;
+        const { data, total, pageNum, pageSize } = this.props.areaGroup;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
@@ -59,7 +58,7 @@ class AreaGroup extends PureComponent {
 }
 
 AreaGroup.propTypes = {
-    form: PropTypes.objectOf(PropTypes.any),
+    areaGroup: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(AreaGroup));

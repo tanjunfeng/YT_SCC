@@ -5,37 +5,17 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
+import { Button, Input, Form, DatePicker, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Util from '../../../util/util';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
-import { promotionStatus } from '../constants';
 import { BranchCompany } from '../../../container/search';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
 class SearchForm extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.getStatus = this.getStatus.bind(this);
-        this.handleSearch = this.handleSearch.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        this.getFormData = this.getFormData.bind(this);
-        this.handleCreate = this.handleCreate.bind(this);
-    }
-
-    getStatus() {
-        const keys = Object.keys(promotionStatus);
-        return keys.map((key) => (
-            <Option key={key} value={key}>
-                {promotionStatus[key]}
-            </Option>
-        ));
-    }
-
-    getFormData() {
+    getFormData = () => {
         const {
             id,
             promotionName,
@@ -57,12 +37,12 @@ class SearchForm extends PureComponent {
         });
     }
 
-    handleSearch() {
+    handleSearch = () => {
         // 通知父页面执行搜索
         this.props.onPromotionSearch(this.getFormData());
     }
 
-    handleReset() {
+    handleReset = () => {
         this.props.form.resetFields(); // 清除当前查询条件
         this.props.onPromotionReset(); // 通知查询条件已清除
         // 点击重置时清除 seachMind 引用文本
@@ -71,7 +51,7 @@ class SearchForm extends PureComponent {
         });
     }
 
-    handleCreate() {
+    handleCreate = () => {
         const { pathname } = this.props.location;
         const win = window.open(`${pathname}/create`, '_blank');
         win.focus();
@@ -80,8 +60,8 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form layout="inline" className="promotion">
-                <Row className="row-bottom">
+            <Form layout="inline" className="area-group">
+                <Row>
                     <Col>
                         <FormItem label="活动ID">
                             {getFieldDecorator('id')(<Input size="default" />)}
@@ -97,16 +77,6 @@ class SearchForm extends PureComponent {
                             {getFieldDecorator('branchCompany', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
-                        </FormItem>
-                    </Col>
-                    <Col>
-                        {/* 状态 */}
-                        <FormItem label="状态">
-                            {getFieldDecorator('statusCode', {
-                                initialValue: 'all'
-                            })(<Select size="default">
-                                {this.getStatus()}
-                            </Select>)}
                         </FormItem>
                     </Col>
                     <Col>
