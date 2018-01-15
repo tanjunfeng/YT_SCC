@@ -75,7 +75,7 @@ class SearchForm extends PureComponent {
      * 导出EXCEL
      */
     handleExport = () => {
-        this.props.exportList();
+        this.props.exportList(this.getFormVulue());
     }
 
     render() {
