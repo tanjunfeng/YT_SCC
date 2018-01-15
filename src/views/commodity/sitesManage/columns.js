@@ -1,3 +1,5 @@
+import React from 'react';
+import { logisticsModelStr } from './constant';
 
 export const sitesManageColumns = [
     {
@@ -22,23 +24,23 @@ export const sitesManageColumns = [
     },
     {
         title: '品牌',
-        dataIndex: 'brand',
-        key: 'brand',
+        dataIndex: 'brandName',
+        key: 'brandName',
     },
     {
         title: '商品',
-        dataIndex: 'saleName',
-        key: 'saleName',
+        dataIndex: 'productName',
+        key: 'productName',
     },
     {
         title: '所属子公司编码',
-        dataIndex: 'companyCode',
-        key: 'companyCode',
+        dataIndex: 'branchCompanyId',
+        key: 'branchCompanyId',
     },
     {
         title: '所属子公司',
-        dataIndex: 'subCompany',
-        key: 'subCompany',
+        dataIndex: 'branchCompanyName',
+        key: 'branchCompanyName',
     },
     {
         title: '门店名称',
@@ -47,17 +49,20 @@ export const sitesManageColumns = [
     },
     {
         title: '供应商',
-        dataIndex: 'supplier',
-        key: 'supplier',
+        dataIndex: 'supplierName',
+        key: 'supplierName',
     },
     {
         title: '供应商地点',
-        dataIndex: 'supplierAddr',
-        key: 'supplierAddr',
+        dataIndex: 'AdrSupName',
+        key: 'AdrSupName',
     },
     {
         title: '物流模式',
-        dataIndex: 'logisticsMode',
-        key: 'logisticsMode',
+        dataIndex: 'logisticsModel',
+        key: 'logisticsModel',
+        render: text => (
+            <span>{logisticsModelStr[text]}</span>
+        )
     }
 ];

@@ -9,19 +9,33 @@ import {
 } from 'antd';
 import Utils from '../../../util/util';
 import { logisticsList } from './constant';
+import { Supplier, SupplierAdderss } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const formItemLayout = {
+    labelCol: {
+        xs: { span: 24 },
+        sm: { span: 5 },
+    },
+    wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+    },
+};
+
 class EditSiteRelationModal extends PureComponent {
     handleEditFetch = () => {
         const { editSiteRelation, editId } = this.props;
         const { getFieldsValue, validateFields } = this.props.form;
-        const { logisticsModel } = getFieldsValue();
+        const { logisticsModel, supplier, supplierAddr } = getFieldsValue();
         validateFields((err) => {
             if (!err) {
                 editSiteRelation(Utils.removeInvalid({
                     logisticsModel,
-                    editId
+                    id: editId,
+                    supplierId: supplier.spId,
+                    AdrSupId: supplierAddr.spAdrid
                 })).then(res => {
                     if (res.success) {
                         message.success('编辑成功');
@@ -34,7 +48,7 @@ class EditSiteRelationModal extends PureComponent {
     }
     render() {
         const { visible, closeModal } = this.props;
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
         return (
             <Modal
                 title="编辑地点关系"
@@ -43,7 +57,21 @@ class EditSiteRelationModal extends PureComponent {
                 onCancel={closeModal}
             >
                 <Form>
-                    <FormItem label="物流模式" >
+                    <FormItem {...formItemLayout} label="供应商">
+                        {getFieldDecorator('supplier', {
+                            initialValue: { spId: '', spNo: '', companyName: '' }
+                        })(
+                            <Supplier />
+                        )}
+                    </FormItem>
+                    <FormItem {...formItemLayout} label="供应商地点" >
+                        {getFieldDecorator('supplierAddr', { initialValue: {
+                            providerNo: '',
+                            providerName: '',
+                            spAdrid: ''
+                        }})(<SupplierAdderss pId={getFieldValue('supplier').spId} disabled={getFieldValue('supplier').spId === ''} />)}
+                    </FormItem>
+                    <FormItem {...formItemLayout} label="物流模式" >
                         {getFieldDecorator('logisticsModel', {
                             initialValue: logisticsList.defaultValue
                         })(

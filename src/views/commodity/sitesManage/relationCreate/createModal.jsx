@@ -11,6 +11,7 @@ import Utils from '../../../../util/util';
 import { logisticsList, siteTypeList } from '../constant';
 import Sites from '../../../../container/search/Sites';
 import { Supplier, SupplierAdderss } from '../../../../container/search';
+import { repeatData } from './RepeatTestData';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -32,22 +33,22 @@ class CreateModal extends PureComponent {
         }
     }
     handleCreateRelation = () => {
-        const { createRelations, selectedIds } = this.props;
+        const { createRelations, selectedIds, openRepeatModel } = this.props;
         const { getFieldsValue, validateFields } = this.props.form;
         const {
-                logisticsModel,
-                siteType,
-                site,
-                supplier,
-                supplierAddr
-                } = getFieldsValue();
+            logisticsModel,
+            placeType,
+            placeId,
+            supplier,
+            supplierAddr
+        } = getFieldsValue();
         const params = {
             logisticsModel,
-            siteType,
-            site,
-            spId: supplier.spId,
-            spAdrId: supplierAddr.spAdrid,
-            selectedIds
+            placeType,
+            placeId,
+            supplierId: supplier.spId,
+            AdrSupId: supplierAddr.spAdrid,
+            productIds: selectedIds
         };
         validateFields((err) => {
             if (!err) {
@@ -55,6 +56,7 @@ class CreateModal extends PureComponent {
                     if (res.success) {
                         message.success('添加商品地点关系成功');
                         this.props.closeModal();
+                        openRepeatModel(repeatData);
                     } else {
                         message.error('添加商品地点关系失败');
                     }
@@ -75,7 +77,7 @@ class CreateModal extends PureComponent {
                 <div className="create-modal" >
                     <Form>
                         <FormItem {...formItemLayout} label="地点类型" >
-                            {getFieldDecorator('siteType', {
+                            {getFieldDecorator('placeType', {
                                 initialValue: siteTypeList.defaultValue
                             })(
                                 <Select
@@ -140,6 +142,7 @@ CreateModal.propTypes = {
     visible: PropTypes.bool,
     closeModal: PropTypes.func,
     createRelations: PropTypes.func,
+    openRepeatModel: PropTypes.func,
     selectedIds: PropTypes.arrayOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any)
 };

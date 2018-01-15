@@ -15,9 +15,16 @@ import Brands from '../../../../container/search/Brands';
 import Utils from '../../../../util/util';
 
 const FormItem = Form.Item;
+const productLevel = [
+    'firstLevelCategoryId',
+    'secondLevelCategoryId',
+    'thirdLevelCategoryId',
+    'fourthLevelCategoryId'
+];
+
 class SearchForm extends PureComponent {
     state = {
-        selectedOptions: null
+        selectedOptions: []
     }
     componentDidMount() {
         const { queryProducts } = this.props;
@@ -44,11 +51,16 @@ class SearchForm extends PureComponent {
             barCode
         } = getFieldsValue();
         const queryParams = {
-            barCode,
-            selectedOptions,
+            internationalCode: barCode,
             brand: brand.record ? brand.record.id : '',
-            commodity: commodity.record ? commodity.record.productId : '',
+            productName: commodity.record ? commodity.record.productName : '',
         };
+
+        if (selectedOptions.length > 0) {
+            selectedOptions.forEach((item, i) => {
+                queryParams[productLevel[i]] = item;
+            });
+        }
         if (selectedOptions && selectedOptions.length > 0 && selectedOptions.length < 3) {
             message.error('请选择至少三级商品分类');
             return;
@@ -61,7 +73,7 @@ class SearchForm extends PureComponent {
     */
     handleReset = () => {
         this.setState({
-            selectedOptions: null
+            selectedOptions: []
         });
         this.props.form.resetFields();
     }

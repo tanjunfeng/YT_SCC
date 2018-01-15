@@ -56,7 +56,7 @@ class SiteManage extends PureComponent {
             dataIndex: 'action',
             key: 'action',
             render: (text, record) => (
-                <a onClick={() => { this.handleEdit(record.id) }}>编辑</a>
+                <a onClick={() => { this.handleEdit(record.productId) }}>编辑</a>
             ),
         };
         sitesManageColumns.push(operation);
@@ -98,39 +98,20 @@ class SiteManage extends PureComponent {
     }
 
     /**
-     * 选择全部记录
-    */
-    deleteAll = () => {
-        confirm({
-            title: '',
-            content: '数据删除不可恢复，确认删除全部商品地点关系?',
-            onOk() {
-                this.props.removeSiteManages().then(res => {
-                    if (res.success) {
-                        message.success('删除成功');
-                    } else {
-                        message.error('删除失败');
-                    }
-                });
-            },
-            onCancel() {}
-        });
-    }
-
-    /**
      * 批量自定义删除
     */
     customDelete = () => {
         const { selectedRows } = this.state;
+        const { removeSiteManagesByIds } = this.props;
         /**
          * ToDo: id替换为实际字段
          */
-        const selectedIds = selectedRows.map(item => item.id);
+        const ids = selectedRows.map(item => item.productId);
         confirm({
             title: '',
             content: '数据删除不可恢复，确认删除选中的商品地点关系?',
             onOk() {
-                this.props.removeSiteManagesByIds(selectedIds).then(res => {
+                removeSiteManagesByIds({ids}).then(res => {
                     if (res.success) {
                         message.success('删除成功');
                     } else {
@@ -157,14 +138,14 @@ class SiteManage extends PureComponent {
                 />
                 <div className="sites-manage-tab">
                     <div className="table-operations">
-                        <Button onClick={this.deleteAll}>全部删除</Button>
+                        {/* <Button onClick={this.deleteAll}>全部删除</Button> */}
                         <Button
                             disabled={selectedRows.length === 0}
                             onClick={this.customDelete}
                         >批量删除</Button>
                     </div>
                     <Table
-                        rowKey={record => record.id}
+                        rowKey={record => record.productId}
                         rowSelection={this.rowSelection}
                         dataSource={data}
                         columns={sitesManageColumns}

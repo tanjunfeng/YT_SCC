@@ -15,6 +15,7 @@ import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../../constant';
 import { productListColumns } from './columns';
 import CreateModal from './createModal';
+import RepeatModal from './repeatDataModal';
 
 const defaultImg = require('../../../../images/default/100x100.png');
 
@@ -27,12 +28,14 @@ const defaultImg = require('../../../../images/default/100x100.png');
 class RelationCreate extends PureComponent {
     state = {
         selectedRows: [],
-        visible: false
+        repeatDatas: [],
+        createModalVisible: false,
+        repeatModalVisible: false
     }
     componentDidMount() {
         // rowSelection object indicates the need for row selection
         /**
-         * 选择删除行
+         * 选中的行
          */
         this.rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
@@ -62,19 +65,52 @@ class RelationCreate extends PureComponent {
     /**
     * 关闭创建弹窗
     */
-    closeModal = () => {
+    closeCreateModal = () => {
         this.setState({
-            visible: false
+            createModalVisible: false
+        });
+    }
+
+    /**
+    * 关闭重复数据弹窗
+    */
+    closeRepeatModal = () => {
+        this.setState({
+            repeatModalVisible: false
         });
     }
 
     /**
     * 打开创建弹窗
     */
-    openModal = () => {
+    openCreateModal = () => {
         this.setState({
-            visible: true
+            createModalVisible: true
         });
+    }
+
+     /**
+    * 打开重复数据弹窗
+    */
+    openRepeatModal = () => {
+        this.setState({
+            repeatModalVisible: true
+        });
+    }
+
+    /**
+     * 有重复数据打开弹窗
+    */
+
+    handleRepeat = repeatDatas => {
+        this.repeatDatas = repeatDatas;
+        this.setState({
+            repeatDatas
+        });
+
+        if (repeatDatas.length > 0) {
+            this.openRepeatModal();
+        }
     }
 
     /**
@@ -103,14 +139,14 @@ class RelationCreate extends PureComponent {
     }
     render() {
         const { data, total, pageNum } = this.props.productsData;
-        const { visible } = this.state;
+        const { createModalVisible, repeatModalVisible, repeatDatas } = this.state;
         const selectedIds = this.state.selectedRows.map(item => item.productId);
         productListColumns[0].render = this.renderGoodsOpations;
         return (
             <div>
                 <SearchForm
                     queryProducts={this.queryProducts}
-                    openModal={this.openModal}
+                    openModal={this.openCreateModal}
                     isCreateRelation={selectedIds.length > 0}
                 />
                 <Table
@@ -128,9 +164,15 @@ class RelationCreate extends PureComponent {
                 />
                 <CreateModal
                     createRelations={this.props.createProductSiteRelations}
-                    visible={visible}
-                    closeModal={this.closeModal}
+                    visible={createModalVisible}
+                    closeModal={this.closeCreateModal}
                     selectedIds={selectedIds}
+                    openRepeatModel={this.handleRepeat}
+                />
+                <RepeatModal
+                    closeModal={this.closeRepeatModal}
+                    visible={repeatModalVisible}
+                    data={repeatDatas}
                 />
             </div>
         );

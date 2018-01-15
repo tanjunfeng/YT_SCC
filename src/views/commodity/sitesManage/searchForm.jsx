@@ -164,6 +164,11 @@ class SearchForm extends PureComponent {
                                 size="default"
                             >查询</Button>
                             <Button
+                                onClick={this.handleSearch}
+                                size="default"
+                            >重置</Button>
+                            <Button
+                                type="primary"
                                 size="default"
                                 onClick={this.handleAdd}
                             >新增</Button>

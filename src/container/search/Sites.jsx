@@ -131,7 +131,7 @@ Sites.propTypes = {
 };
 
 Sites.defaultProps = {
-    siteTypeCode: 0
+    siteTypeCode: '0'
 };
 
 export default Sites;

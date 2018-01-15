@@ -26,3 +26,8 @@ export const siteTypeList = {
     }]
 };
 
+export const logisticsModelStr = {
+    0: '直送',
+    1: '配送'
+};
+
