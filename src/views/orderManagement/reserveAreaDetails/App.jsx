@@ -3,7 +3,7 @@
  * @Description: 预定专区详情
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-11 20:13:02
+ * @Last Modified time: 2018-01-15 09:26:57
  */
 
 import React, { PureComponent } from 'react';
@@ -20,7 +20,7 @@ import {
     clearReserAreaDetail
 } from '../../../actions/process';
 import Util from '../../../util/util';
-import { wishListsForExcel } from '../../../service';
+import { wishDetailsForExcel } from '../../../service';
 
 @connect(state => ({
     reserveAreaDetaiData: state.toJS().procurement.reserveAreaDetaiData,
@@ -101,8 +101,8 @@ class ReserveAreaDetails extends PureComponent {
     /**
      * 下载导入结果的回调
     */
-    handleExportList = () => {
-        Util.exportExcel(wishListsForExcel, Util.removeInvalid(this.param));
+    handleExportList = (data) => {
+        Util.exportExcel(wishDetailsForExcel, Util.removeInvalid(this.param, data));
     }
 
     render() {
