@@ -26,8 +26,16 @@ import columns from './columns';
 }, dispatch))
 
 class AreaGroup extends PureComponent {
+    componentDidMount() {
+        this.props.getAreaGroup();
+    }
+
+    param = {
+        current: 1
+    }
+
     render() {
-        const { data, total, pageNum, pageSize } = this.props.areaGroup;
+        const { data = [], total = 0, pageNum = 1, pageSize = 20 } = this.props.areaGroup;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
@@ -58,6 +66,7 @@ class AreaGroup extends PureComponent {
 }
 
 AreaGroup.propTypes = {
+    getAreaGroup: PropTypes.func,
     areaGroup: PropTypes.objectOf(PropTypes.any),
 }
 

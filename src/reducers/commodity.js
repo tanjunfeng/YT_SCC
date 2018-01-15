@@ -93,7 +93,7 @@ const initState = Immutable.fromJS({
     costPrice: null,
 
     // 区域组
-    areaGroup: null
+    areaGroup: {}
 });
 
 export default function (state = initState, action) {

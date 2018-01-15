@@ -313,7 +313,7 @@ const routes = [
                     <Route
                         path="/areaGroup"
                         exact
-                        render={() => <Bundle load={PriceImport}>{(App) => <App />}</Bundle>}
+                        render={() => <Bundle load={AreaGroup}>{(App) => <App />}</Bundle>}
                     />
                 ),
             }
