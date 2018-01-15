@@ -120,6 +120,8 @@ export const sellPriceChangeExcelTemplate = '/prodSell/sellPriceChangeExcelTempl
 
 // 导出心愿单列表
 export const wishListsForExcel = '/wishBackAction/queryWishListsForExcel';
+// 导出心愿单详情
+export const wishDetailsForExcel = '/wishBackAction/queryWishDetailsForExcel';
 
 /**
  * 登录 Api
@@ -977,7 +979,7 @@ export const queryCommentHisByBusi = params => http.get('/bpm/queryCommentHisByB
 // 价格变更记录模块
 export const queryProdPriceChangeList = params => http.get('/prodSell/queryProdPriceChangeList', params);
 // 预定专区
-export const queryReserveAreaList = params => http.get('/price/queryReserveAreaList', params);
+export const queryReserveAreaList = params => http.get('/wishBackAction/queryWishListsByParam', params);
 // 预定专区完成或关闭心愿单
 export const comleteOrCloseWishList = params => http.post('/wishBackAction/comleteOrCloseWishList', params);
 // 预定详情

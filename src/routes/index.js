@@ -825,7 +825,7 @@ const routes = [
             {
                 path: '/reserveAreaList',
                 parent: 'ordergl',
-                key: 'xyzq',
+                key: 'ydzq',
                 component: () => (
                     <Switch>
                         <Route
