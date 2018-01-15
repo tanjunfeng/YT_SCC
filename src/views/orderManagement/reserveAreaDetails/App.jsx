@@ -3,7 +3,7 @@
  * @Description: 预定专区详情
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-15 09:36:52
+ * @Last Modified time: 2018-01-15 10:34:12
  */
 
 import React, { PureComponent } from 'react';
@@ -35,6 +35,7 @@ class ReserveAreaDetails extends PureComponent {
 
         this.state = {
         }
+        this.wishListId = null;
     }
 
     componentWillMount() {
@@ -52,7 +53,8 @@ class ReserveAreaDetails extends PureComponent {
     param = {
         pageNum: 1,
         pageSize: PAGE_SIZE,
-        current: 1
+        current: 1,
+        wishListId: this.props.match.params.id
     };
 
     /**
@@ -102,7 +104,8 @@ class ReserveAreaDetails extends PureComponent {
      * 下载导入结果的回调
     */
     handleExportList = (data) => {
-        Util.exportExcel(wishDetailsForExcel, Util.removeInvalid(data));
+        Util.exportExcel(wishDetailsForExcel,
+            Util.removeInvalid({data, wishListId: this.props.match.params.id}));
     }
 
     render() {
@@ -134,6 +137,7 @@ class ReserveAreaDetails extends PureComponent {
     }
 }
 ReserveAreaDetails.propTypes = {
+    match: PropTypes.objectOf(PropTypes.any),
     queryReserAreaDetail: PropTypes.objectOf(PropTypes.any),
     reserveAreaDetaiData: PropTypes.objectOf(PropTypes.array),
     clearReserAreaDetail: PropTypes.func

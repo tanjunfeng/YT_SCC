@@ -121,7 +121,7 @@ export const sellPriceChangeExcelTemplate = '/prodSell/sellPriceChangeExcelTempl
 // 导出心愿单列表
 export const wishListsForExcel = '/wishBackAction/queryWishListsForExcel';
 // 导出心愿单详情
-export const wishDetailsForExcel = '/wishBackAction/querywishdetailsforexcel';
+export const wishDetailsForExcel = '/wishBackAction/queryWishDetailsForExcel';
 
 /**
  * 登录 Api
