@@ -1,0 +1,18 @@
+{
+    "timestamp": 1513072463339,
+    "code": 200,
+    "success": true,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 20,
+        "total": 1,
+        "data": [
+            {
+                "areaGroupCode": "10000000",
+                "areaGroupName": "一线城市街边店"
+            }
+        ]
+    }
+}

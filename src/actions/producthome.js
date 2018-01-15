@@ -458,7 +458,7 @@ export const ChangeProPurchaseStatus = (params) => dispatch => (
 
 // 查询逻辑仓库列表
 const receiveGetWarehouseInfo1 = (data) => ({
-    type: ActionType.GER_WARE_HOUSE_LOGIC_INFO,
+    type: ActionType.GET_WARE_HOUSE_LOGIC_INFO,
     payload: data,
 });
 

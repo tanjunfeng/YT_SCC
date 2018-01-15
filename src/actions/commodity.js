@@ -155,5 +155,5 @@ export const getAreaGroup = params => dispatch => (
 
 export const clearAreaGroup = () => dispatch => (dispatch({
     type: ActionType.CLEAR_AREA_GROUP,
-    payload: null
+    payload: { pageNum: 1, pageSize: 20, total: 0, data: [] }
 }));

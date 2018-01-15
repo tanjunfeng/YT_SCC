@@ -1,9 +1,12 @@
 const columns = [{
-    dataIndex: 'areaGroupId',
-    name: '区域组'
+    dataIndex: 'areaGroupCode',
+    title: '区域组编码'
+}, {
+    dataIndex: 'areaGroupName',
+    title: '区域组名称'
 }, {
     dataIndex: 'operation',
-    name: '操作'
+    title: '操作'
 }];
 
 export default columns;

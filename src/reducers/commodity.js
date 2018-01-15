@@ -93,7 +93,7 @@ const initState = Immutable.fromJS({
     costPrice: null,
 
     // 区域组
-    areaGroup: {}
+    areaGroup: { pageNum: 1, pageSize: 20, total: 0, data: [] }
 });
 
 export default function (state = initState, action) {
@@ -199,7 +199,7 @@ export default function (state = initState, action) {
         case ActionType.DELETE_PROD_PRUCHASE_BYID:
             return state.set('deleteProd', action.payload);
 
-        case ActionType.GER_WARE_HOUSE_LOGIC_INFO:
+        case ActionType.GET_WARE_HOUSE_LOGIC_INFO:
             return state.set('getWarehouseLogicInfo', action.payload);
 
         case ActionType.GET_COST_PRICE:

@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author taoqiyu
  *
- * 促销管理 - 下单打折查询列表
+ * 区域组管理
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -26,16 +26,24 @@ import columns from './columns';
 }, dispatch))
 
 class AreaGroup extends PureComponent {
-    componentDidMount() {
+    componentWillMount() {
+        this.props.clearAreaGroup();
         this.props.getAreaGroup();
+    }
+
+    componentDidMount() {
     }
 
     param = {
         current: 1
     }
 
+    renderOperations = () => {
+
+    }
+
     render() {
-        const { data = [], total = 0, pageNum = 1, pageSize = 20 } = this.props.areaGroup;
+        const { data, total, pageNum, pageSize } = this.props.areaGroup;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
@@ -46,10 +54,7 @@ class AreaGroup extends PureComponent {
                 <Table
                     dataSource={data}
                     columns={columns}
-                    rowKey="id"
-                    scroll={{
-                        x: 1400
-                    }}
+                    rowKey="areaGroupCode"
                     bordered
                     pagination={{
                         current: this.param.current,
@@ -67,6 +72,7 @@ class AreaGroup extends PureComponent {
 
 AreaGroup.propTypes = {
     getAreaGroup: PropTypes.func,
+    clearAreaGroup: PropTypes.func,
     areaGroup: PropTypes.objectOf(PropTypes.any),
 }
 
