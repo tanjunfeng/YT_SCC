@@ -3,7 +3,7 @@
  * @Description: 预定专区详情
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-15 09:26:57
+ * @Last Modified time: 2018-01-15 09:36:52
  */
 
 import React, { PureComponent } from 'react';
@@ -102,7 +102,7 @@ class ReserveAreaDetails extends PureComponent {
      * 下载导入结果的回调
     */
     handleExportList = (data) => {
-        Util.exportExcel(wishDetailsForExcel, Util.removeInvalid(this.param, data));
+        Util.exportExcel(wishDetailsForExcel, Util.removeInvalid(data));
     }
 
     render() {
