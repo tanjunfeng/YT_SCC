@@ -19,7 +19,7 @@ export default (params) => dispatch => (
         fetchDeleteProdPurchaseById(params)
             .then(res => {
                 dispatch(receive(res.data));
-                resolve(res.data)
+                resolve(res)
             })
             .catch(err => {
                 reject(err);
