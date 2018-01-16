@@ -9,14 +9,18 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Row, Col, Button, Table } from 'antd';
+import { Form, Icon, Row, Col, Table, Input, Button } from 'antd';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../constant/index';
 import { distributionInformationColumns as columns } from '../columns';
+import FlowImage from '../../../components/flowImage';
+
+const { TextArea } = Input;
 
 @connect(
     state => ({
         shippingDetailData: state.toJS().order.shippingDetailData,
+        flowChartData: state.toJS().process.flowChartData
     }),
     dispatch => bindActionCreators({
     }, dispatch)
@@ -25,9 +29,19 @@ class DistributionInformation extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            flowChartData: null
         }
     }
 
+    closeCanvas = () => {
+        this.setState({flowChartData: null})
+    }
+
+    showCanvas = () => {
+        console.log('111');
+        const data = this.props.shippingDetailData.flowChartData;
+        this.setState({flowChartData: data})
+    }
     render() {
         const {
             shippingMethod,
@@ -89,6 +103,43 @@ class DistributionInformation extends PureComponent {
                                     <span>{deliveryerPhone}</span>
                                 </Col>
                             </Row>
+                            <Row>
+                                <Col className="gutter-row" span={7}>
+                                    <span className="details-info-lable">物流状态:</span>
+                                    <span></span>
+                                </Col>
+                                <Col className="gutter-row" span={7}>
+                                    <span className="details-info-lable">签收凭证:</span>
+                                    <span>
+                                        <span>供应商已签收&nbsp;&nbsp;</span>
+                                        <a onClick={this.showCanvas}>查看</a>
+                                    </span>
+                                </Col>
+                                <Col className="gutter-row" span={10}>
+                                    <span className="details-info-lable">配送方式:</span>
+                                    <span>{deliveryerPhone}</span>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className="gutter-row" span={7}>
+                                    <span className="details-info-lable">配送方:</span>
+                                    <span></span>
+                                </Col>
+                                <Col className="gutter-row" span={7}>
+                                    <span className="details-info-lable">备注:</span>
+                                    <TextArea
+                                        autosize={{ minRows: 3, maxRows: 6 }}
+                                        value={this.state.textAreaNote}
+                                        style={{ resize: 'none' }}
+                                        maxLength="250"
+                                        onChange={(e) => {
+                                            this.setState({
+                                                textAreaNote: e.target.value
+                                            })
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
                         </div>
                     </div>
                 </div>
@@ -108,6 +159,9 @@ class DistributionInformation extends PureComponent {
                         </div>
                     </div>
                 </div>
+                <FlowImage data={this.state.flowChartData} closeCanvas={this.closeCanvas} >
+                    <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
+                </FlowImage>
             </div>
         );
     }
@@ -115,7 +169,6 @@ class DistributionInformation extends PureComponent {
 
 DistributionInformation.propTypes = {
     shippingDetailData: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(DistributionInformation));

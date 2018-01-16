@@ -256,7 +256,26 @@ class OrderInformation extends PureComponent {
                                 </Col>
                             </Row>
                             <Row>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">下单时间:</span>
+                                    <span>
+                                        {moment(parseInt(orderDetailData.creationTime, 10))
+                                            .format(TIME_FORMAT)}
+                                    </span>
+                                </Col>
                                 <Col className="gutter-row" span={12}>
+                                    <span className="details-info-lable">派送方:</span>
+                                    <span>{orderDetailData.delivery}</span>
+                                </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">会员等级优惠:</span>
+                                    <span>
+                                        {this.getAmount(orderDetailData.userDiscountAmount)}
+                                    </span>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">备注:</span>
                                     <TextArea
                                         autosize={{ minRows: 3, maxRows: 6 }}
@@ -270,24 +289,23 @@ class OrderInformation extends PureComponent {
                                         }}
                                     />
                                 </Col>
-                                <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">下单时间:</span>
-                                    <span>
-                                        {moment(parseInt(orderDetailData.creationTime, 10))
-                                            .format(TIME_FORMAT)}
-                                    </span>
+                                <Col className="gutter-row" span={12}>
+                                    <span className="details-info-lable">取消原因:</span>
+                                    <TextArea
+                                        autosize={{ minRows: 3, maxRows: 6 }}
+                                        value={this.state.textAreaNote}
+                                        style={{ resize: 'none' }}
+                                        maxLength="250"
+                                        onChange={(e) => {
+                                            this.setState({
+                                                textAreaNote: e.target.value
+                                            })
+                                        }}
+                                    />
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <div className="margin-b">
-                                        <span className="details-info-lable">会员等级优惠:</span>
-                                        <span>
-                                            {this.getAmount(orderDetailData.userDiscountAmount)}
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <span className="details-info-lable">实付金额:</span>
-                                        <span className="red-star">{this.getAmount(orderDetailData.total)}</span>
-                                    </div>
+                                    <span className="details-info-lable">实付金额:</span>
+                                    <span className="red-star">{this.getAmount(orderDetailData.total)}</span>
                                 </Col>
                             </Row>
                         </div>
