@@ -6,12 +6,12 @@ export const processingState = {
         value: '全部'
     }, {
         key: 'init',
-        value: '待处理'
+        value: '未开始'
     }, {
         key: 'complete',
-        value: '已完成'
+        value: '到货处理'
     }, {
         key: 'close',
-        value: '关闭'
+        value: '无货处理'
     }]
 }
