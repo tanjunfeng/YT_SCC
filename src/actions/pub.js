@@ -110,6 +110,23 @@ export const fetchRegionByCode = ({ type = 0, code = '100000' }) => dispatch => 
         })
 )
 
+const receiveNextCategorys = (data) => ({
+    type: ActionType.RECEIVE_NEXT_CATEGORYS,
+    payload: data,
+});
+
+export const getRegionByCode = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryCategorys(params)
+            .then(res => {
+                dispatch(receiveNextCategorys(res.data));
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
 const receiveAllCategorys = (data) => ({
     type: ActionType.RECEIVE_All_CATEGORYS,
     payload: data,
