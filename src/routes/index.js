@@ -26,7 +26,7 @@ import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDeta
 import importPurchasePriceList from 'bundle-loader?lazy!../views/commodity/importPurchasePriceList';
 // 售价导入
 import PriceImport from 'bundle-loader?lazy!../views/commodity/priceImport';
-import AreaGroup from 'bundle-loader?lazy!../views/commodity/areaGroup';
+import AreaGroupList from 'bundle-loader?lazy!../views/commodity/areaGroupList';
 // 分类列表页商品排序管理
 import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
@@ -306,14 +306,14 @@ const routes = [
             },
             // 区域组管理
             {
-                path: '/areaGroup',
+                path: '/areaGroupList',
                 parent: 'gylspgl',
-                key: 'areaGroup',
+                key: 'areaGroupList',
                 component: () => (
                     <Route
-                        path="/areaGroup"
+                        path="/areaGroupList"
                         exact
-                        render={() => <Bundle load={AreaGroup}>{(App) => <App />}</Bundle>}
+                        render={() => <Bundle load={AreaGroupList}>{(App) => <App />}</Bundle>}
                     />
                 ),
             }

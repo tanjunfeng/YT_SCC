@@ -20,7 +20,7 @@ import { getCategoriesByParentId, clearCategoriesList } from '../../actions/prom
     clearCategoriesList
 }, dispatch))
 
-class Category extends PureComponent {
+class Address extends PureComponent {
     state = {
         options: [],
         isLoading: false
@@ -134,15 +134,15 @@ class Category extends PureComponent {
     }
 }
 
-Category.propTypes = {
+Address.propTypes = {
     getCategoriesByParentId: PropTypes.func,
     clearCategoriesList: PropTypes.func,
     disabled: PropTypes.bool,
     onChange: PropTypes.func
 }
 
-Category.defaultProps = {
+Address.defaultProps = {
     disabled: false
 }
 
-export default withRouter(Form.create()(Category));
+export default withRouter(Form.create()(Address));

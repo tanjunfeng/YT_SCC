@@ -9,7 +9,8 @@ import { Button, Input, Form, DatePicker, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Util from '../../../util/util';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
-import { BranchCompany } from '../../../container/search';
+import { BranchCompany, AreaGroup } from '../../../container/search';
+import { fetchRegionByCode } from '../../../actions/pub';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -63,24 +64,26 @@ class SearchForm extends PureComponent {
             <Form layout="inline" className="area-group">
                 <Row>
                     <Col>
-                        <FormItem label="活动ID">
-                            {getFieldDecorator('id')(<Input size="default" />)}
+                        <FormItem label="区域组">
+                            {getFieldDecorator('areaGroup', {
+                                initialValue: { id: '', name: '' }
+                            })(<AreaGroup />)}
                         </FormItem>
                     </Col>
                     <Col>
-                        <FormItem label="活动名称">
-                            {getFieldDecorator('promotionName')(<Input size="default" />)}
+                        <FormItem label="区域类型">
+                            {getFieldDecorator('areaGroupType')(<Input size="default" />)}
                         </FormItem>
                     </Col>
                     <Col>
-                        <FormItem label="使用范围" className="itemTop">
-                            {getFieldDecorator('branchCompany', {
+                        <FormItem label="地点">
+                            {getFieldDecorator('address', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
                         </FormItem>
                     </Col>
                     <Col>
-                        <FormItem label="活动时间">
+                        <FormItem label="区域地点">
                             {getFieldDecorator('promotionDateRange', {
                                 initialValue: []
                             })(<RangePicker

@@ -25,13 +25,13 @@ import columns from './columns';
     clearAreaGroup
 }, dispatch))
 
-class AreaGroup extends PureComponent {
+class AreaGroupList extends PureComponent {
     componentWillMount() {
         this.props.clearAreaGroup();
-        this.props.getAreaGroup();
     }
 
     componentDidMount() {
+        this.props.getAreaGroup();
     }
 
     param = {
@@ -70,10 +70,10 @@ class AreaGroup extends PureComponent {
     }
 }
 
-AreaGroup.propTypes = {
+AreaGroupList.propTypes = {
     getAreaGroup: PropTypes.func,
     clearAreaGroup: PropTypes.func,
     areaGroup: PropTypes.objectOf(PropTypes.any),
 }
 
-export default withRouter(Form.create()(AreaGroup));
+export default withRouter(Form.create()(AreaGroupList));

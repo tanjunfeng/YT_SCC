@@ -1,4 +1,5 @@
 import BranchCompany from './BranchCompany';
+import AreaGroup from './AreaGroup';
 import Franchisee from './Franchisee';
 import DirectStores from './DirectStores';
 import AddingGoodsByStore from './AddingGoodsByStore';
@@ -8,6 +9,7 @@ import Commodity from './Commodity';
 
 export {
     BranchCompany,
+    AreaGroup,
     Franchisee,
     DirectStores,
     AddingGoodsByStore,
