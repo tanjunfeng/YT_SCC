@@ -290,7 +290,7 @@ class ProdModal extends Component {
     render() {
         const {
             prefixCls, form, initValue = {}, userNames,
-            isEdit, data, hasMainSupplier, getProductByIds, getProdPurchaseByIds
+            isEdit, data, hasMainSupplier, getProductByIds = {}, getProdPurchaseByIds
         } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
@@ -329,7 +329,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchaseInsideNumber', {
                                             rules: [{ required: true, message: '采购内装数' }],
-                                            initialValue: getProductByIds.purchaseInsideNumber
+                                            initialValue: initValue.purchaseInsideNumber
                                         })(
                                             <InputNumber
                                                 min={0}
