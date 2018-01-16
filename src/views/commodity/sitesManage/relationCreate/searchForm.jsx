@@ -13,15 +13,9 @@ import Commodity from '../../../../container/search/Commodity';
 import { Category } from '../../../../container/cascader';
 import Brands from '../../../../container/search/Brands';
 import Utils from '../../../../util/util';
+import { productLevel } from '../constant';
 
 const FormItem = Form.Item;
-const productLevel = [
-    'firstLevelCategoryId',
-    'secondLevelCategoryId',
-    'thirdLevelCategoryId',
-    'fourthLevelCategoryId'
-];
-
 class SearchForm extends PureComponent {
     state = {
         selectedOptions: []

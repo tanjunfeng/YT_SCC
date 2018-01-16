@@ -53,8 +53,6 @@ class SiteManage extends PureComponent {
 
         const operation = {
             title: '操作',
-            dataIndex: 'action',
-            key: 'action',
             render: (text, record) => (
                 <a onClick={() => { this.handleEdit(record.productId) }}>编辑</a>
             ),
@@ -74,6 +72,7 @@ class SiteManage extends PureComponent {
      * 查询商品地点关系列表
      */
     queryList = queryParams => {
+        console.log(JSON.stringify(queryParams));
         this.queryParams = queryParams;
         this.props.getSitesManageList(this.queryParams);
     }
@@ -138,7 +137,6 @@ class SiteManage extends PureComponent {
                 />
                 <div className="sites-manage-tab">
                     <div className="table-operations">
-                        {/* <Button onClick={this.deleteAll}>全部删除</Button> */}
                         <Button
                             disabled={selectedRows.length === 0}
                             onClick={this.customDelete}

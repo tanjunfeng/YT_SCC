@@ -38,17 +38,27 @@ class Sites extends PureComponent {
     */
     getSiteQueryType = siteTypeCode => {
         let SiteQueryType = '';
-        if (siteTypeCode == 0) {
-            SiteQueryType = 'getWarehouseLogic';
+        if (siteTypeCode == '1') {
+            SiteQueryType = 'findCompanyBaseInfo';
             this.setState({
                 loactionColumn: {
-                    code: 'warehouseCode',
-                    name: 'warehouseName'
+                    code: 'id',
+                    name: 'name'
+                }
+            });
+        }
+        
+        if (siteTypeCode == '2') {
+            SiteQueryType = 'queryAreaGroupList';
+            this.setState({
+                loactionColumn: {
+                    code: 'areaGroupCode',
+                    name: 'areaGroupName'
                 }
             });
         }
 
-        if (siteTypeCode == 1) {
+        if (siteTypeCode == '3') {
             SiteQueryType = 'getStoreInfo';
             this.setState({
                 loactionColumn: {

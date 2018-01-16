@@ -32,7 +32,8 @@ import {
     queryDirectStores,
     queryPurchaseOrderBrands,
     findCompanyBaseInfo as findCompaniesService,
-    modifypassword as modifypasswordActionService
+    modifypassword as modifypasswordActionService,
+    queryAreaGroupList
 } from '../service';
 
 const pubValueList = {
@@ -79,7 +80,9 @@ const pubValueList = {
     // 查询直营店
     queryDirectStores,
     // 品牌值清单
-    queryPurchaseOrderBrands
+    queryPurchaseOrderBrands,
+    // 区域组值清单
+    queryAreaGroupList
 };
 
 const receiveCollapsed = (isCollapsed) => ({

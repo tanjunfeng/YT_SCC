@@ -8,7 +8,7 @@ import {
     message
 } from 'antd';
 import Utils from '../../../../util/util';
-import { logisticsList, siteTypeList } from '../constant';
+import { logisticsList, placeTypeList, placeFieldMap } from '../constant';
 import Sites from '../../../../container/search/Sites';
 import { Supplier, SupplierAdderss } from '../../../../container/search';
 import { repeatData } from './RepeatTestData';
@@ -38,14 +38,14 @@ class CreateModal extends PureComponent {
         const {
             logisticsModel,
             placeType,
-            placeId,
+            place,
             supplier,
             supplierAddr
         } = getFieldsValue();
         const params = {
             logisticsModel,
             placeType,
-            placeId,
+            placeId: place.record ? place.record[placeFieldMap[placeType]] : '',
             supplierId: supplier.spId,
             AdrSupId: supplierAddr.spAdrid,
             productIds: selectedIds
@@ -78,13 +78,13 @@ class CreateModal extends PureComponent {
                     <Form>
                         <FormItem {...formItemLayout} label="地点类型" >
                             {getFieldDecorator('placeType', {
-                                initialValue: siteTypeList.defaultValue
+                                initialValue: placeTypeList.defaultValue
                             })(
                                 <Select
                                     size="large"
                                 >
                                     {
-                                        siteTypeList.data.map(item => (
+                                        placeTypeList.data.map(item => (
                                             <Option key={item.key} value={item.key}>
                                                 {item.value}
                                             </Option>
@@ -94,10 +94,10 @@ class CreateModal extends PureComponent {
                             )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="地点" >
-                            {getFieldDecorator('site', {
+                            {getFieldDecorator('place', {
                                 initialValue: {}
                             })(
-                                <Sites disabled={getFieldValue('siteType') === ''} siteTypeCode={getFieldValue('siteType')} />
+                                <Sites disabled={getFieldValue('placeType') === '0'} siteTypeCode={getFieldValue('placeType')} />
                             )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="供应商">

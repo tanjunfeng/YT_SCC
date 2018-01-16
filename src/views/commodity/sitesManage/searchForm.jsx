@@ -14,7 +14,7 @@ import Commodity from '../../../container/search/Commodity';
 import { Category } from '../../../container/cascader';
 import Brands from '../../../container/search/Brands';
 import Sites from '../../../container/search/Sites';
-import { logisticsList, siteTypeList } from './constant';
+import { logisticsList, placeTypeList, placeFieldMap, productLevel } from './constant';
 import Utils from '../../../util/util';
 
 const FormItem = Form.Item;
@@ -38,31 +38,43 @@ class SearchForm extends PureComponent {
             brand,
             commodity,
             logisticsModel,
-            site,
-            siteType
+            place,
+            placeType
         } = getFieldsValue();
-        const queryParams = {
-            barCode,
+        const baseParams = {
+            internationalCode: barCode,
             brand: brand.record ? brand.record.id : '',
-            commodity: commodity.record ? commodity.record.productId : '',
+            productId: commodity.record ? commodity.record.productId : '',
             logisticsModel,
-            /**
-             * 根据不同的值清单取site.record对应字段
-             */
-            site: site.record ? site.record.id : '',
-            siteType,
-            selectedOptions
+            // 根据不同的值清单取place.record对应字段
+            placeId: place.record ? place.record[placeFieldMap[placeType]] : '',
+            placeType
+        };
+        if (selectedOptions.length > 0) {
+            selectedOptions.forEach((item, i) => {
+                baseParams[productLevel[i]] = item;
+            });
         }
 
         if (selectedOptions.length > 0 && selectedOptions.length < 3) {
             message.error('请选择至少三级商品分类');
             return;
         }
-        this.props.queryList(Utils.removeInvalid(queryParams));
+
+        this.props.queryList({
+            queryJson: Utils.removeInvalid(baseParams)
+        });
     }
 
     handleAdd = () => {
         this.props.history.push('/sitesManage/create');
+    }
+
+    handleReset = () => {
+        this.props.form.setFieldsValue({
+            place: { reset: true }
+        });
+        this.props.form.resetFields();
     }
 
     handleCategorySelect = (category, selectedOptions) => {
@@ -129,14 +141,14 @@ class SearchForm extends PureComponent {
                         </Col>
                         <Col>
                             <FormItem label="地点类型" >
-                                {getFieldDecorator('siteType', {
-                                    initialValue: siteTypeList.defaultValue
+                                {getFieldDecorator('placeType', {
+                                    initialValue: placeTypeList.defaultValue
                                 })(
                                     <Select
                                         size="large"
                                     >
                                         {
-                                            siteTypeList.data.map(item => (
+                                            placeTypeList.data.map(item => (
                                                 <Option key={item.key} value={item.key}>
                                                     {item.value}
                                                 </Option>
@@ -148,10 +160,13 @@ class SearchForm extends PureComponent {
                         </Col>
                         <Col>
                             <FormItem label="地点" >
-                                {getFieldDecorator('site', {
-                                    initialValue: {}
+                                {getFieldDecorator('place', {
+                                    initialValue: {
+                                        id: '',
+                                        name: ''
+                                    }
                                 })(
-                                    <Sites disabled={getFieldValue('siteType') === ''} siteTypeCode={getFieldValue('siteType')} />
+                                    <Sites disabled={getFieldValue('placeType') === '0'} siteTypeCode={getFieldValue('placeType')} />
                                 )}
                             </FormItem>
                         </Col>
@@ -164,7 +179,7 @@ class SearchForm extends PureComponent {
                                 size="default"
                             >查询</Button>
                             <Button
-                                onClick={this.handleSearch}
+                                onClick={this.handleReset}
                                 size="default"
                             >重置</Button>
                             <Button

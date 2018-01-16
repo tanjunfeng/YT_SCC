@@ -985,6 +985,7 @@ export const queryProdPriceChangeList = params => http.get('/prodSell/queryProdP
 export const prodPlaceBulkDelete = params => http.get('/prodPlace/bulkDelete', params);
 export const prodPlacePpdate = params => http.post('/prodPlace/update', params);
 export const addDistinctProductSiteRelations = params => http.get('/prodPlace/addDistinct', params);
+export const queryAreaGroupList = params => http.get('/areaGroup/queryAreaGroupList', params);
 // 预定专区
 export const queryReserveAreaList = params => http.get('/wishBackAction/queryWishListsByParam', params);
 // 预定专区完成或关闭心愿单
