@@ -667,6 +667,13 @@ export const wishAreaColumns = [{
         children: Util.getTime(timestamp)
     })
 }, {
+    title: '所属子公司',
+    dataIndex: 'branchCompanyId',
+    key: 'branchCompanyId',
+    render: (text, record) => (
+        <span>{record.branchCompanyId}-{record.branchCompanyName}</span>
+    )
+}, {
     title: '处理状态',
     dataIndex: 'status',
     key: 'status',
