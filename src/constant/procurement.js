@@ -6,10 +6,10 @@ export const poStatus = {
         value: '请选择'
     }, {
         key: '0',
-        value: '制单'
+        value: '草稿'
     }, {
         key: '1',
-        value: '已提交'
+        value: '待审核'
     }, {
         key: '2',
         value: '已审核'
@@ -19,6 +19,9 @@ export const poStatus = {
     }, {
         key: '4',
         value: '已关闭'
+    }, {
+        key: '5',
+        value: '已取消'
     }]
 }
 
@@ -145,9 +148,26 @@ export const businessModeType = {
     }, {
         key: '1',
         value: '代销'
+    }, {
+        key: '2',
+        value: '寄售'
     }]
 }
 
+// 供应商接单状态
+export const supplierOrderStatus = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '请选择'
+    }, {
+        key: '0',
+        value: '未接单'
+    }, {
+        key: '1',
+        value: '已接单'
+    }]
+}
 export const locTypeCodes = {
     warehouse: '0000',
     shop: '0001'
@@ -168,6 +188,24 @@ export const poType = {
     }, {
         key: '2',
         value: '促销采购'
+    }]
+}
+
+// 处理状态
+export const processingState = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '全部'
+    }, {
+        key: 'init',
+        value: '待处理'
+    }, {
+        key: 'complete',
+        value: '已完成'
+    }, {
+        key: 'close',
+        value: '关闭'
     }]
 }
 
