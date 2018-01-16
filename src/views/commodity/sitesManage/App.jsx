@@ -13,7 +13,6 @@ import {
 import {
     getSitesManageList,
     removeSiteManagesByIds,
-    removeSiteManages,
     editSiteManageById
 } from '../../../actions/commodity';
 import SearchForm from './searchForm';
@@ -22,13 +21,11 @@ import { sitesManageColumns } from './columns';
 import { PAGE_SIZE } from '../../../constant';
 
 const confirm = Modal.confirm
-
 @connect(state => ({
     goodsSitesManageList: state.toJS().commodity.goodsSitesManageList,
 }), dispatch => bindActionCreators({
     getSitesManageList,
     removeSiteManagesByIds,
-    removeSiteManages,
     editSiteManageById
 }, dispatch))
 class SiteManage extends PureComponent {

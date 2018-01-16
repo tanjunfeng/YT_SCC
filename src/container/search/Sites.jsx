@@ -24,10 +24,15 @@ class Sites extends PureComponent {
         }
     }
     componentWillReceiveProps(nextProps) {
-        // const { [code]: [code] } = nextProps.value;
-        // if (this.props.value.productId !== '' &&  === '') {
-        //     this.siteSearchMind.reset();
-        // }
+        const { siteTypeCode, placeFieldMap } = this.props;
+        /**
+         * placeField为选择具体地点类型时，地点的id字段
+        */
+        const placeField = [placeFieldMap[siteTypeCode]];
+        const { [placeField]: id } = nextProps.value;
+        if (this.props.value[placeField] !== '' &&  id === '') {
+            this.siteSearchMind.reset();
+        }
         if (nextProps.value.reset && !this.props.value.reset) {
             this.handleClear();
         }
@@ -47,7 +52,7 @@ class Sites extends PureComponent {
                 }
             });
         }
-        
+
         if (siteTypeCode == '2') {
             SiteQueryType = 'queryAreaGroupList';
             this.setState({
@@ -103,6 +108,7 @@ class Sites extends PureComponent {
         const { loactionColumn } = this.state;
         return (
             <SearchMind
+                style={{ zIndex: this.props.zIndex }}
                 compKey={loactionColumn.code}
                 ref={ref => { this.siteSearchMind = ref }}
                 fetch={this.query}
@@ -138,10 +144,12 @@ Sites.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     initialValue: PropTypes.string,
     siteTypeCode: PropTypes.string,
+    placeFieldMap: PropTypes.object
 };
 
 Sites.defaultProps = {
-    siteTypeCode: '0'
+    siteTypeCode: '0',
+    zIndex: 1000
 };
 
 export default Sites;

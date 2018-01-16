@@ -16,7 +16,7 @@ const Option = Select.Option;
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 },
+        sm: { span: 7 },
     },
     wrapperCol: {
         xs: { span: 24 },
@@ -25,6 +25,16 @@ const formItemLayout = {
 };
 
 class EditSiteRelationModal extends PureComponent {
+    componentWillReceiveProps(nextProps) {
+        const { visible } = nextProps;
+        /**
+         * 弹窗关闭时清除历史数据
+         */
+        if (!visible) {
+            this.props.form.resetFields();
+        }
+    }
+
     handleEditFetch = () => {
         const { editSiteRelation, editId } = this.props;
         const { getFieldsValue, validateFields } = this.props.form;
@@ -56,39 +66,41 @@ class EditSiteRelationModal extends PureComponent {
                 onOk={this.handleEditFetch}
                 onCancel={closeModal}
             >
-                <Form>
-                    <FormItem {...formItemLayout} label="供应商">
-                        {getFieldDecorator('supplier', {
-                            initialValue: { spId: '', spNo: '', companyName: '' }
-                        })(
-                            <Supplier />
-                        )}
-                    </FormItem>
-                    <FormItem {...formItemLayout} label="供应商地点" >
-                        {getFieldDecorator('supplierAddr', { initialValue: {
-                            providerNo: '',
-                            providerName: '',
-                            spAdrid: ''
-                        }})(<SupplierAdderss pId={getFieldValue('supplier').spId} disabled={getFieldValue('supplier').spId === ''} />)}
-                    </FormItem>
-                    <FormItem {...formItemLayout} label="物流模式" >
-                        {getFieldDecorator('logisticsModel', {
-                            initialValue: logisticsList.defaultValue
-                        })(
-                            <Select
-                                size="large"
-                            >
-                                {
-                                    logisticsList.data.map(item => (
-                                        <Option key={item.key} value={item.key}>
-                                            {item.value}
-                                        </Option>
-                                    ))
-                                }
-                            </Select>
-                        )}
-                    </FormItem>
-                </Form>
+                <div className="edit-modal-container">
+                    <Form>
+                        <FormItem {...formItemLayout} label="供应商">
+                            {getFieldDecorator('supplier', {
+                                initialValue: { spId: '', spNo: '', companyName: '' }
+                            })(
+                                <Supplier />
+                            )}
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="供应商地点" >
+                            {getFieldDecorator('supplierAddr', { initialValue: {
+                                providerNo: '',
+                                providerName: '',
+                                spAdrid: ''
+                            }})(<SupplierAdderss pId={getFieldValue('supplier').spId} disabled={getFieldValue('supplier').spId === ''} />)}
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="物流模式" >
+                            {getFieldDecorator('logisticsModel', {
+                                initialValue: logisticsList.defaultValue
+                            })(
+                                <Select
+                                    size="large"
+                                >
+                                    {
+                                        logisticsList.data.map(item => (
+                                            <Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>
+                                        ))
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
+                    </Form>
+                </div>
             </Modal>
         );
     }

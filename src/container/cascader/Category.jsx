@@ -41,6 +41,13 @@ class Category extends PureComponent {
         });
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { isClearCategory } = nextProps;
+        if (isClearCategory && isClearCategory !== this.props.isClearCategory) {
+            this.ref.setValue([]);
+        }
+    }
+
     componentWillUnmount() {
         this.props.clearCategoriesList();
     }
@@ -129,6 +136,7 @@ class Category extends PureComponent {
                 loadData={this.handleLoadData}
                 onChange={this.handleChange}
                 placeholder={'请选择'}
+                ref={ref => this.ref = ref}
                 changeOnSelect
             />
         );
@@ -143,7 +151,8 @@ Category.propTypes = {
 }
 
 Category.defaultProps = {
-    disabled: false
+    disabled: false,
+    isClearCategory: false
 }
 
 export default withRouter(Form.create()(Category));

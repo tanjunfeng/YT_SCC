@@ -18,7 +18,7 @@ const Option = Select.Option;
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 },
+        sm: { span: 7 },
     },
     wrapperCol: {
         xs: { span: 24 },
@@ -27,11 +27,15 @@ const formItemLayout = {
 };
 
 class CreateModal extends PureComponent {
+    state = {
+        initialPlaceValue: {}
+    }
     componentWillReceiveProps(nextProps) {
         if (nextProps.visible !== this.props.visible) {
             this.props.form.resetFields();
         }
     }
+
     handleCreateRelation = () => {
         const { createRelations, selectedIds, openRepeatModel } = this.props;
         const { getFieldsValue, validateFields } = this.props.form;
@@ -64,8 +68,29 @@ class CreateModal extends PureComponent {
             }
         });
     }
+
+    handPlaceTypeChange = val => {
+        if (parseInt(val, 10) === 1 || parseInt(val, 10) === 3) {
+            this.setState({
+                initialPlaceValue: {
+                    id: '',
+                    name: ''
+                }
+            });
+        }
+
+        if (parseInt(val, 10) === 2) {
+            this.setState({
+                initialPlaceValue: {
+                    areaGroupCode: '',
+                    areaGroupName: ''
+                }
+            });
+        }
+    }
     render() {
         const { visible, closeModal } = this.props;
+        const { initialPlaceValue } = this.state;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         return (
             <Modal
@@ -74,7 +99,7 @@ class CreateModal extends PureComponent {
                 onOk={this.handleCreateRelation}
                 onCancel={closeModal}
             >
-                <div className="create-modal" >
+                <div className="create-modal" style={{display: 'flex', justifyContent: 'center'}} >
                     <Form>
                         <FormItem {...formItemLayout} label="地点类型" >
                             {getFieldDecorator('placeType', {
@@ -82,6 +107,7 @@ class CreateModal extends PureComponent {
                             })(
                                 <Select
                                     size="large"
+                                    onChange={this.handPlaceTypeChange}
                                 >
                                     {
                                         placeTypeList.data.map(item => (
@@ -95,16 +121,21 @@ class CreateModal extends PureComponent {
                         </FormItem>
                         <FormItem {...formItemLayout} label="地点" >
                             {getFieldDecorator('place', {
-                                initialValue: {}
+                                initialValue: initialPlaceValue
                             })(
-                                <Sites disabled={getFieldValue('placeType') === '0'} siteTypeCode={getFieldValue('placeType')} />
+                                <Sites
+                                    disabled={getFieldValue('placeType') === '0'}
+                                    siteTypeCode={getFieldValue('placeType')}
+                                    placeFieldMap={placeFieldMap}
+                                    zIndex={1001}
+                                />
                             )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="供应商">
                             {getFieldDecorator('supplier', {
                                 initialValue: { spId: '', spNo: '', companyName: '' }
                             })(
-                                <Supplier />
+                                <Supplier zIndex={1000} />
                             )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="供应商地点" >
@@ -112,7 +143,12 @@ class CreateModal extends PureComponent {
                                 providerNo: '',
                                 providerName: '',
                                 spAdrid: ''
-                            }})(<SupplierAdderss pId={getFieldValue('supplier').spId} disabled={getFieldValue('supplier').spId === ''} />)}
+                            }})(
+                                <SupplierAdderss
+                                    zIndex={999}
+                                    pId={getFieldValue('supplier').spId}
+                                    disabled={getFieldValue('supplier').spId === ''}
+                                />)}
                         </FormItem>
                         <FormItem {...formItemLayout} label="物流模式" >
                             {getFieldDecorator('logisticsModel', {

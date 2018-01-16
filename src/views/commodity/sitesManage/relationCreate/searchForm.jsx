@@ -18,7 +18,8 @@ import { productLevel } from '../constant';
 const FormItem = Form.Item;
 class SearchForm extends PureComponent {
     state = {
-        selectedOptions: []
+        selectedOptions: [],
+        isClearCategory: false
     }
     componentDidMount() {
         const { queryProducts } = this.props;
@@ -67,7 +68,8 @@ class SearchForm extends PureComponent {
     */
     handleReset = () => {
         this.setState({
-            selectedOptions: []
+            selectedOptions: [],
+            isClearCategory: true
         });
         this.props.form.resetFields();
     }
@@ -82,13 +84,17 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { isCreateRelation } = this.props;
+        const { isClearCategory } = this.state;
         return (
             <div className="site-relation-create">
                 <Form layout="inline" className="site-relation-create-form">
                     <Row gutter={40}>
                         <Col>
                             <FormItem label="商品分类">
-                                <Category onChange={this.handleCategorySelect} />
+                                <Category
+                                    onChange={this.handleCategorySelect}
+                                    isClearCategory={isClearCategory}
+                                />
                             </FormItem>
                         </Col>
                         <Col>

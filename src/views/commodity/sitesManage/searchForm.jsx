@@ -24,7 +24,9 @@ class SearchForm extends PureComponent {
     state = {
         classify: {},
         selectedOptions: [],
-        category: 0
+        initialPlaceValue: {},
+        category: 0,
+        isClearCategory: false
     }
     componentDidMount() {
         this.props.queryList();
@@ -71,8 +73,11 @@ class SearchForm extends PureComponent {
     }
 
     handleReset = () => {
-        this.props.form.setFieldsValue({
-            place: { reset: true }
+        // this.props.form.setFieldsValue({
+        //     place: { reset: true }
+        // });
+        this.setState({
+            isClearCategory: true
         });
         this.props.form.resetFields();
     }
@@ -82,15 +87,39 @@ class SearchForm extends PureComponent {
             selectedOptions: selectedOptions.map(item => item.value)
         });
     }
+
+    handPlaceTypeChange = val => {
+        if (parseInt(val, 10) === 1 || parseInt(val, 10) === 3) {
+            this.setState({
+                initialPlaceValue: {
+                    id: '',
+                    name: ''
+                }
+            });
+        }
+
+        if (parseInt(val, 10) === 2) {
+            this.setState({
+                initialPlaceValue: {
+                    areaGroupCode: '',
+                    areaGroupName: ''
+                }
+            });
+        }
+    }
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
+        const { initialPlaceValue, isClearCategory} = this.state;
         return (
             <div className="sites-manage">
                 <Form layout="inline" className="sites-manage-form">
                     <Row gutter={40}>
                         <Col>
                             <FormItem label="商品分类">
-                                <Category onChange={this.handleCategorySelect} />
+                                <Category
+                                    isClearCategory={isClearCategory}
+                                    onChange={this.handleCategorySelect}
+                                />
                             </FormItem>
                         </Col>
                         <Col>
@@ -146,6 +175,7 @@ class SearchForm extends PureComponent {
                                 })(
                                     <Select
                                         size="large"
+                                        onChange={this.handPlaceTypeChange}
                                     >
                                         {
                                             placeTypeList.data.map(item => (
@@ -161,12 +191,13 @@ class SearchForm extends PureComponent {
                         <Col>
                             <FormItem label="地点" >
                                 {getFieldDecorator('place', {
-                                    initialValue: {
-                                        id: '',
-                                        name: ''
-                                    }
+                                    initialValue: initialPlaceValue
                                 })(
-                                    <Sites disabled={getFieldValue('placeType') === '0'} siteTypeCode={getFieldValue('placeType')} />
+                                    <Sites
+                                        disabled={getFieldValue('placeType') === '0'}
+                                        siteTypeCode={getFieldValue('placeType')}
+                                        placeFieldMap={placeFieldMap}
+                                    />
                                 )}
                             </FormItem>
                         </Col>
