@@ -3,7 +3,7 @@
  * @Description: 预定专区详情searchForm
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-11 20:12:16
+ * @Last Modified time: 2018-01-15 09:25:52
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -72,7 +72,7 @@ class SearchForm extends PureComponent {
      * 导出EXCEL
      */
     handleExport = () => {
-        this.props.exportList();
+        this.props.exportList(this.getFormVulue());
     }
 
     render() {
