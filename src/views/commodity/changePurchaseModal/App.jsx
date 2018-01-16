@@ -299,7 +299,6 @@ class ProdModal extends Component {
         const { internationalCodes = [] } = data;
         const { internationalCode } = getProductByIds.internationalCodes[0];
         const { supportReturn } = getProdPurchaseByIds;
-        console.log(getProdPurchaseByIds, supportReturn)
         const firstCreated = () => {
             switch (userNames.firstCreated) {
                 case 0:
@@ -317,6 +316,7 @@ class ProdModal extends Component {
                 className={isEdit ? prefixCls : 'creat-prod'}
                 onOk={this.handleOk}
                 width={isEdit ? '517px' : '480px'}
+                destroyOnClose
                 onCancel={this.handleCancel}
                 maskClosable={false}
             >
@@ -639,6 +639,7 @@ ProdModal.propTypes = {
     handleClose: PropTypes.func,
     prodPurchase: PropTypes.objectOf(PropTypes.any),
     initValue: PropTypes.objectOf(PropTypes.any),
+    getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
     isEdit: PropTypes.bool,
     hasMainSupplier: PropTypes.bool,
