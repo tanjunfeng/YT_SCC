@@ -16,7 +16,7 @@ import {
     queryDirectInfo,
     clearDirectInfo
 } from '../../../actions/procurement';
-import { processingState } from '../../../constant/procurement';
+import { processingState } from '../../../constant/process';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
