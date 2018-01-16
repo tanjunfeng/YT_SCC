@@ -299,6 +299,7 @@ class ProdModal extends Component {
         const { internationalCodes = [] } = data;
         const { internationalCode } = getProductByIds.internationalCodes[0];
         const { supportReturn } = getProdPurchaseByIds;
+        console.log(getProdPurchaseByIds, supportReturn)
         const firstCreated = () => {
             switch (userNames.firstCreated) {
                 case 0:
@@ -424,7 +425,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('supportReturn', {
                                             rules: [{ required: true, message: '请选择是否支持退货!' }],
-                                            initialValue: supportReturn ? String(supportReturn) : supportReturnOption.defaultValue
+                                            initialValue: isEdit ? String(supportReturn) : supportReturnOption.defaultValue
                                         })(
                                             <Select
                                                 className="sc-form-item-select"
