@@ -9,14 +9,12 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Row, Col, Button, Table, Input } from 'antd';
+import { Form, Icon, Row, Col, Button, Table } from 'antd';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../constant/index';
 import { distributionInformationColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 
-const FormItem = Form.Item;
-const { TextArea } = Input;
 
 @connect(
     state => ({
@@ -89,7 +87,6 @@ class DistributionInformation extends PureComponent {
     }
 
     render() {
-        this.renderColumns();
         const { shippingDetailData, value } = this.props;
         const { data } = shippingDetailData;
         const {
@@ -104,6 +101,9 @@ class DistributionInformation extends PureComponent {
             distributionName,
             singedCertImg
         } = data;
+        if (shippingStateDesc === '已签收待确认') {
+            this.renderColumns();
+        }
         return (
             <div>
                 <div className="order-details-item">
@@ -161,7 +161,7 @@ class DistributionInformation extends PureComponent {
                                     <span>{shippingStateDesc}</span>
                                 </Col>
                                 {
-                                    !singedCertImg ?
+                                    singedCertImg ?
                                         <Col className="gutter-row" span={7}>
                                             <span className="details-info-lable">签收凭证:</span>
                                             <span>供应商已签收凭证</span>
@@ -215,6 +215,9 @@ class DistributionInformation extends PureComponent {
 }
 
 DistributionInformation.propTypes = {
+    onChange: PropTypes.func,
+    onReceipt: PropTypes.func,
+    onVoucher: PropTypes.func,
     shippingDetailData: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 }

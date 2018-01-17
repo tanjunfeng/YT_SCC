@@ -54,10 +54,10 @@ class OrderManagementDetails extends Component {
             oldData: goodsList || this.state.oldData,
         })
         goodsList.forEach((item) => {
-            const id = item.id;
+            const skuId = item.skuId;
             const completedQuantity = item.completedQuantity;
             Object.assign(coupData, {
-                [id]: completedQuantity
+                [skuId]: completedQuantity
             });
         });
     }
@@ -67,8 +67,15 @@ class OrderManagementDetails extends Component {
      */
     handleReceipt = () => {
         const { oldData, coupData } = this.state;
-        console.log(oldData)
-        console.log(coupData)
+        const oldNum = {};
+        oldData.forEach((item) => {
+            const skuId = item.skuId;
+            const completedQuantity = item.completedQuantity;
+            Object.assign(oldNum, {
+                [skuId]: completedQuantity
+            });
+        });
+        console.log(coupData || oldNum)
     }
 
     /**
