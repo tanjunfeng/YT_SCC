@@ -159,15 +159,18 @@ const receiveShippingDetailInfo = (data) => ({
     type: ActionType.FETCH_SHIPPING_DETAIL,
     payload: data,
 })
-export const fetchShippingDetailInfo = (data) => dispatch => (
-    queryShippingDetailInfo(data)
-        .then(res => {
-            dispatch(
-                receiveShippingDetailInfo(res.data)
-            );
-        })
-        .catch(err => Promise.reject(err))
-)
+export const fetchShippingDetailInfo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryShippingDetailInfo(params)
+            .then(res => {
+                dispatch(
+                    receiveShippingDetailInfo(res)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
 
 // 保存订单详情备注信息
 export const savaOrderDescription = (data) => (

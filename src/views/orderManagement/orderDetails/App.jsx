@@ -30,11 +30,52 @@ const orderDT = 'order-details';
 )
 
 class OrderManagementDetails extends Component {
+    state = {
+        oldData: [],
+        coupData: {}
+    }
+
     componentWillMount() {
         const { id } = this.props.match.params;
         this.props.fetchOrderDetailInfo({ id });
         this.props.fetchPaymentDetailInfo({ orderId: id });
-        this.props.fetchShippingDetailInfo({ id });
+        this.props.fetchShippingDetailInfo({ id }).then((res) => {
+            if (res.code === 200) {
+                this.setState({
+                    oldData: [...res.data.shippingProductDtos]
+                })
+            }
+        });
+    }
+
+    handleSendChange = (goodsList) => {
+        const coupData = this.state.coupData;
+        this.setState({
+            oldData: goodsList || this.state.oldData,
+        })
+        goodsList.forEach((item) => {
+            const id = item.id;
+            const completedQuantity = item.completedQuantity;
+            Object.assign(coupData, {
+                [id]: completedQuantity
+            });
+        });
+    }
+
+    /**
+     * 确认签收发送签收数量
+     */
+    handleReceipt = () => {
+        const { oldData, coupData } = this.state;
+        console.log(oldData)
+        console.log(coupData)
+    }
+
+    /**
+     * 查看签收凭证
+     */
+    handleVoucher = (singedCertImg) => {
+        console.log('查看凭证')
     }
 
     render() {
@@ -52,7 +93,12 @@ class OrderManagementDetails extends Component {
                         <PayInformation />
                     </TabPane>
                     <TabPane tab="配送信息" key="3">
-                        <DistributionInformation />
+                        <DistributionInformation
+                            value={this.state.oldData}
+                            onChange={this.handleSendChange}
+                            onReceipt={this.handleReceipt}
+                            onVoucher={this.handleVoucher}
+                        />
                     </TabPane>
                 </Tabs>
             </div>

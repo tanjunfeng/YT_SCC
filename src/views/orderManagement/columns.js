@@ -579,9 +579,17 @@ const directSalesgoodsColumns = [{
 }];
 
 const distributionInformationColumns = [{
+    title: '序号',
+    dataIndex: 'index',
+    render: (text, record, index) => index + 1
+}, {
     title: '商品编码',
     dataIndex: 'skuId',
     key: 'skuId',
+}, {
+    title: '商品条码',
+    dataIndex: 'internationalCode',
+    key: 'internationalCode',
 }, {
     title: '商品名称',
     dataIndex: 'productName',
@@ -600,10 +608,9 @@ const distributionInformationColumns = [{
     title: '配送数量',
     dataIndex: 'shippedQuantity',
     key: 'shippedQuantity',
-    render: (text, record) => (
+    render: (text) => (
         <span>
             <span>{text}</span>
-            <span>{record.unit}</span>
         </span>
     )
 }, {
@@ -621,6 +628,15 @@ const distributionInformationColumns = [{
         <span>
             <span>{text}</span>
             <span>{record.unit}</span>
+        </span>
+    )
+}, {
+    title: '签收差数',
+    dataIndex: 'completedNum',
+    key: 'completedNum',
+    render: (text) => (
+        <span>
+            <span>{text}</span>
         </span>
     )
 }, {
