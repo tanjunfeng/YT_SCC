@@ -16,37 +16,24 @@ const FormItem = Form.Item;
 class SearchForm extends PureComponent {
     getFormData = () => {
         const {
-            id,
-            promotionName,
-            promotionDateRange,
-            statusCode,
-            branchCompany
+            areaGroup
         } = this.props.form.getFieldsValue();
-        let status = statusCode;
-        if (statusCode === 'all') {
-            status = '';
-        }
         return Util.removeInvalid({
-            id,
-            promotionName,
-            status,
-            startDate: promotionDateRange.length > 1 ? promotionDateRange[0].valueOf() : '',
-            endDate: promotionDateRange.length > 1 ? promotionDateRange[1].valueOf() : '',
-            branchCompanyId: branchCompany.id
+            areaGroup: areaGroup.areaGroupCode
         });
     }
 
     handleSearch = () => {
         // 通知父页面执行搜索
-        this.props.onPromotionSearch(this.getFormData());
+        this.props.onSearch(this.getFormData());
     }
 
     handleReset = () => {
         this.props.form.resetFields(); // 清除当前查询条件
-        this.props.onPromotionReset(); // 通知查询条件已清除
+        this.props.onReset(); // 通知查询条件已清除
         // 点击重置时清除 seachMind 引用文本
         this.props.form.setFieldsValue({
-            branchCompany: { reset: true }
+            areaGroup: { reset: true }
         });
     }
 
@@ -58,7 +45,7 @@ class SearchForm extends PureComponent {
                     <Col>
                         <FormItem label="区域组">
                             {getFieldDecorator('areaGroup', {
-                                initialValue: { id: '', name: '' }
+                                initialValue: { areaGroupCode: '', areaGroupName: '' }
                             })(<AreaGroup />)}
                         </FormItem>
                     </Col>
@@ -79,8 +66,8 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    onPromotionSearch: PropTypes.func,
-    onPromotionReset: PropTypes.func,
+    onSearch: PropTypes.func,
+    onReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any)
 };
 

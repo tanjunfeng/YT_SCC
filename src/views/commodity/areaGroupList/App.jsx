@@ -48,8 +48,8 @@ class AreaGroupList extends PureComponent {
         return (
             <div>
                 <SearchForm
-                    onPromotionSearch={this.handlePromotionSearch}
-                    onPromotionReset={this.handlePromotionReset}
+                    onSearch={this.handleSearch}
+                    onReset={this.handleReset}
                 />
                 <Table
                     dataSource={data}
