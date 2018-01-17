@@ -265,7 +265,7 @@ class OrderInformation extends PureComponent {
                                 </Col>
                                 <Col className="gutter-row" span={12}>
                                     <span className="details-info-lable">派送方:</span>
-                                    <span>{orderDetailData.delivery}</span>
+                                    <span>{orderDetailData.distributionName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">会员等级优惠:</span>
@@ -293,7 +293,7 @@ class OrderInformation extends PureComponent {
                                     <span className="details-info-lable">取消原因:</span>
                                     <TextArea
                                         autosize={{ minRows: 3, maxRows: 6 }}
-                                        value={this.state.textAreaNote}
+                                        value={orderDetailData.cancelReason}
                                         style={{ resize: 'none' }}
                                         maxLength="250"
                                         onChange={(e) => {

@@ -38,8 +38,7 @@ class DistributionInformation extends PureComponent {
     }
 
     showCanvas = () => {
-        console.log('111');
-        const data = this.props.shippingDetailData.flowChartData;
+        const data = this.props.shippingDetailData.singedCertImg;
         this.setState({flowChartData: data})
     }
     render() {
@@ -51,7 +50,15 @@ class DistributionInformation extends PureComponent {
             deliveryer,
             deliveryerPhone,
             shippingProductDtos,
+            shippingState,
+            shippingModes,
+            distributionName,
         } = this.props.shippingDetailData;
+        const shipping = {
+            '': '',
+            unified: '统配',
+            provider: '直送'
+        }
         return (
             <div>
                 <div className="order-details-item">
@@ -106,7 +113,7 @@ class DistributionInformation extends PureComponent {
                             <Row>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">物流状态:</span>
-                                    <span></span>
+                                    <span>{shippingState}</span>
                                 </Col>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">签收凭证:</span>
@@ -117,19 +124,19 @@ class DistributionInformation extends PureComponent {
                                 </Col>
                                 <Col className="gutter-row" span={10}>
                                     <span className="details-info-lable">配送方式:</span>
-                                    <span>{deliveryerPhone}</span>
+                                    <span>{shipping[shippingModes]}</span>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">配送方:</span>
-                                    <span></span>
+                                    <span>{distributionName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">备注:</span>
                                     <TextArea
                                         autosize={{ minRows: 3, maxRows: 6 }}
-                                        value={this.state.textAreaNote}
+                                        value={''}
                                         style={{ resize: 'none' }}
                                         maxLength="250"
                                         onChange={(e) => {
