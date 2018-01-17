@@ -796,6 +796,8 @@ export const queryBranchCompanyInfo = (params) => http.get('/prodSell/queryBranc
 export const getFranchiseeInfo = (params) => http.get('/sorder/getFranchiseeInfo', params);
 // 查询可用子公司信息
 export const findCanUseCompanyInfo = (params) => http.get('/supplier/findCompanyBaseInfo', params);
+// 查询区域组信息
+export const queryAreaGroupList = (params) => http.get('/areaGroup/queryAreaGroupList', params);
 
 // 此接口用于查询各级分类（值清单）
 export const queryCategorysByLevel = (params) => http.get('/category/queryCategories', params);

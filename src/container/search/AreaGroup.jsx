@@ -86,7 +86,7 @@ AreaGroup.propTypes = {
 }
 
 AreaGroup.defaultProps = {
-    url: 'findCompanyBaseInfo'
+    url: 'queryAreaGroupList'
 }
 
 
