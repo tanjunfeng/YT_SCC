@@ -16,6 +16,7 @@ import Brands from '../../../container/search/Brands';
 import Sites from '../../../container/search/Sites';
 import { logisticsList, placeTypeListQuery, placeFieldMap, productLevel } from './constant';
 import Utils from '../../../util/util';
+import { PAGE_SIZE } from '../../../constant';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -30,9 +31,8 @@ class SearchForm extends PureComponent {
     }
     componentDidMount() {
         this.props.queryList({
-            queryJson: {},
             pageNum: 1,
-            pageSize: 20
+            pageSize: PAGE_SIZE
         });
     }
 
@@ -77,9 +77,6 @@ class SearchForm extends PureComponent {
     }
 
     handleReset = () => {
-        // this.props.form.setFieldsValue({
-        //     place: { reset: true }
-        // });
         this.setState({
             isClearCategory: true
         });
@@ -111,6 +108,12 @@ class SearchForm extends PureComponent {
             });
         }
     }
+
+    resetClearCategoryFlag = () => {
+        this.setState({
+            isClearCategory: false
+        });
+    }
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const { initialPlaceValue, isClearCategory} = this.state;
@@ -123,6 +126,7 @@ class SearchForm extends PureComponent {
                                 <Category
                                     isClearCategory={isClearCategory}
                                     onChange={this.handleCategorySelect}
+                                    resetFlag={this.resetClearCategoryFlag}
                                 />
                             </FormItem>
                         </Col>

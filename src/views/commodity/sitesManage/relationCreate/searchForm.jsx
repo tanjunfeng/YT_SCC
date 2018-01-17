@@ -81,6 +81,12 @@ class SearchForm extends PureComponent {
         this.props.openModal();
     }
 
+    resetClearCategoryFlag = () => {
+        this.setState({
+            isClearCategory: false
+        });
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const { isCreateRelation } = this.props;
@@ -94,6 +100,7 @@ class SearchForm extends PureComponent {
                                 <Category
                                     onChange={this.handleCategorySelect}
                                     isClearCategory={isClearCategory}
+                                    resetFlag={this.resetClearCategoryFlag}
                                 />
                             </FormItem>
                         </Col>

@@ -43,8 +43,9 @@ class Category extends PureComponent {
 
     componentWillReceiveProps(nextProps) {
         const { isClearCategory } = nextProps;
-        if (isClearCategory && isClearCategory !== this.props.isClearCategory) {
+        if (isClearCategory && !this.props.isClearCategory) {
             this.ref.setValue([]);
+            this.props.resetFlag();
         }
     }
 
