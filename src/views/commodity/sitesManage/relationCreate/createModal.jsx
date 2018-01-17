@@ -8,7 +8,7 @@ import {
     message
 } from 'antd';
 import Utils from '../../../../util/util';
-import { logisticsList, placeTypeList, placeFieldMap } from '../constant';
+import { logisticsList, placeTypeListCreate, placeFieldMap } from '../constant';
 import Sites from '../../../../container/search/Sites';
 import { Supplier, SupplierAdderss } from '../../../../container/search';
 import { repeatData } from './RepeatTestData';
@@ -51,8 +51,15 @@ class CreateModal extends PureComponent {
             placeType,
             placeId: place.record ? place.record[placeFieldMap[placeType]] : '',
             supplierId: supplier.spId,
+            supplierCode: supplier.spNo,
+            supplierName: supplier.companyName,
             AdrSupId: supplierAddr.spAdrid,
-            productIds: selectedIds
+            AdrSupCode: supplierAddr.providerNo,
+            AdrSupName: supplierAddr.providerName,
+            productIds: selectedIds,
+            pageNum: 1,
+            pageSize: 20
+
         };
         validateFields((err) => {
             if (!err) {
@@ -70,7 +77,11 @@ class CreateModal extends PureComponent {
     }
 
     handPlaceTypeChange = val => {
-        if (parseInt(val, 10) === 1 || parseInt(val, 10) === 3) {
+        if (
+            parseInt(val, 10) === 1 ||
+            parseInt(val, 10) === 3 ||
+            parseInt(val, 10) === 0
+        ) {
             this.setState({
                 initialPlaceValue: {
                     id: '',
@@ -103,14 +114,15 @@ class CreateModal extends PureComponent {
                     <Form>
                         <FormItem {...formItemLayout} label="地点类型" >
                             {getFieldDecorator('placeType', {
-                                initialValue: placeTypeList.defaultValue
+                                initialValue: placeTypeListCreate.defaultValue
                             })(
                                 <Select
                                     size="large"
+                                    placeholder="请选择"
                                     onChange={this.handPlaceTypeChange}
                                 >
                                     {
-                                        placeTypeList.data.map(item => (
+                                        placeTypeListCreate.data.map(item => (
                                             <Option key={item.key} value={item.key}>
                                                 {item.value}
                                             </Option>
@@ -124,8 +136,8 @@ class CreateModal extends PureComponent {
                                 initialValue: initialPlaceValue
                             })(
                                 <Sites
-                                    disabled={getFieldValue('placeType') === '0'}
-                                    siteTypeCode={getFieldValue('placeType')}
+                                    disabled={getFieldValue('placeType') === ''}
+                                    siteTypeCode={parseInt(getFieldValue('placeType'), 10) === 0 ? '3' : getFieldValue('placeType')}
                                     placeFieldMap={placeFieldMap}
                                     zIndex={1001}
                                 />

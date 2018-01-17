@@ -35,7 +35,7 @@
                 },
                 {
                     "authorityId": 236,
-                    "authorityCode": "sitesManage",
+                    "authorityCode": "productSiteManage",
                     "displayName": "商品地点管理",
                     "menuList": []
                 },

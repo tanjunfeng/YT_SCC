@@ -750,7 +750,7 @@ export const prodBatchUpdate = (params) => http.post('prodSell/prodBatchUpdate',
 // 批量全国上下架
 export const availablProducts = (params) => http.post('product/availablProducts', params);
 // 商品地点管理模块
-export const queryProdPlacePage = params => http.get('/prodPlace/queryPage', params);
+export const queryProdPlacePage = params => http.post('/prodPlace/queryPage', params);
 
 
 // 商品管理，导入采购进价，查询采购价格变更申请列表
@@ -982,10 +982,11 @@ export const queryProdPriceChangeList = params => http.get('/prodSell/queryProdP
  *商品地点管理
 */
 // 批量删除
-export const prodPlaceBulkDelete = params => http.get('/prodPlace/bulkDelete', params);
+export const prodPlaceBulkDelete = params => http.post('/prodPlace/bulkDelete', params);
 export const prodPlacePpdate = params => http.post('/prodPlace/update', params);
-export const addDistinctProductSiteRelations = params => http.get('/prodPlace/addDistinct', params);
+export const addDistinctProductSiteRelations = params => http.post('/prodPlace/addDistinct', params);
 export const queryAreaGroupList = params => http.get('/areaGroup/queryAreaGroupList', params);
+export const queryProductSiteRelationById = (params) => http.get('/prodPlace/queryDetail', params);
 // 预定专区
 export const queryReserveAreaList = params => http.get('/wishBackAction/queryWishListsByParam', params);
 // 预定专区完成或关闭心愿单

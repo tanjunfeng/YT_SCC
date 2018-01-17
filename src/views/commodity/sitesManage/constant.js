@@ -12,7 +12,7 @@ export const logisticsList = {
     }]
 };
 
-export const placeTypeList = {
+export const placeTypeListQuery = {
     defaultValue: '0',
     data: [{
         key: '0',
@@ -22,7 +22,7 @@ export const placeTypeList = {
         value: '子公司'
     }, {
         key: '2',
-        value: '区域'
+        value: '区域组'
     }, {
         key: '3',
         value: '门店'
@@ -50,4 +50,25 @@ export const productLevel = [
     'thirdLevelCategoryId',
     'fourthLevelCategoryId'
 ];
+
+export const placeTypeListCreate = {
+    defaultValue: '',
+    data: [
+        {
+            key: '',
+            value: '请选择'
+        }, {
+            key: '0',
+            value: '所有门店'
+        }, {
+            key: '1',
+            value: '子公司'
+        }, {
+            key: '2',
+            value: '区域组'
+        }, {
+            key: '3',
+            value: '门店'
+        }]
+};
 

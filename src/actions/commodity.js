@@ -17,7 +17,8 @@ import {
     prodPlaceBulkDelete,
     prodPlacePpdate as updateSiteManageById,
     queryproductsbypages as searchProductsByCondition,
-    addDistinctProductSiteRelations as createRelations
+    addDistinctProductSiteRelations as createRelations,
+    queryProductSiteRelationById as queryDetail
 } from '../service';
 
 /**
@@ -228,6 +229,26 @@ export const createProductSiteRelations = params => dispatch => (
         createRelations(params)
             .then(res => {
                 dispatch(createProductSiteRelationsAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 查询商品地点关系详情
+ */
+
+const queryDetailByIdAction = data => ({
+    type: ActionType.QUERY_PRODUCT_SITE_RELATION_BY_ID,
+    payload: data
+});
+
+export const queryDetailById = params => dispatch => (
+    new Promise((resolve, reject) => {
+        queryDetail(params)
+            .then(res => {
+                dispatch(queryDetailByIdAction(res.data));
                 resolve(res);
             })
             .catch(err => reject(err))

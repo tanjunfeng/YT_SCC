@@ -94,7 +94,9 @@ const initState = Immutable.fromJS({
     // 商品地点关系列表
     goodsSitesManageList: {},
     // 商品信息列表
-    productsData: {}
+    productsData: {},
+    // 单条商品地点关系记录详情
+    proSiteDetail: {}
 });
 
 export default function (state = initState, action) {
@@ -210,6 +212,8 @@ export default function (state = initState, action) {
             return state.set('goodsSitesManageList', action.payload);
         case ActionType.QUERY_PRODUCTS_BY_CONDITION:
             return state.set('productsData', action.payload);
+        case ActionType.QUERY_PRODUCT_SITE_RELATION_BY_ID:
+            return state.set('proSiteDetail', action.payload);
         default:
             return state;
     }

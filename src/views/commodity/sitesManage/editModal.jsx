@@ -56,9 +56,21 @@ class EditSiteRelationModal extends PureComponent {
             }
         });
     }
+
     render() {
-        const { visible, closeModal } = this.props;
+        const { visible, closeModal, detail } = this.props;
         const { getFieldDecorator, getFieldValue } = this.props.form;
+        const initSupplier = {
+            spId: 'xcsupp001',
+            spNo: '100000',
+            companyName: '成都海王星商贸有限公司'
+        };
+
+        const initSupplierAddr = {
+            providerNo: '1000001',
+            providerName: 'providerName',
+            spAdrid: 'spAdrid'
+        };
         return (
             <Modal
                 title="编辑地点关系"
@@ -70,21 +82,24 @@ class EditSiteRelationModal extends PureComponent {
                     <Form>
                         <FormItem {...formItemLayout} label="供应商">
                             {getFieldDecorator('supplier', {
-                                initialValue: { spId: '', spNo: '', companyName: '' }
+                                initialValue: initSupplier
                             })(
-                                <Supplier />
+                                <Supplier
+                                    defaultRaw={initSupplier}
+                                />
                             )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="供应商地点" >
-                            {getFieldDecorator('supplierAddr', { initialValue: {
-                                providerNo: '',
-                                providerName: '',
-                                spAdrid: ''
-                            }})(<SupplierAdderss pId={getFieldValue('supplier').spId} disabled={getFieldValue('supplier').spId === ''} />)}
+                            {getFieldDecorator('supplierAddr', {initialValue: initSupplierAddr})(
+                                <SupplierAdderss
+                                    defaultRaw={initSupplierAddr}
+                                    pId={getFieldValue('supplier').spId}
+                                    disabled={getFieldValue('supplier').spId === ''}
+                                />)}
                         </FormItem>
                         <FormItem {...formItemLayout} label="物流模式" >
                             {getFieldDecorator('logisticsModel', {
-                                initialValue: logisticsList.defaultValue
+                                initialValue: detail.logisticsModel
                             })(
                                 <Select
                                     size="large"
@@ -111,7 +126,8 @@ EditSiteRelationModal.propTypes = {
     closeModal: PropTypes.func,
     editSiteRelation: PropTypes.func,
     editId: PropTypes.string,
-    form: PropTypes.objectOf(PropTypes.any)
+    form: PropTypes.objectOf(PropTypes.any),
+    detail: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(EditSiteRelationModal));

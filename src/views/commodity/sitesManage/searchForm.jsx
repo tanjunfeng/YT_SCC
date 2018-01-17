@@ -14,7 +14,7 @@ import Commodity from '../../../container/search/Commodity';
 import { Category } from '../../../container/cascader';
 import Brands from '../../../container/search/Brands';
 import Sites from '../../../container/search/Sites';
-import { logisticsList, placeTypeList, placeFieldMap, productLevel } from './constant';
+import { logisticsList, placeTypeListQuery, placeFieldMap, productLevel } from './constant';
 import Utils from '../../../util/util';
 
 const FormItem = Form.Item;
@@ -29,7 +29,11 @@ class SearchForm extends PureComponent {
         isClearCategory: false
     }
     componentDidMount() {
-        this.props.queryList();
+        this.props.queryList({
+            queryJson: {},
+            pageNum: 1,
+            pageSize: 20
+        });
     }
 
     handleSearch = () => {
@@ -69,7 +73,7 @@ class SearchForm extends PureComponent {
     }
 
     handleAdd = () => {
-        this.props.history.push('/sitesManage/create');
+        this.props.history.push('/productSiteManage/create');
     }
 
     handleReset = () => {
@@ -171,14 +175,14 @@ class SearchForm extends PureComponent {
                         <Col>
                             <FormItem label="地点类型" >
                                 {getFieldDecorator('placeType', {
-                                    initialValue: placeTypeList.defaultValue
+                                    initialValue: placeTypeListQuery.defaultValue
                                 })(
                                     <Select
                                         size="large"
                                         onChange={this.handPlaceTypeChange}
                                     >
                                         {
-                                            placeTypeList.data.map(item => (
+                                            placeTypeListQuery.data.map(item => (
                                                 <Option key={item.key} value={item.key}>
                                                     {item.value}
                                                 </Option>

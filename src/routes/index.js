@@ -311,18 +311,18 @@ const routes = [
             },
             // 商品地点管理
             {
-                path: '/sitesManage',
+                path: '/productSiteManage',
                 parent: 'gylspgl',
-                key: 'sitesManage',
+                key: 'productSiteManage',
                 component: () => (
                     <Switch>
                         <Route
-                            path="/sitesManage"
+                            path="/productSiteManage"
                             exact
                             render={() => <Bundle load={SitesManage}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/sitesManage/create"
+                            path="/productSiteManage/create"
                             render={() => <Bundle load={SiteRelationCreate}>
                                 {(App) => <App />}
                             </Bundle>}

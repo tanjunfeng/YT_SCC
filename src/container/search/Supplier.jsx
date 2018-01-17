@@ -16,6 +16,13 @@ import './SearchMind.scss';
 }, dispatch))
 
 class Supplier extends PureComponent {
+    // componentDidMount() {
+    //     this.props.onChange({
+    //         spId: 'xcsupp001',
+    //         spNo: '100000',
+    //         companyName: '成都海王星商贸有限公司'
+    //     });
+    // }
     componentWillReceiveProps(nextProps) {
         const { spId } = nextProps.value;
         if (this.props.value.spId !== '' && spId === '') {
@@ -55,6 +62,7 @@ class Supplier extends PureComponent {
                         pageSize: params.pagination.pageSize
                     }, 'querySuppliersList')
                 }
+                defaultRaw={this.props.defaultRaw}
                 disabled={this.props.disabled}
                 defaultValue={this.props.initialValue}
                 addonBefore=""
@@ -89,7 +97,8 @@ Supplier.propTypes = {
 };
 
 Supplier.defaultProps = {
-    zIndex: 1000
-}
+    zIndex: 1000,
+    defaultRaw: null
+};
 
 export default Supplier;

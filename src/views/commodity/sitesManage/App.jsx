@@ -13,7 +13,8 @@ import {
 import {
     getSitesManageList,
     removeSiteManagesByIds,
-    editSiteManageById
+    editSiteManageById,
+    queryDetailById
 } from '../../../actions/commodity';
 import SearchForm from './searchForm';
 import EditModal from './editModal';
@@ -23,10 +24,12 @@ import { PAGE_SIZE } from '../../../constant';
 const confirm = Modal.confirm
 @connect(state => ({
     goodsSitesManageList: state.toJS().commodity.goodsSitesManageList,
+    proSiteDetail: state.toJS().commodity.proSiteDetail
 }), dispatch => bindActionCreators({
     getSitesManageList,
     removeSiteManagesByIds,
-    editSiteManageById
+    editSiteManageById,
+    queryDetailById
 }, dispatch))
 class SiteManage extends PureComponent {
     state = {
@@ -78,10 +81,12 @@ class SiteManage extends PureComponent {
      * 编辑商品地点关系
     */
     handleEdit = editId => {
+        const { queryDetailById } = this.props;
         this.setState({
             editId,
             visible: true
         });
+        queryDetailById({id: editId});
     }
 
     /**
@@ -124,7 +129,7 @@ class SiteManage extends PureComponent {
      * getSitesManageList: 获取列表方法
      */
     render() {
-        const { goodsSitesManageList } = this.props;
+        const { goodsSitesManageList, proSiteDetail } = this.props;
         const { data, total, pageNum } = goodsSitesManageList;
         const { selectedRows, editId, visible } = this.state;
         return (
@@ -153,10 +158,12 @@ class SiteManage extends PureComponent {
                         }}
                     />
                     <EditModal
+                        detail={proSiteDetail}
                         editId={editId}
                         visible={visible}
                         closeModal={this.closeModal}
                         editSiteRelation={this.props.editSiteManageById}
+                        // queryDetailById={this.props.queryDetailById}
                     />
                 </div>
             </div>
@@ -167,8 +174,8 @@ class SiteManage extends PureComponent {
 SiteManage.propTypes = {
     getSitesManageList: PropTypes.func,
     editSiteManageById: PropTypes.func,
+    queryDetailById: PropTypes.func,
     removeSiteManagesByIds: PropTypes.func,
-    removeSiteManages: PropTypes.func,
     goodsSitesManageList: PropTypes.objectOf(PropTypes.any)
 };
 
