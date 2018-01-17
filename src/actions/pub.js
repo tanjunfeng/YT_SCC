@@ -117,9 +117,10 @@ const receiveNextCategorys = (data) => ({
 
 export const getRegionByCode = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        queryCategorys(params)
+        queryRegionByCode(params)
             .then(res => {
                 dispatch(receiveNextCategorys(res.data));
+                resolve(res);
             })
             .catch(err => {
                 reject(err);

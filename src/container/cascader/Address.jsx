@@ -11,13 +11,12 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Cascader } from 'antd';
 
-import { getCategoriesByParentId, clearCategoriesList } from '../../actions/promotion';
+import { getRegionByCode } from '../../actions/pub';
 
 @connect(state => ({
-    categories: state.toJS().promotion.categories
+    region: state.toJS().pub.region
 }), dispatch => bindActionCreators({
-    getCategoriesByParentId,
-    clearCategoriesList
+    getRegionByCode
 }, dispatch))
 
 class Address extends PureComponent {
@@ -27,21 +26,17 @@ class Address extends PureComponent {
     };
 
     componentDidMount() {
-        this.props.getCategoriesByParentId({ parentId: '' }).then((res) => {
+        this.props.getRegionByCode({ code: 100000 }).then(res => {
             this.setState({
-                options: res.data.map((treeNode, index) => ({
-                    key: `root-${index}`,
-                    label: treeNode.categoryName,
-                    value: treeNode.id,
+                options: res.data.map(treeNode => ({
+                    key: String(treeNode.id),
+                    label: treeNode.regionName,
+                    value: treeNode.code,
                     isLeaf: false,
-                    level: treeNode.level
+                    level: treeNode.regionType
                 }))
             });
         });
-    }
-
-    componentWillUnmount() {
-        this.props.clearCategoriesList();
     }
 
     /**
@@ -56,12 +51,12 @@ class Address extends PureComponent {
             this.props.onChange(null, selectedOptions);
         } else {
             const target = selectedOptions[selectedOptions.length - 1];
-            const category = {
-                categoryId: target.value,
-                categoryName: target.label,
-                categoryLevel: target.level
+            const address = {
+                code: target.value,
+                regionName: target.label,
+                regionType: target.level
             };
-            this.props.onChange(category, selectedOptions);
+            this.props.onChange(address, selectedOptions);
         }
     }
 
@@ -70,8 +65,8 @@ class Address extends PureComponent {
         this.setState({
             isLoading: target.loading = true
         });
-        this.props.getCategoriesByParentId({ parentId: target.value }).then(res => {
-            target.children = this.appendObject(res, target);
+        this.props.getRegionByCode({ code: target.value }).then(res => {
+            target.children = this.appendObject(res);
             this.appendOption(target.children, target.value);
             this.setState({
                 isLoading: target.loading = false
@@ -85,16 +80,15 @@ class Address extends PureComponent {
      * @param {*请求数据} res
      * @param {*子节点地址} target
      */
-    appendObject = (res, target) => {
-        const id = target.value;
+    appendObject = res => {
         const arr = [];
-        res.data.forEach((treeNode, index) => {
+        res.data.forEach(treeNode => {
             arr.push({
-                key: `${id}-${index}`,
-                label: treeNode.categoryName,
-                value: treeNode.id,
-                isLeaf: treeNode.level === 4,
-                level: treeNode.level
+                key: String(treeNode),
+                label: treeNode.regionName,
+                value: treeNode.code,
+                isLeaf: +(treeNode.regionType) === 4,
+                level: treeNode.regionType
             })
         });
         return arr;
@@ -135,8 +129,7 @@ class Address extends PureComponent {
 }
 
 Address.propTypes = {
-    getCategoriesByParentId: PropTypes.func,
-    clearCategoriesList: PropTypes.func,
+    getRegionByCode: PropTypes.func,
     disabled: PropTypes.bool,
     onChange: PropTypes.func
 }
