@@ -7,19 +7,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 
 import Util from '../../../util/util';
 import { AreaGroup } from '../../../container/search';
-import { getRegionByCode } from '../../../actions/pub';
 
 const FormItem = Form.Item;
-
-@connect(() => ({
-}), dispatch => bindActionCreators({
-    getRegionByCode
-}, dispatch))
 
 class SearchForm extends PureComponent {
     getFormData = () => {

@@ -82,8 +82,7 @@ AreaGroup.propTypes = {
     url: PropTypes.string,
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
-    value: PropTypes.objectOf(PropTypes.any),
-    values: PropTypes.objectOf(PropTypes.any)
+    value: PropTypes.objectOf(PropTypes.any)
 }
 
 AreaGroup.defaultProps = {
