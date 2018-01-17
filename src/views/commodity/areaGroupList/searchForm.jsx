@@ -58,12 +58,6 @@ class SearchForm extends PureComponent {
         });
     }
 
-    handleCreate = () => {
-        const { pathname } = this.props.location;
-        const win = window.open(`${pathname}/create`, '_blank');
-        win.focus();
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -85,9 +79,6 @@ class SearchForm extends PureComponent {
                         <Button size="default" onClick={this.handleReset}>
                             重置
                         </Button>
-                        <Button size="default" onClick={this.handleCreate}>
-                            新增
-                        </Button>
                     </Col>
                 </Row>
             </Form>
@@ -98,8 +89,7 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     onPromotionSearch: PropTypes.func,
     onPromotionReset: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any),
-    location: PropTypes.objectOf(PropTypes.any)
+    form: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(SearchForm));
