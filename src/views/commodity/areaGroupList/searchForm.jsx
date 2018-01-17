@@ -5,15 +5,21 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Form, DatePicker, Row, Col } from 'antd';
+import { Button, Form, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 import Util from '../../../util/util';
-import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
-import { BranchCompany, AreaGroup } from '../../../container/search';
-import { fetchRegionByCode } from '../../../actions/pub';
+import { AreaGroup } from '../../../container/search';
+import { getRegionByCode } from '../../../actions/pub';
 
 const FormItem = Form.Item;
-const { RangePicker } = DatePicker;
+
+@connect(() => ({
+}), dispatch => bindActionCreators({
+    getRegionByCode
+}, dispatch))
 
 class SearchForm extends PureComponent {
     getFormData = () => {
@@ -68,31 +74,6 @@ class SearchForm extends PureComponent {
                             {getFieldDecorator('areaGroup', {
                                 initialValue: { id: '', name: '' }
                             })(<AreaGroup />)}
-                        </FormItem>
-                    </Col>
-                    <Col>
-                        <FormItem label="区域类型">
-                            {getFieldDecorator('areaGroupType')(<Input size="default" />)}
-                        </FormItem>
-                    </Col>
-                    <Col>
-                        <FormItem label="地点">
-                            {getFieldDecorator('address', {
-                                initialValue: { id: '', name: '' }
-                            })(<BranchCompany />)}
-                        </FormItem>
-                    </Col>
-                    <Col>
-                        <FormItem label="区域地点">
-                            {getFieldDecorator('promotionDateRange', {
-                                initialValue: []
-                            })(<RangePicker
-                                size="default"
-                                className="manage-form-enterTime"
-                                showTime={{ format: MINUTE_FORMAT }}
-                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                placeholder={['开始时间', '结束时间']}
-                            />)}
                         </FormItem>
                     </Col>
                 </Row>
