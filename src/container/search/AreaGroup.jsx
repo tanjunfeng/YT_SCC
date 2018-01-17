@@ -17,7 +17,7 @@ import './SearchMind.scss';
 
 class AreaGroup extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        if (this.props.value.id !== '' && nextProps.value.id === '') {
+        if (this.props.value.areaGroupCode !== '' && nextProps.value.areaGroupCode === '') {
             this.searchMind.reset();
         }
         if (nextProps.value.reset && !this.props.value.reset) {
@@ -30,7 +30,7 @@ class AreaGroup extends PureComponent {
         this.props.pubFetchValueList({
             branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
             branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : '',
-            productId: this.props.value.id || ''
+            productId: this.props.value.areaGroupCode || ''
         }, this.props.url)
 
     /**
@@ -38,7 +38,7 @@ class AreaGroup extends PureComponent {
      */
     handleClear = () => {
         this.searchMind.reset();
-        this.props.onChange({ id: '', name: '' });
+        this.props.onChange({ areaGroupCode: '', areaGroupName: '' });
     }
 
     /**
@@ -51,24 +51,24 @@ class AreaGroup extends PureComponent {
     render() {
         return (
             <SearchMind
-                compKey="spId"
+                compKey="areaGroupCode"
                 ref={ref => { this.searchMind = ref }}
                 fetch={this.query}
                 disabled={this.props.disabled}
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
                 renderChoosedInputRaw={(row) => (
-                    <div>{row.id} - {row.name}</div>
+                    <div>{row.areaGroupCode} - {row.areaGroupName}</div>
                 )}
                 pageSize={6}
                 columns={[
                     {
-                        title: '子公司id',
-                        dataIndex: 'id',
+                        title: '区域组编码',
+                        dataIndex: 'areaGroupCode',
                         width: 68
                     }, {
-                        title: '子公司名字',
-                        dataIndex: 'name'
+                        title: '区域组名称',
+                        dataIndex: 'areaGroupName'
                     }
                 ]}
             />
