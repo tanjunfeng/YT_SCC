@@ -22,7 +22,8 @@ import {
     orderTypeOptions,
     orderStatusOptions,
     payStatusOptions,
-    logisticsStatusOptions
+    logisticsStatusOptions,
+    shippingType
 } from '../../../constant/searchParams';
 import { exportOrderList } from '../../../service';
 import CauseModal from './causeModal';
@@ -118,7 +119,9 @@ class OrderManagementList extends Component {
             transNum,
             productName,
             containParent,
-            franchiseeStoreId
+            franchiseeStoreId,
+            shippingModes,
+            distributionName
         } = this.props.form.getFieldsValue();
         const { submitStartTime, submitEndTime } = this.state.time;
         this.current = 1;
@@ -138,7 +141,9 @@ class OrderManagementList extends Component {
             transNum,
             productName,
             containParent: containParent ? 1 : 0,
-            franchiseeStoreId
+            franchiseeStoreId,
+            shippingModes,
+            distributionName
         }
         const searchData = this.searchData;
         searchData.page = 1;
@@ -501,6 +506,32 @@ class OrderManagementList extends Component {
                         <Col>
                             <FormItem label="门店编号">
                                 {getFieldDecorator('franchiseeStoreId')(<Input placeholder="请输入门店编号" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="配送方式">
+                                {getFieldDecorator('shippingModes', {
+                                    initialValue: shippingType.defaultValue
+                                })(
+                                    <Select
+                                        size="default"
+                                    >
+                                        {
+                                            shippingType.data.map((item) =>
+                                                (<Option
+                                                    key={item.key}
+                                                    value={item.key}
+                                                >
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="配送方">
+                                {getFieldDecorator('distributionName')(<Input placeholder="请输入配送方名称" />)}
                             </FormItem>
                         </Col>
                         <Col>
