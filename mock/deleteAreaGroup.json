@@ -1,0 +1,8 @@
+{
+    "timestamp": 1516191216048,
+    "code": 500,
+    "message": "这些区域组 10000013 下存在门店,不能删除，请重新勾选删除",
+    "exception": null,
+    "data": null,
+    "success": false
+}

@@ -13,7 +13,8 @@ import {
     updateSellPriceStatus,
     getSellPriceInfoByIdAction as getSellPriceInfoByIdService,
     getCostPrice as getCostPriceService,
-    getAreaGroup as getAreaGroupService
+    getAreaGroup as getAreaGroupService,
+    deleteAreaGroup as deleteAreaGroupService
 } from '../service';
 
 /**
@@ -146,6 +147,29 @@ export const getAreaGroup = params => dispatch => (
             .then(res => {
                 dispatch(
                     getAreaGroupActionType(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 删除选中区域组
+ *
+ * @param {Object} params 传参
+ */
+const deleteAreaGroupActionType = data => ({
+    type: ActionType.DELETE_AREA_GROUP,
+    payload: data
+});
+
+export const deleteAreaGroup = params => dispatch => (
+    new Promise((resolve, reject) => {
+        deleteAreaGroupService(params)
+            .then(res => {
+                dispatch(
+                    deleteAreaGroupActionType(res.data)
                 );
                 resolve(res);
             })

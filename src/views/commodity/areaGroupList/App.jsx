@@ -9,22 +9,26 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Button } from 'antd';
+import { Table, Form, Button, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 
 import { PAGE_SIZE } from '../../../constant';
 import {
     getAreaGroup,
-    clearAreaGroup
+    clearAreaGroup,
+    deleteAreaGroup
 } from '../../../actions/commodity';
 import SearchForm from './searchForm';
 import columns from './columns';
+
+const confirm = Modal.confirm;
 
 @connect(state => ({
     areaGroup: state.toJS().commodity.areaGroup
 }), dispatch => bindActionCreators({
     getAreaGroup,
-    clearAreaGroup
+    clearAreaGroup,
+    deleteAreaGroup
 }, dispatch))
 
 class AreaGroupList extends PureComponent {
@@ -55,6 +59,21 @@ class AreaGroupList extends PureComponent {
             current: pageNum
         });
         this.query();
+    }
+
+    showDeleteConfirm = () => {
+        const self = this;
+        const { areas } = this.state;
+        confirm({
+            title: '确定删除此区域组？',
+            content: '若区域组下仍有门店则删除不会成功',
+            okText: '确定',
+            okType: 'danger',
+            cancelText: '取消',
+            onOk() {
+                self.props.deleteAreaGroup({ areaGroupCode: areas.join(',') });
+            }
+        });
     }
 
     query = () => {
@@ -114,7 +133,7 @@ class AreaGroupList extends PureComponent {
                     <Button
                         size="default"
                         disabled={areas.length === 0}
-                        onClick={this.handleDelete}
+                        onClick={this.showDeleteConfirm}
                     >
                         删除区域组
                     </Button>
