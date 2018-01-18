@@ -63,9 +63,9 @@ class AreaGroup extends PureComponent {
                 pageSize={6}
                 columns={[
                     {
-                        title: '区域组编码',
+                        title: '编码',
                         dataIndex: 'areaGroupCode',
-                        width: 68
+                        width: 78
                     }, {
                         title: '区域组名称',
                         dataIndex: 'areaGroupName'
