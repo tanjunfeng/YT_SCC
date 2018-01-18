@@ -16,10 +16,12 @@ const FormItem = Form.Item;
 class SearchForm extends PureComponent {
     getFormData = () => {
         const {
-            areaGroup
+            areaGroup,
+            branchCompany
         } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
-            areaGroup: areaGroup.areaGroupCode
+            areaGroup: areaGroup.areaGroupCode,
+            branchCompany: branchCompany.id
         });
     }
 
@@ -44,17 +46,17 @@ class SearchForm extends PureComponent {
             <Form layout="inline" className="area-group">
                 <Row>
                     <Col>
-                        <FormItem label="区域组">
-                            {getFieldDecorator('areaGroup', {
-                                initialValue: { areaGroupCode: '', areaGroupName: '' }
-                            })(<AreaGroup />)}
-                        </FormItem>
-                    </Col>
-                    <Col>
                         <FormItem label="子公司">
                             {getFieldDecorator('branchCompany', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="区域组">
+                            {getFieldDecorator('areaGroup', {
+                                initialValue: { areaGroupCode: '', areaGroupName: '' }
+                            })(<AreaGroup />)}
                         </FormItem>
                     </Col>
                 </Row>

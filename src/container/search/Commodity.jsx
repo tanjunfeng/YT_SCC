@@ -87,7 +87,8 @@ Commodity.propTypes = {
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
-    initialValue: PropTypes.string
+    initialValue: PropTypes.string,
+    api: PropTypes.string,
 }
 
 export default Commodity;

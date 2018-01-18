@@ -7,8 +7,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
 import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
+import Utils from '../../util/util';
 import './SearchMind.scss';
 
 @connect(() => ({}), dispatch => bindActionCreators({
@@ -27,11 +29,11 @@ class AreaGroup extends PureComponent {
 
     // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
     query = params =>
-        this.props.pubFetchValueList({
-            branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-            branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : '',
-            productId: this.props.value.areaGroupCode || ''
-        }, this.props.url)
+        this.props.pubFetchValueList(Utils.removeInvalid({
+            groupCodeOrName: params.value,
+            pageNum: params.pagination.current || 1,
+            pageSize: params.pagination.pageSize
+        }), this.props.url)
 
     /**
      * 子公司-清除

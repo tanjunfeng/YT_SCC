@@ -12,6 +12,7 @@ import { withRouter } from 'react-router';
 import { Table, Form } from 'antd';
 import { Link } from 'react-router-dom';
 
+import { PAGE_SIZE } from '../../../constant';
 import {
     getAreaGroup,
     clearAreaGroup
@@ -32,19 +33,44 @@ class AreaGroupList extends PureComponent {
     }
 
     componentDidMount() {
-        this.props.getAreaGroup();
+        this.handleReset();
+        this.query();
     }
 
-    param = {
-        current: 1
+    /**
+     * 分页页码改变的回调
+     */
+    onPaginate = (pageNum = 1) => {
+        Object.assign(this.param, {
+            pageNum,
+            current: pageNum
+        });
+        this.query();
     }
 
-    handleSearch = () => {
+    param = {}
 
+    query = () => {
+        this.props.getAreaGroup(this.param).then(data => {
+            const { pageNum, pageSize } = data.data;
+            Object.assign(this.param, { pageNum, pageSize });
+        });
+    }
+
+    handleSearch = (param) => {
+        this.handleReset();
+        Object.assign(this.param, {
+            current: 1,
+            ...param
+        });
+        this.query();
     }
 
     handleReset = () => {
-
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        }
     }
 
     renderOperations = (text, record) => {
