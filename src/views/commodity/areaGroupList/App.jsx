@@ -22,6 +22,20 @@ import SearchForm from './searchForm';
 import columns from './columns';
 
 const confirm = Modal.confirm;
+function showDeleteConfirm(resolve) {
+    confirm({
+        title: '确定删除此区域组？',
+        content: '若区域组下仍有门店则删除不会成功',
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk() {
+            if (typeof resolve === 'function') {
+                resolve();
+            }
+        }
+    });
+}
 
 @connect(state => ({
     areaGroup: state.toJS().commodity.areaGroup
@@ -61,21 +75,6 @@ class AreaGroupList extends PureComponent {
         this.query();
     }
 
-    showDeleteConfirm = () => {
-        const self = this;
-        const { areas } = this.state;
-        confirm({
-            title: '确定删除此区域组？',
-            content: '若区域组下仍有门店则删除不会成功',
-            okText: '确定',
-            okType: 'danger',
-            cancelText: '取消',
-            onOk() {
-                self.props.deleteAreaGroup({ areaGroupCode: areas.join(',') });
-            }
-        });
-    }
-
     query = () => {
         this.props.getAreaGroup(this.param).then(data => {
             const { pageNum, pageSize } = data.data;
@@ -99,6 +98,13 @@ class AreaGroupList extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         }
+    }
+
+    handleDelete = () => {
+        const { areas } = this.state;
+        showDeleteConfirm(() => {
+            this.props.deleteAreaGroup({ areaGroupCode: areas.join(',') });
+        });
     }
 
     renderOperations = (text, record) => {
@@ -133,7 +139,7 @@ class AreaGroupList extends PureComponent {
                     <Button
                         size="default"
                         disabled={areas.length === 0}
-                        onClick={this.showDeleteConfirm}
+                        onClick={this.handleDelete}
                     >
                         删除区域组
                     </Button>
@@ -161,6 +167,7 @@ class AreaGroupList extends PureComponent {
 AreaGroupList.propTypes = {
     getAreaGroup: PropTypes.func,
     clearAreaGroup: PropTypes.func,
+    deleteAreaGroup: PropTypes.func,
     location: PropTypes.objectOf(PropTypes.any),
     areaGroup: PropTypes.objectOf(PropTypes.any),
 }
