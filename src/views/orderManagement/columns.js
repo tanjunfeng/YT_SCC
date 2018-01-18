@@ -254,6 +254,10 @@ const orderListColumns = [{
     dataIndex: 'shippingStateDesc',
     key: 'shippingStateDesc',
 }, {
+    title: '配送方',
+    dataIndex: 'distributionName',
+    key: 'distributionName',
+}, {
     title: '子公司',
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName',
