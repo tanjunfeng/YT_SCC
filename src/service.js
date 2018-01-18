@@ -830,6 +830,9 @@ export const backstageOrderBack = (params) => http.post('/webReturnRequest/inser
 // 订单管理-查询配送信息
 export const queryShippingDetailInfo = (params) => http.get('/sorder/shippingGroupInfo', params);
 
+// 订单管理-查询配送信息
+export const confirmation = (params) => http.post('/sorder/confirmOrder', params);
+
 // 订单管理-保存订单详情备注信息
 export const orderDescription = (params) => http.post('/sorder/orderDescription', params);
 

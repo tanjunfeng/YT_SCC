@@ -101,7 +101,7 @@ class DistributionInformation extends PureComponent {
             distributionName,
             singedCertImg
         } = data;
-        if (shippingStateDesc === '已签收待确认') {
+        if (shippingStateDesc !== '已签收待确认') {
             this.renderColumns();
         }
         return (
@@ -139,10 +139,13 @@ class DistributionInformation extends PureComponent {
                                     <span className="details-info-lable">预计达到日期:</span>
                                     {
                                         estimatedArrivalDate
-                                        && <span>
+                                        ? <span>
                                             {moment(
                                                 parseInt(estimatedArrivalDate, 10)
                                             ).format(DATE_FORMAT)}
+                                        </span>
+                                        : <span>
+                                            -
                                         </span>
                                     }
                                 </Col>
@@ -161,7 +164,7 @@ class DistributionInformation extends PureComponent {
                                     <span>{shippingStateDesc}</span>
                                 </Col>
                                 {
-                                    singedCertImg ?
+                                    !singedCertImg ?
                                         <Col className="gutter-row" span={7}>
                                             <span className="details-info-lable">签收凭证:</span>
                                             <span>供应商已签收凭证</span>

@@ -132,7 +132,7 @@ import { getPriceImportList, getCreateSell } from './priceImport'
 import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './whiteListConfiguration';
 
 // 根据库存实时拆单
-import { splitorderbyinventory, interfaceInventory } from './order';
+import { splitorderbyinventory, interfaceInventory, confirmation } from './order';
 
 // 退货订单列表
 
@@ -258,6 +258,7 @@ export {
     // 订单
     splitorderbyinventory,
     interfaceInventory,
+    confirmation,
     // 销售管理
     returnGoodsList,
     returnGoodsDetail,

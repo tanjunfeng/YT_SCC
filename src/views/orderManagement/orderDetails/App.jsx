@@ -13,7 +13,12 @@ import { Form, Tabs } from 'antd';
 import OrderInformation from './orderInfo';
 import PayInformation from './payInfo';
 import DistributionInformation from './distributionInfo';
-import { fetchOrderDetailInfo, fetchPaymentDetailInfo, fetchShippingDetailInfo } from '../../../actions/order';
+import {
+    fetchOrderDetailInfo,
+    fetchPaymentDetailInfo,
+    fetchShippingDetailInfo,
+    confirmation
+} from '../../../actions/order';
 
 const TabPane = Tabs.TabPane;
 const orderDT = 'order-details';
@@ -26,6 +31,7 @@ const orderDT = 'order-details';
         fetchOrderDetailInfo,
         fetchPaymentDetailInfo,
         fetchShippingDetailInfo,
+        confirmation
     }, dispatch)
 )
 
@@ -37,7 +43,11 @@ class OrderManagementDetails extends Component {
 
     componentWillMount() {
         const { id } = this.props.match.params;
-        this.props.fetchOrderDetailInfo({ id });
+        this.props.fetchOrderDetailInfo({ id }).then((res) => {
+            if (res.code === 200) {
+                this.orderId = res.data.id;
+            }
+        });
         this.props.fetchPaymentDetailInfo({ orderId: id });
         this.props.fetchShippingDetailInfo({ id }).then((res) => {
             if (res.code === 200) {
@@ -48,34 +58,45 @@ class OrderManagementDetails extends Component {
         });
     }
 
+    orderId = null;
+
     handleSendChange = (goodsList) => {
         const coupData = this.state.coupData;
         this.setState({
             oldData: goodsList || this.state.oldData,
         })
+        const commerceItemList = [];
         goodsList.forEach((item) => {
-            const skuId = item.skuId;
-            const completedQuantity = item.completedQuantity;
-            Object.assign(coupData, {
-                [skuId]: completedQuantity
-            });
+            commerceItemList.push({
+                commerceId: item.id,
+                completedQuantity: item.completedQuantity
+            })
         });
+        Object.assign(coupData, {
+            commerceItemList
+        })
     }
 
     /**
      * 确认签收发送签收数量
      */
     handleReceipt = () => {
-        const { oldData, coupData } = this.state;
-        const oldNum = {};
+        const { oldData } = this.state;
+        const oldNumObj = {};
+        const commerceItemList = [];
         oldData.forEach((item) => {
-            const skuId = item.skuId;
-            const completedQuantity = item.completedQuantity;
-            Object.assign(oldNum, {
-                [skuId]: completedQuantity
-            });
+            commerceItemList.push({
+                commerceId: item.id,
+                completedQuantity: item.completedQuantity
+            })
         });
-        console.log(coupData || oldNum)
+        Object.assign(oldNumObj, {
+            commerceItemList
+        })
+        this.props.confirmation({
+            orderId: this.orderId,
+            commerceItemDatas: commerceItemList
+        })
     }
 
     /**
@@ -116,6 +137,7 @@ class OrderManagementDetails extends Component {
 OrderManagementDetails.propTypes = {
     match: PropTypes.objectOf(PropTypes.any),
     fetchOrderDetailInfo: PropTypes.func,
+    confirmation: PropTypes.func,
     fetchPaymentDetailInfo: PropTypes.func,
     fetchShippingDetailInfo: PropTypes.func,
 }
