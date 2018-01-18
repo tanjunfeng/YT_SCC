@@ -46,7 +46,7 @@ class SearchForm extends PureComponent {
             <Form layout="inline" className="area-group">
                 <Row>
                     <Col>
-                        <FormItem label="子公司">
+                        <FormItem label="所属子公司">
                             {getFieldDecorator('branchCompany', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}

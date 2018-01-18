@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form } from 'antd';
+import { Table, Form, Button } from 'antd';
 import { Link } from 'react-router-dom';
 
 import { PAGE_SIZE } from '../../../constant';
@@ -28,6 +28,8 @@ import columns from './columns';
 }, dispatch))
 
 class AreaGroupList extends PureComponent {
+    state = { areas: [] }
+
     componentWillMount() {
         this.props.clearAreaGroup();
     }
@@ -35,6 +37,13 @@ class AreaGroupList extends PureComponent {
     componentDidMount() {
         this.handleReset();
         this.query();
+    }
+
+    /**
+     * table复选框
+     */
+    onSelectChange = (areas) => {
+        this.setState({ areas });
     }
 
     /**
@@ -48,14 +57,14 @@ class AreaGroupList extends PureComponent {
         this.query();
     }
 
-    param = {}
-
     query = () => {
         this.props.getAreaGroup(this.param).then(data => {
             const { pageNum, pageSize } = data.data;
             Object.assign(this.param, { pageNum, pageSize });
         });
     }
+
+    param = {}
 
     handleSearch = (param) => {
         this.handleReset();
@@ -84,16 +93,37 @@ class AreaGroupList extends PureComponent {
     render() {
         const { data, total, pageNum, pageSize } = this.props.areaGroup;
         columns[columns.length - 1].render = this.renderOperations;
+        const { areas } = this.state;
+        const rowSelection = {
+            selectedRowKeys: areas,
+            onChange: this.onSelectChange
+        };
         return (
-            <div>
+            <div className="area-group">
                 <SearchForm
                     onSearch={this.handleSearch}
                     onReset={this.handleReset}
                 />
+                <div className="button-group">
+                    <Button
+                        size="default"
+                        onClick={this.handleCreate}
+                    >
+                        新增区域组
+                    </Button>
+                    <Button
+                        size="default"
+                        disabled={areas.length === 0}
+                        onClick={this.handleDelete}
+                    >
+                        删除区域组
+                    </Button>
+                </div>
                 <Table
                     dataSource={data}
                     columns={columns}
                     rowKey="areaGroupCode"
+                    rowSelection={rowSelection}
                     bordered
                     pagination={{
                         current: this.param.current,

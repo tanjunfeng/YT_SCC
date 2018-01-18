@@ -11,7 +11,10 @@
         "data": [
             {
                 "areaGroupCode": "10000000",
-                "areaGroupName": "一线城市街边店"
+                "areaGroupName": "一线城市街边店",
+                "branchCompany": {
+                    "id": 100041, "name": "双流科学城店"
+                }
             }
         ]
     }

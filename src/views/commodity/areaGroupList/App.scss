@@ -1,43 +1,45 @@
 .area-group {
-    border: 1px solid #c4c5c9;
-    padding: 40px 0 20px;
-    margin: 10px 0;
-    .ant-form-item-label {
-        width: 110px;
-        .sc-form-item-label {
-            text-align: right;
-        }
-    }
-    .ant-form-item {
-        float: left;
-        display: block;
-        height: 42px;
-        .ywc-smind {
-            top: 4px;
-        }
-        @media screen and (min-width: 0px) and (max-width: 1400px) {
-            .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
-                width: 220px;
+    .ant-form {
+        border: 1px solid #c4c5c9;
+        padding: 40px 0 20px;
+        margin: 10px 0;
+        .ant-form-item-label {
+            width: 110px;
+            .sc-form-item-label {
+                text-align: right;
             }
         }
-        @media screen and (min-width: 1401px) and (max-width: 1600px) {
-            .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
-                width: 240px;
+        .ant-form-item {
+            float: left;
+            display: block;
+            height: 42px;
+            .ywc-smind {
+                top: 4px;
+            }
+            @media screen and (min-width: 0px) and (max-width: 1400px) {
+                .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
+                    width: 220px;
+                }
+            }
+            @media screen and (min-width: 1401px) and (max-width: 1600px) {
+                .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
+                    width: 240px;
+                }
+            }
+            @media screen and (min-width: 1601px) and (max-width: 1920px) {
+                .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
+                    width: 200px;
+                }
+            }
+            @media screen and (min-width: 1921px) {
+                .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
+                    width: 260px;
+                }
             }
         }
-        @media screen and (min-width: 1601px) and (max-width: 1920px) {
-            .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
-                width: 200px;
-            }
+        .ant-row-flex-end {
+            margin-top: 24px;
         }
-        @media screen and (min-width: 1921px) {
-            .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
-                width: 260px;
-            }
-        }
-    }
-    .ant-row-flex-end {
-        margin-top: 24px;
     }
     .button-group {
         padding: 20px;
