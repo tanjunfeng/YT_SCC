@@ -45,7 +45,8 @@ class BranchCompany extends PureComponent {
         const { id } = values;
         return (
             <SearchMind
-                compKey="spId"
+                compKey="id"
+                rowKey="id"
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
                     // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
@@ -88,7 +89,8 @@ BranchCompany.propTypes = {
 }
 
 BranchCompany.defaultProps = {
-    url: 'findCompanyBaseInfo'
+    url: 'findCompanyBaseInfo',
+    disabled: false
 }
 
 

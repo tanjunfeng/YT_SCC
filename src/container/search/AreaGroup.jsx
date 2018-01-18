@@ -54,9 +54,9 @@ class AreaGroup extends PureComponent {
         return (
             <SearchMind
                 compKey="areaGroupCode"
+                rowKey="areaGroupCode"
                 ref={ref => { this.searchMind = ref }}
                 fetch={this.query}
-                disabled={this.props.disabled}
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
                 renderChoosedInputRaw={(row) => (
@@ -80,7 +80,6 @@ class AreaGroup extends PureComponent {
 }
 
 AreaGroup.propTypes = {
-    disabled: PropTypes.bool,
     url: PropTypes.string,
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
