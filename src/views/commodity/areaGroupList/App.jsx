@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Table, Form } from 'antd';
+import { Link } from 'react-router-dom';
 
 import {
     getAreaGroup,
@@ -38,8 +39,20 @@ class AreaGroupList extends PureComponent {
         current: 1
     }
 
-    renderOperations = () => {
+    handleSearch = () => {
 
+    }
+
+    handleReset = () => {
+
+    }
+
+    renderOperations = (text, record) => {
+        const { areaGroupCode } = record;
+        const { pathname } = this.props.location;
+        return (
+            <Link target="_blank" to={`${pathname}/detail/${areaGroupCode}`}>查看详情</Link>
+        );
     }
 
     render() {
@@ -73,6 +86,7 @@ class AreaGroupList extends PureComponent {
 AreaGroupList.propTypes = {
     getAreaGroup: PropTypes.func,
     clearAreaGroup: PropTypes.func,
+    location: PropTypes.objectOf(PropTypes.any),
     areaGroup: PropTypes.objectOf(PropTypes.any),
 }
 

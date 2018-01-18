@@ -9,7 +9,7 @@ import { Button, Form, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 
 import Util from '../../../util/util';
-import { AreaGroup } from '../../../container/search';
+import { AreaGroup, BranchCompany } from '../../../container/search';
 
 const FormItem = Form.Item;
 
@@ -33,7 +33,8 @@ class SearchForm extends PureComponent {
         this.props.onReset(); // 通知查询条件已清除
         // 点击重置时清除 seachMind 引用文本
         this.props.form.setFieldsValue({
-            areaGroup: { reset: true }
+            areaGroup: { reset: true },
+            branchCompany: { reset: true }
         });
     }
 
@@ -47,6 +48,13 @@ class SearchForm extends PureComponent {
                             {getFieldDecorator('areaGroup', {
                                 initialValue: { areaGroupCode: '', areaGroupName: '' }
                             })(<AreaGroup />)}
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="子公司">
+                            {getFieldDecorator('branchCompany', {
+                                initialValue: { id: '', name: '' }
+                            })(<BranchCompany />)}
                         </FormItem>
                     </Col>
                 </Row>
