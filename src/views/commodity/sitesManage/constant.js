@@ -18,9 +18,6 @@ export const placeTypeListQuery = {
         key: '0',
         value: '全部'
     }, {
-        key: '1',
-        value: '子公司'
-    }, {
         key: '2',
         value: '区域组'
     }, {
@@ -56,10 +53,7 @@ export const placeTypeListCreate = {
     data: [
         {
             key: '',
-            value: '请选择'
-        }, {
-            key: '0',
-            value: '所有门店'
+            value: '--请选择--'
         }, {
             key: '1',
             value: '子公司'

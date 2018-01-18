@@ -54,8 +54,8 @@ export const sitesManageColumns = [
     },
     {
         title: '供应商地点',
-        dataIndex: 'AdrSupName',
-        key: 'AdrSupName',
+        dataIndex: 'adrSupName',
+        key: 'adrSupName',
     },
     {
         title: '物流模式',

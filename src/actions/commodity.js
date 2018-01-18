@@ -18,7 +18,8 @@ import {
     prodPlacePpdate as updateSiteManageById,
     queryproductsbypages as searchProductsByCondition,
     addDistinctProductSiteRelations as createRelations,
-    queryProductSiteRelationById as queryDetail
+    queryProductSiteRelationById as queryDetail,
+    exportRepeatSiteRelation
 } from '../service';
 
 /**
@@ -249,6 +250,35 @@ export const queryDetailById = params => dispatch => (
         queryDetail(params)
             .then(res => {
                 dispatch(queryDetailByIdAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 保存添加商品地点关系参数
+*/
+
+export const receiveAddRelationParams = data => ({
+    type: ActionType.RECEIVE_ADD_RELATION_PARAMS,
+    payload: data
+});
+
+/**
+ * 导出添加商品地点关系重复数据
+ */
+
+const exportRepeatSiteRelationAction = data => ({
+    type: ActionType.EXPORT_REPEATED_PROD_ADD,
+    payload: data
+});
+
+export const exportRepeatData = params => dispatch => (
+    new Promise((resolve, reject) => {
+        exportRepeatSiteRelation(params)
+            .then(res => {
+                dispatch(exportRepeatSiteRelationAction(res.data));
                 resolve(res);
             })
             .catch(err => reject(err))

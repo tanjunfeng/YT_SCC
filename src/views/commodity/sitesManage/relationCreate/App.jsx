@@ -9,7 +9,9 @@ import {
 } from 'antd';
 import {
     queryProductsByCondition,
-    createProductSiteRelations
+    createProductSiteRelations,
+    receiveAddRelationParams,
+    exportRepeatData
 } from '../../../../actions/commodity';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../../constant';
@@ -21,14 +23,17 @@ const defaultImg = require('../../../../images/default/100x100.png');
 
 @connect(state => ({
     productsData: state.toJS().commodity.productsData,
+    addRelationParams: state.toJS().commodity.addRelationParams
 }), dispatch => bindActionCreators({
     queryProductsByCondition,
-    createProductSiteRelations
+    createProductSiteRelations,
+    receiveAddRelationParams,
+    exportRepeatData
 }, dispatch))
 class RelationCreate extends PureComponent {
     state = {
         selectedRows: [],
-        repeatDatas: [],
+        repeatRes: {},
         createModalVisible: false,
         repeatModalVisible: false
     }
@@ -102,15 +107,13 @@ class RelationCreate extends PureComponent {
      * 有重复数据打开弹窗
     */
 
-    handleRepeat = repeatDatas => {
-        this.repeatDatas = repeatDatas;
+    handleRepeat = repeatRes => {
+        this.repeatRes = repeatRes;
         this.setState({
-            repeatDatas
+            repeatRes
         });
-
-        if (repeatDatas.length > 0) {
-            this.openRepeatModal();
-        }
+        
+        this.openRepeatModal();
     }
 
     /**
@@ -139,7 +142,7 @@ class RelationCreate extends PureComponent {
     }
     render() {
         const { data, total, pageNum } = this.props.productsData;
-        const { createModalVisible, repeatModalVisible, repeatDatas } = this.state;
+        const { createModalVisible, repeatModalVisible, repeatRes } = this.state;
         const selectedIds = this.state.selectedRows.map(item => item.productId);
         productListColumns[0].render = this.renderGoodsOpations;
         return (
@@ -168,11 +171,14 @@ class RelationCreate extends PureComponent {
                     closeModal={this.closeCreateModal}
                     selectedIds={selectedIds}
                     openRepeatModel={this.handleRepeat}
+                    saveParams={this.props.receiveAddRelationParams}
                 />
                 <RepeatModal
                     closeModal={this.closeRepeatModal}
+                    exportExcel={this.props.exportRepeatData}
                     visible={repeatModalVisible}
-                    data={repeatDatas}
+                    repeatRes={repeatRes}
+                    reqParams={this.props.addRelationParams}
                 />
             </div>
         );

@@ -54,7 +54,7 @@ class SiteManage extends PureComponent {
         const operation = {
             title: '操作',
             render: (text, record) => (
-                <a onClick={() => { this.handleEdit(record.productId) }}>编辑</a>
+                <a onClick={() => { this.handleEdit(record.id) }}>编辑</a>
             ),
         };
         sitesManageColumns.push(operation);
@@ -130,7 +130,7 @@ class SiteManage extends PureComponent {
      */
     render() {
         const { goodsSitesManageList, proSiteDetail } = this.props;
-        const { data, total, pageNum } = goodsSitesManageList;
+        const { resultObject, recordsTotal, currentPage } = goodsSitesManageList;
         const { selectedRows, editId, visible } = this.state;
         return (
             <div>
@@ -145,13 +145,13 @@ class SiteManage extends PureComponent {
                         >批量删除</Button>
                     </div>
                     <Table
-                        rowKey={record => record.productId}
+                        rowKey={record => record.id}
                         rowSelection={this.rowSelection}
-                        dataSource={data}
+                        dataSource={resultObject}
                         columns={sitesManageColumns}
                         pagination={{
-                            current: pageNum,
-                            total,
+                            current: currentPage,
+                            total: recordsTotal,
                             pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.handlePaginationChange
@@ -159,11 +159,10 @@ class SiteManage extends PureComponent {
                     />
                     <EditModal
                         detail={proSiteDetail}
-                        editId={editId}
+                        editId={String(editId)}
                         visible={visible}
                         closeModal={this.closeModal}
                         editSiteRelation={this.props.editSiteManageById}
-                        // queryDetailById={this.props.queryDetailById}
                     />
                 </div>
             </div>

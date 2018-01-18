@@ -10,7 +10,7 @@ import {
     Button,
     message
 } from 'antd';
-import Commodity from '../../../container/search/Commodity';
+import {BranchCompany, Commodity } from '../../../container/search';
 import { Category } from '../../../container/cascader';
 import Brands from '../../../container/search/Brands';
 import Sites from '../../../container/search/Sites';
@@ -43,6 +43,7 @@ class SearchForm extends PureComponent {
             barCode,
             brand,
             commodity,
+            branchCompany,
             logisticsModel,
             place,
             placeType
@@ -54,7 +55,8 @@ class SearchForm extends PureComponent {
             logisticsModel,
             // 根据不同的值清单取place.record对应字段
             placeId: place.record ? place.record[placeFieldMap[placeType]] : '',
-            placeType
+            placeType: parseInt(placeType, 10),
+            branchCompanyId: branchCompany.id
         };
         if (selectedOptions.length > 0) {
             selectedOptions.forEach((item, i) => {
@@ -67,9 +69,7 @@ class SearchForm extends PureComponent {
             return;
         }
 
-        this.props.queryList({
-            queryJson: Utils.removeInvalid(baseParams)
-        });
+        this.props.queryList(Utils.removeInvalid(baseParams));
     }
 
     handleAdd = () => {
@@ -177,11 +177,21 @@ class SearchForm extends PureComponent {
                             </FormItem>
                         </Col>
                         <Col>
+                            <FormItem label="子公司" >
+                                {getFieldDecorator('branchCompany', {
+                                    initialValue: { id: '', name: '' }
+                                })(
+                                    <BranchCompany />
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col>
                             <FormItem label="地点类型" >
                                 {getFieldDecorator('placeType', {
                                     initialValue: placeTypeListQuery.defaultValue
                                 })(
                                     <Select
+                                        disabled={!getFieldValue('branchCompany').id}
                                         size="large"
                                         onChange={this.handPlaceTypeChange}
                                     >

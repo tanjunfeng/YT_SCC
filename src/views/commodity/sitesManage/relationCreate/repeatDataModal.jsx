@@ -10,10 +10,17 @@ import { sitesManageColumns } from '../columns';
 
 class RepeatDataModal extends PureComponent {
     exportExcel = () => {
-        this.props.closeModal();
+        const { reqParams, exportExcel, closeModal } = this.props;
+        exportExcel(reqParams).then(res => {
+            if (res.success) {
+                closeModal();
+            }
+        });
     }
     render() {
-        const { data, closeModal, visible } = this.props;
+        const { repeatRes, closeModal, visible } = this.props;
+        // recordsTotal, currentPage
+        const { resultObject} = repeatRes;
         return (
             <Modal
                 title="以下商品地点已经存在商品地点关系，不能再次生成，请确认"
@@ -26,9 +33,9 @@ class RepeatDataModal extends PureComponent {
             >
                 <div style={{marginTop: '20px'}}>
                     <Table
-                        rowKey={record => record.productId}
+                        rowKey={record => record.id}
                         rowSelection={this.rowSelection}
-                        dataSource={data}
+                        dataSource={resultObject}
                         columns={sitesManageColumns}
                     />
                 </div>
@@ -39,8 +46,18 @@ class RepeatDataModal extends PureComponent {
 
 RepeatDataModal.propTypes = {
     visible: PropTypes.bool,
-    data: PropTypes.arrayOf(PropTypes.any),
-    closeModal: PropTypes.func
+    repeatRes: PropTypes.objectOf(PropTypes.any),
+    closeModal: PropTypes.func,
+    exportExcel: PropTypes.func,
+    reqParams: PropTypes.objectOf(PropTypes.any)
 };
+
+RepeatDataModal.defaultProps = {
+    repeatRes: {
+        resultObject: [],
+        recordsTotal: 0,
+        currentPage: 0
+    }
+}
 
 export default withRouter(Form.create()(RepeatDataModal));

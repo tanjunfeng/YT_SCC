@@ -4,11 +4,12 @@
     "message":"请求成功",
     "exception":null,
     "data":{
-        "pageNum":1,
+        "currentPage":1,
         "pageSize":2,
-        "total":21,
-        "data":[
+        "recordsTotal":21,
+        "resultObject":[
             {
+                "id": 1,
                 "firstLevelCategoryName": "日杂",
                 "secondLevelCategoryName": "家居百货",
                 "thirdLevelCategoryName": "厨房用具",
@@ -27,6 +28,7 @@
                 "logisticsModel": 0
             },
             {
+                "id": 2,
                 "firstLevelCategoryName": "日杂",
                 "secondLevelCategoryName": "家居百货",
                 "thirdLevelCategoryName": "厨房用具",
@@ -45,6 +47,7 @@
                 "logisticsModel": 1
             },
             {
+                "id": 3,
                 "firstLevelCategoryName": "日杂",
                 "secondLevelCategoryName": "家居百货",
                 "thirdLevelCategoryName": "厨房用具",
@@ -63,6 +66,7 @@
                 "logisticsModel": 1
             },
             {
+                "id": 4,
                 "firstLevelCategoryName": "日杂",
                 "secondLevelCategoryName": "家居百货",
                 "thirdLevelCategoryName": "厨房用具",

@@ -12,6 +12,7 @@ import { logisticsList, placeTypeListCreate, placeFieldMap } from '../constant';
 import Sites from '../../../../container/search/Sites';
 import { Supplier, SupplierAdderss } from '../../../../container/search';
 import { repeatData } from './RepeatTestData';
+import { PAGE_SIZE } from '../../../../constant';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -37,7 +38,7 @@ class CreateModal extends PureComponent {
     }
 
     handleCreateRelation = () => {
-        const { createRelations, selectedIds, openRepeatModel } = this.props;
+        const { createRelations, selectedIds, openRepeatModel, saveParams } = this.props;
         const { getFieldsValue, validateFields } = this.props.form;
         const {
             logisticsModel,
@@ -58,16 +59,28 @@ class CreateModal extends PureComponent {
             AdrSupName: supplierAddr.providerName,
             productIds: selectedIds,
             pageNum: 1,
-            pageSize: 20
+            pageSize: PAGE_SIZE
 
         };
         validateFields((err) => {
             if (!err) {
-                createRelations(Utils.removeInvalid(params)).then(res => {
+                const reqParams = Utils.removeInvalid(params);
+                /**
+                 * 保存添加的请求参数, 下载重复数据时重用
+                 */
+                saveParams(reqParams);
+                createRelations(reqParams).then(res => {
                     if (res.success) {
-                        message.success('添加商品地点关系成功');
-                        this.props.closeModal();
-                        openRepeatModel(repeatData);
+                        // openRepeatModel(repeatData.data);
+                        /**
+                         * 有数据重复
+                         */
+                        if (res.data.resultObject) {
+                            openRepeatModel(res.data);
+                        } else {
+                            message.success('添加商品地点关系成功');
+                            this.props.closeModal();
+                        }
                     } else {
                         message.error('添加商品地点关系失败');
                     }
@@ -79,8 +92,7 @@ class CreateModal extends PureComponent {
     handPlaceTypeChange = val => {
         if (
             parseInt(val, 10) === 1 ||
-            parseInt(val, 10) === 3 ||
-            parseInt(val, 10) === 0
+            parseInt(val, 10) === 3
         ) {
             this.setState({
                 initialPlaceValue: {
@@ -137,7 +149,7 @@ class CreateModal extends PureComponent {
                             })(
                                 <Sites
                                     disabled={getFieldValue('placeType') === ''}
-                                    siteTypeCode={parseInt(getFieldValue('placeType'), 10) === 0 ? '3' : getFieldValue('placeType')}
+                                    siteTypeCode={getFieldValue('placeType')}
                                     placeFieldMap={placeFieldMap}
                                     zIndex={1001}
                                 />
@@ -188,6 +200,7 @@ class CreateModal extends PureComponent {
 
 CreateModal.propTypes = {
     visible: PropTypes.bool,
+    saveParams: PropTypes.func,
     closeModal: PropTypes.func,
     createRelations: PropTypes.func,
     openRepeatModel: PropTypes.func,

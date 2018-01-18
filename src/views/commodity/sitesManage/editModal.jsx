@@ -61,15 +61,15 @@ class EditSiteRelationModal extends PureComponent {
         const { visible, closeModal, detail } = this.props;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const initSupplier = {
-            spId: 'xcsupp001',
-            spNo: '100000',
-            companyName: '成都海王星商贸有限公司'
+            spId: detail.supplierId,
+            spNo: detail.supplierCode,
+            companyName: detail.supplierName
         };
 
         const initSupplierAddr = {
-            providerNo: '1000001',
-            providerName: 'providerName',
-            spAdrid: 'spAdrid'
+            providerNo: detail.adrSupCode,
+            providerName: detail.adrSupName,
+            spAdrid: detail.adrSupId
         };
         return (
             <Modal
@@ -85,6 +85,7 @@ class EditSiteRelationModal extends PureComponent {
                                 initialValue: initSupplier
                             })(
                                 <Supplier
+                                    zIndex={10001}
                                     defaultRaw={initSupplier}
                                 />
                             )}
@@ -92,6 +93,7 @@ class EditSiteRelationModal extends PureComponent {
                         <FormItem {...formItemLayout} label="供应商地点" >
                             {getFieldDecorator('supplierAddr', {initialValue: initSupplierAddr})(
                                 <SupplierAdderss
+                                    zIndex={10000}
                                     defaultRaw={initSupplierAddr}
                                     pId={getFieldValue('supplier').spId}
                                     disabled={getFieldValue('supplier').spId === ''}
@@ -99,7 +101,7 @@ class EditSiteRelationModal extends PureComponent {
                         </FormItem>
                         <FormItem {...formItemLayout} label="物流模式" >
                             {getFieldDecorator('logisticsModel', {
-                                initialValue: detail.logisticsModel
+                                initialValue: String(detail.logisticsModel)
                             })(
                                 <Select
                                     size="large"
