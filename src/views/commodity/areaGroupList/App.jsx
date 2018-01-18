@@ -19,6 +19,7 @@ import {
     deleteAreaGroup
 } from '../../../actions/commodity';
 import SearchForm from './searchForm';
+import ModalCreate from './modalCreate';
 import columns from './columns';
 
 const confirm = Modal.confirm;
@@ -46,7 +47,10 @@ function showDeleteConfirm(resolve) {
 }, dispatch))
 
 class AreaGroupList extends PureComponent {
-    state = { areas: [] }
+    state = {
+        areas: [], // 选中的区域组
+        modalCreateVisible: false // 创建区域组模态框显示
+    }
 
     componentWillMount() {
         this.props.clearAreaGroup();
@@ -118,7 +122,7 @@ class AreaGroupList extends PureComponent {
     render() {
         const { data, total, pageNum, pageSize } = this.props.areaGroup;
         columns[columns.length - 1].render = this.renderOperations;
-        const { areas } = this.state;
+        const { areas, modalCreateVisible } = this.state;
         const rowSelection = {
             selectedRowKeys: areas,
             onChange: this.onSelectChange
@@ -132,7 +136,7 @@ class AreaGroupList extends PureComponent {
                 <div className="button-group">
                     <Button
                         size="default"
-                        onClick={this.handleCreate}
+                        onClick={() => { this.setState({ modalCreateVisible: true }); }}
                     >
                         新增区域组
                     </Button>
@@ -157,6 +161,16 @@ class AreaGroupList extends PureComponent {
                         total,
                         showQuickJumper: true,
                         onChange: this.onPaginate
+                    }}
+                />
+                <ModalCreate
+                    visible={modalCreateVisible}
+                    onOk={() => {
+                        this.query();
+                        this.setState({ modalCreateVisible: false });
+                    }}
+                    onCancel={() => {
+                        this.setState({ modalCreateVisible: false });
                     }}
                 />
             </div>
