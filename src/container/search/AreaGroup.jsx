@@ -27,7 +27,7 @@ class AreaGroup extends PureComponent {
         }
     }
 
-    // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
+    // gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/areaGroup/queryAreaGroupList
     query = params =>
         this.props.pubFetchValueList(Utils.removeInvalid({
             groupCodeOrName: params.value,
@@ -36,7 +36,7 @@ class AreaGroup extends PureComponent {
         }), this.props.url)
 
     /**
-     * 子公司-清除
+     * 区域组-清除
      */
     handleClear = () => {
         this.searchMind.reset();
@@ -44,7 +44,7 @@ class AreaGroup extends PureComponent {
     }
 
     /**
-     * 子公司-值清单
+     * 区域组-值清单
      */
     handleChoose = ({ record }) => {
         this.props.onChange(record);
