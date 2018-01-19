@@ -131,6 +131,9 @@ import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './white
 // 根据库存实时拆单
 import { splitorderbyinventory, interfaceInventory } from './order';
 
+// 根据库存实时拆单
+import { comleteOrCloseWishList, queryReserveAreaList, queryReserAreaDetail } from './process';
+
 // 退货订单列表
 
 import {
@@ -255,6 +258,11 @@ export {
     // 订单
     splitorderbyinventory,
     interfaceInventory,
+
+    // 预定专区
+    comleteOrCloseWishList,
+    queryReserveAreaList,
+    queryReserAreaDetail,
     // 销售管理
     returnGoodsList,
     returnGoodsDetail,
