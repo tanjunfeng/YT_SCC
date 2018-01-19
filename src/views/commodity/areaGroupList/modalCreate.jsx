@@ -31,41 +31,31 @@ class ModalCreate extends PureComponent {
         const { validateFields, setFields } = form;
         validateFields((err, values) => {
             const { areaGroupName, branchCompany } = values;
-            if (err) reject();
-            if (!areaGroupName || Utils.trim(areaGroupName) === '') {
+            if (err) {
                 reject();
+            } else if (!areaGroupName || Utils.trim(areaGroupName) === '') {
+                setFields({
+                    areaGroupName: {
+                        value: '',
+                        errors: [new Error('未填写区域组名称')],
+                    },
+                });
+                reject();
+            } else if (!branchCompany || branchCompany.id === '') {
+                setFields({
+                    branchCompany: {
+                        errors: [new Error('未选取所属子公司')],
+                    },
+                });
+                reject();
+            } else {
+                resolve(Utils.removeInvalid({
+                    areaGroupName,
+                    branchCompanyId: branchCompany.id,
+                    branchCompanyName: branchCompany.name
+                }));
             }
-            // 判断是否重复
-            this.props.isAreaGroupExists({
-                areaGroupName
-            }).then(response => {
-                if (response.code === 50011) {
-                    setFields({
-                        areaGroupName: {
-                            errors: [new Error('已存在此区域组名')],
-                        },
-                    });
-                    reject();
-                } else if (response.code === 200) {
-                    if (!branchCompany || branchCompany.id === '') {
-                        setFields({
-                            branchCompany: {
-                                errors: [new Error('未选取所属子公司')],
-                            },
-                        });
-                        reject();
-                    } else {
-                        resolve(Utils.removeInvalid({
-                            areaGroupName,
-                            branchCompanyId: branchCompany.id,
-                            branchCompanyName: branchCompany.name
-                        }));
-                    }
-                }
-            }).catch(() => {
-                reject();
-            });
-        });
+        })
     })
 
     /**
@@ -80,25 +70,48 @@ class ModalCreate extends PureComponent {
         });
     }
 
+    /**
+     * 判断区域组名称是否重复
+     */
+    isDuplicate = data => new Promise((resolve, reject) => {
+        const { areaGroupName } = data;
+        this.props.isAreaGroupExists({
+            areaGroupName
+        }).then(res => {
+            if (res.code === 200) {
+                resolve(data);
+            } else {
+                reject();
+            }
+        }).catch(() => {
+            reject();
+        });
+    });
+
+    /**
+     * 保存数据到后台
+     */
+    saveData = data => new Promise((resolve, reject) => {
+        this.props.createAreaGroup(data).then(res => {
+            // 正确返回并写入一行数据
+            if (res.code === 200 && res.data === 1) {
+                this.props.onOk();
+                this.clearData();
+            } else {
+                reject();
+            }
+        }).catch(() => { reject() });
+    });
+
     handleOk = () => {
         // 调用创建接口
-        this.getFormData((result, data) => {
-            if (result) {
-                this.props.createAreaGroup(data).then(res => {
-                    if (res.code === 200 && res.data === 1) {
-                        this.props.onOk();
-                        this.clearData();
-                        this.setState({
-                            confirmLoading: false
-                        });
-                    }
-                });
-            } else {
-                this.setState({
-                    confirmLoading: false
-                });
-            }
-        });
+        this.getFormData().then(
+            data => this.isDuplicate(data)
+        ).then(data => this.saveData(data)).finally(() => {
+            this.setState({
+                confirmLoading: false
+            });
+        })
     }
 
     handleCancel = () => {
