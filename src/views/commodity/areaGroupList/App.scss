@@ -48,3 +48,12 @@
         margin-right: 20px;
     }
 }
+
+.area-group-modal {
+    &.ant-modal .ant-form-inline .ant-form-explain {
+        left: 0;
+    }
+    .ywc-smind {
+        top: 4px;
+    }
+}

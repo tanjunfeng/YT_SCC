@@ -355,6 +355,9 @@ export const getCostPrice = (params) => http.get('/prodPurchase/queryPurchasePri
 // 查询区域分组
 export const getAreaGroup = (params) => http.get('/areaGroup/queryAreaGroupList', params);
 
+// 新增区域组
+export const createAreaGroup = (params) => http.post('/areaGroup/insertAreaGroup', params);
+
 // 删除区域组
 export const deleteAreaGroup = (params) => http.post('/areaGroup/deleteAreaGroup', params);
 
