@@ -19,9 +19,8 @@ http.response(
     res => {
         switch (res.data.code) {
             case 200: // 请求成功
-                return Promise.resolve(res);
             case 50011: // 已存在的字段
-                return Promise.reject(res.data.isExists);
+                return Promise.resolve(res);
             case 401: // 未登录
                 LoginLayout();
                 return Promise.reject(res.data);

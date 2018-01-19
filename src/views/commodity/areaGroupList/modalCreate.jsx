@@ -26,27 +26,15 @@ const FormItem = Form.Item;
 class ModalCreate extends PureComponent {
     state = { confirmLoading: false }
 
-    getFormData = new Promise((resolve, reject) => {
+    getFormData = () => new Promise((resolve, reject) => {
         const { form } = this.props;
-        const { validateFields, setFields } = form;
+        const { validateFields } = form;
         validateFields((err, values) => {
             const { areaGroupName, branchCompany } = values;
-            if (err) {
-                reject();
-            } else if (!areaGroupName || Utils.trim(areaGroupName) === '') {
-                setFields({
-                    areaGroupName: {
-                        value: '',
-                        errors: [new Error('未填写区域组名称')],
-                    },
-                });
-                reject();
-            } else if (!branchCompany || branchCompany.id === '') {
-                setFields({
-                    branchCompany: {
-                        errors: [new Error('未选取所属子公司')],
-                    },
-                });
+            if (err ||
+                !this.validateAreaGroupName(areaGroupName) ||
+                !this.validateBranchCompany(branchCompany)
+            ) {
                 reject();
             } else {
                 resolve(Utils.removeInvalid({
@@ -57,6 +45,36 @@ class ModalCreate extends PureComponent {
             }
         })
     })
+
+    validateAreaGroupName = areaGroupName => {
+        const { form } = this.props;
+        const { setFields } = form;
+        if (!areaGroupName || Utils.trim(areaGroupName) === '') {
+            setFields({
+                areaGroupName: {
+                    value: '',
+                    errors: [new Error('未填写区域组名称')],
+                },
+            });
+            return false;
+        }
+        return true;
+    }
+
+    validateBranchCompany = branchCompany => {
+        const { form } = this.props;
+        const { setFields } = form;
+        if (!branchCompany || branchCompany.id === '') {
+            setFields({
+                branchCompany: {
+                    value: { id: '', name: '' },
+                    errors: [new Error('未选取所属子公司')],
+                },
+            });
+            return false;
+        }
+        return true;
+    }
 
     /**
      * 清除表单数据
@@ -73,15 +91,18 @@ class ModalCreate extends PureComponent {
     /**
      * 判断区域组名称是否重复
      */
-    isDuplicate = data => new Promise((resolve, reject) => {
-        const { areaGroupName } = data;
+    isDuplicate = areaGroupName => new Promise((resolve, reject) => {
         this.props.isAreaGroupExists({
             areaGroupName
         }).then(res => {
-            if (res.code === 200) {
-                resolve(data);
-            } else {
-                reject();
+            switch (res.code) {
+                case 200:
+                    resolve();
+                    break;
+                case 50011:
+                default:
+                    reject();
+                    break;
             }
         }).catch(() => {
             reject();
@@ -105,17 +126,42 @@ class ModalCreate extends PureComponent {
 
     handleOk = () => {
         // 调用创建接口
-        this.getFormData().then(
-            data => this.isDuplicate(data)
-        ).then(data => this.saveData(data)).finally(() => {
-            this.setState({
-                confirmLoading: false
-            });
-        })
+        this.getFormData()
+            .then(data => this.saveData(data))
+            .catch(() => {
+                this.setState({
+                    confirmLoading: false
+                });
+            })
+            .finally(() => {
+                this.setState({
+                    confirmLoading: false
+                });
+            })
     }
 
     handleCancel = () => {
         this.props.onCancel();
+    }
+
+    validateDuplicateName = (rule, value, callback) => {
+        if (!value || Utils.trim(value) === '') {
+            callback();
+        } else if (String(value).length > 15) {
+            callback('活动名称最长15位');
+        } else {
+            const msg = '区域名称重复';
+            this.isDuplicate(value).then(() => {
+                callback();
+            }).catch(() => {
+                this.props.form.setFields({
+                    areaGroupName: {
+                        value, errors: [new Error(msg)]
+                    }
+                });
+                callback(msg);
+            });
+        }
     }
 
     render() {
@@ -137,7 +183,7 @@ class ModalCreate extends PureComponent {
                             initialValue: '',
                             rules: [
                                 { required: true, message: '请输入区域组名称' },
-                                { max: 15, message: '活动名称最长15位' }
+                                { validator: this.validateDuplicateName }
                             ]
                         })(<Input size="default" />)}
                     </FormItem>
