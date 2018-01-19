@@ -11,7 +11,6 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Form, Icon, Row, Col, Input, Button, Modal, message } from 'antd';
-import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
@@ -24,6 +23,7 @@ import {
     interfaceInventory
 } from '../../../actions/order';
 import GoodsInfo from '../goodsInfo';
+import Utils from '../../../util/util';
 
 const confirm = Modal.confirm;
 const { TextArea } = Input;
@@ -259,8 +259,7 @@ class OrderInformation extends PureComponent {
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">下单时间:</span>
                                     <span>
-                                        {moment(parseInt(orderDetailData.creationTime, 10))
-                                            .format(TIME_FORMAT)}
+                                        {Utils.getTime(orderDetailData.creationTime)}
                                     </span>
                                 </Col>
                                 <Col className="gutter-row" span={12}>

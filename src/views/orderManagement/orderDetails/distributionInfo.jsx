@@ -10,10 +10,10 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Form, Icon, Row, Col, Table, Input, Button } from 'antd';
-import moment from 'moment';
 import { DATE_FORMAT } from '../../../constant/index';
 import { distributionInformationColumns as columns } from '../columns';
 import FlowImage from '../../../components/flowImage';
+import Utils from '../../../util/util';
 
 const { TextArea } = Input;
 
@@ -78,9 +78,7 @@ class DistributionInformation extends PureComponent {
                                     {
                                         shipOnDate
                                         && <span>
-                                            {moment(
-                                                parseInt(shipOnDate, 10)
-                                            ).format(DATE_FORMAT)}
+                                            {Utils.getDate(shipOnDate)}
                                         </span>
                                     }
                                 </Col>
@@ -95,9 +93,7 @@ class DistributionInformation extends PureComponent {
                                     {
                                         estimatedArrivalDate
                                         && <span>
-                                            {moment(
-                                                parseInt(estimatedArrivalDate, 10)
-                                            ).format(DATE_FORMAT)}
+                                            {Utils.getDate(estimatedArrivalDate)}
                                         </span>
                                     }
                                 </Col>
