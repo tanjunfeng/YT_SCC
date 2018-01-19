@@ -52,8 +52,10 @@ class Brands extends PureComponent {
     }
 
     render() {
+        const { zIndex = 1000 } = this.props;
         return (
             <SearchMind
+                style={{ zIndex }}
                 compKey="id"
                 ref={ref => { this.brandSearchMind = ref }}
                 disabled={this.props.disabled}
@@ -87,7 +89,8 @@ Brands.propTypes = {
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
-    initialValue: PropTypes.string
+    initialValue: PropTypes.string,
+    zIndex: PropTypes.number
 };
 
 export default Brands;

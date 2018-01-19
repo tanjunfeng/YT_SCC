@@ -7,19 +7,22 @@ import {
     Modal
 } from 'antd';
 import { sitesManageColumns } from '../columns';
+import Utils from '../../../../util/util';
+import { exportRepeatSiteRelationExcel } from '../../../../service';
 
 class RepeatDataModal extends PureComponent {
     exportExcel = () => {
         const { reqParams, exportExcel, closeModal } = this.props;
-        exportExcel(reqParams).then(res => {
-            if (res.success) {
-                closeModal();
-            }
-        });
+        exportExcel(reqParams);
+        Utils.exportExcel(exportRepeatSiteRelationExcel, reqParams);
+        // exportExcel(reqParams).then(res => {
+        //     if (res.success) {
+        //         closeModal();
+        //     }
+        // });
     }
     render() {
         const { repeatRes, closeModal, visible } = this.props;
-        // recordsTotal, currentPage
         const { resultObject} = repeatRes;
         return (
             <Modal
@@ -29,7 +32,7 @@ class RepeatDataModal extends PureComponent {
                 onCancel={closeModal}
                 cancelText="确定"
                 okText="下载详情"
-                width="1000px"
+                width="1400px"
             >
                 <div style={{marginTop: '20px'}}>
                     <Table

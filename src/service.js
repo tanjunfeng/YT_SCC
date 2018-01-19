@@ -122,6 +122,8 @@ export const sellPriceChangeExcelTemplate = '/prodSell/sellPriceChangeExcelTempl
 export const wishListsForExcel = '/wishBackAction/queryWishListsForExcel';
 // 导出心愿单详情
 export const wishDetailsForExcel = '/wishBackAction/queryWishDetailsForExcel';
+// 导出商品地点关系重复数据
+export const exportRepeatSiteRelationExcel = '/prodPlace/exportRepeatedProdAdd';
 
 /**
  * 登录 Api

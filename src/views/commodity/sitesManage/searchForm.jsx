@@ -68,6 +68,7 @@ class SearchForm extends PureComponent {
     }
 
     handleSearch = () => {
+        this.getQueryParams();
         const { selectedOptions } = this.state;
         const { branchCompanyId } = this.baseQueryParams;
         if (selectedOptions.length > 0 && selectedOptions.length < 3) {
@@ -79,7 +80,6 @@ class SearchForm extends PureComponent {
             message.error('请选择一个子公司');
             return;
         }
-        this.getQueryParams();
         this.props.queryList(Utils.removeInvalid(this.baseQueryParams));
     }
 
@@ -160,7 +160,7 @@ class SearchForm extends PureComponent {
                         <Col>
                             <FormItem label="品牌">
                                 {getFieldDecorator('brand', { initialValue: {
-                                    id: '', name: '' }})(<Brands disabled={!getFieldValue('branchCompany').id} />)
+                                    id: '', name: '' }})(<Brands zIndex={1001} disabled={!getFieldValue('branchCompany').id} />)
                                 }
                             </FormItem>
                         </Col>

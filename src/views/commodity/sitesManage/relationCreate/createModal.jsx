@@ -10,8 +10,6 @@ import {
 import Utils from '../../../../util/util';
 import { logisticsList, placeTypeListCreate, placeFieldMap } from '../constant';
 import Sites from '../../../../container/search/Sites';
-import { Supplier, SupplierAdderss } from '../../../../container/search';
-// import { repeatData } from './RepeatTestData';
 import { PAGE_SIZE } from '../../../../constant';
 import SupplierInfor from '../SupplierInfoFilterByPlace/index';
 
@@ -55,9 +53,15 @@ class CreateModal extends PureComponent {
             supplierId: supplier.spId,
             supplierCode: supplier.spNo,
             supplierName: supplier.companyName,
-            AdrSupId: supplierAddr.spAdrid,
-            AdrSupCode: supplierAddr.providerNo,
-            AdrSupName: supplierAddr.providerName,
+            adrSupId: supplierAddr.spAdrId,
+            adrSupCode: supplierAddr.providerNo,
+            adrSupName: supplierAddr.providerName,
+            // supplierId: 'xprov003',
+            // supplierCode: '10002',
+            // supplierName: '成都诚心诚意商贸有限公司',
+            // adrSupId: 3,
+            // adrSupCode: '1000003',
+            // adrSupName: '四川-成都诚心诚意商贸有限公司',
             productIds: selectedIds,
             pageNum: 1,
             pageSize: PAGE_SIZE

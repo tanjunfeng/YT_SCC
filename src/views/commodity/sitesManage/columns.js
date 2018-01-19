@@ -31,6 +31,7 @@ export const sitesManageColumns = [
         title: '商品',
         dataIndex: 'productName',
         key: 'productName',
+        render: (text, record) => (<span>{record.productCode}-{text}</span>)
     },
     {
         title: '所属子公司编码',
@@ -51,6 +52,7 @@ export const sitesManageColumns = [
         title: '供应商',
         dataIndex: 'supplierName',
         key: 'supplierName',
+        render: (text, record) => (<span>{record.supplierCode}-{text}</span>)
     },
     {
         title: '供应商地点',

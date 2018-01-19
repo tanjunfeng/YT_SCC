@@ -13,9 +13,9 @@ export const logisticsList = {
 };
 
 export const placeTypeListQuery = {
-    defaultValue: '0',
+    defaultValue: '',
     data: [{
-        key: '0',
+        key: '',
         value: '全部'
     }, {
         key: '2',

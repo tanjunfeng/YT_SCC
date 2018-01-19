@@ -10,6 +10,7 @@ import {
 import Utils from '../../../util/util';
 import { logisticsList } from './constant';
 import { Supplier, SupplierAdderss } from '../../../container/search';
+// import SupplierInfor from '../SupplierInfoFilterByPlace/index';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
