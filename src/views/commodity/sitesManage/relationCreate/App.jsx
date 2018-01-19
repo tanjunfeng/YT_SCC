@@ -134,7 +134,10 @@ class RelationCreate extends PureComponent {
                     <span>{productCode}</span>
                 </div>
                 <div className="table-commodity-description">
-                    <img alt="未上传" className="table-commodity-description-img" src={`${thumbnailImage || defaultImg}`} />
+                    <img alt="未上传"
+                        className="table-commodity-description-img"
+                        src={`${thumbnailImage || defaultImg}`}
+                    />
                     <span className="table-commodity-description-name">{saleName}</span>
                 </div>
             </div>

@@ -32,6 +32,7 @@ class SearchForm extends PureComponent {
     componentDidMount() {
         this.props.queryList({
             pageNum: 1,
+            branchCompanyId: '',
             pageSize: PAGE_SIZE
         });
     }
@@ -56,7 +57,7 @@ class SearchForm extends PureComponent {
             // 根据不同的值清单取place.record对应字段
             placeId: place.record ? place.record[placeFieldMap[placeType]] : '',
             placeType: parseInt(placeType, 10),
-            branchCompanyId: branchCompany.id
+            branchCompanyId: branchCompany.id || 10003
         };
         if (selectedOptions.length > 0) {
             selectedOptions.forEach((item, i) => {

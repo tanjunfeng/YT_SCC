@@ -30,8 +30,6 @@ import PriceImport from 'bundle-loader?lazy!../views/commodity/priceImport';
 import SitesManage from 'bundle-loader?lazy!../views/commodity/sitesManage';
 // 商品地点关系创建
 import SiteRelationCreate from 'bundle-loader?lazy!../views/commodity/sitesManage/relationCreate';
-// 地区组管理
-import RegionManage from 'bundle-loader?lazy!../views/commodity/regionManage';
 // 分类列表页商品排序管理
 import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
@@ -323,28 +321,9 @@ const routes = [
                         />
                         <Route
                             path="/productSiteManage/create"
-                            render={() => <Bundle load={SiteRelationCreate}>
+                            render={() => (<Bundle load={SiteRelationCreate}>
                                 {(App) => <App />}
-                            </Bundle>}
-                        />
-                    </Switch>
-                ),
-            },
-            // 区域组管理
-            {
-                path: '/regionManage',
-                parent: 'gylspgl',
-                key: 'regionManage',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/regionManage"
-                            exact
-                            render={() => <Bundle load={RegionManage}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/regionManage/add"
-                            render={() => <Bundle load={RegionManage}>{(App) => <App />}</Bundle>}
+                            </Bundle>)}
                         />
                     </Switch>
                 ),
