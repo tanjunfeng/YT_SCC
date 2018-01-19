@@ -26,16 +26,30 @@ const FormItem = Form.Item;
 class ModalCreate extends PureComponent {
     state = { confirmLoading: false }
 
-    getFormData = () => {
-        const { areaGroupName, branchCompany } = this.props.form.getFieldsValue();
-        return Utils.removeInvalid({ areaGroupName, branchCompanyId: branchCompany.id });
+    getFormData = (callback) => {
+        const { form } = this.props;
+        const { validateFields } = form;
+        validateFields((err, values) => {
+            if (err) {
+                return null;
+            }
+            const { areaGroupName, branchCompany } = values;
+            callback(
+                Utils.removeInvalid({
+                    areaGroupName,
+                    branchCompanyId: branchCompany.id,
+                    branchCompanyName: branchCompany.name
+                })
+            );
+            return null;
+        });
     }
 
     /**
      * 清除表单数据
      */
     clearData = () => {
-        const {form } = this.props;
+        const { form } = this.props;
         const { resetFields, setFieldsValue } = form;
         resetFields();
         setFieldsValue({
@@ -45,7 +59,10 @@ class ModalCreate extends PureComponent {
     }
 
     handleOk = () => {
-        this.props.createAreaGroup(this.getFormData());
+        // 调用创建接口
+        this.getFormData(formData => {
+            this.props.createAreaGroup(formData);
+        });
         this.props.onOk();
     }
 
