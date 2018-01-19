@@ -9,7 +9,7 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Row, Col, Button, Table } from 'antd';
+import { Form, Icon, Row, Col, Button, Table, Modal } from 'antd';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../constant/index';
 import { distributionInformationColumns as columns } from '../columns';
@@ -24,7 +24,9 @@ import EditableCell from './editableCell';
     }, dispatch)
 )
 class DistributionInformation extends PureComponent {
-
+    state = {
+        visible: false
+    }
     /**
      * 签收数量编辑列
      */
@@ -35,24 +37,7 @@ class DistributionInformation extends PureComponent {
         Object.assign(goods, {
             completedQuantity
         });
-        this.props.onChange(goodsList)
-    }
-
-    /**
-     * 确认签收通知父组件请求
-     */
-    handleReceipt = () => {
-        this.props.onReceipt();
-    }
-
-    /**
-     * 凭证查看
-     */
-    handleVoucher = () => {
-        const { shippingDetailData } = this.props;
-        const { data } = shippingDetailData;
-        const { singedCertImg } = data;
-        this.props.onVoucher(singedCertImg);
+        this.props.onChange(goodsList);
     }
 
     /**
@@ -61,6 +46,38 @@ class DistributionInformation extends PureComponent {
     getLeftQuantity = (text, record) => (
         record.quantity - record.completedQuantity
     )
+
+    /**
+     * 凭证查看
+     */
+    handleVoucher = () => {
+        this.showModal();
+    }
+
+    showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    }
+
+    handleOk = () => {
+        this.setState({
+            visible: false,
+        });
+    }
+
+    handleCancel = () => {
+        this.setState({
+            visible: false,
+        });
+    }
+
+    /**
+     * 确认签收通知父组件请求
+     */
+    handleReceipt = () => {
+        this.props.onReceipt();
+    }
 
     /**
      * 签收差额
@@ -205,13 +222,30 @@ class DistributionInformation extends PureComponent {
                         </div>
                     </div>
                 </div>
-                <Row type="flex" justify="end">
-                    <Col>
-                        <Button type="primary" size="default" onClick={this.handleReceipt}>
-                            确认签收
-                        </Button>
-                    </Col>
-                </Row>
+                {
+                    shippingStateDesc !== '已签收待确认' &&
+                    <Row type="flex" justify="end">
+                        <Col>
+                            <Button type="primary" size="default" onClick={this.handleReceipt}>
+                                确认签收
+                            </Button>
+                        </Col>
+                    </Row>
+                }
+                {
+                    <Modal
+                        visible={this.state.visible}
+                        footer={null}
+                        destroyOnClose
+                        maskClosable
+                        closable={false}
+                        wrapClassName="img-visible-class"
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                    >
+                        <img src="http://sit.image.com/group1/M00/01/36/rB4KPVmTuyeAeRLOAA1rIuRd3Es710.png" alt="凭证图片" />
+                    </Modal>
+                }
             </div>
         );
     }
@@ -220,7 +254,6 @@ class DistributionInformation extends PureComponent {
 DistributionInformation.propTypes = {
     onChange: PropTypes.func,
     onReceipt: PropTypes.func,
-    onVoucher: PropTypes.func,
     shippingDetailData: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 }

@@ -97,3 +97,12 @@
         margin: 0 5px 10px 5px;
     }
 }
+.img-visible-class{
+    .ant-modal-body{
+        overflow: hidden;
+        padding: 1;
+        img{
+            width: 100%;
+        }
+    }
+}

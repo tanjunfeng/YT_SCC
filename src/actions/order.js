@@ -23,7 +23,7 @@ import {
     confirmPayment,
     splitorderByInventoryService,
     interfaceInventoryService,
-    confirmation as confirmationService,
+    confirmation as confirmationService
 } from '../service';
 import ActionType from './ActionType';
 

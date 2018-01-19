@@ -17,7 +17,7 @@ import {
     fetchOrderDetailInfo,
     fetchPaymentDetailInfo,
     fetchShippingDetailInfo,
-    confirmation
+    confirmation,
 } from '../../../actions/order';
 
 const TabPane = Tabs.TabPane;
@@ -31,7 +31,7 @@ const orderDT = 'order-details';
         fetchOrderDetailInfo,
         fetchPaymentDetailInfo,
         fetchShippingDetailInfo,
-        confirmation
+        confirmation,
     }, dispatch)
 )
 
@@ -99,13 +99,6 @@ class OrderManagementDetails extends Component {
         })
     }
 
-    /**
-     * 查看签收凭证
-     */
-    handleVoucher = (singedCertImg) => {
-        console.log('查看凭证')
-    }
-
     render() {
         return (
             <div>
@@ -125,7 +118,6 @@ class OrderManagementDetails extends Component {
                             value={this.state.oldData}
                             onChange={this.handleSendChange}
                             onReceipt={this.handleReceipt}
-                            onVoucher={this.handleVoucher}
                         />
                     </TabPane>
                 </Tabs>
