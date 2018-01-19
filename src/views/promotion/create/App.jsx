@@ -377,7 +377,7 @@ class PromotionCreate extends PureComponent {
                     >保存</Button>
                     <Button
                         size="default"
-                        className='cancelBtn'
+                        className="cancelBtn"
                         onClick={this.goBack}
                     >取消</Button>
                 </Row>
@@ -388,6 +388,7 @@ class PromotionCreate extends PureComponent {
 
 PromotionCreate.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
     createPromotion: PropTypes.func
 }
 
