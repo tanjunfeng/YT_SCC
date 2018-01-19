@@ -22,8 +22,33 @@ class SearchForm extends PureComponent {
         isClearCategory: false
     }
     componentDidMount() {
-        const { queryProducts } = this.props;
-        queryProducts();
+        // const { queryProducts } = this.props;
+        // queryProducts();
+        this.handleSearch();
+    }
+
+    /**
+     * 获取查询数据
+     */
+    getQueryParams = () => {
+        const { getFieldsValue } = this.props.form;
+        const { selectedOptions } = this.state;
+        const {
+            brand,
+            commodity,
+            barCode
+        } = getFieldsValue();
+        this.queryParams = {
+            internationalCode: barCode,
+            brand: brand.record ? brand.record.id : '',
+            productName: commodity.record ? commodity.record.productName : '',
+        };
+
+        if (selectedOptions.length > 0) {
+            selectedOptions.forEach((item, i) => {
+                this.queryParams[productLevel[i]] = item;
+            });
+        }
     }
 
     /**
@@ -38,29 +63,13 @@ class SearchForm extends PureComponent {
      * 查询
     */
     handleSearch = () => {
-        const { getFieldsValue } = this.props.form;
         const { selectedOptions } = this.state;
-        const {
-            brand,
-            commodity,
-            barCode
-        } = getFieldsValue();
-        const queryParams = {
-            internationalCode: barCode,
-            brand: brand.record ? brand.record.id : '',
-            productName: commodity.record ? commodity.record.productName : '',
-        };
-
-        if (selectedOptions.length > 0) {
-            selectedOptions.forEach((item, i) => {
-                queryParams[productLevel[i]] = item;
-            });
-        }
+        this.getQueryParams();
         if (selectedOptions && selectedOptions.length > 0 && selectedOptions.length < 3) {
             message.error('请选择至少三级商品分类');
             return;
         }
-        this.props.queryProducts(Utils.removeInvalid(queryParams));
+        this.props.queryProducts(Utils.removeInvalid(this.queryParams));
     }
 
     /**

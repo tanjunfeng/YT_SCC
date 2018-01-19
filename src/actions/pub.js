@@ -34,7 +34,7 @@ import {
     findCompanyBaseInfo as findCompaniesService,
     modifypassword as modifypasswordActionService,
     queryAreaGroupList,
-    filterSupplierByPlace
+    filterSupplyInfo
 } from '../service';
 
 const pubValueList = {
@@ -44,8 +44,8 @@ const pubValueList = {
     queryBrandsByPages,
     // 通过表单值查询供应商地点列表
     querySuppliersList,
-    // 通过地点过滤供应商地点列表
-    filterSupplierByPlace,
+    // 通过地点过滤供应商地点或供应商列表
+    filterSupplyInfo,
     // 商品的暂停购进和恢复采购
     goodsChangeStatus,
     // 商品的区域性批量上架

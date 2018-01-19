@@ -37,7 +37,7 @@ class SearchForm extends PureComponent {
         });
     }
 
-    handleSearch = () => {
+    getQueryParams = () => {
         const { getFieldsValue } = this.props.form;
         const { selectedOptions } = this.state;
         const {
@@ -49,34 +49,47 @@ class SearchForm extends PureComponent {
             place,
             placeType
         } = getFieldsValue();
-        const baseParams = {
+        this.baseQueryParams = {
             internationalCode: barCode,
             brand: brand.record ? brand.record.id : '',
             productId: commodity.record ? commodity.record.productId : '',
+            productName: commodity.record ? commodity.record.productName : '',
             logisticsModel,
             // 根据不同的值清单取place.record对应字段
             placeId: place.record ? place.record[placeFieldMap[placeType]] : '',
             placeType: parseInt(placeType, 10),
-            branchCompanyId: branchCompany.id || 10003
+            branchCompanyId: branchCompany.id
         };
         if (selectedOptions.length > 0) {
             selectedOptions.forEach((item, i) => {
-                baseParams[productLevel[i]] = item;
+                this.baseQueryParams[productLevel[i]] = item;
             });
         }
+    }
 
+    handleSearch = () => {
+        const { selectedOptions } = this.state;
+        const { branchCompanyId } = this.baseQueryParams;
         if (selectedOptions.length > 0 && selectedOptions.length < 3) {
             message.error('请选择至少三级商品分类');
             return;
         }
 
-        this.props.queryList(Utils.removeInvalid(baseParams));
+        if (!branchCompanyId) {
+            message.error('请选择一个子公司');
+            return;
+        }
+        this.getQueryParams();
+        this.props.queryList(Utils.removeInvalid(this.baseQueryParams));
     }
 
     handleAdd = () => {
         this.props.history.push('/productSiteManage/create');
     }
 
+    /**
+     * 重置搜索条件
+     */
     handleReset = () => {
         this.setState({
             isClearCategory: true
@@ -123,8 +136,21 @@ class SearchForm extends PureComponent {
                 <Form layout="inline" className="sites-manage-form">
                     <Row gutter={40}>
                         <Col>
+                            <FormItem label="子公司" >
+                                {getFieldDecorator('branchCompany', {
+                                    initialValue: { id: '', name: '' },
+                                    rules: [{
+                                        required: true,
+                                    }]
+                                })(
+                                    <BranchCompany zIndex={1001} />
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col>
                             <FormItem label="商品分类">
                                 <Category
+                                    disabled={!getFieldValue('branchCompany').id}
                                     isClearCategory={isClearCategory}
                                     onChange={this.handleCategorySelect}
                                     resetFlag={this.resetClearCategoryFlag}
@@ -134,14 +160,14 @@ class SearchForm extends PureComponent {
                         <Col>
                             <FormItem label="品牌">
                                 {getFieldDecorator('brand', { initialValue: {
-                                    id: '', name: '' }})(<Brands />)
+                                    id: '', name: '' }})(<Brands disabled={!getFieldValue('branchCompany').id} />)
                                 }
                             </FormItem>
                         </Col>
                         <Col>
                             <FormItem label="商品" >
                                 {getFieldDecorator('commodity', { initialValue: {
-                                    productId: '', productName: '' }})(<Commodity api="queryProductForSelect" />)
+                                    productId: '', productName: '' }})(<Commodity zIndex={999} api="queryProductForSelect" disabled={!getFieldValue('branchCompany').id} />)
                                 }
                             </FormItem>
                         </Col>
@@ -152,6 +178,7 @@ class SearchForm extends PureComponent {
                                         className="input"
                                         style={{ paddingLeft: '10px', paddingRight: '10px' }}
                                         placeholder="商品条码"
+                                        disabled={!getFieldValue('branchCompany').id}
                                     />
                                 )}
                             </FormItem>
@@ -165,6 +192,7 @@ class SearchForm extends PureComponent {
                                 })(
                                     <Select
                                         size="large"
+                                        disabled={!getFieldValue('branchCompany').id}
                                     >
                                         {
                                             logisticsList.data.map(item => (
@@ -174,15 +202,6 @@ class SearchForm extends PureComponent {
                                             ))
                                         }
                                     </Select>
-                                )}
-                            </FormItem>
-                        </Col>
-                        <Col>
-                            <FormItem label="子公司" >
-                                {getFieldDecorator('branchCompany', {
-                                    initialValue: { id: '', name: '' }
-                                })(
-                                    <BranchCompany />
                                 )}
                             </FormItem>
                         </Col>

@@ -11,8 +11,9 @@ import Utils from '../../../../util/util';
 import { logisticsList, placeTypeListCreate, placeFieldMap } from '../constant';
 import Sites from '../../../../container/search/Sites';
 import { Supplier, SupplierAdderss } from '../../../../container/search';
-import { repeatData } from './RepeatTestData';
+// import { repeatData } from './RepeatTestData';
 import { PAGE_SIZE } from '../../../../constant';
+import SupplierInfor from '../SupplierInfoFilterByPlace/index';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -48,8 +49,8 @@ class CreateModal extends PureComponent {
             supplierAddr
         } = getFieldsValue();
         const params = {
-            logisticsModel,
-            placeType,
+            logisticsModel: parseInt(logisticsModel, 10),
+            placeType: parseInt(placeType, 10),
             placeId: place.record ? place.record[placeFieldMap[placeType]] : '',
             supplierId: supplier.spId,
             supplierCode: supplier.spNo,
@@ -159,7 +160,15 @@ class CreateModal extends PureComponent {
                             {getFieldDecorator('supplier', {
                                 initialValue: { spId: '', spNo: '', companyName: '' }
                             })(
-                                <Supplier zIndex={1000} />
+                                <SupplierInfor
+                                    zIndex={1000}
+                                    queryType="1"
+                                    disabled={!getFieldValue('place').record}
+                                    selectedPlace={{
+                                        placeType: getFieldValue('placeType'),
+                                        placeId: getFieldValue('place').record ? getFieldValue('place').record[placeFieldMap[getFieldValue('placeType')]] : ''
+                                    }}
+                                />
                             )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="供应商地点" >
@@ -168,10 +177,14 @@ class CreateModal extends PureComponent {
                                 providerName: '',
                                 spAdrid: ''
                             }})(
-                                <SupplierAdderss
+                                <SupplierInfor
                                     zIndex={999}
-                                    pId={getFieldValue('supplier').spId}
-                                    disabled={getFieldValue('supplier').spId === ''}
+                                    queryType="2"
+                                    disabled={!getFieldValue('place').record}
+                                    selectedPlace={{
+                                        placeType: getFieldValue('placeType'),
+                                        placeId: getFieldValue('place').record ? getFieldValue('place').record[placeFieldMap[getFieldValue('placeType')]] : ''
+                                    }}
                                 />)}
                         </FormItem>
                         <FormItem {...formItemLayout} label="物流模式" >

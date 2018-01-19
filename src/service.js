@@ -988,7 +988,7 @@ export const addDistinctProductSiteRelations = params => http.post('/prodPlace/a
 export const queryAreaGroupList = params => http.get('/areaGroup/queryAreaGroupList', params);
 export const queryProductSiteRelationById = (params) => http.get('/prodPlace/queryDetail', params);
 export const exportRepeatSiteRelation = (params) => http.post('/prodPlace/exportRepeatedProdAdd', params);
-export const filterSupplierByPlace = (params) => http.get('/prodPlace/prodSpAdrSearchBox', params);
+export const filterSupplyInfo = (params) => http.get('/prodPlace/prodSpAdrSearchBox', params);
 
 // 预定专区
 export const queryReserveAreaList = params => http.get('/wishBackAction/queryWishListsByParam', params);

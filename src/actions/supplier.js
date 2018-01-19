@@ -20,7 +20,7 @@ import {
     querySupplierPlaceRegion,
     auditSupplierEditInfo,
     updateProdPurchase,
-    filterSupplierByPlace
+    filterSupplyInfo
 } from '../service';
 
 const handleServer = {
@@ -238,16 +238,16 @@ export const removeDetailData = () => dispatch => (dispatch({
 }))
 
 /**
- * 通过地点筛选供应商action
+ * 通过地点筛选供应商&供应商地点action
  */
 const receiveFilterByPlace = (data) => ({
-    type: ActionType.FILTER_SUPPLIER_BY_PLACE,
+    type: ActionType.FILTER_SUPPLY_INFO_BY_PLACE,
     payload: data,
 })
 
 export const filterByPlace = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        filterSupplierByPlace(params)
+        filterSupplyInfo(params)
             .then(res => {
                 dispatch(
                     receiveFilterByPlace(res.data)
