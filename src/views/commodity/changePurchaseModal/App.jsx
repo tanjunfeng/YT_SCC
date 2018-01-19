@@ -209,6 +209,10 @@ class ProdModal extends Component {
                 message.error('采购价格必须大于等于0');
                 return;
             }
+            if (!values.newestPrice) {
+                message.error('最新采购价必须大于等于0');
+                return;
+            }
             const subData = Util.removeInvalid({
                 id: isEdit ? initValue.id : null,
                 // 供应商id
@@ -601,7 +605,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>主供应商：</span>
                                     <span className={`${prefixCls}-warehouse-input`}>
                                         {getFieldDecorator('supplierType', {
-                                            initialValue: prodPurchase.salesInsideNumber
+                                            initialValue: this.state.checked
                                         })(
                                             <Checkbox
                                                 checked={this.state.checked}
