@@ -26,28 +26,42 @@ const FormItem = Form.Item;
 class ModalCreate extends PureComponent {
     state = { confirmLoading: false }
 
-    componentWillReceiveProps(nextProps) {
-        if (!nextProps.visible && this.props.visible) {
-            // this.clearData();
-        }
-    }
-
     getFormData = (callback) => {
         const { validateFields } = this.props.form;
-        validateFields((err, values) => {
-            if (err) {
-                callback(false);
-            }
-            const { areaGroupName, branchCompany } = values;
-            callback(
-                true,
-                Utils.removeInvalid({
-                    areaGroupName,
-                    branchCompanyId: branchCompany.id,
-                    branchCompanyName: branchCompany.name
-                })
-            );
+        this.setState({
+            confirmLoading: true
         });
+        validateFields((err, values) => {
+            if (err || !this.validateBranchCompany(values)) {
+                this.setState({
+                    confirmLoading: false
+                });
+                callback(false);
+            } else {
+                const { areaGroupName, branchCompany } = values;
+                callback(
+                    true,
+                    Utils.removeInvalid({
+                        areaGroupName,
+                        branchCompanyId: branchCompany.id,
+                        branchCompanyName: branchCompany.name
+                    })
+                );
+            }
+        });
+    }
+
+    validateBranchCompany = (values) => {
+        const { setFields } = this.props.form;
+        if (values.branchCompany.id === '') {
+            setFields({
+                branchCompany: {
+                    errors: [new Error('未选取所属子公司')],
+                },
+            });
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -63,18 +77,16 @@ class ModalCreate extends PureComponent {
     }
 
     handleOk = () => {
-        this.setState({
-            confirmLoading: true
-        });
         // 调用创建接口
         this.getFormData((validated, data) => {
             if (validated) {
                 this.props.createAreaGroup(data).then(res => {
                     if (res.code === 200 && res.data === 1) {
+                        this.props.onOk();
+                        this.clearData();
                         this.setState({
                             confirmLoading: false
                         });
-                        this.props.onOk();
                     }
                 });
             }
