@@ -70,6 +70,8 @@ export default {
     CLEAR_AREA_GROUP: 'CLEAR_AREA_GROUP',
     // 新增区域组
     CREATE_AREA_GROUP: 'CREATE_AREA_GROUP',
+    // 区域组是否已存在
+    IS_AREA_GROUP_EXISTS: 'IS_AREA_GROUP_EXISTS',
     // 删除区域组
     DELETE_AREA_GROUP: 'DELETE_AREA_GROUP',
     // 跳转到修改销售价格页面

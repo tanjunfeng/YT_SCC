@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Modal, Input } from 'antd';
 import {
-    createAreaGroup
+    createAreaGroup, isAreaGroupExists
 } from '../../../actions/commodity';
 import Utils from '../../../util/util';
 import { BranchCompany } from '../../../container/search/index';
@@ -20,54 +20,53 @@ const FormItem = Form.Item;
 
 @connect(() => ({
 }), dispatch => bindActionCreators({
-    createAreaGroup
+    createAreaGroup, isAreaGroupExists
 }, dispatch))
 
 class ModalCreate extends PureComponent {
     state = { confirmLoading: false }
 
-    getFormData = (callback) => {
-        const { validateFields } = this.props.form;
-        this.setState({
-            confirmLoading: true
-        });
+    getFormData = new Promise((resolve, reject) => {
+        const { form } = this.props;
+        const { validateFields, setFields } = form;
         validateFields((err, values) => {
-            if (err || !this.validateBranchCompany(values)) {
-                this.setState({
-                    confirmLoading: false
-                });
-                callback(false);
-            } else {
-                const { areaGroupName, branchCompany } = values;
-                callback(
-                    true,
-                    Utils.removeInvalid({
-                        areaGroupName,
-                        branchCompanyId: branchCompany.id,
-                        branchCompanyName: branchCompany.name
-                    })
-                );
+            const { areaGroupName, branchCompany } = values;
+            if (err) reject();
+            if (!areaGroupName || Utils.trim(areaGroupName) === '') {
+                reject();
             }
-        });
-    }
-
-    /**
-     * 校验子公司是否未选取并报错
-     *
-     * @return {*bool} 校验失败返回 false
-     */
-    validateBranchCompany = values => {
-        const { setFields } = this.props.form;
-        if (values.branchCompany.id === '') {
-            setFields({
-                branchCompany: {
-                    errors: [new Error('未选取所属子公司')],
-                },
+            // 判断是否重复
+            this.props.isAreaGroupExists({
+                areaGroupName
+            }).then(response => {
+                if (response.code === 50011) {
+                    setFields({
+                        areaGroupName: {
+                            errors: [new Error('已存在此区域组名')],
+                        },
+                    });
+                    reject();
+                } else if (response.code === 200) {
+                    if (!branchCompany || branchCompany.id === '') {
+                        setFields({
+                            branchCompany: {
+                                errors: [new Error('未选取所属子公司')],
+                            },
+                        });
+                        reject();
+                    } else {
+                        resolve(Utils.removeInvalid({
+                            areaGroupName,
+                            branchCompanyId: branchCompany.id,
+                            branchCompanyName: branchCompany.name
+                        }));
+                    }
+                }
+            }).catch(() => {
+                reject();
             });
-            return false;
-        }
-        return true;
-    }
+        });
+    })
 
     /**
      * 清除表单数据
@@ -83,8 +82,8 @@ class ModalCreate extends PureComponent {
 
     handleOk = () => {
         // 调用创建接口
-        this.getFormData((validated, data) => {
-            if (validated) {
+        this.getFormData((result, data) => {
+            if (result) {
                 this.props.createAreaGroup(data).then(res => {
                     if (res.code === 200 && res.data === 1) {
                         this.props.onOk();
@@ -93,6 +92,10 @@ class ModalCreate extends PureComponent {
                             confirmLoading: false
                         });
                     }
+                });
+            } else {
+                this.setState({
+                    confirmLoading: false
                 });
             }
         });
@@ -141,6 +144,7 @@ ModalCreate.propTypes = {
     onOk: PropTypes.func,
     onCancel: PropTypes.func,
     createAreaGroup: PropTypes.func,
+    isAreaGroupExists: PropTypes.func,
     visible: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any)
 }

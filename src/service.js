@@ -17,20 +17,26 @@ const http = new Http();
  */
 http.response(
     res => {
-        if (res.data.code === 401) {
-            LoginLayout();
-            return Promise.reject(res.data);
-        } else if (res.data.code !== 200) {
-            const { code } = res.data;
-            const mess = res.data.message;
-            const errText = ERRORTEXT[code];
-            if (typeof mess === 'string' || errText) {
-                const err = errText || (mess || '未知错误')
-                message.error(err);
+        switch (res.data.code) {
+            case 200: // 请求成功
+                return Promise.resolve(res);
+            case 50011: // 已存在的字段
+                return Promise.reject(res.data.isExists);
+            case 401: // 未登录
+                LoginLayout();
+                return Promise.reject(res.data);
+            default: {
+                // 其他默认错误
+                const { code } = res.data;
+                const mess = res.data.message;
+                const errText = ERRORTEXT[code];
+                if (typeof mess === 'string' || errText) {
+                    const err = errText || (mess || '未知错误')
+                    message.error(err);
+                }
+                return Promise.reject(res.data);
             }
-            return Promise.reject(res.data);
         }
-        return Promise.resolve(res);
     },
     err => {
         if (err.response) {
@@ -357,6 +363,9 @@ export const getAreaGroup = (params) => http.get('/areaGroup/queryAreaGroupList'
 
 // 新增区域组
 export const createAreaGroup = (params) => http.post('/areaGroup/insertAreaGroup', params);
+
+// 区域组名是否存在
+export const isAreaGroupExists = (params) => http.post('/areaGroup/queryStoreGroupByName', params);
 
 // 删除区域组
 export const deleteAreaGroup = (params) => http.post('/areaGroup/deleteAreaGroup', params);

@@ -15,6 +15,7 @@ import {
     getCostPrice as getCostPriceService,
     getAreaGroup as getAreaGroupService,
     createAreaGroup as createAreaGroupService,
+    isAreaGroupExists as isAreaGroupExistsService,
     deleteAreaGroup as deleteAreaGroupService
 } from '../service';
 
@@ -171,6 +172,29 @@ export const createAreaGroup = params => dispatch => (
             .then(res => {
                 dispatch(
                     createAreaGroupActionType(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 区域组名是否存在
+ *
+ * @param {Object} params 传参
+ */
+const isAreaGroupExistsActionType = data => ({
+    type: ActionType.IS_AREA_GROUP_EXISTS,
+    payload: data
+});
+
+export const isAreaGroupExists = params => dispatch => (
+    new Promise((resolve, reject) => {
+        isAreaGroupExistsService(params)
+            .then(res => {
+                dispatch(
+                    isAreaGroupExistsActionType(res.data)
                 );
                 resolve(res);
             })
