@@ -26,22 +26,27 @@ const FormItem = Form.Item;
 class ModalCreate extends PureComponent {
     state = { confirmLoading: false }
 
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.visible && this.props.visible) {
+            // this.clearData();
+        }
+    }
+
     getFormData = (callback) => {
-        const { form } = this.props;
-        const { validateFields } = form;
+        const { validateFields } = this.props.form;
         validateFields((err, values) => {
             if (err) {
-                return null;
+                callback(false);
             }
             const { areaGroupName, branchCompany } = values;
             callback(
+                true,
                 Utils.removeInvalid({
                     areaGroupName,
                     branchCompanyId: branchCompany.id,
                     branchCompanyName: branchCompany.name
                 })
             );
-            return null;
         });
     }
 
@@ -53,17 +58,27 @@ class ModalCreate extends PureComponent {
         const { resetFields, setFieldsValue } = form;
         resetFields();
         setFieldsValue({
-            areaGroup: { reset: true },
             branchCompany: { reset: true }
         });
     }
 
     handleOk = () => {
-        // 调用创建接口
-        this.getFormData(formData => {
-            this.props.createAreaGroup(formData);
+        this.setState({
+            confirmLoading: true
         });
-        this.props.onOk();
+        // 调用创建接口
+        this.getFormData((validated, data) => {
+            if (validated) {
+                this.props.createAreaGroup(data).then(res => {
+                    if (res.code === 200 && res.data === 1) {
+                        this.setState({
+                            confirmLoading: false
+                        });
+                        this.props.onOk();
+                    }
+                });
+            }
+        });
     }
 
     handleCancel = () => {
@@ -86,13 +101,17 @@ class ModalCreate extends PureComponent {
                 <Form layout="inline">
                     <FormItem label="区域组名称">
                         {getFieldDecorator('areaGroupName', {
-                            rules: [{ required: true, message: '请输入区域组名称' }]
+                            initialValue: '',
+                            rules: [
+                                { required: true, message: '请输入区域组名称' },
+                                { max: 15, message: '活动名称最长15位' }
+                            ]
                         })(<Input size="default" />)}
                     </FormItem>
                     <FormItem label="所属子公司">
                         {getFieldDecorator('branchCompany', {
-                            rules: [{ required: true, message: '所属子公司不能为空' }],
-                            initialValue: { id: '', name: '' }
+                            initialValue: { id: '', name: '' },
+                            rules: [{ required: true, message: '所属子公司不能为空' }]
                         })(<BranchCompany />)}
                     </FormItem>
                 </Form>
