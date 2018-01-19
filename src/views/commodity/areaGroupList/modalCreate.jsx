@@ -51,7 +51,12 @@ class ModalCreate extends PureComponent {
         });
     }
 
-    validateBranchCompany = (values) => {
+    /**
+     * 校验子公司是否未选取并报错
+     *
+     * @return {*bool} 校验失败返回 false
+     */
+    validateBranchCompany = values => {
         const { setFields } = this.props.form;
         if (values.branchCompany.id === '') {
             setFields({
