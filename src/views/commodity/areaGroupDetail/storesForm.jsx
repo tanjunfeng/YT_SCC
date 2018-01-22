@@ -35,8 +35,8 @@ class StoresForm extends PureComponent {
     /**
      * table复选框
      */
-    onSelectChange(stores) {
-        this.props.onSelect(stores);
+    onSelectChange(selectedStores) {
+        this.props.onSelect(selectedStores);
     }
 
     handleReset() {
@@ -48,9 +48,12 @@ class StoresForm extends PureComponent {
     }
 
     render() {
-        const { title, data, stores, pageNum, pageSize, total } = this.props.value;
+        const {
+            title, data, selectedStores,
+            pageNum, pageSize, total, current
+        } = this.props.value;
         const rowSelection = {
-            selectedRowKeys: stores,
+            selectedRowKeys: selectedStores,
             onChange: this.onSelectChange
         };
         return (
@@ -67,7 +70,7 @@ class StoresForm extends PureComponent {
                     rowSelection={rowSelection}
                     bordered
                     pagination={{
-                        current: this.param.current,
+                        current,
                         pageNum,
                         pageSize,
                         total,

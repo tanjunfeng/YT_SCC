@@ -374,6 +374,9 @@ export const deleteAreaGroup = (params) => http.post('/areaGroup/deleteAreaGroup
 // 查询区域组门店信息
 export const queryAreaStores = (params) => http.get('/store/getStoreInfo', params);
 
+// 查询已分组的区域组门店信息
+export const getGroupedStores = (params) => http.get('/areaGroup/queryStoresFromGroup', params);
+
 // 修改采购价格
 export const updatePurchasePrice = (params) => http.post('/price/updatePurchasePrice', params);
 

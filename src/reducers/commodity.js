@@ -6,6 +6,7 @@
  */
 import Immutable from 'immutable';
 import ActionType from '../actions/ActionType';
+import { PAGE_SIZE } from '../constant';
 
 const initState = Immutable.fromJS({
 
@@ -93,7 +94,11 @@ const initState = Immutable.fromJS({
     costPrice: null,
 
     // 区域组
-    areaGroup: { pageNum: 1, pageSize: 20, total: 0, records: [] },
+    areaGroup: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] },
+
+    // 已分组的门店列表
+    groupedStores: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] },
+
     // 商品地点关系列表
     goodsSitesManageList: {},
     // 商品信息列表
@@ -217,6 +222,10 @@ export default function (state = initState, action) {
         case ActionType.RECEIVE_AREA_GROUP:
         case ActionType.CLEAR_AREA_GROUP:
             return state.set('areaGroup', action.payload);
+
+        case ActionType.GET_GROUPED_STORES:
+        case ActionType.CLEAR_GROUPED_STORES:
+            return state.set('groupedStores', action.payload);
 
         case ActionType.RECEIVE_SITES_MANAGE_LIST:
             return state.set('goodsSitesManageList', action.payload);

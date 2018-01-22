@@ -6,6 +6,7 @@
  */
 
 import ActionType from './ActionType';
+import { PAGE_SIZE } from '../constant';
 
 import {
     addStepSellPrice,
@@ -17,6 +18,7 @@ import {
     createAreaGroup as createAreaGroupService,
     isAreaGroupExists as isAreaGroupExistsService,
     deleteAreaGroup as deleteAreaGroupService,
+    getGroupedStores as getGroupedStoresService,
     queryProdPlacePage,
     prodPlaceBulkDelete,
     prodPlacePpdate as updateSiteManageById,
@@ -162,6 +164,44 @@ export const getAreaGroup = params => dispatch => (
             .catch(err => reject(err))
     })
 );
+
+/**
+ * 清空区域组列表
+ */
+export const clearAreaGroup = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_AREA_GROUP,
+    payload: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] }
+}));
+
+/**
+ * 查询已在区域组下的门店
+ *
+ * @param {Object} params 传参
+ */
+const getGroupedStoresActionType = data => ({
+    type: ActionType.GET_GROUPED_STORES,
+    payload: data
+});
+
+export const getGroupedStores = params => dispatch => (
+    new Promise((resolve, reject) => {
+        getGroupedStoresService({
+            existsAreaGroup: true,
+            ...params
+        }).then(res => {
+            dispatch(getGroupedStoresActionType(res.data));
+            resolve(res);
+        }).catch(err => reject(err))
+    })
+);
+
+/**
+ * 清空已分组门店列表
+ */
+export const clearGroupedStores = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_GROUPED_STORES,
+    payload: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] }
+}));
 
 const getSitesManageListAction = data => ({
     type: ActionType.RECEIVE_SITES_MANAGE_LIST,
@@ -330,11 +370,6 @@ export const createProductSiteRelations = params => dispatch => (
             .catch(err => reject(err))
     })
 );
-
-export const clearAreaGroup = () => dispatch => (dispatch({
-    type: ActionType.CLEAR_AREA_GROUP,
-    payload: { pageNum: 1, pageSize: 20, total: 0, records: [] }
-}));
 
 /**
  * 查询商品地点关系详情

@@ -12,34 +12,86 @@ import { withRouter } from 'react-router';
 import { Form, Row, Col, Button } from 'antd';
 
 import {
-    getAreaGroup, clearAreaGroup
+    getAreaGroup, clearAreaGroup, getGroupedStores, clearGroupedStores
 } from '../../../actions/commodity';
 import StoresForm from './storesForm';
+import { PAGE_SIZE } from '../../../constant/index';
 
 const FormItem = Form.Item;
 
 @connect(state => ({
-    areaGroup: state.toJS().commodity.areaGroup
+    areaGroup: state.toJS().commodity.areaGroup,
+    groupedStores: state.toJS().commodity.groupedStores,
 }), dispatch => bindActionCreators({
-    getAreaGroup, clearAreaGroup
+    getAreaGroup, clearAreaGroup, getGroupedStores, clearGroupedStores
 }, dispatch))
 
 class AreaGroupDetail extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            groupedStoreId: '',
+            selectedGroupedStores: [],  // 选中的已有门店索引列表
+            selectedFreeStores: [], // 已选中的未分组门店索引列表
+        };
+        this.areaGroupId = this.props.match.params.id; // 区域组编号
+        this.branchCompanyId = ''; // 分公司编号
+        // 已存在的门店列表查询条件
+        this.paramsGrouped = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        };
+        this.currentGrouped = 1;
+    }
+
     componentWillMount() {
         this.props.clearAreaGroup();
+        this.props.clearGroupedStores();
     }
 
     componentDidMount() {
         const { id } = this.props.match.params;
         this.props.getAreaGroup({
             areaGroupIdOrName: id
+        }).then(() => {
+
         });
     }
 
-    getExistsStoresValues = () => ({
-        title: '已有门店',
-        // data, stores, pageNum, pageSize, total
-    })
+    /**
+     * 已分组的门店列表
+     */
+    getGroupedStoresValues = () => {
+        const { records, pageNum, pageSize, total } = this.props.groupedStores;
+        const { selectedGroupedStores } = this.state;
+        return ({
+            title: '已有门店',
+            records,
+            selectedStores: selectedGroupedStores,
+            pageNum,
+            pageSize,
+            total,
+            current: this.currentGrouped
+        })
+    }
+
+    getFreeStoresValues = () => this.getGroupedStoresValues()
+
+    queryGrouped = () => {
+        this.props.getGroupedStores({
+            ...this.paramsGrouped,
+            areaGroupId: this.areaGroupId,
+            branchCompanyId: this.branchCompanyId,
+        });
+    }
+
+    handleGroupedFormSearch = params => {
+        this.paramsGrouped = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            ...params
+        };
+    }
 
     renderTitle = info => {
         const data = info || {
@@ -51,6 +103,7 @@ class AreaGroupDetail extends PureComponent {
         const {
             id, areaGroupName, branchCompanyId, branchCompanyName
         } = data;
+        this.branchCompanyId = branchCompanyId;
         return (
             <Form layout="inline">
                 <Row>
@@ -93,7 +146,8 @@ class AreaGroupDetail extends PureComponent {
                 {this.renderTitle(areaGroup.records[0])}
                 <div className="shuttle-form">
                     <StoresForm
-                        value={this.getExistsStoresValues()}
+                        value={this.getGroupedStoresValues()}
+                        onSearch={this.handleGroupedFormSearch}
                     />
                     {this.renderButtonGroup()}
                     <StoresForm
@@ -108,6 +162,9 @@ class AreaGroupDetail extends PureComponent {
 AreaGroupDetail.propTypes = {
     clearAreaGroup: PropTypes.func,
     getAreaGroup: PropTypes.func,
+    clearGroupedStores: PropTypes.func,
+    getGroupedStores: PropTypes.func,
+    groupedStores: PropTypes.objectOf(PropTypes.any),
     areaGroup: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any)
 }

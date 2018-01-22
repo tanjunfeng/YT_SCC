@@ -74,6 +74,10 @@ export default {
     IS_AREA_GROUP_EXISTS: 'IS_AREA_GROUP_EXISTS',
     // 删除区域组
     DELETE_AREA_GROUP: 'DELETE_AREA_GROUP',
+    // 获取已分组门店列表
+    GET_GROUPED_STORES: 'GET_GROUPED_STORES',
+    // 清除已分组门店列表
+    CLEAR_GROUPED_STORES: 'CLEAR_GROUPED_STORES',
     // 跳转到修改销售价格页面
     RECEIVE_TO_UPDATE_SELL_PRICE: 'RECEIVE_TO_UPDATE_SELL_PRICE',
     // 修改销售价格
