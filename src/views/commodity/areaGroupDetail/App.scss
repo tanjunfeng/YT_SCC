@@ -2,16 +2,13 @@
     .ant-form {
         padding: 20px 0 20px;
         margin: 10px 0;
-        .ant-form-item-label {
-            width: 110px;
-            .sc-form-item-label {
-                text-align: right;
-            }
-        }
         .ant-form-item {
             float: left;
             display: block;
             height: 42px;
+            &-label .sc-form-item-label {
+                text-align: right;
+            }
             .ywc-smind {
                 top: 4px;
             }

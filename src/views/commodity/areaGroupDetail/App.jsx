@@ -77,10 +77,10 @@ class AreaGroupDetail extends PureComponent {
                                 &lt;&lt; 添加查询结果
                             </Button>
                             <Button type="primary" size="default" onClick={this.handleAddSelected}>
-                                &lt; 添加所选门店
+                                &lt;&nbsp; 添加所选门店
                             </Button>
                             <Button type="danger" size="default" onClick={this.handleDelSelected}>
-                                删除所选门店 &gt;
+                                删除所选门店 &nbsp;&gt;
                             </Button>
                             <Button type="danger" size="default" onClick={this.handleDelAll}>
                                 删除查询结果 &gt;&gt;
