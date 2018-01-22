@@ -162,6 +162,7 @@ export const getAreaGroup = params => dispatch => (
             .catch(err => reject(err))
     })
 );
+
 const getSitesManageListAction = data => ({
     type: ActionType.RECEIVE_SITES_MANAGE_LIST,
     payload: data
@@ -303,7 +304,8 @@ export const deleteAreaGroup = params => dispatch => (
             .then(res => {
                 dispatch(
                     deleteAreaGroupActionType(res.data)
-                );                resolve(res);
+                );
+                resolve(res);
             })
             .catch(err => reject(err))
     })

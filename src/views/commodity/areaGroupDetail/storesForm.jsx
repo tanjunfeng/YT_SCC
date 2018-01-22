@@ -40,7 +40,7 @@ class StoresForm extends PureComponent {
     }
 
     handleReset() {
-
+        this.props.onReset();
     }
 
     handleSearch(param) {
@@ -83,6 +83,7 @@ class StoresForm extends PureComponent {
 StoresForm.propTypes = {
     onSearch: PropTypes.func,
     onSelect: PropTypes.func,
+    onReset: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any)
 }
 
