@@ -1,13 +1,17 @@
 const columns = [{
-    dataIndex: 'areaGroupCode',
+    dataIndex: 'id',
     title: '区域组编码'
 }, {
     dataIndex: 'areaGroupName',
     title: '区域组名称'
 }, {
-    dataIndex: 'branchCompany',
+    dataIndex: 'branchCompanyId',
     title: '所属子公司',
-    render: company => (company && company.name ? `${company.id} - ${company.name}` : '-')
+    render: (text, record) => (
+        record && record.branchCompanyId
+            ? `${text} - ${record.branchCompanyName}`
+            : '-'
+    )
 }, {
     dataIndex: 'operation',
     title: '操作'

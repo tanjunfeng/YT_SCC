@@ -171,7 +171,7 @@ export const createAreaGroup = params => dispatch => (
         createAreaGroupService(params)
             .then(res => {
                 dispatch(
-                    createAreaGroupActionType(res.data)
+                    createAreaGroupActionType(res.record)
                 );
                 resolve(res);
             })
@@ -227,5 +227,5 @@ export const deleteAreaGroup = params => dispatch => (
 
 export const clearAreaGroup = () => dispatch => (dispatch({
     type: ActionType.CLEAR_AREA_GROUP,
-    payload: { pageNum: 1, pageSize: 20, total: 0, data: [] }
+    payload: { pageNum: 1, pageSize: 20, total: 0, records: [] }
 }));

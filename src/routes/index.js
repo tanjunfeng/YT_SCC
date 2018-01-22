@@ -318,7 +318,7 @@ const routes = [
                             render={() => <Bundle load={AreaGroupList}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/areaGroupDetail/:id"
+                            path="/areaGroupList/detail/:id"
                             exact
                             render={() => (<Bundle load={AreaGroupDetail}>
                                 {App => <App />}
