@@ -73,6 +73,9 @@ import {
     queryAuditPurReList,
     queryProcessDefinitions,
     queryPoDetail,
+    queryReserveAreaList,
+    comleteOrCloseWishList,
+    queryReserAreaDetail,
     approveRefund,
     cancelRefund
 } from './procurement';
@@ -129,10 +132,7 @@ import { getPriceImportList, getCreateSell } from './priceImport'
 import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './whiteListConfiguration';
 
 // 根据库存实时拆单
-import { splitorderbyinventory, interfaceInventory } from './order';
-
-// 根据库存实时拆单
-import { comleteOrCloseWishList, queryReserveAreaList, queryReserAreaDetail } from './process';
+import { splitorderbyinventory, interfaceInventory, confirmation, queryVoucherData } from './order';
 
 // 退货订单列表
 
@@ -258,11 +258,8 @@ export {
     // 订单
     splitorderbyinventory,
     interfaceInventory,
-
-    // 预定专区
-    comleteOrCloseWishList,
-    queryReserveAreaList,
-    queryReserAreaDetail,
+    confirmation,
+    queryVoucherData,
     // 销售管理
     returnGoodsList,
     returnGoodsDetail,
@@ -274,6 +271,10 @@ export {
     returnGoodsListFormDataClear,
     // 采购退货列表
     fetchReturnMngList,
+    // 预定专区
+    queryReserveAreaList,
+    comleteOrCloseWishList,
+    queryReserAreaDetail,
     // 采购退货详情
     fetchReturnPoRcvDetail,
     // 查询退货流水号

@@ -23,6 +23,7 @@ import {
     confirmPayment,
     splitorderByInventoryService,
     interfaceInventoryService,
+    confirmation as confirmationService
 } from '../service';
 import ActionType from './ActionType';
 
@@ -159,15 +160,36 @@ const receiveShippingDetailInfo = (data) => ({
     type: ActionType.FETCH_SHIPPING_DETAIL,
     payload: data,
 })
-export const fetchShippingDetailInfo = (data) => dispatch => (
-    queryShippingDetailInfo(data)
-        .then(res => {
-            dispatch(
-                receiveShippingDetailInfo(res.data)
-            );
-        })
-        .catch(err => Promise.reject(err))
-)
+export const fetchShippingDetailInfo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryShippingDetailInfo(params)
+            .then(res => {
+                dispatch(
+                    receiveShippingDetailInfo(res)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+// 后端管理界面的销售订单确认收货接口
+const confirmationAciton = (data) => ({
+    type: ActionType.CONFIRMATION_ACTION,
+    payload: data,
+})
+export const confirmation = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        confirmationService(params)
+            .then(res => {
+                dispatch(
+                    confirmationAciton(res)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
 
 // 保存订单详情备注信息
 export const savaOrderDescription = (data) => (
