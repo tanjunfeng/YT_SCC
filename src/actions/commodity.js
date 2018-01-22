@@ -140,7 +140,6 @@ export const clearCostPrice = () => dispatch => (dispatch({
     payload: null
 }));
 
-<<<<<<< HEAD
 /**
  * 查询所有区域组
  *
@@ -158,7 +157,11 @@ export const getAreaGroup = params => dispatch => (
                 dispatch(
                     getAreaGroupActionType(res.data)
                 );
-=======
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
 const getSitesManageListAction = data => ({
     type: ActionType.RECEIVE_SITES_MANAGE_LIST,
     payload: data
@@ -193,7 +196,6 @@ export const removeSiteManagesByIds = params => dispatch => (
         prodPlaceBulkDelete(params)
             .then(res => {
                 dispatch(deleteSiteManagesByIdsAction(res.data));
->>>>>>> bb00b7b0fadf82958d67eb03f07241c8e0829813
                 resolve(res);
             })
             .catch(err => reject(err))
@@ -201,7 +203,6 @@ export const removeSiteManagesByIds = params => dispatch => (
 );
 
 /**
-<<<<<<< HEAD
  * 新增区域组
  *
  * @param {Object} params 传参
@@ -218,7 +219,12 @@ export const createAreaGroup = params => dispatch => (
                 dispatch(
                     createAreaGroupActionType(res.record)
                 );
-=======
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+/**
  * 编辑商品地点关系
  * @param {Object} data
  */
@@ -232,7 +238,6 @@ export const editSiteManageById = params => dispatch => (
         updateSiteManageById(params)
             .then(res => {
                 dispatch(editSiteManageByIdAction(res.data));
->>>>>>> bb00b7b0fadf82958d67eb03f07241c8e0829813
                 resolve(res);
             })
             .catch(err => reject(err))
@@ -240,7 +245,6 @@ export const editSiteManageById = params => dispatch => (
 );
 
 /**
-<<<<<<< HEAD
  * 区域组名是否存在
  *
  * @param {Object} params 传参
@@ -257,8 +261,14 @@ export const isAreaGroupExists = params => dispatch => (
                 dispatch(
                     isAreaGroupExistsActionType(res.data)
                 );
-=======
- *查询商品
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 查询商品
  * @param {Object} data
  */
 const queryProductsByConditionAction = data => ({
@@ -271,7 +281,6 @@ export const queryProductsByCondition = params => dispatch => (
         searchProductsByCondition(params)
             .then(res => {
                 dispatch(queryProductsByConditionAction(res.data));
->>>>>>> bb00b7b0fadf82958d67eb03f07241c8e0829813
                 resolve(res);
             })
             .catch(err => reject(err))
@@ -279,7 +288,6 @@ export const queryProductsByCondition = params => dispatch => (
 );
 
 /**
-<<<<<<< HEAD
  * 删除选中区域组
  *
  * @param {Object} params 传参
@@ -295,8 +303,13 @@ export const deleteAreaGroup = params => dispatch => (
             .then(res => {
                 dispatch(
                     deleteAreaGroupActionType(res.data)
-                );
-=======
+                );                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
  * 创建商品地点关系
  * @param {Object} data
  */
@@ -310,23 +323,20 @@ export const createProductSiteRelations = params => dispatch => (
         createRelations(params)
             .then(res => {
                 dispatch(createProductSiteRelationsAction(res.data));
->>>>>>> bb00b7b0fadf82958d67eb03f07241c8e0829813
                 resolve(res);
             })
             .catch(err => reject(err))
     })
 );
 
-<<<<<<< HEAD
 export const clearAreaGroup = () => dispatch => (dispatch({
     type: ActionType.CLEAR_AREA_GROUP,
     payload: { pageNum: 1, pageSize: 20, total: 0, records: [] }
 }));
-=======
+
 /**
  * 查询商品地点关系详情
  */
-
 const queryDetailByIdAction = data => ({
     type: ActionType.QUERY_PRODUCT_SITE_RELATION_BY_ID,
     payload: data
@@ -345,8 +355,7 @@ export const queryDetailById = params => dispatch => (
 
 /**
  * 保存添加商品地点关系参数
-*/
-
+ */
 export const receiveAddRelationParams = data => ({
     type: ActionType.RECEIVE_ADD_RELATION_PARAMS,
     payload: data
@@ -355,7 +364,6 @@ export const receiveAddRelationParams = data => ({
 /**
  * 导出添加商品地点关系重复数据
  */
-
 const exportRepeatSiteRelationAction = data => ({
     type: ActionType.EXPORT_REPEATED_PROD_ADD,
     payload: data
@@ -371,4 +379,3 @@ export const exportRepeatData = params => dispatch => (
             .catch(err => reject(err))
     })
 );
->>>>>>> bb00b7b0fadf82958d67eb03f07241c8e0829813
