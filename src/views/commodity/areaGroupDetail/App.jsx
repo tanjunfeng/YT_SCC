@@ -73,7 +73,7 @@ class AreaGroupDetail extends PureComponent {
                     <div className="col-half">1</div>
                     <div className="col-center">
                         <div className="button-group">
-                            <Button size="default" onClick={this.handleAddAll}>
+                            <Button type="primary" size="default" onClick={this.handleAddAll}>
                                 &lt;&lt; 添加查询结果
                             </Button>
                             <Button type="primary" size="default" onClick={this.handleAddSelected}>
