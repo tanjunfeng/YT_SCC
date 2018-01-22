@@ -22,8 +22,6 @@ class SearchForm extends PureComponent {
         isClearCategory: false
     }
     componentDidMount() {
-        // const { queryProducts } = this.props;
-        // queryProducts();
         this.handleSearch();
     }
 

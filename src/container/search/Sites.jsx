@@ -92,9 +92,10 @@ class Sites extends PureComponent {
     }
 
     query = (params) => {
-        const { siteTypeCode } = this.props;
+        const { siteTypeCode, branchCompanyId = '' } = this.props;
         const conditions = {
             param: params.value,
+            branchCompanyId,
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
         };

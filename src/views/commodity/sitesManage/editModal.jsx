@@ -9,8 +9,7 @@ import {
 } from 'antd';
 import Utils from '../../../util/util';
 import { logisticsList } from './constant';
-import { Supplier, SupplierAdderss } from '../../../container/search';
-// import SupplierInfor from '../SupplierInfoFilterByPlace/index';
+import SupplierInfo from './SupplierInfoFilterByPlace/index';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -26,6 +25,10 @@ const formItemLayout = {
 };
 
 class EditSiteRelationModal extends PureComponent {
+    state = {
+        initSupplier: {},
+
+    }
     componentWillReceiveProps(nextProps) {
         const { visible } = nextProps;
         /**
@@ -46,7 +49,11 @@ class EditSiteRelationModal extends PureComponent {
                     logisticsModel,
                     id: editId,
                     supplierId: supplier.spId,
-                    AdrSupId: supplierAddr.spAdrid
+                    supplierCode: supplier.spNo,
+                    supplierName: supplier.companyName,
+                    adrSupId: supplierAddr.spAdrId,
+                    adrSupCode: supplierAddr.providerNo,
+                    adrSupName: supplierAddr.providerName
                 })).then(res => {
                     if (res.success) {
                         message.success('编辑成功');
@@ -60,18 +67,18 @@ class EditSiteRelationModal extends PureComponent {
 
     render() {
         const { visible, closeModal, detail } = this.props;
-        const { getFieldDecorator, getFieldValue } = this.props.form;
+        const { getFieldDecorator } = this.props.form;
         const initSupplier = {
             spId: detail.supplierId,
             spNo: detail.supplierCode,
             companyName: detail.supplierName
         };
-
         const initSupplierAddr = {
             providerNo: detail.adrSupCode,
             providerName: detail.adrSupName,
-            spAdrid: detail.adrSupId
+            spAdrId: detail.adrSupId
         };
+
         return (
             <Modal
                 title="编辑地点关系"
@@ -85,19 +92,27 @@ class EditSiteRelationModal extends PureComponent {
                             {getFieldDecorator('supplier', {
                                 initialValue: initSupplier
                             })(
-                                <Supplier
-                                    zIndex={10001}
+                                <SupplierInfo
+                                    zIndex={1000}
                                     defaultRaw={initSupplier}
+                                    queryType="1"
+                                    selectedPlace={{
+                                        placeType: detail.placeType,
+                                        placeId: detail.placeId
+                                    }}
                                 />
                             )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="供应商地点" >
                             {getFieldDecorator('supplierAddr', {initialValue: initSupplierAddr})(
-                                <SupplierAdderss
-                                    zIndex={10000}
+                                <SupplierInfo
+                                    zIndex={999}
+                                    queryType="2"
                                     defaultRaw={initSupplierAddr}
-                                    pId={getFieldValue('supplier').spId}
-                                    disabled={getFieldValue('supplier').spId === ''}
+                                    selectedPlace={{
+                                        placeType: detail.placeType,
+                                        placeId: detail.placeId
+                                    }}
                                 />)}
                         </FormItem>
                         <FormItem {...formItemLayout} label="物流模式" >

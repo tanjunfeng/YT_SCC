@@ -12,15 +12,10 @@ import { exportRepeatSiteRelationExcel } from '../../../../service';
 
 class RepeatDataModal extends PureComponent {
     exportExcel = () => {
-        const { reqParams, exportExcel, closeModal } = this.props;
-        exportExcel(reqParams);
-        Utils.exportExcel(exportRepeatSiteRelationExcel, reqParams);
-        // exportExcel(reqParams).then(res => {
-        //     if (res.success) {
-        //         closeModal();
-        //     }
-        // });
+        const { reqParams } = this.props;
+        Utils.exportExcel(exportRepeatSiteRelationExcel, Utils.removeInvalid(reqParams));
     }
+
     render() {
         const { repeatRes, closeModal, visible } = this.props;
         const { resultObject} = repeatRes;
@@ -41,6 +36,7 @@ class RepeatDataModal extends PureComponent {
                         dataSource={resultObject}
                         columns={sitesManageColumns}
                     />
+                    <div id="downloadDiv" style={{display: 'none'}} />
                 </div>
             </Modal>
         );
@@ -51,7 +47,6 @@ RepeatDataModal.propTypes = {
     visible: PropTypes.bool,
     repeatRes: PropTypes.objectOf(PropTypes.any),
     closeModal: PropTypes.func,
-    exportExcel: PropTypes.func,
     reqParams: PropTypes.objectOf(PropTypes.any)
 };
 

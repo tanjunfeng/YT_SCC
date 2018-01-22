@@ -63,6 +63,11 @@
 .table-operations > button {
     margin-right: 8px;
   }
-  .table-operations > :first-child {
+
+.table-operations > :first-child {
     margin-left: 8px;
   }
+
+div.ant-table-placeholder {
+    z-index: 0;
+}

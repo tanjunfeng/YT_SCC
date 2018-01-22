@@ -51,7 +51,7 @@ class SearchForm extends PureComponent {
         } = getFieldsValue();
         this.baseQueryParams = {
             internationalCode: barCode,
-            brand: brand.record ? brand.record.id : '',
+            brand: brand.record ? brand.record.name : '',
             productId: commodity.record ? commodity.record.productId : '',
             productName: commodity.record ? commodity.record.productName : '',
             logisticsModel,
@@ -84,7 +84,9 @@ class SearchForm extends PureComponent {
     }
 
     handleAdd = () => {
-        this.props.history.push('/productSiteManage/create');
+        const { pathname } = this.props.location;
+        const win = window.open(`${pathname}/create`, '_blank');
+        win.focus();
     }
 
     /**
@@ -154,6 +156,7 @@ class SearchForm extends PureComponent {
                                     isClearCategory={isClearCategory}
                                     onChange={this.handleCategorySelect}
                                     resetFlag={this.resetClearCategoryFlag}
+                                    // ref={input => { this.category = input }}
                                 />
                             </FormItem>
                         </Col>
@@ -232,6 +235,7 @@ class SearchForm extends PureComponent {
                                     initialValue: initialPlaceValue
                                 })(
                                     <Sites
+                                        branchCompanyId={getFieldValue('branchCompany').id}
                                         disabled={getFieldValue('placeType') === '0'}
                                         siteTypeCode={getFieldValue('placeType')}
                                         placeFieldMap={placeFieldMap}
@@ -267,7 +271,7 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     queryList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any)
+    location: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(SearchForm));

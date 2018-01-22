@@ -11,7 +11,7 @@ import Utils from '../../../../util/util';
 import { logisticsList, placeTypeListCreate, placeFieldMap } from '../constant';
 import Sites from '../../../../container/search/Sites';
 import { PAGE_SIZE } from '../../../../constant';
-import SupplierInfor from '../SupplierInfoFilterByPlace/index';
+import SupplierInfo from '../SupplierInfoFilterByPlace/index';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -56,12 +56,6 @@ class CreateModal extends PureComponent {
             adrSupId: supplierAddr.spAdrId,
             adrSupCode: supplierAddr.providerNo,
             adrSupName: supplierAddr.providerName,
-            // supplierId: 'xprov003',
-            // supplierCode: '10002',
-            // supplierName: '成都诚心诚意商贸有限公司',
-            // adrSupId: 3,
-            // adrSupCode: '1000003',
-            // adrSupName: '四川-成都诚心诚意商贸有限公司',
             productIds: selectedIds,
             pageNum: 1,
             pageSize: PAGE_SIZE
@@ -164,7 +158,7 @@ class CreateModal extends PureComponent {
                             {getFieldDecorator('supplier', {
                                 initialValue: { spId: '', spNo: '', companyName: '' }
                             })(
-                                <SupplierInfor
+                                <SupplierInfo
                                     zIndex={1000}
                                     queryType="1"
                                     disabled={!getFieldValue('place').record}
@@ -181,7 +175,7 @@ class CreateModal extends PureComponent {
                                 providerName: '',
                                 spAdrid: ''
                             }})(
-                                <SupplierInfor
+                                <SupplierInfo
                                     zIndex={999}
                                     queryType="2"
                                     disabled={!getFieldValue('place').record}
