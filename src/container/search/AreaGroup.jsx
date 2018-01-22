@@ -30,7 +30,7 @@ class AreaGroup extends PureComponent {
     // gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/areaGroup/queryAreaGroupList
     query = params =>
         this.props.pubFetchValueList(Utils.removeInvalid({
-            groupCodeOrName: params.value,
+            areaGroupIdOrName: params.value,
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
         }), this.props.url)
@@ -57,6 +57,7 @@ class AreaGroup extends PureComponent {
                 rowKey="areaGroupCode"
                 ref={ref => { this.searchMind = ref }}
                 fetch={this.query}
+                disabled={this.props.disabled}
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
                 renderChoosedInputRaw={(row) => (
@@ -80,6 +81,7 @@ class AreaGroup extends PureComponent {
 }
 
 AreaGroup.propTypes = {
+    disabled: PropTypes.bool,
     url: PropTypes.string,
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,

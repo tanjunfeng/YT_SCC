@@ -5,22 +5,22 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Form, Row, Col } from 'antd';
+import { Button, Form, Row, Col, Input } from 'antd';
 import { withRouter } from 'react-router';
 
 import Util from '../../../util/util';
-import { AreaGroup, BranchCompany } from '../../../container/search';
+import { BranchCompany } from '../../../container/search';
 
 const FormItem = Form.Item;
 
 class SearchForm extends PureComponent {
     getFormData = () => {
         const {
-            areaGroup,
+            areaGroupIdOrName,
             branchCompany
         } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
-            areaGroup: areaGroup.areaGroupCode,
+            areaGroupIdOrName,
             branchCompany: branchCompany.id
         });
     }
@@ -35,7 +35,6 @@ class SearchForm extends PureComponent {
         this.props.onReset(); // 通知查询条件已清除
         // 点击重置时清除 seachMind 引用文本
         this.props.form.setFieldsValue({
-            areaGroup: { reset: true },
             branchCompany: { reset: true }
         });
     }
@@ -54,9 +53,9 @@ class SearchForm extends PureComponent {
                     </Col>
                     <Col>
                         <FormItem label="区域组">
-                            {getFieldDecorator('areaGroup', {
-                                initialValue: { areaGroupCode: '', areaGroupName: '' }
-                            })(<AreaGroup />)}
+                            {getFieldDecorator('areaGroupIdOrName', {
+                                initialValue: ''
+                            })(<Input size="default" />)}
                         </FormItem>
                     </Col>
                 </Row>
