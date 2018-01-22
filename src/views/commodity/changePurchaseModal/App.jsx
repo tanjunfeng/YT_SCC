@@ -282,7 +282,9 @@ class ProdModal extends Component {
 
     handleNewsPricChange = (newestPrice) => {
         if (newestPrice && this.getFormData().purchasePrice) {
-            const result = ((newestPrice - this.getFormData().purchasePrice) / this.getFormData().purchasePrice) * 100
+            const result = (
+                (newestPrice - this.getFormData().purchasePrice) / this.getFormData().purchasePrice
+            ) * 100
             return result.toFixed(2)
         }
     }
