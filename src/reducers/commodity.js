@@ -93,7 +93,15 @@ const initState = Immutable.fromJS({
     costPrice: null,
 
     // 区域组
-    areaGroup: { pageNum: 1, pageSize: 20, total: 0, records: [] }
+    areaGroup: { pageNum: 1, pageSize: 20, total: 0, records: [] },
+    // 商品地点关系列表
+    goodsSitesManageList: {},
+    // 商品信息列表
+    productsData: {},
+    // 单条商品地点关系记录详情
+    proSiteDetail: {},
+    // 添加商品地点关系是的参数(下载重复数据需要重用)
+    addRelationParams: {}
 });
 
 export default function (state = initState, action) {
@@ -205,11 +213,22 @@ export default function (state = initState, action) {
         case ActionType.GET_COST_PRICE:
         case ActionType.CLEAR_COST_PRICE:
             return state.set('costPrice', action.payload);
+<<<<<<< HEAD
 
         case ActionType.RECEIVE_AREA_GROUP:
         case ActionType.CLEAR_AREA_GROUP:
             return state.set('areaGroup', action.payload);
 
+=======
+        case ActionType.RECEIVE_SITES_MANAGE_LIST:
+            return state.set('goodsSitesManageList', action.payload);
+        case ActionType.QUERY_PRODUCTS_BY_CONDITION:
+            return state.set('productsData', action.payload);
+        case ActionType.QUERY_PRODUCT_SITE_RELATION_BY_ID:
+            return state.set('proSiteDetail', action.payload);
+        case ActionType.RECEIVE_ADD_RELATION_PARAMS:
+            return state.set('addRelationParams', action.payload);
+>>>>>>> bb00b7b0fadf82958d67eb03f07241c8e0829813
         default:
             return state;
     }

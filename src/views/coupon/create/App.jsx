@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
- * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-05 13:45:57
+ * @Last Modified by: zhoucl
+ * @Last Modified time: 2018-01-11 11:45:35
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';

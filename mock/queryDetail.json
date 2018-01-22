@@ -1,0 +1,25 @@
+{
+    "timestamp": 1515465789711,
+    "code": 200,
+    "message": {},
+    "exception": null,
+    "data": {
+        "firstLevelCategoryName": "日杂",
+        "secondLevelCategoryName": "家居百货",
+        "thirdLevelCategoryName": "厨房用具",
+        "fourthLevelCategoryName": "榨汁机",
+        "brandName": "泰禾",
+        "productId": "xprod347727",
+        "productName": "泰禾朵朵吸水杯TH-10188",
+        "branchCompanyId": "10000",
+        "branchCompanyName": "成都子公司",
+        "storeCode": "10000",
+        "storeName": "xxx雅堂",
+        "supplierCode": "10000",
+        "supplierName": "xxx供应商",
+        "AdrSupCode": "10000",
+        "AdrSupName": "xxx供应商地点",
+        "logisticsModel": "0"
+    },
+    "success": true
+}

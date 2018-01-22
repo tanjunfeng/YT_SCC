@@ -41,10 +41,11 @@ class BranchCompany extends PureComponent {
     }
 
     render() {
-        const { url, values = {} } = this.props;
+        const { url, values = {}, zIndex = 1000 } = this.props;
         const { id } = values;
         return (
             <SearchMind
+                style={{ zIndex }}
                 compKey="id"
                 rowKey="id"
                 ref={ref => { this.searchMind = ref }}
@@ -85,7 +86,8 @@ BranchCompany.propTypes = {
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
-    values: PropTypes.objectOf(PropTypes.any)
+    values: PropTypes.objectOf(PropTypes.any),
+    zIndex: PropTypes.number
 }
 
 BranchCompany.defaultProps = {

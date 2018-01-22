@@ -39,7 +39,6 @@ const defaultImg = require('../../../images/default/100x100.png');
 const FormItem = Form.Item;
 const Option = Select.Option;
 const confirm = Modal.confirm;
-const commodityML = 'commodity-management';
 
 @connect(
     state => ({
@@ -628,8 +627,7 @@ class ManagementList extends PureComponent {
                                     onChoosed={this.handleSupplyChoose}
                                     onClear={this.handleSupplyClear}
                                     renderChoosedInputRaw={(datas) => (
-                                        <div>{datas.providerNo} -
-                                                            {datas.providerName}</div>
+                                        <div>{datas.providerNo} - {datas.providerName}</div>
                                     )}
                                     rowKey="spAdrid"
                                     pageSize={5}

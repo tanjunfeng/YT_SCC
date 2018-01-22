@@ -28,6 +28,10 @@ import importPurchasePriceList from 'bundle-loader?lazy!../views/commodity/impor
 import PriceImport from 'bundle-loader?lazy!../views/commodity/priceImport';
 import AreaGroupList from 'bundle-loader?lazy!../views/commodity/areaGroupList';
 import AreaGroupDetail from 'bundle-loader?lazy!../views/commodity/areaGroupDetail';
+// 商品地点关系管理
+import SitesManage from 'bundle-loader?lazy!../views/commodity/sitesManage';
+// 商品地点关系创建
+import SiteRelationCreate from 'bundle-loader?lazy!../views/commodity/sitesManage/relationCreate';
 // 分类列表页商品排序管理
 import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
@@ -305,6 +309,27 @@ const routes = [
                     />
                 ),
             },
+            // 商品地点管理
+            {
+                path: '/productSiteManage',
+                parent: 'gylspgl',
+                key: 'productSiteManage',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/productSiteManage"
+                            exact
+                            render={() => <Bundle load={SitesManage}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/productSiteManage/create"
+                            render={() => (<Bundle load={SiteRelationCreate}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                    </Switch>
+                ),
+            },
             // 区域组管理
             {
                 path: '/areaGroupList',
@@ -322,7 +347,7 @@ const routes = [
                             exact
                             render={() => (<Bundle load={AreaGroupDetail}>
                                 {App => <App />}
-                            </Bundle>)}
+                                </Bundle>)}
                         />
                     </Switch>
                 ),
