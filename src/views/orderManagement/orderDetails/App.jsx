@@ -49,6 +49,11 @@ class OrderManagementDetails extends Component {
             }
         });
         this.props.fetchPaymentDetailInfo({ orderId: id });
+        this.shippingDetailInfo();
+    }
+
+    shippingDetailInfo = () => {
+        const { id } = this.props.match.params;
         this.props.fetchShippingDetailInfo({ id }).then((res) => {
             if (res.code === 200) {
                 this.setState({
@@ -98,9 +103,10 @@ class OrderManagementDetails extends Component {
             commerceItemDatas: commerceItemList
         }).then((res) => {
             if (res.code === 200 && res.success === true) {
-                message.success('删除成功')
+                message.success(res.message)
             } else {
-                message.warning(res.message)
+                this.shippingDetailInfo();
+                message.error(res.message)
             }
         })
     }
