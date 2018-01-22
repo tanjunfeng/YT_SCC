@@ -1006,7 +1006,6 @@ export const queryProdPriceChangeList = params => http.get('/prodSell/queryProdP
 export const prodPlaceBulkDelete = params => http.post('/prodPlace/bulkDelete', params);
 export const prodPlacePpdate = params => http.post('/prodPlace/update', params);
 export const addDistinctProductSiteRelations = params => http.post('/prodPlace/addDistinct', params);
-export const queryAreaGroupList = params => http.get('/areaGroup/queryAreaGroupList', params);
 export const queryProductSiteRelationById = (params) => http.get('/prodPlace/queryDetail', params);
 export const exportRepeatSiteRelation = (params) => http.post('/prodPlace/exportRepeatedProdAdd', params);
 export const filterSupplyInfo = (params) => http.get('/prodPlace/prodSpAdrSearchBox', params);
