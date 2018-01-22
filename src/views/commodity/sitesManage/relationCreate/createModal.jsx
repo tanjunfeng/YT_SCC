@@ -110,6 +110,22 @@ class CreateModal extends PureComponent {
             });
         }
     }
+
+    /**
+     * 地点改变时清空供应商(地址)
+     */
+
+    handleSiteChange = () => {
+        const { resetFields, setFieldsValue } = this.props.form;
+        resetFields(['supplier', 'supplierAddr']);
+        setFieldsValue({
+            supplier: { reset: true }
+        });
+        setFieldsValue({
+            supplierAddr: { reset: true }
+        });
+    }
+
     render() {
         const { visible, closeModal } = this.props;
         const { initialPlaceValue } = this.state;
@@ -147,6 +163,7 @@ class CreateModal extends PureComponent {
                                 initialValue: initialPlaceValue
                             })(
                                 <Sites
+                                    onChange={this.handleSiteChange}
                                     disabled={getFieldValue('placeType') === ''}
                                     siteTypeCode={getFieldValue('placeType')}
                                     placeFieldMap={placeFieldMap}

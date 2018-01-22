@@ -93,10 +93,23 @@ class SearchForm extends PureComponent {
      * 重置搜索条件
      */
     handleReset = () => {
+        const { setFieldsValue } = this.props.form;
         this.setState({
             isClearCategory: true
         });
         this.props.form.resetFields();
+        setFieldsValue({
+            branchCompany: { reset: true }
+        });
+        setFieldsValue({
+            brand: { reset: true }
+        });
+        setFieldsValue({
+            commodity: { reset: true }
+        });
+        setFieldsValue({
+            place: { reset: true }
+        });
     }
 
     handleCategorySelect = (category, selectedOptions) => {
@@ -156,7 +169,6 @@ class SearchForm extends PureComponent {
                                     isClearCategory={isClearCategory}
                                     onChange={this.handleCategorySelect}
                                     resetFlag={this.resetClearCategoryFlag}
-                                    // ref={input => { this.category = input }}
                                 />
                             </FormItem>
                         </Col>

@@ -19,6 +19,7 @@ class RepeatDataModal extends PureComponent {
     render() {
         const { repeatRes, closeModal, visible } = this.props;
         const { resultObject} = repeatRes;
+        const columns = !sitesManageColumns[sitesManageColumns.length - 1].key ? sitesManageColumns.slice(0, -1) : sitesManageColumns;
         return (
             <Modal
                 title="以下商品地点已经存在商品地点关系，不能再次生成，请确认"
@@ -34,7 +35,7 @@ class RepeatDataModal extends PureComponent {
                         rowKey={record => record.id}
                         rowSelection={this.rowSelection}
                         dataSource={resultObject}
-                        columns={sitesManageColumns}
+                        columns={columns}
                     />
                     <div id="downloadDiv" style={{display: 'none'}} />
                 </div>
