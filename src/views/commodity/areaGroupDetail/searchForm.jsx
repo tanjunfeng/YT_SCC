@@ -16,18 +16,21 @@ const FormItem = Form.Item;
 
 class SearchForm extends PureComponent {
     state = {
-        code: '',
+        // 省市区地址编码
+        provinceId: '',
+        cityId: '',
+        districtId: '',
         resetAddress: false // 是否重置地址
     }
 
     getFormData = () => {
-        const {
-            areaGroupIdOrName,
-            stores
-        } = this.props.form.getFieldsValue();
+        const { provinceId, cityId, districtId } = this.state;
+        const { stores } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
-            areaGroupIdOrName,
-            stores: stores.id
+            storeId: stores.id,
+            provinceId,
+            cityId,
+            districtId
         });
     }
 
@@ -37,21 +40,32 @@ class SearchForm extends PureComponent {
     }
 
     handleReset = () => {
-        this.props.onReset(); // 通知查询条件已清除
         // 点击重置时清除 seachMind 引用文本
         this.props.form.setFieldsValue({
             stores: { reset: true }
         });
-        this.setState({ code: '', resetAddress: true });
+        this.setState({
+            provinceId: '',
+            cityId: '',
+            districtId: '',
+            resetAddress: true
+        });
+        this.props.onReset(); // 通知查询条件已清除
     }
 
     handleAddressChange = (address, options) => {
-        console.log(options);
         if (address === null) {
-            this.setState({ code: '', resetAddress: false });
+            this.setState({
+                provinceId: '',
+                cityId: '',
+                districtId: '',
+                resetAddress: false
+            });
         } else {
             this.setState({
-                code: address.code
+                provinceId: options[0] || '',
+                cityId: options[1] || '',
+                districtId: options[2] || ''
             });
         }
     }

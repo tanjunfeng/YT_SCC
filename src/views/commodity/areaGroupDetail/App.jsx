@@ -36,6 +36,11 @@ class AreaGroupDetail extends PureComponent {
         });
     }
 
+    getExistsStoresValues = () => ({
+        title: '已有门店',
+        // data, stores, pageNum, pageSize, total
+    })
+
     renderTitle = info => {
         const data = info || {
             id: '',
@@ -87,9 +92,13 @@ class AreaGroupDetail extends PureComponent {
             <div className="area-group-detail">
                 {this.renderTitle(areaGroup.records[0])}
                 <div className="shuttle-form">
-                    <StoresForm />
+                    <StoresForm
+                        value={this.getExistsStoresValues()}
+                    />
                     {this.renderButtonGroup()}
-                    <StoresForm />
+                    <StoresForm
+                        value={this.getFreeStoresValues()}
+                    />
                 </div>
             </div>
         );
