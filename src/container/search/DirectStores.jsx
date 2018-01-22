@@ -66,7 +66,7 @@ class DirectStores extends PureComponent {
                     {
                         title: '门店编号',
                         dataIndex: 'storeId',
-                        width: 98
+                        width: 68
                     }, {
                         title: '门店名称',
                         dataIndex: 'storeName'
