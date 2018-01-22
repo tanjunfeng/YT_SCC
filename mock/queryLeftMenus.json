@@ -32,6 +32,12 @@
                     "authorityCode": "priceImport",
                     "displayName": "售价导入",
                     "menuList": []
+                },
+                {
+                    "authorityId": 236,
+                    "authorityCode": "productSiteManage",
+                    "displayName": "商品地点管理",
+                    "menuList": []
                 }
             ]
         },

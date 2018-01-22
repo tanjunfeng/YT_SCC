@@ -1,5 +1,5 @@
 /**
- * 查询商品
+ * 查询品牌
  *
  * @author zhouchanglong
  */
@@ -16,11 +16,11 @@ import './SearchMind.scss';
     pubFetchValueList
 }, dispatch))
 
-class Commodity extends PureComponent {
+class Brands extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        const { productId } = nextProps.value;
-        if (this.props.value.productId !== '' && productId === '') {
-            this.productSearchMind.reset();
+        const { id } = nextProps.value;
+        if (this.props.value.id !== '' && id === '') {
+            this.brandSearchMind.reset();
         }
         if (nextProps.value.reset && !this.props.value.reset) {
             this.handleClear();
@@ -31,8 +31,8 @@ class Commodity extends PureComponent {
      * 清除
      */
     handleClear = () => {
-        this.productSearchMind.reset();
-        this.props.onChange({ productId: '', productName: '' });
+        this.brandSearchMind.reset();
+        this.props.onChange({ id: '', name: '' });
     }
 
     /**
@@ -42,41 +42,41 @@ class Commodity extends PureComponent {
         this.props.onChange(val);
     }
 
-    query = (params) => {
+    query = (param) => {
         const conditions = {
-            teamText: params.value,
-            pageNum: params.pagination.current || 1,
-            pageSize: params.pagination.pageSize
+            name: param.value,
+            pageSize: param.pagination.pageSize,
+            pageNum: param.pagination.current || 1
         };
-        return this.props.pubFetchValueList(Utils.removeInvalid(conditions), this.props.api);
+        return this.props.pubFetchValueList(Utils.removeInvalid(conditions), 'queryBrandsByPages');
     }
 
     render() {
-        const { zIndex } = this.props.zIndex;
+        const { zIndex = 1000 } = this.props;
         return (
             <SearchMind
                 style={{ zIndex }}
-                compKey="productId"
-                ref={ref => { this.productSearchMind = ref }}
-                fetch={this.query}
+                compKey="id"
+                ref={ref => { this.brandSearchMind = ref }}
                 disabled={this.props.disabled}
+                fetch={ this.query }
                 defaultValue={this.props.initialValue}
-                rowKey="productId"
+                rowKey="id"
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
-                renderChoosedInputRaw={(row) => (
-                    <div>{row.productName}</div>
+                renderChoosedInputRaw={(brandData) => (
+                    <div>{brandData.id}-{brandData.name}</div>
                 )}
-                pageSize={6}
+                pageSize={5}
                 columns={[
                     {
-                        title: '商品编码',
-                        dataIndex: 'productCode',
-                        width: 70,
+                        title: 'id',
+                        dataIndex: 'id',
+                        width: 98
                     }, {
-                        title: '商品名字',
-                        dataIndex: 'productName',
-                        width: 140,
+                        title: '名称',
+                        dataIndex: 'name',
+                        width: 140
                     }
                 ]}
             />
@@ -84,19 +84,13 @@ class Commodity extends PureComponent {
     }
 }
 
-Commodity.propTypes = {
+Brands.propTypes = {
     disabled: PropTypes.bool,
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
     initialValue: PropTypes.string,
-    api: PropTypes.string,
     zIndex: PropTypes.number
 };
 
-Commodity.defaultProps = {
-    api: 'queryProductForSelect',
-    zIndex: 1000
-};
-
-export default Commodity;
+export default Brands;

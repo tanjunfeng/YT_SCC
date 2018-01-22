@@ -19,6 +19,7 @@ import EditableCell from './editableCell';
 @connect(
     state => ({
         shippingDetailData: state.toJS().order.shippingDetailData,
+        flowChartData: state.toJS().process.flowChartData
     }),
     dispatch => bindActionCreators({
     }, dispatch)
@@ -103,6 +104,14 @@ class DistributionInformation extends PureComponent {
         columns[9].render = this.calculationDiff;
     }
 
+    closeCanvas = () => {
+        this.setState({flowChartData: null})
+    }
+
+    showCanvas = () => {
+        const data = this.props.shippingDetailData.singedCertImg;
+        this.setState({flowChartData: data})
+    }
     render() {
         const { shippingDetailData, value } = this.props;
         const { data } = shippingDetailData;
@@ -140,9 +149,7 @@ class DistributionInformation extends PureComponent {
                                     {
                                         shipOnDate
                                         && <span>
-                                            {moment(
-                                                parseInt(shipOnDate, 10)
-                                            ).format(DATE_FORMAT)}
+                                            {Utils.getDate(shipOnDate)}
                                         </span>
                                     }
                                 </Col>

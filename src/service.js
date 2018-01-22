@@ -122,6 +122,8 @@ export const sellPriceChangeExcelTemplate = '/prodSell/sellPriceChangeExcelTempl
 export const wishListsForExcel = '/wishBackAction/queryWishListsForExcel';
 // 导出心愿单详情
 export const wishDetailsForExcel = '/wishBackAction/queryWishDetailsForExcel';
+// 导出商品地点关系重复数据
+export const exportRepeatSiteRelationExcel = '/prodPlace/exportRepeatedProdAdd';
 
 /**
  * 登录 Api
@@ -749,6 +751,9 @@ export const prodBatchPutAway = (params) => http.post('prodSell/prodBatchPutaway
 export const prodBatchUpdate = (params) => http.post('prodSell/prodBatchUpdate', params);
 // 批量全国上下架
 export const availablProducts = (params) => http.post('product/availablProducts', params);
+// 商品地点管理模块
+export const queryProdPlacePage = params => http.post('/prodPlace/queryPage', params);
+
 
 // 商品管理，导入采购进价，查询采购价格变更申请列表
 export const queryPurchasePriceInfo = (params) => http.get('/prodPurchase/purchasePriceChangeList', params);
@@ -978,6 +983,18 @@ export const processImageByBusi = params => http.get('/bpm/processImageByBusi', 
 export const queryCommentHisByBusi = params => http.get('/bpm/queryCommentHisByBusi', params);
 // 价格变更记录模块
 export const queryProdPriceChangeList = params => http.get('/prodSell/queryProdPriceChangeList', params);
+/**
+ *商品地点管理
+*/
+// 批量删除
+export const prodPlaceBulkDelete = params => http.post('/prodPlace/bulkDelete', params);
+export const prodPlacePpdate = params => http.post('/prodPlace/update', params);
+export const addDistinctProductSiteRelations = params => http.post('/prodPlace/addDistinct', params);
+export const queryAreaGroupList = params => http.get('/areaGroup/queryAreaGroupList', params);
+export const queryProductSiteRelationById = (params) => http.get('/prodPlace/queryDetail', params);
+export const exportRepeatSiteRelation = (params) => http.post('/prodPlace/exportRepeatedProdAdd', params);
+export const filterSupplyInfo = (params) => http.get('/prodPlace/prodSpAdrSearchBox', params);
+
 // 预定专区
 export const queryReserveAreaList = params => http.get('/wishBackAction/queryWishListsByParam', params);
 // 预定专区完成或关闭心愿单

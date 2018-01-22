@@ -44,7 +44,7 @@ class Supplier extends PureComponent {
     render() {
         return (
             <SearchMind
-                style={{ zIndex: 10000 }}
+                style={{ zIndex: this.props.zIndex }}
                 compKey="spId"
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
@@ -54,7 +54,9 @@ class Supplier extends PureComponent {
                         pageNum: params.pagination.current || 1,
                         pageSize: params.pagination.pageSize
                     }, 'querySuppliersList')
+                    // filterSupplierByPlace 通过地点过滤
                 }
+                defaultRaw={this.props.defaultRaw}
                 disabled={this.props.disabled}
                 defaultValue={this.props.initialValue}
                 addonBefore=""
@@ -86,6 +88,11 @@ Supplier.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
     initialValue: PropTypes.string
-}
+};
+
+Supplier.defaultProps = {
+    zIndex: 1000,
+    defaultRaw: null
+};
 
 export default Supplier;
