@@ -1,10 +1,10 @@
 {
-    "timestamp": 1508728686395,
+    "timestamp": 1516347981441,
     "code": 200,
     "message": "请求成功",
     "exception": null,
     "data": {
-        "id": "9803707",
+        "id": "303916",
         "shippingNo": null,
         "shippingMethod": "YTS",
         "shipOnDate": null,
@@ -13,30 +13,47 @@
         "deliveryerPhone": null,
         "shippingProductDtos": [
             {
-                "id": "9803349",
-                "skuId": "1001586",
-                "productName": "南方黑芝麻糊480!@#*",
-                "quantity": 12,
+                "id": "1003597",
+                "skuId": "1001298",
+                "productName": "南方黑芝麻糊480%",
+                "quantity": 1,
                 "shippedQuantity": 0,
-                "unit": "袋",
+                "unit": "袋1",
                 "salePrice": 100.0,
                 "completedQuantity": 0,
                 "completedMulQuantity": 0,
                 "completedMulAmount": 0.0
             },
             {
-                "id": "9803350",
-                "skuId": "1001587",
-                "productName": "北方红芝麻糊480ml/袋",
-                "quantity": 12,
+                "id": "1003598",
+                "skuId": "1001307",
+                "productName": "南方无糖黑芝麻糊602%",
+                "quantity": 3,
                 "shippedQuantity": 0,
-                "unit": "袋",
-                "salePrice": 100.0,
+                "unit": "袋1",
+                "salePrice": 20.0,
+                "completedQuantity": 0,
+                "completedMulQuantity": 0,
+                "completedMulAmount": 0.0
+            },
+            {
+                "id": "1003599",
+                "skuId": "1000381",
+                "productName": "桃李葡萄干蛋糕卷",
+                "quantity": 10,
+                "shippedQuantity": 0,
+                "unit": "个",
+                "salePrice": 200.0,
                 "completedQuantity": 0,
                 "completedMulQuantity": 0,
                 "completedMulAmount": 0.0
             }
-        ]
+        ],
+        "shippingState": "QX",
+        "shippingStateDesc": "已签收待确认",
+        "distributionName": null,
+        "shippingModes": "unified",
+        "singedCertImg": "http://sit.image.com/group1/M00/01/36/rB4KPVmTuyeAeRLOAA1rIuRd3Es710.png"
     },
     "success": true
 }

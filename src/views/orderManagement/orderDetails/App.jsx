@@ -9,7 +9,7 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Tabs } from 'antd';
+import { Form, Tabs, message } from 'antd';
 import OrderInformation from './orderInfo';
 import PayInformation from './payInfo';
 import DistributionInformation from './distributionInfo';
@@ -96,6 +96,12 @@ class OrderManagementDetails extends Component {
         this.props.confirmation({
             orderId: this.orderId,
             commerceItemDatas: commerceItemList
+        }).then((res) => {
+            if (res.code === 200 && res.success === true) {
+                message.success('删除成功')
+            } else {
+                message.warning(res.message)
+            }
         })
     }
 

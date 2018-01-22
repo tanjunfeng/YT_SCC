@@ -118,7 +118,7 @@ class DistributionInformation extends PureComponent {
             distributionName,
             singedCertImg
         } = data;
-        if (shippingStateDesc !== '已签收待确认') {
+        if (shippingStateDesc === '已签收待确认') {
             this.renderColumns();
         }
         return (
@@ -181,7 +181,7 @@ class DistributionInformation extends PureComponent {
                                     <span>{shippingStateDesc}</span>
                                 </Col>
                                 {
-                                    !singedCertImg ?
+                                    singedCertImg ?
                                         <Col className="gutter-row" span={7}>
                                             <span className="details-info-lable">签收凭证:</span>
                                             <span>供应商已签收凭证</span>
@@ -194,7 +194,7 @@ class DistributionInformation extends PureComponent {
                                 }
                                 <Col className="gutter-row" span={10}>
                                     <span className="details-info-lable">配送方式:</span>
-                                    <span>{shippingModes}</span>
+                                    <span>{shippingModes === 'unified' ? '统配' : '直送'}</span>
                                 </Col>
                             </Row>
                             <Row>
@@ -223,7 +223,7 @@ class DistributionInformation extends PureComponent {
                     </div>
                 </div>
                 {
-                    shippingStateDesc !== '已签收待确认' &&
+                    shippingStateDesc === '已签收待确认' &&
                     <Row type="flex" justify="end">
                         <Col>
                             <Button type="primary" size="default" onClick={this.handleReceipt}>
@@ -233,6 +233,7 @@ class DistributionInformation extends PureComponent {
                     </Row>
                 }
                 {
+                    this.state.visible &&
                     <Modal
                         visible={this.state.visible}
                         footer={null}
@@ -243,7 +244,7 @@ class DistributionInformation extends PureComponent {
                         onOk={this.handleOk}
                         onCancel={this.handleCancel}
                     >
-                        <img src="http://sit.image.com/group1/M00/01/36/rB4KPVmTuyeAeRLOAA1rIuRd3Es710.png" alt="凭证图片" />
+                        <img src={singedCertImg} alt="凭证图片" />
                     </Modal>
                 }
             </div>
