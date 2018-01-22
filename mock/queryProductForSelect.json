@@ -10,12 +10,12 @@
             {
                 "productId": "60000335741",
                 "productCode": "1000064",
-                "saleName": "12"
+                "productName": "12"
             },
             {
                 "productId": "60000000",
                 "productCode": "1000000",
-                "saleName": "11"
+                "productName": "11"
             }
         ],
         "imgDomain": null

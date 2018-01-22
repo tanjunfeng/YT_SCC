@@ -41,6 +41,14 @@ class Category extends PureComponent {
         });
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { isClearCategory } = nextProps;
+        if (isClearCategory && !this.props.isClearCategory) {
+            this.ref.setValue([]);
+            this.props.resetFlag();
+        }
+    }
+
     componentWillUnmount() {
         this.props.clearCategoriesList();
     }
@@ -53,7 +61,6 @@ class Category extends PureComponent {
      * http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/promotion/insertPromotion
      */
     handleChange = (value, selectedOptions) => {
-        console.log(value, selectedOptions);
         if (selectedOptions.length === 0) {
             this.props.onChange(null, selectedOptions);
         } else {
@@ -130,6 +137,7 @@ class Category extends PureComponent {
                 loadData={this.handleLoadData}
                 onChange={this.handleChange}
                 placeholder={'请选择'}
+                ref={ref => this.ref = ref}
                 changeOnSelect
             />
         );
@@ -144,7 +152,8 @@ Category.propTypes = {
 }
 
 Category.defaultProps = {
-    disabled: false
+    disabled: false,
+    isClearCategory: false
 }
 
 export default withRouter(Form.create()(Category));
