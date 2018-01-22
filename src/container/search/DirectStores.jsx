@@ -41,12 +41,11 @@ class DirectStores extends PureComponent {
     }
 
     query = (params) => (
-        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/getAllStores
         this.props.pubFetchValueList(Utils.removeInvalid({
             pageNo: params.pagination.current || 1,
             pageSize: params.pagination.pageSize,
             storeId: params.value
-        }), 'queryDirectStores')
+        }), this.props.api)
     )
 
     render() {
@@ -80,7 +79,13 @@ class DirectStores extends PureComponent {
 DirectStores.propTypes = {
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
+    api: PropTypes.string,
     value: PropTypes.objectOf(PropTypes.any)
+}
+
+DirectStores.defaultProps = {
+    // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/getAllStores
+    api: 'queryDirectStores'
 }
 
 export default DirectStores;

@@ -30,6 +30,7 @@ import {
     queryProductForSelect,
     queryPurchaseOrderProducts,
     queryDirectStores,
+    queryAreaStores,
     queryPurchaseOrderBrands,
     queryAreaGroupList,
     findCompanyBaseInfo as findCompaniesService,
@@ -82,6 +83,8 @@ const pubValueList = {
     queryPurchaseOrderProducts,
     // 查询直营店
     queryDirectStores,
+    // 根据区域组查询门店
+    queryAreaStores,
     // 品牌值清单
     queryPurchaseOrderBrands,
     // 查询区域组列表

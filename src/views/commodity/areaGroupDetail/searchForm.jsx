@@ -75,6 +75,8 @@ class SearchForm extends PureComponent {
                             {getFieldDecorator('stores', {
                                 initialValue: { storeId: '', storeName: '' }
                             })(<DirectStores
+                                // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/store/getStoreInfo
+                                api="queryAreaStores"
                                 onChange={this.handleDirectStoresChange}
                             />)}
                         </FormItem>
