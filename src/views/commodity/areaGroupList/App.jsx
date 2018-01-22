@@ -64,7 +64,7 @@ class AreaGroupList extends PureComponent {
     /**
      * table复选框
      */
-    onSelectChange = (areas) => {
+    onSelectChange = areas => {
         this.setState({ areas });
     }
 
@@ -88,7 +88,7 @@ class AreaGroupList extends PureComponent {
 
     param = {}
 
-    handleSearch = (param) => {
+    handleSearch = param => {
         this.handleReset();
         Object.assign(this.param, {
             current: 1,
@@ -112,10 +112,10 @@ class AreaGroupList extends PureComponent {
     }
 
     renderOperations = (text, record) => {
-        const { areaGroupCode } = record;
+        const { id } = record;
         const { pathname } = this.props.location;
         return (
-            <Link target="_blank" to={`${pathname}/detail/${areaGroupCode}`}>查看详情</Link>
+            <Link target="_blank" to={`${pathname}/detail/${id}`}>查看详情</Link>
         );
     }
 
