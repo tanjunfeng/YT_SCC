@@ -16,6 +16,11 @@ class StoresForm extends PureComponent {
     constructor(props) {
         super(props);
         this.handleSearch = this.handleSearch.bind(this);
+        this.handleReset = this.handleReset.bind(this);
+    }
+
+    handleReset() {
+
     }
 
     handleSearch(param) {
@@ -27,6 +32,7 @@ class StoresForm extends PureComponent {
             <div className="col-half">
                 <SearchForm
                     onSearch={this.handleSearch}
+                    onReset={this.handleReset}
                 />
                 {/* <Table
                     dataSource={records}

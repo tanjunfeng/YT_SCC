@@ -15,14 +15,19 @@ import { Address } from '../../../container/cascader';
 const FormItem = Form.Item;
 
 class SearchForm extends PureComponent {
+    state = {
+        code: '',
+        resetAddress: false // 是否重置地址
+    }
+
     getFormData = () => {
         const {
             areaGroupIdOrName,
-            branchCompany
+            stores
         } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
             areaGroupIdOrName,
-            branchCompany: branchCompany.id
+            stores: stores.id
         });
     }
 
@@ -32,26 +37,35 @@ class SearchForm extends PureComponent {
     }
 
     handleReset = () => {
-        this.props.form.resetFields(); // 清除当前查询条件
         this.props.onReset(); // 通知查询条件已清除
         // 点击重置时清除 seachMind 引用文本
         this.props.form.setFieldsValue({
-            branchCompany: { reset: true }
+            stores: { reset: true }
         });
+        this.setState({ code: '', resetAddress: true });
     }
 
-    handleAddressChange = address => {
-        console.log(address);
+    handleAddressChange = (address, options) => {
+        console.log(options);
+        if (address === null) {
+            this.setState({ code: '', resetAddress: false });
+        } else {
+            this.setState({
+                code: address.code
+            });
+        }
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { resetAddress } = this.state;
         return (
             <Form layout="inline" className="stores-search-form">
                 <Row>
                     <Col>
                         <FormItem label="所属城市">
                             <Address
+                                reset={resetAddress}
                                 onChange={this.handleAddressChange}
                             />
                         </FormItem>

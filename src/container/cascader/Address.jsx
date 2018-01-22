@@ -20,12 +20,34 @@ import { getRegionByCode } from '../../actions/pub';
 }, dispatch))
 
 class Address extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.getInitialData = this.getInitialData.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleLoadData = this.handleLoadData.bind(this);
+        this.appendObject = this.appendObject.bind(this);
+        this.appendOption = this.appendOption.bind(this);
+    }
+
     state = {
+        value: '',
         options: [],
         isLoading: false
     };
 
     componentDidMount() {
+        this.getInitialData();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.reset && !this.props.reset) {
+            this.setState({ value: '' }, () => {
+                this.getInitialData();
+            });
+        }
+    }
+
+    getInitialData() {
         this.props.getRegionByCode({ code: 100000 }).then(res => {
             this.setState({
                 options: res.data.map(treeNode => ({
@@ -46,7 +68,8 @@ class Address extends PureComponent {
      * @param {*选中的对象} selectedOptions
      * http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/promotion/insertPromotion
      */
-    handleChange = (value, selectedOptions) => {
+    handleChange(value, selectedOptions) {
+        this.setState({ value });
         if (selectedOptions.length === 0) {
             this.props.onChange(null, selectedOptions);
         } else {
@@ -60,7 +83,7 @@ class Address extends PureComponent {
         }
     }
 
-    handleLoadData = (selectedOptions) => {
+    handleLoadData(selectedOptions) {
         const target = selectedOptions[selectedOptions.length - 1];
         this.setState({
             isLoading: target.loading = true
@@ -80,7 +103,7 @@ class Address extends PureComponent {
      * @param {*请求数据} res
      * @param {*子节点地址} target
      */
-    appendObject = res => {
+    appendObject(res) {
         const arr = [];
         res.data.forEach(treeNode => {
             arr.push({
@@ -100,7 +123,7 @@ class Address extends PureComponent {
      * @param {*子节点地址} children
      * @param {*父节点编号} parentId
      */
-    appendOption = (children, parentId) => {
+    appendOption(children, parentId) {
         const dist = this.state.options;
         dist.forEach((obj, index) => {
             if (obj.value === parentId) {
@@ -115,6 +138,7 @@ class Address extends PureComponent {
     }
 
     render() {
+        const { value } = this.state;
         return (
             <Cascader
                 disabled={this.props.disabled}
@@ -122,6 +146,7 @@ class Address extends PureComponent {
                 loadData={this.handleLoadData}
                 onChange={this.handleChange}
                 placeholder={'请选择'}
+                value={value}
                 changeOnSelect
             />
         );
@@ -131,6 +156,7 @@ class Address extends PureComponent {
 Address.propTypes = {
     getRegionByCode: PropTypes.func,
     disabled: PropTypes.bool,
+    reset: PropTypes.bool,
     onChange: PropTypes.func
 }
 
