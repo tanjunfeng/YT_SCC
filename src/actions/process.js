@@ -37,56 +37,6 @@ export const queryProcessData = (params) => dispatch => (
             .catch(err => reject(err));
     })
 );
-// 流程管理下根据ID删除一条流程信息
-const delectProcessListAction = (data) => ({
-    type: ActionType.DELECT_PROCESS_DATA,
-    payload: data
-});
-
-export const delectProcessData = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        delectProcessListService(params)
-            .then(res => {
-                dispatch(
-                    delectProcessListAction(res.data));
-                resolve(res);
-            })
-            .catch(err => reject(err));
-    })
-);
-// 流程管理下获取流程图数据
-const queryChartDataAction = (data) => ({
-    type: ActionType.FETCH_CHART_DATA,
-    payload: data
-});
-
-export const queryChartData = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        queryChartDataService(params)
-            .then(res => {
-                dispatch(
-                    queryChartDataAction(res.data));
-                resolve(res);
-            })
-            .catch(err => reject(err));
-    })
-);
-
-/**
- * 清空流程管理列表
- */
-export const clearProcessData = () => dispatch => (dispatch({
-    type: ActionType.CLEAR_PROCESS_DATA,
-    payload: {}
-}));
-
-/**
- * 清空流程图数据
- */
-export const clearChartData = () => dispatch => (dispatch({
-    type: ActionType.CLEAR_CHART_DATA,
-    payload: null
-}));
 // 完成或关闭心愿单
 const comleteOrCloseWishListAction = (data) => ({
     type: ActionType.COMLETE_OR_CLOSE_WISH,
@@ -151,6 +101,56 @@ export const queryReserAreaDetail = (params) => dispatch => (
 export const clearReserAreaDetail = () => dispatch => (dispatch({
     type: ActionType.CLEAR_RESERVE_DETAIL,
     payload: []
+}));
+// 流程管理下根据ID删除一条流程信息
+const delectProcessListAction = (data) => ({
+    type: ActionType.DELECT_PROCESS_DATA,
+    payload: data
+});
+
+export const delectProcessData = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        delectProcessListService(params)
+            .then(res => {
+                dispatch(
+                    delectProcessListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+// 流程管理下获取流程图数据
+const queryChartDataAction = (data) => ({
+    type: ActionType.FETCH_CHART_DATA,
+    payload: data
+});
+
+export const queryChartData = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryChartDataService(params)
+            .then(res => {
+                dispatch(
+                    queryChartDataAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+/**
+ * 清空流程管理列表
+ */
+export const clearProcessData = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_PROCESS_DATA,
+    payload: {}
+}));
+
+/**
+ * 清空流程图数据
+ */
+export const clearChartData = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_CHART_DATA,
+    payload: null
 }));
 
 // 待办事项下采购单审批列表获取高亮流程图数据

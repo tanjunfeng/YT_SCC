@@ -3,7 +3,7 @@
  * @Description: 预定专区
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-16 15:56:50
+ * @Last Modified time: 2018-01-17 19:53:52
  */
 
 import React, { PureComponent } from 'react';
@@ -15,6 +15,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import { PAGE_SIZE } from '../../../constant';
 import Util from '../../../util/util';
 import SearchForm from './searchForm';
@@ -105,7 +106,7 @@ class ReserveAreaList extends PureComponent {
     }
 
     handleSelect = (record, index) => {
-        const { comleteOrCloseWishList } = this.props;
+        const closeWishList = this.props.comleteOrCloseWishList;
         const { key } = index;
         const { id } = record;
         switch (key) {
@@ -114,7 +115,7 @@ class ReserveAreaList extends PureComponent {
                     title: '到货处理',
                     content: '确认此到货处理操作？',
                     onOk: () => {
-                        comleteOrCloseWishList({wishListId: id, status: key}).then(res => {
+                        closeWishList({wishListId: id, status: key}).then(res => {
                             if (res.code === 200) message.success(res.message);
                         })
                     },
@@ -126,7 +127,7 @@ class ReserveAreaList extends PureComponent {
                     title: '无货处理',
                     content: '确认此无货处理操作？',
                     onOk: () => {
-                        comleteOrCloseWishList({wishListId: id, status: key}).then(res => {
+                        closeWishList({wishListId: id, status: key}).then(res => {
                             if (res.code === 200) message.success(res.message);
                         })
                     },
@@ -151,29 +152,23 @@ class ReserveAreaList extends PureComponent {
      * @param {object} record 单行数据
     */
     renderOperation = (text, record) => {
-        const { id, status } = record;
+        const { id } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key={0}>
                     <Link target="_blank" to={`${pathname}/reserveAreaDetails/${id}`}>查看详情</Link>
                 </Menu.Item>
-                {
-                    status === 'init' &&
-                    <Menu.Item key={'complete'}>
-                        <a target="_blank" rel="noopener noreferrer">
-                                    到货通知
-                        </a>
-                    </Menu.Item>
-                }
-                {
-                    status === 'init' &&
-                    <Menu.Item key={'close'}>
-                        <a target="_blank" rel="noopener noreferrer">
-                                    无货处理
-                        </a>
-                    </Menu.Item>
-                }
+                <Menu.Item key={'complete'}>
+                    <a target="_blank" rel="noopener noreferrer">
+                                到货通知
+                    </a>
+                </Menu.Item>
+                <Menu.Item key={'close'}>
+                    <a target="_blank" rel="noopener noreferrer">
+                                无货处理
+                    </a>
+                </Menu.Item>
             </Menu>
         );
         return (
@@ -190,7 +185,7 @@ class ReserveAreaList extends PureComponent {
         const { data = [], pageNum, total } = reserveAreaData;
         wishAreaColumns[wishAreaColumns.length - 1].render = this.renderOperation;
         return (
-            <div className="reserve-area-list">
+            <div>
                 <SearchForm
                     onAreaListSearch={this.handleAreaListSearch}
                     onAreaListReset={this.handleAreaListReset}

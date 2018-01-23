@@ -94,7 +94,9 @@
         "userDiscountAmount": 0.0,
         "shipping": 0.0,
         "total": 900.0,
-        "returnOrder": 0
+        "returnOrder": 0,
+        "cancelReason": "库存不足",
+        "distributionName": "顺丰快递"
     },
     "success": true
 }

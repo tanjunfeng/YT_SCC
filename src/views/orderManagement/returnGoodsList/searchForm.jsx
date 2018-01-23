@@ -94,10 +94,9 @@ class SearchForm extends PureComponent {
         return (
             <Form
                 layout="inline"
-                className="ant-advanced-search-form"
                 onSubmit={this.handleSearch}
             >
-                <Row gutter={40}>
+                <Row className="row-bottom">
                     <Col>
                         <FormItem label="退货单类型">
                             {getFieldDecorator('returnRequestType', {
@@ -200,7 +199,7 @@ class SearchForm extends PureComponent {
                         </FormItem>
                     </Col>
                 </Row>
-                <Row gutter={40} type="flex" justify="end">
+                <Row type="flex" justify="end">
                     <Col>
                         <Button type="primary" htmlType="submit">搜索</Button>
                         <Button onClick={this.handleReset}>重置</Button>

@@ -43,11 +43,12 @@ class SupplierAdderss extends PureComponent {
     }
 
     render() {
-        const { pId } = this.props;
+        const { pId, zIndex, defaultRaw } = this.props;
         return (
             <SearchMind
-                style={{ zIndex: 10000 }}
+                style={{ zIndex }}
                 compKey="providerNo"
+                defaultRaw={defaultRaw}
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
                     this.props.pubFetchValueList({
@@ -95,6 +96,11 @@ SupplierAdderss.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     initialValue: PropTypes.string,
     pId: PropTypes.string
-}
+};
+
+SupplierAdderss.defaultProps = {
+    zIndex: 1000,
+    defaultRaw: null
+};
 
 export default SupplierAdderss;

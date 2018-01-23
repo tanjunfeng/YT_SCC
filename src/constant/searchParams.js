@@ -640,6 +640,24 @@ export const logisticsStatusOptions = {
     }, {
         key: 'UJS',
         value: '已拒签'
+    }, {
+        key: 'YQSDQR',
+        value: '已签收待确认'
+    }]
+}
+
+// 订单管理-配送方式
+export const shippingType = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '全部'
+    }, {
+        key: 'unified',
+        value: '统配'
+    }, {
+        key: 'provider',
+        value: '直送'
     }]
 }
 

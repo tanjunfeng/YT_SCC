@@ -37,6 +37,21 @@ export const renderPayCondition = (key) => {
 }
 
 /**
+ * 供应商接单状态
+ * @param {*} key
+ */
+export const supplierOrderStatus = (key) => {
+    switch (key) {
+        case 1:
+            return '已接单';
+        case 2:
+            return '未接单';
+        default:
+            return '';
+    }
+}
+
+/**
  * 渲染账期
  * @param {*} key
  */

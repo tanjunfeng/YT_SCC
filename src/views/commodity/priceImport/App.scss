@@ -34,11 +34,13 @@ $promotionFieldWidth: 220px;
     .ant-form-item-control-wrapper{
         display: inline-block;
     }
+    .row-bottom {
+        margin-bottom: 24px;
+    }
     .ant-form-item {
         float: left;
         display: block;
         height: 42px;
-        margin-bottom: 24px;
         .ywc-smind {
             top: 4px;
         }

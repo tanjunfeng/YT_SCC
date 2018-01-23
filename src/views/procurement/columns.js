@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import moment from 'moment';
-import { locType, poStatus, businessModeType, poType } from '../../constant/procurement';
+import { locType, poStatus, businessModeType, poType, supplierOrderStatus } from '../../constant/procurement';
 
 // 供应商列表
 export const poMngListColumns = [
@@ -92,6 +92,17 @@ export const poMngListColumns = [
         title: '大类名称',
         dataIndex: 'secondCategoryName',
         key: 'secondCategoryName'
+    },
+    {
+        title: '供应商接单状态',
+        dataIndex: 'supOrderStatus',
+        key: 'supOrderStatus',
+        render: (text) => {
+            if (text === null || typeof text === 'undefined') {
+                return '-';
+            }
+            return (supplierOrderStatus.data[text + 1].value);
+        }
     },
     {
         title: '状态',

@@ -32,7 +32,9 @@ import {
     queryDirectStores,
     queryPurchaseOrderBrands,
     findCompanyBaseInfo as findCompaniesService,
-    modifypassword as modifypasswordActionService
+    modifypassword as modifypasswordActionService,
+    queryAreaGroupList,
+    filterSupplyInfo
 } from '../service';
 
 const pubValueList = {
@@ -42,6 +44,8 @@ const pubValueList = {
     queryBrandsByPages,
     // 通过表单值查询供应商地点列表
     querySuppliersList,
+    // 通过地点过滤供应商地点或供应商列表
+    filterSupplyInfo,
     // 商品的暂停购进和恢复采购
     goodsChangeStatus,
     // 商品的区域性批量上架
@@ -79,7 +83,9 @@ const pubValueList = {
     // 查询直营店
     queryDirectStores,
     // 品牌值清单
-    queryPurchaseOrderBrands
+    queryPurchaseOrderBrands,
+    // 区域组值清单
+    queryAreaGroupList
 };
 
 const receiveCollapsed = (isCollapsed) => ({

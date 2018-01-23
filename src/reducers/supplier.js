@@ -161,7 +161,6 @@ export default function (state = initState, action) {
 
         case ActionType.REMOVE_DETAIL_DATA:
             return state.set('detailData', action.payload);
-
         default:
             return state;
     }

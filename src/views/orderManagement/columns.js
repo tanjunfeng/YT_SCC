@@ -68,6 +68,7 @@ const goodsColumns = [{
                 </div>
             )
         }
+        return '';
     }
 }, {
     title: '商品名称',
@@ -253,6 +254,10 @@ const orderListColumns = [{
     title: '物流状态',
     dataIndex: 'shippingStateDesc',
     key: 'shippingStateDesc',
+}, {
+    title: '配送方',
+    dataIndex: 'distributionName',
+    key: 'distributionName',
 }, {
     title: '子公司',
     dataIndex: 'branchCompanyName',
@@ -579,9 +584,17 @@ const directSalesgoodsColumns = [{
 }];
 
 const distributionInformationColumns = [{
+    title: '序号',
+    dataIndex: 'index',
+    render: (text, record, index) => index + 1
+}, {
     title: '商品编码',
     dataIndex: 'skuId',
     key: 'skuId',
+}, {
+    title: '商品条码',
+    dataIndex: 'internationalCode',
+    key: 'internationalCode',
 }, {
     title: '商品名称',
     dataIndex: 'productName',
@@ -600,10 +613,9 @@ const distributionInformationColumns = [{
     title: '配送数量',
     dataIndex: 'shippedQuantity',
     key: 'shippedQuantity',
-    render: (text, record) => (
+    render: (text) => (
         <span>
             <span>{text}</span>
-            <span>{record.unit}</span>
         </span>
     )
 }, {
@@ -624,6 +636,15 @@ const distributionInformationColumns = [{
         </span>
     )
 }, {
+    title: '签收差数',
+    dataIndex: 'completedNum',
+    key: 'completedNum',
+    render: (text) => (
+        <span>
+            <span>{text}</span>
+        </span>
+    )
+}, {
     title: '签收差额',
     dataIndex: 'completedMulAmount',
     key: 'completedMulAmount',
@@ -638,7 +659,7 @@ export const wishAreaColumns = [{
     key: 'productCode',
     render: text => {
         if (!text) {
-            return <span><i className="wishList-red" />供应链无此商品</span>;
+            return <span className="'wishList-red'">供应链无此商品</span>;
         }
         return (
             <span>{text}</span>
@@ -653,7 +674,12 @@ export const wishAreaColumns = [{
     dataIndex: 'productName',
     key: 'productName',
     render: text => {
-        return !text ? <span><i className="wishList-red" />暂无商品信息</span> : <span>{text}</span>
+        if (!text) {
+            return '暂无商品信息';
+        }
+        return (
+            <span className={!text ? 'wishList-red' : ''}>{text}</span>
+        );
     }
 }, {
     title: '需求数量',
@@ -667,24 +693,17 @@ export const wishAreaColumns = [{
         children: Util.getTime(timestamp)
     })
 }, {
-    title: '所属子公司',
-    dataIndex: 'branchCompanyId',
-    key: 'branchCompanyId',
-    render: (text, record) => (
-        <span>{record.branchCompanyId}-{record.branchCompanyName}</span>
-    )
-}, {
     title: '处理状态',
     dataIndex: 'status',
     key: 'status',
     render: (status) => {
         switch (status) {
             case 'init':
-                return <span><i className="wishList-gray" />未开始</span>;
+                return <span className="wishList-gray">未开始</span>;
             case 'complete':
-                return <span><i className="wishList-green" />到货处理</span>;
+                return <span className="wishList-green">到货处理</span>;
             case 'close':
-                return <span><i className="wishList-blue" />无货处理</span>;
+                return <span className="wishList-blue">无货处理</span>;
             default:
                 return '-';
         }

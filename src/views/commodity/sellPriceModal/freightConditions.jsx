@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import immutable from 'immutable';
 import PropTypes from 'prop-types';
-import { Form, InputNumber, message, Select } from 'antd';
+import { Form, InputNumber, Select } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -46,11 +45,12 @@ class FreightConditions extends Component {
 
     componentDidMount() {
         const { datas } = this.props;
-        const { validateFields, setFields } = this.props.form;
+        const { validateFields } = this.props.form;
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
             result.productId = datas.id || datas.productId;
+            return null;
         })
     }
 
@@ -153,7 +153,9 @@ class FreightConditions extends Component {
                                 <FormItem label="销售内装数">
                                     {getFieldDecorator('salesInsideNumber', {
                                         rules: [{ required: true, message: '请输入销售内装数' }],
-                                        initialValue: isEdit ? sellPricesInReview.salesInsideNumber : values.salesInsideNumber
+                                        initialValue: isEdit ?
+                                            sellPricesInReview.salesInsideNumber
+                                            : values.salesInsideNumber
                                     })(<InputNumber
                                         min={0}
                                         className={
@@ -179,7 +181,9 @@ class FreightConditions extends Component {
                                                 }
                                             }
                                         ],
-                                        initialValue: isEdit ? sellPricesInReview.minNumber : values.minNumber
+                                        initialValue: isEdit
+                                            ? sellPricesInReview.minNumber
+                                            : values.minNumber
                                     })(<InputNumber
                                         min={0}
                                         disabled={isSub}
@@ -192,23 +196,25 @@ class FreightConditions extends Component {
                                 </FormItem>
                                 <FormItem label="最大销售数量">
                                     {getFieldDecorator('maxNumber', {
-                                        initialValue: isEdit ? sellPricesInReview.maxNumber : values.maxNumber
-                                    })(
-                                        <InputNumber
-                                            min={0}
-                                            className={sellPricesInReview.maxNumber
-                                                !== newDatas.maxNumber
-                                                ? 'sell-modal-border' : null}
-                                            disabled={isSub}
-                                            onChange={this.handleMaxChange}
-                                            step={currentInside || data.salesInsideNumber}
-                                        />
-                                        )}
+                                        initialValue: isEdit
+                                            ? sellPricesInReview.maxNumber
+                                            : values.maxNumber
+                                    })(<InputNumber
+                                        min={0}
+                                        className={sellPricesInReview.maxNumber
+                                            !== newDatas.maxNumber
+                                            ? 'sell-modal-border' : null}
+                                        disabled={isSub}
+                                        onChange={this.handleMaxChange}
+                                        step={currentInside || data.salesInsideNumber}
+                                    />)}
                                 </FormItem>
                                 <FormItem label="承诺发货时间：下单后">
                                     {getFieldDecorator('deliveryDay', {
                                         rules: [{ required: true, message: '请输入承诺发货时间!' }],
-                                        initialValue: isEdit ? sellPricesInReview.deliveryDay : values.deliveryDay
+                                        initialValue: isEdit
+                                            ? sellPricesInReview.deliveryDay
+                                            : values.deliveryDay
                                     })(<InputNumber
                                         min={0}
                                         className={sellPricesInReview.deliveryDay
@@ -218,7 +224,7 @@ class FreightConditions extends Component {
                                         onChange={this.handleDelayChange}
                                     />)}
                                     天内发货
-                                    </FormItem>
+                                </FormItem>
                                 <FormItem label="是否整箱销售">
                                     {getProductById.sellFullCase === 1 ? '是' : '否'}
                                 </FormItem>
@@ -230,12 +236,12 @@ class FreightConditions extends Component {
                                         initialValue: preHarvestPinStatusChange
                                     })(<Select
                                         style={{ width: '140px' }}
-                                        className="sc-form-item-select"
                                         size="default"
                                         disabled={isSub}
                                         className={sellPricesInReview.preHarvestPinStatus
                                             !== newDatas.preHarvestPinStatus
-                                            ? 'sell-modal-border' : null}
+                                            ? 'sell-modal-border sc-form-item-select'
+                                            : 'sc-form-item-select'}
                                         onChange={this.handleSelectChange}
                                     >
                                         {
@@ -292,6 +298,7 @@ FreightConditions.propTypes = {
     prefixCls: PropTypes.string,
     isAfter: PropTypes.bool,
     isEdit: PropTypes.bool,
+    isSub: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
     values: PropTypes.objectOf(PropTypes.any),
     getProductById: PropTypes.objectOf(PropTypes.any),

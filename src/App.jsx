@@ -57,8 +57,8 @@ const findIdByCode = (code, data) => {
                 }
             });
         }
+        return id;
     });
-    return id;
 }
 
 @connect(

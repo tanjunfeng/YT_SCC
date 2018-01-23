@@ -3,7 +3,7 @@
  * @Description: 预定专区详情searchForm
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-16 14:15:49
+ * @Last Modified time: 2018-01-15 09:25:52
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -11,10 +11,6 @@ import { Form, Row, Col, Button } from 'antd';
 import { withRouter } from 'react-router';
 import { DirectStores } from '../../../container/search';
 import Util from '../../../util/util';
-import {
-    queryDirectInfo,
-    clearDirectInfo
-} from '../../../actions/procurement';
 
 const FormItem = Form.Item;
 
@@ -48,6 +44,7 @@ class SearchForm extends PureComponent {
                 storeId: stores.record.storeId
             });
         }
+        return null;
     }
 
     /**
@@ -64,7 +61,7 @@ class SearchForm extends PureComponent {
         this.props.form.resetFields(); // 清除当前查询条件
         this.props.onAreaListReset(); // 通知查询条件已清除
         this.props.form.setFieldsValue({
-            stores: { storeId: '', storeName: '' }
+            stores: { reset: true }
         });
     }
 

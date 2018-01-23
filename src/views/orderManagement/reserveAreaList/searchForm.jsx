@@ -6,16 +6,11 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Form, Row, Col, DatePicker, Select, Button  } from 'antd';
+import { Input, Form, Row, Col, DatePicker, Select, Button } from 'antd';
 import { withRouter } from 'react-router';
-import { bindActionCreators } from 'redux';
 import { BranchCompany } from '../../../container/search';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
-import Util from '../../../util/util';
-import {
-    queryDirectInfo,
-    clearDirectInfo
-} from '../../../actions/procurement';
+import Utils from '../../../util/util';
 import { processingState } from '../../../constant/process';
 
 const FormItem = Form.Item;
@@ -44,7 +39,7 @@ class SearchForm extends PureComponent {
         } = this.props.form.getFieldsValue();
         const createTimeStart = orderDate.length > 1 ? orderDate[0].valueOf() : '';
         const createTimeEnd = orderDate.length > 1 ? orderDate[1].valueOf() : '';
-        return Util.removeInvalid({
+        return Utils.removeInvalid({
             branchCompanyId: company.id,
             gbCode,
             status,
@@ -79,7 +74,7 @@ class SearchForm extends PureComponent {
     }
 
     render() {
-        const { form, directInfo = {} } = this.props;
+        const { form } = this.props;
         const { getFieldDecorator } = form;
         return (
             <div className="wisharea-List">
@@ -151,7 +146,6 @@ class SearchForm extends PureComponent {
 
 SearchForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    directInfo: PropTypes.objectOf(PropTypes.any),
     onAreaListSearch: PropTypes.func,
     onAreaListReset: PropTypes.func,
     exportList: PropTypes.func,

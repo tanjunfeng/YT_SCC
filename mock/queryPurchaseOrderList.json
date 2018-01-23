@@ -43,7 +43,8 @@
                 "totalTaxAmount": 69.74,
                 "totalWithoutTaxAmount": 410.26,
                 "totalAmount": 480.00,
-                "businessMode": 0
+                "businessMode": 0,
+                "supOrderStatus": 1
             },
             {
                 "id": 59,
@@ -80,7 +81,8 @@
                 "totalTaxAmount": 0.99,
                 "totalWithoutTaxAmount": 99.01,
                 "totalAmount": 100.00,
-                "businessMode": 0
+                "businessMode": 0,
+                "supOrderStatus": 0
             },
             {
                 "id": 58,

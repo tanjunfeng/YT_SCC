@@ -183,10 +183,10 @@ class SearchForm extends PureComponent {
 
         return (
             <div className="white-list-search-box">
-                <Form>
-                    <Row gutter={40}>
+                <Form layout="inline">
+                    <Row className="row-bottom">
                         <Col>
-                            <FormItem label="加盟商编号" style={{ paddingRight: 10 }}>
+                            <FormItem label="加盟商编号">
                                 {getFieldDecorator('franchiseeId')(<Input size="default" />)}
                             </FormItem>
                         </Col>
@@ -203,12 +203,12 @@ class SearchForm extends PureComponent {
                             </FormItem>
                         </Col>
                         <Col>
-                            <FormItem label="门店编号" style={{ paddingRight: 10 }}>
+                            <FormItem label="门店编号">
                                 {getFieldDecorator('storeId')(<Input size="default" />)}
                             </FormItem>
                         </Col>
                         <Col>
-                            <FormItem label="门店名称" style={{ paddingRight: 10 }}>
+                            <FormItem label="门店名称">
                                 {getFieldDecorator('storeName')(<Input size="default" />)}
                             </FormItem>
                         </Col>
@@ -224,8 +224,8 @@ class SearchForm extends PureComponent {
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row gutter={40} type="flex" justify="end">
-                        <Col span={12} className="export-left">
+                    <Row type="flex" justify="end">
+                        <Col className="export-left">
                             <Upload {...props}>
                                 <Button disabled={this.state.isBtnDisabled}>
                                     <Icon type="upload" /> {uploading ? '上传中' : '点击上传'}
@@ -234,7 +234,7 @@ class SearchForm extends PureComponent {
                             <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
                             <a onClick={this.handleDownload}>下载导入模板</a>
                         </Col>
-                        <Col span={12} className="search-right">
+                        <Col className="search-right">
                             <Button type="primary" size="default" onClick={this.handleSearch}>
                                 查询
                             </Button>

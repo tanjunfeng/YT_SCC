@@ -52,8 +52,10 @@ class Commodity extends PureComponent {
     }
 
     render() {
+        const { zIndex } = this.props.zIndex;
         return (
             <SearchMind
+                style={{ zIndex }}
                 compKey="productId"
                 ref={ref => { this.productSearchMind = ref }}
                 fetch={this.query}
@@ -87,7 +89,14 @@ Commodity.propTypes = {
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
-    initialValue: PropTypes.string
-}
+    initialValue: PropTypes.string,
+    api: PropTypes.string,
+    zIndex: PropTypes.number
+};
+
+Commodity.defaultProps = {
+    api: 'queryProductForSelect',
+    zIndex: 1000
+};
 
 export default Commodity;

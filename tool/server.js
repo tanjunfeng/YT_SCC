@@ -21,7 +21,7 @@ if (__TEST__) {
     rules = [{
         pattern: /https?:\/\/[-\w\.]*(?::\d+)?\/(.+)/,
         responder: 'http://sitxcsc.yatang.com.cn/$1',
-        // responder: 'http://172.30.40.23:8080/$1',
+        // responder: 'http://172.30.49.7:8899/$1',
     }];
 } else {
     host = 'localhost';
