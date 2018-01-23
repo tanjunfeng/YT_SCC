@@ -64,7 +64,7 @@ class Sites extends PureComponent {
         }
 
         if (siteTypeCode == '3') {
-            SiteQueryType = 'getStoreInfo';
+            SiteQueryType = 'queryStoreByCompanyId';
             this.setState({
                 loactionColumn: {
                     code: 'id',

@@ -646,6 +646,8 @@ export const fetchPurchaseOrderInfo = (params) => http.get('/pmPurchaseOrder/que
 
 // 门店地点值清单
 export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
+// 门店地点值清单
+export const queryStoreByCompanyId = (params) => http.get('/prodPlace/queryStoreByCompanyId', params);
 
 // 大类值清单
 export const querycategories = (params) => http.get('/category/queryCategories', params);

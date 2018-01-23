@@ -70,11 +70,10 @@ class CreateModal extends PureComponent {
                 saveParams(reqParams);
                 createRelations(reqParams).then(res => {
                     if (res.success) {
-                        // openRepeatModel(repeatData.data);
                         /**
                          * 有数据重复
                          */
-                        if (res.data.resultObject) {
+                        if (res.data.data) {
                             openRepeatModel(res.data);
                         } else {
                             message.success('添加商品地点关系成功');
