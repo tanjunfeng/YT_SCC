@@ -54,23 +54,24 @@ class AreaGroupDetail extends PureComponent {
         this.props.getAreaGroup({
             areaGroupIdOrName: id
         }).then(() => {
-
-        });
+            this.queryGrouped();
+        }).catch(() => {});
     }
 
     /**
      * 已分组的门店列表
      */
     getGroupedStoresValues = () => {
-        const { records, pageNum, pageSize, total } = this.props.groupedStores;
+        const { groupedStores } = this.props;
+        const { records, pageNo, pageSize, totalCount } = groupedStores;
         const { selectedGroupedStores } = this.state;
         return ({
             title: '已有门店',
             records,
             selectedStores: selectedGroupedStores,
-            pageNum,
+            pageNo,
             pageSize,
-            total,
+            totalCount,
             current: this.currentGrouped
         })
     }
