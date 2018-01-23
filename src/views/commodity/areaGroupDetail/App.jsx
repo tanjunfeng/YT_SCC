@@ -55,7 +55,7 @@ class AreaGroupDetail extends PureComponent {
             areaGroupIdOrName: id
         }).then(() => {
             this.queryGrouped();
-        }).catch(() => {});
+        }).catch(() => { });
     }
 
     /**
@@ -78,6 +78,9 @@ class AreaGroupDetail extends PureComponent {
 
     getFreeStoresValues = () => this.getGroupedStoresValues()
 
+    /**
+     * 查询已有门店列表
+     */
     queryGrouped = () => {
         this.props.getGroupedStores({
             ...this.paramsGrouped,
@@ -86,12 +89,23 @@ class AreaGroupDetail extends PureComponent {
         });
     }
 
-    handleGroupedFormSearch = params => {
+    handleGroupedSearch = params => {
+        this.handleGroupedReset();
+        Object.assign(this.paramsGrouped, {
+            ...params
+        });
+    }
+
+    handleGroupedSelected = selectedStores => {
+        this.setState({ selectedGroupedStores: selectedStores });
+    }
+
+    handleGroupedReset = () => {
         this.paramsGrouped = {
             pageNum: 1,
-            pageSize: PAGE_SIZE,
-            ...params
+            pageSize: PAGE_SIZE
         };
+        this.currentGrouped = 1;
     }
 
     renderTitle = info => {
@@ -148,7 +162,9 @@ class AreaGroupDetail extends PureComponent {
                 <div className="shuttle-form">
                     <StoresForm
                         value={this.getGroupedStoresValues()}
-                        onSearch={this.handleGroupedFormSearch}
+                        onSearch={this.handleGroupedSearch}
+                        onSelect={this.handleGroupedSelected}
+                        onReset={this.handleGroupedReset}
                     />
                     {this.renderButtonGroup()}
                     <StoresForm
