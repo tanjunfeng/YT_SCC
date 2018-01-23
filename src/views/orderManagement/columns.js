@@ -68,7 +68,7 @@ const goodsColumns = [{
                 </div>
             )
         }
-        return '';
+        return null;
     }
 }, {
     title: '商品名称',
@@ -659,11 +659,9 @@ export const wishAreaColumns = [{
     key: 'productCode',
     render: text => {
         if (!text) {
-            return <span className="'wishList-red'">供应链无此商品</span>;
+            return <span><i className={!text ? 'wishList-red' : ''} />供应链无此商品</span>;
         }
-        return (
-            <span>{text}</span>
-        );
+        return <span>{text}</span>;
     }
 }, {
     title: '商品条码',
@@ -675,11 +673,9 @@ export const wishAreaColumns = [{
     key: 'productName',
     render: text => {
         if (!text) {
-            return '暂无商品信息';
+            return <span><i className={!text ? 'wishList-red' : ''} />暂无商品信息</span>;
         }
-        return (
-            <span className={!text ? 'wishList-red' : ''}>{text}</span>
-        );
+        return <span>{text}</span>;
     }
 }, {
     title: '需求数量',
@@ -699,11 +695,11 @@ export const wishAreaColumns = [{
     render: (status) => {
         switch (status) {
             case 'init':
-                return <span className="wishList-gray">未开始</span>;
+                return <span><i className="wishList-gray" />未开始</span>;
             case 'complete':
-                return <span className="wishList-green">到货处理</span>;
+                return <span><i className="wishList-green" />到货处理</span>;
             case 'close':
-                return <span className="wishList-blue">无货处理</span>;
+                return <span><i className="wishList-blue" />无货处理</span>;
             default:
                 return '-';
         }
