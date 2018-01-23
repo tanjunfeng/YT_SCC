@@ -9,7 +9,7 @@ import { Button, Form, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 
 import Util from '../../../util/util';
-import { DirectStores } from '../../../container/search';
+import Stores from './stores';
 import { Address } from '../../../container/cascader';
 
 const FormItem = Form.Item;
@@ -32,9 +32,9 @@ class SearchForm extends PureComponent {
 
     getFormData() {
         const { provinceId, cityId, districtId } = this.state;
-        const { stores } = this.props.form.getFieldsValue();
+        const { store } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
-            storeId: stores.id,
+            storeId: store.id,
             provinceId,
             cityId,
             districtId
@@ -49,7 +49,7 @@ class SearchForm extends PureComponent {
     handleReset() {
         // 点击重置时清除 seachMind 引用文本
         this.props.form.setFieldsValue({
-            stores: { reset: true }
+            store: { reset: true }
         });
         this.setState({
             provinceId: '',
@@ -93,11 +93,9 @@ class SearchForm extends PureComponent {
                     </Col>
                     <Col>
                         <FormItem label="门店">
-                            {getFieldDecorator('stores', {
-                                initialValue: { storeId: '', storeName: '' }
-                            })(<DirectStores
-                                // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/store/getStoreInfo
-                                api="queryAreaStores"
+                            {getFieldDecorator('store', {
+                                initialValue: { id: '', name: '' }
+                            })(<Stores
                                 onChange={this.handleDirectStoresChange}
                             />)}
                         </FormItem>
