@@ -107,7 +107,7 @@ class Address extends PureComponent {
         const arr = [];
         res.data.forEach(treeNode => {
             arr.push({
-                key: String(treeNode),
+                key: String(treeNode.id),
                 label: treeNode.regionName,
                 value: treeNode.code,
                 isLeaf: +(treeNode.regionType) === 4,

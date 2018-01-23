@@ -11,6 +11,7 @@ import { withRouter } from 'react-router';
 import Util from '../../../util/util';
 import Stores from './stores';
 import { Address } from '../../../container/cascader';
+import { ADDRESS_INDEX, REGION_TYPE } from './constant';
 
 const FormItem = Form.Item;
 
@@ -27,6 +28,7 @@ class SearchForm extends PureComponent {
         this.getFormData = this.getFormData.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
+        this.getAddressCode = this.getAddressCode.bind(this);
         this.handleAddressChange = this.handleAddressChange.bind(this);
     }
 
@@ -39,6 +41,19 @@ class SearchForm extends PureComponent {
             cityId,
             districtId
         });
+    }
+
+    /**
+     * 判断省市区级别并返回 code
+     *
+     * @param {*object} item
+     * @param {*number} level
+     */
+    getAddressCode(item, level) {
+        if (item && item.value && +(item.level) === level) {
+            return item.value;
+        }
+        return '';
     }
 
     handleSearch() {
@@ -60,6 +75,12 @@ class SearchForm extends PureComponent {
         this.props.onReset(); // 通知查询条件已清除
     }
 
+    /**
+     * 判断是否清空地址，若没清空分别给省市区赋值
+     *
+     * @param {*object} address 当前选中的最后一个对象
+     * @param {*array} options 当前选中所有对象
+     */
     handleAddressChange(address, options) {
         if (address === null) {
             this.setState({
@@ -69,10 +90,17 @@ class SearchForm extends PureComponent {
                 resetAddress: false
             });
         } else {
+            const provinceId = this.getAddressCode(
+                options[ADDRESS_INDEX.PROVINCE], REGION_TYPE.PROVINCE
+            );
+            const cityId = this.getAddressCode(
+                options[ADDRESS_INDEX.CITY], REGION_TYPE.CITY
+            );
+            const districtId = this.getAddressCode(
+                options[ADDRESS_INDEX.DISTRICT], REGION_TYPE.DISTRICT
+            );
             this.setState({
-                provinceId: options[0] || '',
-                cityId: options[1] || '',
-                districtId: options[2] || ''
+                provinceId, cityId, districtId
             });
         }
     }

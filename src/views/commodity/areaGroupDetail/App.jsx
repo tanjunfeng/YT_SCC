@@ -53,9 +53,9 @@ class AreaGroupDetail extends PureComponent {
         const { id } = this.props.match.params;
         this.props.getAreaGroup({
             areaGroupIdOrName: id
-        }).then(() => {
-            this.queryGrouped();
-        }).catch(() => { });
+        })
+            .then(() => this.queryGrouped())
+            .catch(() => { });
     }
 
     /**
@@ -94,6 +94,7 @@ class AreaGroupDetail extends PureComponent {
         Object.assign(this.paramsGrouped, {
             ...params
         });
+        this.queryGrouped();
     }
 
     handleGroupedSelected = selectedStores => {
