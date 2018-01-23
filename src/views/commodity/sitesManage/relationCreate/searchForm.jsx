@@ -21,6 +21,7 @@ class SearchForm extends PureComponent {
         selectedOptions: [],
         isClearCategory: false
     }
+
     componentDidMount() {
         this.handleSearch();
     }
@@ -36,6 +37,7 @@ class SearchForm extends PureComponent {
             commodity,
             barCode
         } = getFieldsValue();
+
         this.queryParams = {
             internationalCode: barCode,
             brand: brand.record ? brand.record.id : '',
@@ -57,8 +59,9 @@ class SearchForm extends PureComponent {
             selectedOptions: selectedOptions.map(item => item.value)
         });
     }
+
     /**
-     * 查询
+     * 查询商品
     */
     handleSearch = () => {
         const { selectedOptions } = this.state;

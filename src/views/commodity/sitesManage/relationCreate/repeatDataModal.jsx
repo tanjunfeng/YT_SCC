@@ -11,6 +11,9 @@ import Utils from '../../../../util/util';
 import { exportRepeatSiteRelationExcel } from '../../../../service';
 
 class RepeatDataModal extends PureComponent {
+    /**
+     * 导出重复数据Excel
+     */
     exportExcel = () => {
         const { reqParams } = this.props;
         Utils.exportExcel(exportRepeatSiteRelationExcel, Utils.removeInvalid(reqParams));
@@ -19,8 +22,12 @@ class RepeatDataModal extends PureComponent {
     render() {
         const { repeatRes, closeModal, visible } = this.props;
         const { data } = repeatRes;
+        /**
+         * 剔除编辑列
+         */
         const columns = !sitesManageColumns[sitesManageColumns.length - 1].key
             ? sitesManageColumns.slice(0, -1) : sitesManageColumns;
+
         return (
             <Modal
                 title="以下商品地点已经存在商品地点关系，不能再次生成，请确认"

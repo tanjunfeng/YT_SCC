@@ -31,6 +31,7 @@ class Brands extends PureComponent {
      * 清除
      */
     handleClear = () => {
+        console.log('ok.....');
         this.brandSearchMind.reset();
         this.props.onChange({ id: '', name: '' });
     }

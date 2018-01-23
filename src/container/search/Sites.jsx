@@ -57,7 +57,7 @@ class Sites extends PureComponent {
             SiteQueryType = 'queryAreaGroupList';
             this.setState({
                 loactionColumn: {
-                    code: 'areaGroupCode',
+                    code: 'id',
                     name: 'areaGroupName'
                 }
             });

@@ -23,7 +23,6 @@ const Option = Select.Option;
 
 class SearchForm extends PureComponent {
     state = {
-        classify: {},
         selectedOptions: [],
         initialPlaceValue: {},
         category: 0,
@@ -49,6 +48,7 @@ class SearchForm extends PureComponent {
             place,
             placeType
         } = getFieldsValue();
+
         this.baseQueryParams = {
             internationalCode: barCode,
             brand: brand.record ? brand.record.name : '',
@@ -58,9 +58,12 @@ class SearchForm extends PureComponent {
             // 根据不同的值清单取place.record对应字段
             placeId: place.record ? place.record[placeFieldMap[placeType]] : '',
             placeType: parseInt(placeType, 10),
-            branchCompanyId: branchCompany.id
+            branchCompanyId: branchCompany.id ? branchCompany.id : ''
         };
         if (selectedOptions.length > 0) {
+            /**
+             * 商品类别
+             */
             selectedOptions.forEach((item, i) => {
                 this.baseQueryParams[productLevel[i]] = item;
             });
@@ -138,16 +141,18 @@ class SearchForm extends PureComponent {
         if (parseInt(val, 10) === 2) {
             this.setState({
                 initialPlaceValue: {
-                    areaGroupCode: '',
+                    id: '',
                     areaGroupName: ''
                 }
             });
         }
 
-        setFieldsValue({
-            place: { reset: true }
+        setTimeout(() => {
+            setFieldsValue({
+                place: { reset: true }
+            });
+            resetFields(['place']);
         });
-        resetFields(['place']);
     }
 
     resetClearCategoryFlag = () => {

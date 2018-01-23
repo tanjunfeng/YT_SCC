@@ -35,7 +35,7 @@ export const placeFieldMap = {
     // 子公司 取id字段
     1: 'id',
     // 区域 取areaGroupCode字段
-    2: 'areaGroupCode',
+    2: 'id',
     // 门店 取id字段
     3: 'id'
 };

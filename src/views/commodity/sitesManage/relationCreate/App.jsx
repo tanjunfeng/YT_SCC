@@ -22,7 +22,7 @@ const defaultImg = require('../../../../images/default/100x100.png');
 
 @connect(state => ({
     productsData: state.toJS().commodity.productsData,
-    addRelationParams: state.toJS().commodity.addRelationParams
+    relationAddParams: state.toJS().commodity.relationAddParams
 }), dispatch => bindActionCreators({
     queryProductsByCondition,
     createProductSiteRelations,
@@ -178,7 +178,7 @@ class RelationCreate extends PureComponent {
                     closeModal={this.handleCloseRepeatModal}
                     visible={repeatModalVisible}
                     repeatRes={repeatRes}
-                    reqParams={this.props.addRelationParams}
+                    reqParams={this.props.relationAddParams}
                 />
             </div>
         );
@@ -188,7 +188,9 @@ class RelationCreate extends PureComponent {
 RelationCreate.propTypes = {
     queryProductsByCondition: PropTypes.func,
     createProductSiteRelations: PropTypes.func,
-    productsData: PropTypes.objectOf(PropTypes.any)
+    productsData: PropTypes.objectOf(PropTypes.any),
+    receiveAddRelationParams: PropTypes.func,
+    relationAddParams: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(RelationCreate));

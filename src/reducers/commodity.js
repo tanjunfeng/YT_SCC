@@ -98,7 +98,7 @@ const initState = Immutable.fromJS({
     // 单条商品地点关系记录详情
     proSiteDetail: {},
     // 添加商品地点关系是的参数(下载重复数据需要重用)
-    addRelationParams: {}
+    relationAddParams: {}
 });
 
 export default function (state = initState, action) {
@@ -217,7 +217,7 @@ export default function (state = initState, action) {
         case ActionType.QUERY_PRODUCT_SITE_RELATION_BY_ID:
             return state.set('proSiteDetail', action.payload);
         case ActionType.RECEIVE_ADD_RELATION_PARAMS:
-            return state.set('addRelationParams', action.payload);
+            return state.set('relationAddParams', action.payload);
         default:
             return state;
     }

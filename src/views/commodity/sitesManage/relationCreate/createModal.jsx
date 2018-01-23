@@ -30,6 +30,7 @@ class CreateModal extends PureComponent {
     state = {
         initialPlaceValue: {}
     }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.visible !== this.props.visible) {
             this.props.form.resetFields();
@@ -46,6 +47,7 @@ class CreateModal extends PureComponent {
             supplier,
             supplierAddr
         } = getFieldsValue();
+
         const params = {
             logisticsModel: parseInt(logisticsModel, 10),
             placeType: parseInt(placeType, 10),
@@ -61,6 +63,7 @@ class CreateModal extends PureComponent {
             pageSize: PAGE_SIZE
 
         };
+
         validateFields((err, values) => {
             if (!err) {
                 if (!values.place.record) {
@@ -102,6 +105,10 @@ class CreateModal extends PureComponent {
     }
 
     handPlaceTypeChange = val => {
+        /**
+         * 根据地点类型，动态设置地点初始值
+        */
+
         if (
             parseInt(val, 10) === 1 ||
             parseInt(val, 10) === 3
@@ -117,7 +124,7 @@ class CreateModal extends PureComponent {
         if (parseInt(val, 10) === 2) {
             this.setState({
                 initialPlaceValue: {
-                    areaGroupCode: '',
+                    id: '',
                     areaGroupName: ''
                 }
             });
