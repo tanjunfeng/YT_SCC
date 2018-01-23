@@ -11,7 +11,7 @@ import Utils from '../../../../util/util';
 import { logisticsList, placeTypeListCreate, placeFieldMap } from '../constant';
 import Sites from '../../../../container/search/Sites';
 import { PAGE_SIZE } from '../../../../constant';
-import SupplierInfor from '../SupplierInfoFilterByPlace/index';
+import SupplierInfo from '../SupplierInfoFilterByPlace/index';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -56,19 +56,27 @@ class CreateModal extends PureComponent {
             adrSupId: supplierAddr.spAdrId,
             adrSupCode: supplierAddr.providerNo,
             adrSupName: supplierAddr.providerName,
-            // supplierId: 'xprov003',
-            // supplierCode: '10002',
-            // supplierName: '成都诚心诚意商贸有限公司',
-            // adrSupId: 3,
-            // adrSupCode: '1000003',
-            // adrSupName: '四川-成都诚心诚意商贸有限公司',
             productIds: selectedIds,
             pageNum: 1,
             pageSize: PAGE_SIZE
 
         };
-        validateFields((err) => {
+        validateFields((err, values) => {
             if (!err) {
+                if (!values.place.record) {
+                    message.error('请选择地点');
+                    return;
+                }
+
+                if (!values.supplier.spId) {
+                    message.error('请选择供应商');
+                    return;
+                }
+
+                if (!values.supplierAddr.spAdrId) {
+                    message.error('请选择供应商地点');
+                    return;
+                }
                 const reqParams = Utils.removeInvalid(params);
                 /**
                  * 保存添加的请求参数, 下载重复数据时重用
@@ -76,11 +84,10 @@ class CreateModal extends PureComponent {
                 saveParams(reqParams);
                 createRelations(reqParams).then(res => {
                     if (res.success) {
-                        // openRepeatModel(repeatData.data);
                         /**
                          * 有数据重复
                          */
-                        if (res.data.resultObject) {
+                        if (res.data.data) {
                             openRepeatModel(res.data);
                         } else {
                             message.success('添加商品地点关系成功');
@@ -116,6 +123,22 @@ class CreateModal extends PureComponent {
             });
         }
     }
+
+    /**
+     * 地点改变时清空供应商(地址)
+     */
+
+    handleSiteChange = () => {
+        const { resetFields, setFieldsValue } = this.props.form;
+        resetFields(['supplier', 'supplierAddr']);
+        setFieldsValue({
+            supplier: { reset: true }
+        });
+        setFieldsValue({
+            supplierAddr: { reset: true }
+        });
+    }
+
     render() {
         const { visible, closeModal } = this.props;
         const { initialPlaceValue } = this.state;
@@ -131,7 +154,13 @@ class CreateModal extends PureComponent {
                     <Form>
                         <FormItem {...formItemLayout} label="地点类型" >
                             {getFieldDecorator('placeType', {
-                                initialValue: placeTypeListCreate.defaultValue
+                                initialValue: placeTypeListCreate.defaultValue,
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请选择地点类型'
+                                    }
+                                ]
                             })(
                                 <Select
                                     size="large"
@@ -150,9 +179,15 @@ class CreateModal extends PureComponent {
                         </FormItem>
                         <FormItem {...formItemLayout} label="地点" >
                             {getFieldDecorator('place', {
-                                initialValue: initialPlaceValue
+                                initialValue: initialPlaceValue,
+                                rules: [
+                                    {
+                                        required: true
+                                    }
+                                ]
                             })(
                                 <Sites
+                                    onChange={this.handleSiteChange}
                                     disabled={getFieldValue('placeType') === ''}
                                     siteTypeCode={getFieldValue('placeType')}
                                     placeFieldMap={placeFieldMap}
@@ -162,9 +197,14 @@ class CreateModal extends PureComponent {
                         </FormItem>
                         <FormItem {...formItemLayout} label="供应商">
                             {getFieldDecorator('supplier', {
-                                initialValue: { spId: '', spNo: '', companyName: '' }
+                                initialValue: { spId: '', spNo: '', companyName: '' },
+                                rules: [
+                                    {
+                                        required: true
+                                    }
+                                ]
                             })(
-                                <SupplierInfor
+                                <SupplierInfo
                                     zIndex={1000}
                                     queryType="1"
                                     disabled={!getFieldValue('place').record}
@@ -180,8 +220,13 @@ class CreateModal extends PureComponent {
                                 providerNo: '',
                                 providerName: '',
                                 spAdrid: ''
-                            }})(
-                                <SupplierInfor
+                            },
+                            rules: [
+                                {
+                                    required: true
+                                }
+                            ]})(
+                                <SupplierInfo
                                     zIndex={999}
                                     queryType="2"
                                     disabled={!getFieldValue('place').record}
@@ -193,7 +238,13 @@ class CreateModal extends PureComponent {
                         </FormItem>
                         <FormItem {...formItemLayout} label="物流模式" >
                             {getFieldDecorator('logisticsModel', {
-                                initialValue: logisticsList.defaultValue
+                                initialValue: logisticsList.defaultValue,
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请选择物流模式'
+                                    }
+                                ]
                             })(
                                 <Select
                                     size="large"

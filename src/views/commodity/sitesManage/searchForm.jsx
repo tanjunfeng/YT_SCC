@@ -51,7 +51,7 @@ class SearchForm extends PureComponent {
         } = getFieldsValue();
         this.baseQueryParams = {
             internationalCode: barCode,
-            brand: brand.record ? brand.record.id : '',
+            brand: brand.record ? brand.record.name : '',
             productId: commodity.record ? commodity.record.productId : '',
             productName: commodity.record ? commodity.record.productName : '',
             logisticsModel,
@@ -84,17 +84,32 @@ class SearchForm extends PureComponent {
     }
 
     handleAdd = () => {
-        this.props.history.push('/productSiteManage/create');
+        const { pathname } = this.props.location;
+        const win = window.open(`${pathname}/create`, '_blank');
+        win.focus();
     }
 
     /**
      * 重置搜索条件
      */
     handleReset = () => {
+        const { setFieldsValue } = this.props.form;
         this.setState({
             isClearCategory: true
         });
         this.props.form.resetFields();
+        setFieldsValue({
+            branchCompany: { reset: true }
+        });
+        setFieldsValue({
+            brand: { reset: true }
+        });
+        setFieldsValue({
+            commodity: { reset: true }
+        });
+        setFieldsValue({
+            place: { reset: true }
+        });
     }
 
     handleCategorySelect = (category, selectedOptions) => {
@@ -104,6 +119,10 @@ class SearchForm extends PureComponent {
     }
 
     handPlaceTypeChange = val => {
+        const { setFieldsValue, resetFields } = this.props.form;
+        /**
+         * 设置门店初始值
+         */
         if (parseInt(val, 10) === 1 || parseInt(val, 10) === 3) {
             this.setState({
                 initialPlaceValue: {
@@ -113,6 +132,9 @@ class SearchForm extends PureComponent {
             });
         }
 
+        /**
+         * 设置区域组初始值
+         */
         if (parseInt(val, 10) === 2) {
             this.setState({
                 initialPlaceValue: {
@@ -121,6 +143,11 @@ class SearchForm extends PureComponent {
                 }
             });
         }
+
+        setFieldsValue({
+            place: { reset: true }
+        });
+        resetFields(['place']);
     }
 
     resetClearCategoryFlag = () => {
@@ -232,7 +259,8 @@ class SearchForm extends PureComponent {
                                     initialValue: initialPlaceValue
                                 })(
                                     <Sites
-                                        disabled={getFieldValue('placeType') === '0'}
+                                        branchCompanyId={getFieldValue('branchCompany').id}
+                                        disabled={getFieldValue('placeType') === ''}
                                         siteTypeCode={getFieldValue('placeType')}
                                         placeFieldMap={placeFieldMap}
                                     />
@@ -267,7 +295,7 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     queryList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any)
+    location: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(SearchForm));

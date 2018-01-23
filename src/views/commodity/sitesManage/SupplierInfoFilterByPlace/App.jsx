@@ -80,7 +80,6 @@ class SupplierInfo extends PureComponent {
                 compKey={compKey}
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
-                    // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/supplier/supplierSearchBox
                     this.props.pubFetchValueList({
                         condition: params.value,
                         queryType,
@@ -95,9 +94,8 @@ class SupplierInfo extends PureComponent {
                 addonBefore=""
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
-                renderChoosedInputRaw={(data) => (
-                    <div>{data.spNo} - {data.companyName}</div>
-                )}
+                renderChoosedInputRaw={data =>  queryType === '1' ? (<div>{data.spNo} - {data.companyName}</div>) :
+                (<div>{data.providerNo} - {data.providerName}</div>)}
                 rowKey={compKey}
                 pageSize={5}
                 columns={coumnsFields[queryType]}

@@ -64,7 +64,7 @@ class SiteManage extends PureComponent {
      * 分页查询商品地点关系列表
      */
     handlePaginationChange = pageIndex => {
-        this.queryParams.pageIndex = pageIndex;
+        this.queryParams.pageNum = pageIndex;
         this.queryList(this.queryParams);
     }
 
@@ -72,7 +72,6 @@ class SiteManage extends PureComponent {
      * 查询商品地点关系列表
      */
     queryList = queryParams => {
-        console.log(JSON.stringify(queryParams));
         this.queryParams = queryParams;
         this.props.getSitesManageList(this.queryParams);
     }
@@ -82,11 +81,15 @@ class SiteManage extends PureComponent {
     */
     handleEdit = editId => {
         const { queryDetailById } = this.props;
-        this.setState({
-            editId,
-            visible: true
+        queryDetailById({id: editId}).then(res => {
+            console.log(res);
+            if (res.success) {
+                this.setState({
+                    editId,
+                    visible: true
+                });
+            }
         });
-        queryDetailById({id: editId});
     }
 
     /**
@@ -103,11 +106,9 @@ class SiteManage extends PureComponent {
     */
     customDelete = () => {
         const { selectedRows } = this.state;
-        const { removeSiteManagesByIds } = this.props;
-        /**
-         * ToDo: id替换为实际字段
-         */
-        const ids = selectedRows.map(item => item.productId);
+        const queryParams = this.queryParams
+        const { removeSiteManagesByIds, getSitesManageList } = this.props;
+        const ids = selectedRows.map(item => item.id);
         confirm({
             title: '',
             content: '数据删除不可恢复，确认删除选中的商品地点关系?',
@@ -115,6 +116,7 @@ class SiteManage extends PureComponent {
                 removeSiteManagesByIds({ids}).then(res => {
                     if (res.success) {
                         message.success('删除成功');
+                        getSitesManageList(queryParams);
                     } else {
                         message.error('删除失败');
                     }
@@ -130,7 +132,7 @@ class SiteManage extends PureComponent {
      */
     render() {
         const { goodsSitesManageList, proSiteDetail } = this.props;
-        const { resultObject, recordsTotal, currentPage } = goodsSitesManageList;
+        const { data, total, pageNum } = goodsSitesManageList;
         const { selectedRows, editId, visible } = this.state;
         return (
             <div>
@@ -147,11 +149,11 @@ class SiteManage extends PureComponent {
                     <Table
                         rowKey={record => record.id}
                         rowSelection={this.rowSelection}
-                        dataSource={resultObject}
+                        dataSource={data}
                         columns={sitesManageColumns}
                         pagination={{
-                            current: currentPage,
-                            total: recordsTotal,
+                            current: pageNum,
+                            total: total,
                             pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.handlePaginationChange

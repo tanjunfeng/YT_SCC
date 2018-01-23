@@ -24,8 +24,8 @@ export const sitesManageColumns = [
     },
     {
         title: '品牌',
-        dataIndex: 'brandName',
-        key: 'brandName',
+        dataIndex: 'brand',
+        key: 'brand',
     },
     {
         title: '商品',
