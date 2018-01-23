@@ -669,6 +669,8 @@ export const fetchPurchaseOrderInfo = (params) => http.get('/pmPurchaseOrder/que
 
 // 门店地点值清单
 export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
+// 门店地点值清单
+export const queryStoreByCompanyId = (params) => http.get('/prodPlace/queryStoreByCompanyId', params);
 
 // 大类值清单
 export const querycategories = (params) => http.get('/category/queryCategories', params);
@@ -1016,7 +1018,6 @@ export const prodPlaceBulkDelete = params => http.post('/prodPlace/bulkDelete', 
 export const prodPlacePpdate = params => http.post('/prodPlace/update', params);
 export const addDistinctProductSiteRelations = params => http.post('/prodPlace/addDistinct', params);
 export const queryProductSiteRelationById = (params) => http.get('/prodPlace/queryDetail', params);
-export const exportRepeatSiteRelation = (params) => http.post('/prodPlace/exportRepeatedProdAdd', params);
 export const filterSupplyInfo = (params) => http.get('/prodPlace/prodSpAdrSearchBox', params);
 
 // 预定专区

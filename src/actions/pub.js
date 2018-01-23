@@ -20,6 +20,7 @@ import {
     getWarehouseLogic,
     queryAllCategoriesWithIconByParentId,
     getStoreInfo,
+    queryStoreByCompanyId,
     queryProductByStore,
     queryProductByTerm,
     querycategories,
@@ -63,6 +64,8 @@ const pubValueList = {
     getWarehouseLogic,
     // 查询门店列表
     getStoreInfo,
+    // 通过分公司查询门店列表
+    queryStoreByCompanyId,
     // 通过分公司编号查询商品
     queryProductByStore,
     // 查询全量商品

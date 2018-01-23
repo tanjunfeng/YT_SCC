@@ -64,7 +64,7 @@ class Sites extends PureComponent {
         }
 
         if (siteTypeCode == '3') {
-            SiteQueryType = 'getStoreInfo';
+            SiteQueryType = 'queryStoreByCompanyId';
             this.setState({
                 loactionColumn: {
                     code: 'id',
@@ -92,9 +92,10 @@ class Sites extends PureComponent {
     }
 
     query = (params) => {
-        const { siteTypeCode } = this.props;
+        const { siteTypeCode, branchCompanyId = '' } = this.props;
         const conditions = {
             param: params.value,
+            branchCompanyId,
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
         };
@@ -144,7 +145,8 @@ Sites.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     initialValue: PropTypes.string,
     siteTypeCode: PropTypes.string,
-    placeFieldMap: PropTypes.object
+    placeFieldMap: PropTypes.object,
+    branchCompanyId: PropTypes.string
 };
 
 Sites.defaultProps = {
