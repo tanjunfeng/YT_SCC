@@ -6,23 +6,11 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Table } from 'antd';
 
-// import { PAGE_SIZE } from '../../../constant';
 import SearchForm from './searchForm';
 import columns from './columns';
-import {
-    getAreaGroup, clearAreaGroup
-} from '../../../actions/commodity';
-
-@connect(state => ({
-    areaGroup: state.toJS().commodity.areaGroup
-}), dispatch => bindActionCreators({
-    getAreaGroup, clearAreaGroup
-}, dispatch))
 
 class StoresForm extends PureComponent {
     constructor(props) {
