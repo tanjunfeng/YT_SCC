@@ -119,6 +119,10 @@ class SearchForm extends PureComponent {
     }
 
     handPlaceTypeChange = val => {
+        const { setFieldsValue, resetFields } = this.props.form;
+        /**
+         * 设置门店初始值
+         */
         if (parseInt(val, 10) === 1 || parseInt(val, 10) === 3) {
             this.setState({
                 initialPlaceValue: {
@@ -128,6 +132,9 @@ class SearchForm extends PureComponent {
             });
         }
 
+        /**
+         * 设置区域组初始值
+         */
         if (parseInt(val, 10) === 2) {
             this.setState({
                 initialPlaceValue: {
@@ -136,6 +143,11 @@ class SearchForm extends PureComponent {
                 }
             });
         }
+
+        setFieldsValue({
+            place: { reset: true }
+        });
+        resetFields(['place']);
     }
 
     resetClearCategoryFlag = () => {
@@ -248,7 +260,7 @@ class SearchForm extends PureComponent {
                                 })(
                                     <Sites
                                         branchCompanyId={getFieldValue('branchCompany').id}
-                                        disabled={getFieldValue('placeType') === '0'}
+                                        disabled={getFieldValue('placeType') === ''}
                                         siteTypeCode={getFieldValue('placeType')}
                                         placeFieldMap={placeFieldMap}
                                     />

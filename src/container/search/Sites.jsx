@@ -145,7 +145,8 @@ Sites.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     initialValue: PropTypes.string,
     siteTypeCode: PropTypes.string,
-    placeFieldMap: PropTypes.object
+    placeFieldMap: PropTypes.object,
+    branchCompanyId: PropTypes.string
 };
 
 Sites.defaultProps = {

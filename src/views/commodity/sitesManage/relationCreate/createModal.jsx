@@ -61,8 +61,22 @@ class CreateModal extends PureComponent {
             pageSize: PAGE_SIZE
 
         };
-        validateFields((err) => {
+        validateFields((err, values) => {
             if (!err) {
+                if (!values.place.record) {
+                    message.error('请选择地点');
+                    return;
+                }
+
+                if (!values.supplier.spId) {
+                    message.error('请选择供应商');
+                    return;
+                }
+
+                if (!values.supplierAddr.spAdrId) {
+                    message.error('请选择供应商地点');
+                    return;
+                }
                 const reqParams = Utils.removeInvalid(params);
                 /**
                  * 保存添加的请求参数, 下载重复数据时重用
@@ -140,7 +154,13 @@ class CreateModal extends PureComponent {
                     <Form>
                         <FormItem {...formItemLayout} label="地点类型" >
                             {getFieldDecorator('placeType', {
-                                initialValue: placeTypeListCreate.defaultValue
+                                initialValue: placeTypeListCreate.defaultValue,
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请选择地点类型'
+                                    }
+                                ]
                             })(
                                 <Select
                                     size="large"
@@ -159,7 +179,12 @@ class CreateModal extends PureComponent {
                         </FormItem>
                         <FormItem {...formItemLayout} label="地点" >
                             {getFieldDecorator('place', {
-                                initialValue: initialPlaceValue
+                                initialValue: initialPlaceValue,
+                                rules: [
+                                    {
+                                        required: true
+                                    }
+                                ]
                             })(
                                 <Sites
                                     onChange={this.handleSiteChange}
@@ -172,7 +197,12 @@ class CreateModal extends PureComponent {
                         </FormItem>
                         <FormItem {...formItemLayout} label="供应商">
                             {getFieldDecorator('supplier', {
-                                initialValue: { spId: '', spNo: '', companyName: '' }
+                                initialValue: { spId: '', spNo: '', companyName: '' },
+                                rules: [
+                                    {
+                                        required: true
+                                    }
+                                ]
                             })(
                                 <SupplierInfo
                                     zIndex={1000}
@@ -190,7 +220,12 @@ class CreateModal extends PureComponent {
                                 providerNo: '',
                                 providerName: '',
                                 spAdrid: ''
-                            }})(
+                            },
+                            rules: [
+                                {
+                                    required: true
+                                }
+                            ]})(
                                 <SupplierInfo
                                     zIndex={999}
                                     queryType="2"
@@ -203,7 +238,13 @@ class CreateModal extends PureComponent {
                         </FormItem>
                         <FormItem {...formItemLayout} label="物流模式" >
                             {getFieldDecorator('logisticsModel', {
-                                initialValue: logisticsList.defaultValue
+                                initialValue: logisticsList.defaultValue,
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请选择物流模式'
+                                    }
+                                ]
                             })(
                                 <Select
                                     size="large"
