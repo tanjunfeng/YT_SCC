@@ -65,14 +65,21 @@ class SiteManage extends PureComponent {
      */
     handlePaginationChange = pageIndex => {
         this.queryParams.pageNum = pageIndex;
-        this.queryList(this.queryParams);
+        this.handleQueryList(this.queryParams);
     }
 
     /**
      * 查询商品地点关系列表
      */
-    queryList = queryParams => {
+    handleQueryList = queryParams => {
         this.queryParams = queryParams;
+        this.props.getSitesManageList(this.queryParams);
+    }
+
+    /**
+     * 刷新数据
+     */
+    handRefresh = () => {
         this.props.getSitesManageList(this.queryParams);
     }
 
@@ -82,7 +89,6 @@ class SiteManage extends PureComponent {
     handleEdit = editId => {
         const { queryDetailById } = this.props;
         queryDetailById({id: editId}).then(res => {
-            console.log(res);
             if (res.success) {
                 this.setState({
                     editId,
@@ -107,8 +113,9 @@ class SiteManage extends PureComponent {
     customDelete = () => {
         const { selectedRows } = this.state;
         const queryParams = this.queryParams
-        const { removeSiteManagesByIds, getSitesManageList } = this.props;
+        const { removeSiteManagesByIds } = this.props;
         const ids = selectedRows.map(item => item.id);
+        const _self = this;
         confirm({
             title: '',
             content: '数据删除不可恢复，确认删除选中的商品地点关系?',
@@ -116,7 +123,7 @@ class SiteManage extends PureComponent {
                 removeSiteManagesByIds({ids}).then(res => {
                     if (res.success) {
                         message.success('删除成功');
-                        getSitesManageList(queryParams);
+                        _self.handRefresh()
                     } else {
                         message.error('删除失败');
                     }
@@ -137,7 +144,7 @@ class SiteManage extends PureComponent {
         return (
             <div>
                 <SearchForm
-                    queryList={this.queryList}
+                    queryList={this.handleQueryList}
                 />
                 <div className="sites-manage-tab">
                     <div className="table-operations">
@@ -163,6 +170,7 @@ class SiteManage extends PureComponent {
                         detail={proSiteDetail}
                         editId={String(editId)}
                         visible={visible}
+                        refresh={this.handRefresh}
                         closeModal={this.closeModal}
                         editSiteRelation={this.props.editSiteManageById}
                     />

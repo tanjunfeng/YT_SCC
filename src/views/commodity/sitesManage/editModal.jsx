@@ -40,11 +40,27 @@ class EditSiteRelationModal extends PureComponent {
     }
 
     handleEditFetch = () => {
-        const { editSiteRelation, editId } = this.props;
+        const { editSiteRelation, editId, refresh } = this.props;
         const { getFieldsValue, validateFields } = this.props.form;
         const { logisticsModel, supplier, supplierAddr } = getFieldsValue();
-        validateFields((err) => {
+        validateFields((err, values) => {
             if (!err) {
+                console.log(values)
+                if (!values.supplier.spId) {
+                    message.error('请选择供应商');
+                    return;
+                }
+
+                if (!values.supplierAddr.providerNo) {
+                    message.error('请选择供应商地点');
+                    return;
+                }
+
+                if (values.logisticsModel === '') {
+                    message.error('请选择物流模式');
+                    return;
+                }
+
                 editSiteRelation(Utils.removeInvalid({
                     logisticsModel,
                     id: editId,
@@ -56,6 +72,7 @@ class EditSiteRelationModal extends PureComponent {
                     adrSupName: supplierAddr.providerName
                 })).then(res => {
                     if (res.success) {
+                        refresh();
                         message.success('编辑成功');
                     } else {
                         message.error('编辑失败');
@@ -145,7 +162,8 @@ EditSiteRelationModal.propTypes = {
     editSiteRelation: PropTypes.func,
     editId: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
-    detail: PropTypes.objectOf(PropTypes.any)
+    detail: PropTypes.objectOf(PropTypes.any),
+    refresh: PropTypes.func
 };
 
 export default withRouter(Form.create()(EditSiteRelationModal));
