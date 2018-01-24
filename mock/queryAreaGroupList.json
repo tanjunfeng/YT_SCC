@@ -1,26 +1,69 @@
 {
-    "timestamp": 1513072463339,
+    "timestamp": 1516267539291,
     "code": 200,
-    "message": "请求成功",
+    "message": {},
     "exception": null,
     "data": {
-        "pageNum": 1,
-        "pageSize": 15,
-        "total": 106,
-        "data": [
+        "records": [
             {
-                "areaGroupCode": "10000000",
-                "areaGroupName": "一线城市街边店"
+                "id": "10000010",
+                "areaGroupName": "测试区域分组11",
+                "branchCompanyId": "10000",
+                "branchCompanyName": "成都子公司",
+                "createBy": null,
+                "createDate": null,
+                "modifyBy": null,
+                "modifyDate": null,
+                "deleteFlag": 0
             },
             {
-                "areaGroupCode": "10000001",
-                "areaGroupName": "二线城市街边店"
+                "id": "10000011",
+                "areaGroupName": "一线城市街边店",
+                "branchCompanyId": "10000",
+                "branchCompanyName": "成都子公司",
+                "createBy": "隔壁老王",
+                "createDate": 1516179806000,
+                "modifyBy": null,
+                "modifyDate": null,
+                "deleteFlag": 0
             },
             {
-                "areaGroupCode": "10000002",
-                "areaGroupName": "三线城市街边店"
+                "id": "10000013",
+                "areaGroupName": "成都郊区组",
+                "branchCompanyId": "10000",
+                "branchCompanyName": "成都子公司",
+                "createBy": "隔壁老王",
+                "createDate": 1516180599000,
+                "modifyBy": null,
+                "modifyDate": null,
+                "deleteFlag": 0
+            },
+            {
+                "id": "10000014",
+                "areaGroupName": "绵阳组",
+                "branchCompanyId": "10000",
+                "branchCompanyName": "成都子公司",
+                "createBy": "隔壁老王",
+                "createDate": 1516180909000,
+                "modifyBy": null,
+                "modifyDate": null,
+                "deleteFlag": 0
+            },
+            {
+                "id": "10000015",
+                "areaGroupName": "大西南组",
+                "branchCompanyId": "10000",
+                "branchCompanyName": "成都子公司",
+                "createBy": "admin",
+                "createDate": 1516266739000,
+                "modifyBy": null,
+                "modifyDate": null,
+                "deleteFlag": 0
             }
         ],
-        "success": true
-    }
+        "pageNum": 3,
+        "pageSize": 5,
+        "totalPage": 3
+    },
+    "success": true
 }

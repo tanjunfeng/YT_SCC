@@ -6,6 +6,7 @@
  */
 
 import ActionType from './ActionType';
+import { PAGE_SIZE } from '../constant';
 
 import {
     addStepSellPrice,
@@ -13,6 +14,13 @@ import {
     updateSellPriceStatus,
     getSellPriceInfoByIdAction as getSellPriceInfoByIdService,
     getCostPrice as getCostPriceService,
+    getAreaGroup as getAreaGroupService,
+    createAreaGroup as createAreaGroupService,
+    isAreaGroupExists as isAreaGroupExistsService,
+    deleteAreaGroup as deleteAreaGroupService,
+    getGroupedStores as getGroupedStoresService,
+    insertStoreToGroup as insertStoreToGroupService,
+    deleteStoreFromArea as deleteStoreFromAreaService,
     queryProdPlacePage,
     prodPlaceBulkDelete,
     prodPlacePpdate as updateSiteManageById,
@@ -135,6 +143,138 @@ export const clearCostPrice = () => dispatch => (dispatch({
     payload: null
 }));
 
+/**
+ * 查询所有区域组
+ *
+ * @param {Object} params 传参
+ */
+const getAreaGroupActionType = data => ({
+    type: ActionType.RECEIVE_AREA_GROUP,
+    payload: data
+});
+
+export const getAreaGroup = params => dispatch => (
+    new Promise((resolve, reject) => {
+        getAreaGroupService(params)
+            .then(res => {
+                dispatch(
+                    getAreaGroupActionType(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 清空区域组列表
+ */
+export const clearAreaGroup = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_AREA_GROUP,
+    payload: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] }
+}));
+
+/**
+ * 查询已在区域组下的门店
+ *
+ * existsAreaGroup: true
+ * @param {Object} params 传参
+ */
+const getGroupedStoresActionType = data => ({
+    type: ActionType.GET_GROUPED_STORES,
+    payload: data
+});
+
+export const getGroupedStores = params => dispatch => (
+    new Promise((resolve, reject) => {
+        getGroupedStoresService({
+            existsAreaGroup: true,
+            ...params
+        }).then(res => {
+            dispatch(getGroupedStoresActionType(res.data));
+            resolve(res);
+        }).catch(err => reject(err))
+    })
+);
+
+/**
+ * 查询未分组门店
+ *
+ * 重用 getGroupedStoresService
+ * existsAreaGroup: false
+ * @param {Object} params 传参
+ */
+const getFreeStoresActionType = data => ({
+    type: ActionType.GET_FREE_STORES,
+    payload: data
+});
+
+export const getFreeStores = params => dispatch => (
+    new Promise((resolve, reject) => {
+        getGroupedStoresService({
+            existsAreaGroup: false,
+            ...params
+        }).then(res => {
+            dispatch(getFreeStoresActionType(res.data));
+            resolve(res);
+        }).catch(err => reject(err))
+    })
+);
+
+/**
+ * 将未分组门店添加至区域组
+ *
+ * @param {Object} params 传参
+ */
+const insertStoreToGroupActionType = data => ({
+    type: ActionType.INSERT_STORE_TO_GROUP,
+    payload: data
+});
+
+export const insertStoreToGroup = params => dispatch => (
+    new Promise((resolve, reject) => {
+        insertStoreToGroupService(params).then(res => {
+            dispatch(insertStoreToGroupActionType(res.data));
+            resolve(res);
+        }).catch(err => reject(err))
+    })
+);
+
+/**
+ * 将未分组门店添加至区域组
+ *
+ * @param {Object} params 传参
+ */
+const deleteStoreFromAreaActionType = data => ({
+    type: ActionType.DELETE_STORE_FROM_AREA,
+    payload: data
+});
+
+export const deleteStoreFromArea = params => dispatch => (
+    new Promise((resolve, reject) => {
+        deleteStoreFromAreaService(params).then(res => {
+            dispatch(deleteStoreFromAreaActionType(res.data));
+            resolve(res);
+        }).catch(err => reject(err))
+    })
+);
+
+/**
+ * 清空已分组门店列表
+ */
+export const clearGroupedStores = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_GROUPED_STORES,
+    payload: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] }
+}));
+
+/**
+ * 清空未分组门店列表
+ */
+export const clearFreeStores = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_FREE_STORES,
+    payload: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] }
+}));
+
 const getSitesManageListAction = data => ({
     type: ActionType.RECEIVE_SITES_MANAGE_LIST,
     payload: data
@@ -176,6 +316,28 @@ export const removeSiteManagesByIds = params => dispatch => (
 );
 
 /**
+ * 新增区域组
+ *
+ * @param {Object} params 传参
+ */
+const createAreaGroupActionType = data => ({
+    type: ActionType.CREATE_AREA_GROUP,
+    payload: data
+});
+
+export const createAreaGroup = params => dispatch => (
+    new Promise((resolve, reject) => {
+        createAreaGroupService(params)
+            .then(res => {
+                dispatch(
+                    createAreaGroupActionType(res.record)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+/**
  * 编辑商品地点关系
  * @param {Object} data
  */
@@ -196,7 +358,30 @@ export const editSiteManageById = params => dispatch => (
 );
 
 /**
- *查询商品
+ * 区域组名是否存在
+ *
+ * @param {Object} params 传参
+ */
+const isAreaGroupExistsActionType = data => ({
+    type: ActionType.IS_AREA_GROUP_EXISTS,
+    payload: data
+});
+
+export const isAreaGroupExists = params => dispatch => (
+    new Promise((resolve, reject) => {
+        isAreaGroupExistsService(params)
+            .then(res => {
+                dispatch(
+                    isAreaGroupExistsActionType(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 查询商品
  * @param {Object} data
  */
 const queryProductsByConditionAction = data => ({
@@ -209,6 +394,29 @@ export const queryProductsByCondition = params => dispatch => (
         searchProductsByCondition(params)
             .then(res => {
                 dispatch(queryProductsByConditionAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 删除选中区域组
+ *
+ * @param {Object} params 传参
+ */
+const deleteAreaGroupActionType = data => ({
+    type: ActionType.DELETE_AREA_GROUP,
+    payload: data
+});
+
+export const deleteAreaGroup = params => dispatch => (
+    new Promise((resolve, reject) => {
+        deleteAreaGroupService(params)
+            .then(res => {
+                dispatch(
+                    deleteAreaGroupActionType(res.data)
+                );
                 resolve(res);
             })
             .catch(err => reject(err))
@@ -238,7 +446,6 @@ export const createProductSiteRelations = params => dispatch => (
 /**
  * 查询商品地点关系详情
  */
-
 const queryDetailByIdAction = data => ({
     type: ActionType.QUERY_PRODUCT_SITE_RELATION_BY_ID,
     payload: data
@@ -257,10 +464,8 @@ export const queryDetailById = params => dispatch => (
 
 /**
  * 保存添加商品地点关系参数
-*/
-
+ */
 export const receiveAddRelationParams = data => ({
     type: ActionType.RECEIVE_ADD_RELATION_PARAMS,
     payload: data
 });
-

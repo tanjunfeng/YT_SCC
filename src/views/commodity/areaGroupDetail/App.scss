@@ -1,0 +1,52 @@
+.area-group-detail {
+    .ant-form {
+        padding: 20px 0 20px;
+        margin: 10px 0;
+        .ant-form-item {
+            float: left;
+            display: block;
+            height: 42px;
+            &-label {
+                width: 75px;
+                .sc-form-item-label {
+                    text-align: right;
+                }
+            }
+            .ywc-smind {
+                top: 4px;
+            }
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 200px;
+            }
+        }
+        .ant-row-flex-end {
+            margin-top: 24px;
+        }
+    }
+    .shuttle-form {
+        display: flex;
+        flex-direction: row;
+        .col-half {
+            flex-grow: 1;
+            border: 1px solid #c4c5c9;
+        }
+        .col-center {
+            display: flex;
+            flex-basis: 120px;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            .ant-btn {
+                margin: 4px;
+            }
+        }
+    }
+    .button-group {
+        padding: 20px;
+    }
+    .ant-btn {
+        margin-right: 20px;
+    }
+}

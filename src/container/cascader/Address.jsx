@@ -11,56 +11,54 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Cascader } from 'antd';
 
-import { getCategoriesByParentId, clearCategoriesList } from '../../actions/promotion';
+import { getRegionByCode } from '../../actions/pub';
 
 @connect(state => ({
-    categories: state.toJS().promotion.categories
+    region: state.toJS().pub.region
 }), dispatch => bindActionCreators({
-    getCategoriesByParentId,
-    clearCategoriesList
+    getRegionByCode
 }, dispatch))
 
-class Category extends PureComponent {
+class Address extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.getInitialData = this.getInitialData.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleLoadData = this.handleLoadData.bind(this);
+        this.appendObject = this.appendObject.bind(this);
+        this.appendOption = this.appendOption.bind(this);
+    }
+
     state = {
+        value: '',
         options: [],
         isLoading: false
     };
 
-    getInitCategories = () => {
-        this.props.getCategoriesByParentId({ parentId: '' }).then((res) => {
-            this.setState({
-                options: res.data.map((treeNode, index) => ({
-                    key: `root-${index}`,
-                    label: treeNode.categoryName,
-                    value: treeNode.id,
-                    isLeaf: false,
-                    level: treeNode.level
-                }))
-            });
-        });
-    }
-
-    /**
-     * 清除输入框内容
-     */
-    clear = () => {
-        this.cascader.setValue([]);
-    }
-
     componentDidMount() {
-        this.getInitCategories();
+        this.getInitialData();
     }
 
     componentWillReceiveProps(nextProps) {
-        const { isClearCategory } = nextProps;
-        if (isClearCategory && !this.props.isClearCategory) {
-            this.cascader.setValue([]);
-            // this.props.resetFlag();
+        if (nextProps.reset && !this.props.reset) {
+            this.setState({ value: '' }, () => {
+                this.getInitialData();
+            });
         }
     }
 
-    componentWillUnmount() {
-        this.props.clearCategoriesList();
+    getInitialData() {
+        this.props.getRegionByCode({ code: 100000 }).then(res => {
+            this.setState({
+                options: res.data.map(treeNode => ({
+                    key: String(treeNode.id),
+                    label: treeNode.regionName,
+                    value: treeNode.code,
+                    isLeaf: false,
+                    level: treeNode.regionType
+                }))
+            });
+        });
     }
 
     /**
@@ -70,31 +68,28 @@ class Category extends PureComponent {
      * @param {*选中的对象} selectedOptions
      * http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/promotion/insertPromotion
      */
-    handleChange = (value, selectedOptions) => {
+    handleChange(value, selectedOptions) {
+        this.setState({ value });
         if (selectedOptions.length === 0) {
-            this.props.resetFlag();
-            this.getInitCategories();
             this.props.onChange(null, selectedOptions);
         } else {
             const target = selectedOptions[selectedOptions.length - 1];
-            const category = {
-                categoryId: target.value,
-                categoryName: target.label,
-                categoryLevel: target.level
+            const address = {
+                code: target.value,
+                regionName: target.label,
+                regionType: target.level
             };
-
-            console.log(category);
-            this.props.onChange(category, selectedOptions);
+            this.props.onChange(address, selectedOptions);
         }
     }
 
-    handleLoadData = (selectedOptions) => {
+    handleLoadData(selectedOptions) {
         const target = selectedOptions[selectedOptions.length - 1];
         this.setState({
             isLoading: target.loading = true
         });
-        this.props.getCategoriesByParentId({ parentId: target.value }).then(res => {
-            target.children = this.appendObject(res, target);
+        this.props.getRegionByCode({ code: target.value }).then(res => {
+            target.children = this.appendObject(res);
             this.appendOption(target.children, target.value);
             this.setState({
                 isLoading: target.loading = false
@@ -108,16 +103,15 @@ class Category extends PureComponent {
      * @param {*请求数据} res
      * @param {*子节点地址} target
      */
-    appendObject = (res, target) => {
-        const id = target.value;
+    appendObject(res) {
         const arr = [];
-        res.data.forEach((treeNode, index) => {
+        res.data.forEach(treeNode => {
             arr.push({
-                key: `${id}-${index}`,
-                label: treeNode.categoryName,
-                value: treeNode.id,
-                isLeaf: treeNode.level === 4,
-                level: treeNode.level
+                key: String(treeNode.id),
+                label: treeNode.regionName,
+                value: treeNode.code,
+                isLeaf: +(treeNode.regionType) === 4,
+                level: treeNode.regionType
             })
         });
         return arr;
@@ -129,7 +123,7 @@ class Category extends PureComponent {
      * @param {*子节点地址} children
      * @param {*父节点编号} parentId
      */
-    appendOption = (children, parentId) => {
+    appendOption(children, parentId) {
         const dist = this.state.options;
         dist.forEach((obj, index) => {
             if (obj.value === parentId) {
@@ -144,6 +138,7 @@ class Category extends PureComponent {
     }
 
     render() {
+        const { value } = this.state;
         return (
             <Cascader
                 disabled={this.props.disabled}
@@ -151,23 +146,22 @@ class Category extends PureComponent {
                 loadData={this.handleLoadData}
                 onChange={this.handleChange}
                 placeholder={'请选择'}
-                ref={cascader => { this.cascader = cascader }}
+                value={value}
                 changeOnSelect
             />
         );
     }
 }
 
-Category.propTypes = {
-    getCategoriesByParentId: PropTypes.func,
-    clearCategoriesList: PropTypes.func,
+Address.propTypes = {
+    getRegionByCode: PropTypes.func,
     disabled: PropTypes.bool,
+    reset: PropTypes.bool,
     onChange: PropTypes.func
 }
 
-Category.defaultProps = {
-    disabled: false,
-    isClearCategory: false
+Address.defaultProps = {
+    disabled: false
 }
 
-export default withRouter(Form.create()(Category));
+export default withRouter(Form.create()(Address));

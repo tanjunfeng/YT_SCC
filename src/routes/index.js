@@ -26,6 +26,8 @@ import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDeta
 import importPurchasePriceList from 'bundle-loader?lazy!../views/commodity/importPurchasePriceList';
 // 售价导入
 import PriceImport from 'bundle-loader?lazy!../views/commodity/priceImport';
+import AreaGroupList from 'bundle-loader?lazy!../views/commodity/areaGroupList';
+import AreaGroupDetail from 'bundle-loader?lazy!../views/commodity/areaGroupDetail';
 // 商品地点关系管理
 import SitesManage from 'bundle-loader?lazy!../views/commodity/sitesManage';
 // 商品地点关系创建
@@ -324,6 +326,28 @@ const routes = [
                             render={() => (<Bundle load={SiteRelationCreate}>
                                 {(App) => <App />}
                             </Bundle>)}
+                        />
+                    </Switch>
+                ),
+            },
+            // 区域组管理
+            {
+                path: '/areaGroupList',
+                parent: 'gylspgl',
+                key: 'areaGroupList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/areaGroupList"
+                            exact
+                            render={() => <Bundle load={AreaGroupList}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/areaGroupList/detail/:id"
+                            exact
+                            render={() => (<Bundle load={AreaGroupDetail}>
+                                {App => <App />}
+                                </Bundle>)}
                         />
                     </Switch>
                 ),

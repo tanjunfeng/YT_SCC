@@ -31,10 +31,11 @@ import {
     queryProductForSelect,
     queryPurchaseOrderProducts,
     queryDirectStores,
+    queryAreaStores,
     queryPurchaseOrderBrands,
+    queryAreaGroupList,
     findCompanyBaseInfo as findCompaniesService,
     modifypassword as modifypasswordActionService,
-    queryAreaGroupList,
     filterSupplyInfo
 } from '../service';
 
@@ -85,9 +86,11 @@ const pubValueList = {
     queryPurchaseOrderProducts,
     // 查询直营店
     queryDirectStores,
+    // 根据区域组查询门店
+    queryAreaStores,
     // 品牌值清单
     queryPurchaseOrderBrands,
-    // 区域组值清单
+    // 查询区域组列表
     queryAreaGroupList
 };
 
@@ -117,6 +120,24 @@ export const fetchRegionByCode = ({ type = 0, code = '100000' }) => dispatch => 
                 receiveRegion({ type, parentCode: code, data })
             );
         })
+)
+
+const receiveNextCategorys = (data) => ({
+    type: ActionType.RECEIVE_NEXT_CATEGORYS,
+    payload: data,
+});
+
+export const getRegionByCode = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryRegionByCode(params)
+            .then(res => {
+                dispatch(receiveNextCategorys(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
 )
 
 const receiveAllCategorys = (data) => ({

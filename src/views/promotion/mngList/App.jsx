@@ -145,7 +145,7 @@ class PromotionManagementList extends PureComponent {
                         <Menu.Item key="publish">
                             <a target="_blank" rel="noopener noreferrer">
                                 发布
-                        </a>
+                            </a>
                         </Menu.Item>
                         : null
                 }
@@ -155,7 +155,7 @@ class PromotionManagementList extends PureComponent {
                         <Menu.Item key="close">
                             <a target="_blank" rel="noopener noreferrer">
                                 关闭
-                        </a>
+                            </a>
                         </Menu.Item>
                         : null
                 }

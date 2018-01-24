@@ -6,6 +6,7 @@
  */
 import Immutable from 'immutable';
 import ActionType from '../actions/ActionType';
+import { PAGE_SIZE } from '../constant';
 
 const initState = Immutable.fromJS({
 
@@ -91,6 +92,16 @@ const initState = Immutable.fromJS({
 
     // 成本价
     costPrice: null,
+
+    // 区域组
+    areaGroup: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] },
+
+    // 已分组的门店列表
+    groupedStores: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] },
+
+    // 未分组的门店列表
+    freeStores: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] },
+
     // 商品地点关系列表
     goodsSitesManageList: {},
     // 商品信息列表
@@ -204,12 +215,25 @@ export default function (state = initState, action) {
         case ActionType.DELETE_PROD_PRUCHASE_BYID:
             return state.set('deleteProd', action.payload);
 
-        case ActionType.GER_WARE_HOUSE_LOGIC_INFO:
+        case ActionType.GET_WARE_HOUSE_LOGIC_INFO:
             return state.set('getWarehouseLogicInfo', action.payload);
 
         case ActionType.GET_COST_PRICE:
         case ActionType.CLEAR_COST_PRICE:
             return state.set('costPrice', action.payload);
+
+        case ActionType.RECEIVE_AREA_GROUP:
+        case ActionType.CLEAR_AREA_GROUP:
+            return state.set('areaGroup', action.payload);
+
+        case ActionType.GET_GROUPED_STORES:
+        case ActionType.CLEAR_GROUPED_STORES:
+            return state.set('groupedStores', action.payload);
+
+        case ActionType.GET_FREE_STORES:
+        case ActionType.CLEAR_FREE_STORES:
+            return state.set('freeStores', action.payload);
+
         case ActionType.RECEIVE_SITES_MANAGE_LIST:
             return state.set('goodsSitesManageList', action.payload);
         case ActionType.QUERY_PRODUCTS_BY_CONDITION:

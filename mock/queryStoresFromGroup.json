@@ -1,0 +1,83 @@
+{
+    "timestamp": 1516268464818,
+    "code": 200,
+    "message": {},
+    "exception": null,
+    "data": {
+        "records": [
+            {
+                "id": "A000002",
+                "orderCode": "No.000002",
+                "name": "长沙市雨花区桃红食品店",
+                "simpleName": "桃红食品店",
+                "branchCompanyId": "10004",
+                "branchCompanyName": "湖南子公司",
+                "provinceId": "430000",
+                "cityId": "430100",
+                "districtId": "430111",
+                "provinceName": "湖南",
+                "cityName": "长沙",
+                "districtName": "雨花区",
+                "address": "雨花区高升路268号和馨佳园出口",
+                "areaGroupId": "10000013",
+                "areaGroupName": "长沙郊区组"
+            },
+            {
+                "id": "A000003",
+                "orderCode": "No.000003",
+                "name": "长沙市雨花区华地食品超市",
+                "simpleName": "华地食品超市",
+                "branchCompanyId": "10004",
+                "branchCompanyName": "湖南子公司",
+                "provinceId": "430000",
+                "cityId": "430100",
+                "districtId": "430103",
+                "provinceName": "湖南省",
+                "cityName": "长沙市",
+                "districtName": "天心区",
+                "address": "湖南省长沙市雨花区砂子塘街道阳光锦城南门斜对面金地巷46号",
+                "areaGroupId": "10000013",
+                "areaGroupName": "长沙郊区组"
+            },
+            {
+                "id": "A000004",
+                "orderCode": "No.000004",
+                "name": "长沙市岳麓区阳光波哥便利店",
+                "simpleName": "阳光波哥便利店",
+                "branchCompanyId": "10004",
+                "branchCompanyName": "湖南子公司",
+                "provinceId": "430000",
+                "cityId": "430100",
+                "districtId": null,
+                "provinceName": "湖南省",
+                "cityName": "长沙市",
+                "districtName": null,
+                "address": "湖南省长沙市岳麓区阳光一百二期19栋地铁出口",
+                "areaGroupId": "10000013",
+                "areaGroupName": "长沙郊区组"
+            },
+            {
+                "id": "A000006",
+                "orderCode": "No.000006",
+                "name": "来见喜",
+                "simpleName": "来见喜",
+                "branchCompanyId": "10004",
+                "branchCompanyName": "湖南子公司",
+                "provinceId": "440000",
+                "cityId": "440100",
+                "districtId": "440103",
+                "provinceName": "广东",
+                "cityName": "广州",
+                "districtName": "荔湾区",
+                "address": "书香路湖光山色小区侧门旁（明德中学对面）",
+                "areaGroupId": "10000013",
+                "areaGroupName": "长沙郊区组"
+            }
+        ],
+        "pageNo": 1,
+        "pageSize": 15,
+        "totalPage": 1,
+        "totalCount": 4
+    },
+    "success": true
+}

@@ -1,26 +1,21 @@
 {
-    "timestamp":1515665699004,
-    "code":200,
-    "message":"请求成功",
-    "exception":null,
-    "data":{
-        "pageNum":1,
-        "pageSize":3,
-        "total":1118,
-        "data":[
+    "timestamp": 1501148097958,
+    "code": 200,
+    "message": "请求成功",
+    "data": {
+        "pageNum": 1,
+        "pageSize": 2,
+        "total": 2,
+        "data": [
             {
-                "id":"A000001",
-                "name":"鑫莉超市16"
+                "id": "007710",
+                "name": "锦江区依佳超市"
             },
             {
-                "id":"A000029",
-                "name":"兴鑫烟酒副食品商行"
-            },
-            {
-                "id":"A000030",
-                "name":"雨露干杂铺"
+                "id": "A007710",
+                "name": "锦江区依佳超市"
             }
         ]
     },
-    "success":true
+    "success": true
 }
