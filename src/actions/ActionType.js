@@ -80,6 +80,10 @@ export default {
     CLEAR_GROUPED_STORES: 'CLEAR_GROUPED_STORES',
     // 获取未分组门店列表
     GET_FREE_STORES: 'GET_FREE_STORES',
+    // 添加未分组门店到指定区域组
+    INSERT_STORE_TO_GROUP: 'INSERT_STORE_TO_GROUP',
+    // 从指定区域组删除未分组门店
+    DELETE_STORE_FROM_AREA: 'DELETE_STORE_FROM_AREA',
     // 清除未分组门店列表
     CLEAR_FREE_STORES: 'CLEAR_FREE_STORES',
     // 跳转到修改销售价格页面

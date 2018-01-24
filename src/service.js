@@ -380,6 +380,9 @@ export const getGroupedStores = (params) => http.get('/areaGroup/queryStoresFrom
 // 添加未分组门店到区域组
 export const insertStoreToGroup = (params) => http.get('/areaGroup/insertStoreToGroup', params);
 
+// 删除区域组的未分组门店
+export const deleteStoreFromArea = (params) => http.get('/areaGroup/deleteStoreFromArea', params);
+
 // 修改采购价格
 export const updatePurchasePrice = (params) => http.post('/price/updatePurchasePrice', params);
 

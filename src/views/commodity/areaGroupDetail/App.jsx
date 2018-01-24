@@ -18,7 +18,8 @@ import {
     clearGroupedStores,
     getFreeStores,
     clearFreeStores,
-    insertStoreToGroup
+    insertStoreToGroup,
+    deleteStoreFromArea
 } from '../../../actions/commodity';
 import StoresForm from './storesForm';
 import { PAGE_SIZE } from '../../../constant/index';
@@ -36,7 +37,8 @@ const FormItem = Form.Item;
     clearGroupedStores,
     getFreeStores,
     clearFreeStores,
-    insertStoreToGroup
+    insertStoreToGroup,
+    deleteStoreFromArea
 }, dispatch))
 
 class AreaGroupDetail extends PureComponent {
@@ -73,10 +75,9 @@ class AreaGroupDetail extends PureComponent {
         const { id } = this.props.match.params;
         this.props.getAreaGroup({
             areaGroupIdOrName: id
-        })
-            .then(() => this.queryGrouped())
-            .then(() => this.queryFree())
-            .catch(() => { });
+        }).then(() => {
+            this.freshData();
+        });
     }
 
     /**
@@ -119,11 +120,10 @@ class AreaGroupDetail extends PureComponent {
      * 同时刷新左右两个页面
      */
     freshData = () => {
-        this.props.clearGroupedStores()
-            .then(() => this.props.clearFreeStores())
-            .then(() => this.queryGrouped())
-            .then(() => this.queryFree())
-            .catch(() => { });
+        this.props.clearGroupedStores();
+        this.props.clearFreeStores();
+        this.queryGrouped();
+        this.queryFree();
     }
 
     /**
@@ -189,6 +189,9 @@ class AreaGroupDetail extends PureComponent {
         this.currentFree = 1;
     }
 
+    /**
+     * 添加所选门店到指定区域组
+     */
     handleAddSelected = () => {
         const { areaGroupId, areaGroupName, state } = this;
         const { selectedFreeStores } = state;
@@ -198,6 +201,19 @@ class AreaGroupDetail extends PureComponent {
             storeIds: selectedFreeStores.join(',')
         }).then(() => {
             this.setState({ selectedFreeStores: [] });
+            this.freshData();
+        })
+    }
+
+    /**
+     * 从当前区域组删除所选门店
+     */
+    handleDelSelected = () => {
+        const { selectedGroupedStores } = this.state;
+        this.props.deleteStoreFromArea({
+            storeIds: selectedGroupedStores.join(',')
+        }).then(() => {
+            this.setState({ selectedGroupedStores: [] });
             this.freshData();
         })
     }
@@ -292,6 +308,7 @@ AreaGroupDetail.propTypes = {
     clearFreeStores: PropTypes.func,
     getFreeStores: PropTypes.func,
     insertStoreToGroup: PropTypes.func,
+    deleteStoreFromArea: PropTypes.func,
     groupedStores: PropTypes.objectOf(PropTypes.any),
     freeStores: PropTypes.objectOf(PropTypes.any),
     areaGroup: PropTypes.objectOf(PropTypes.any),

@@ -20,6 +20,7 @@ import {
     deleteAreaGroup as deleteAreaGroupService,
     getGroupedStores as getGroupedStoresService,
     insertStoreToGroup as insertStoreToGroupService,
+    deleteStoreFromArea as deleteStoreFromAreaService,
     queryProdPlacePage,
     prodPlaceBulkDelete,
     prodPlacePpdate as updateSiteManageById,
@@ -234,6 +235,25 @@ export const insertStoreToGroup = params => dispatch => (
     new Promise((resolve, reject) => {
         insertStoreToGroupService(params).then(res => {
             dispatch(insertStoreToGroupActionType(res.data));
+            resolve(res);
+        }).catch(err => reject(err))
+    })
+);
+
+/**
+ * 将未分组门店添加至区域组
+ *
+ * @param {Object} params 传参
+ */
+const deleteStoreFromAreaActionType = data => ({
+    type: ActionType.DELETE_STORE_FROM_AREA,
+    payload: data
+});
+
+export const deleteStoreFromArea = params => dispatch => (
+    new Promise((resolve, reject) => {
+        deleteStoreFromAreaService(params).then(res => {
+            dispatch(deleteStoreFromAreaActionType(res.data));
             resolve(res);
         }).catch(err => reject(err))
     })
