@@ -6,24 +6,22 @@ import {
     Table,
     Modal
 } from 'antd';
-import { sitesManageColumns } from '../columns';
+import { exportColumn } from '../columns';
 import Utils from '../../../../util/util';
 import { exportRepeatSiteRelationExcel } from '../../../../service';
 
 class RepeatDataModal extends PureComponent {
+    /**
+     * 导出重复数据Excel
+     */
     exportExcel = () => {
-        const { reqParams, exportExcel, closeModal } = this.props;
-        exportExcel(reqParams);
-        Utils.exportExcel(exportRepeatSiteRelationExcel, reqParams);
-        // exportExcel(reqParams).then(res => {
-        //     if (res.success) {
-        //         closeModal();
-        //     }
-        // });
+        const { reqParams } = this.props;
+        Utils.exportExcel(exportRepeatSiteRelationExcel, Utils.removeInvalid(reqParams));
     }
+
     render() {
         const { repeatRes, closeModal, visible } = this.props;
-        const { resultObject} = repeatRes;
+        const { data } = repeatRes;
         return (
             <Modal
                 title="以下商品地点已经存在商品地点关系，不能再次生成，请确认"
@@ -38,9 +36,10 @@ class RepeatDataModal extends PureComponent {
                     <Table
                         rowKey={record => record.id}
                         rowSelection={this.rowSelection}
-                        dataSource={resultObject}
-                        columns={sitesManageColumns}
+                        dataSource={data}
+                        columns={exportColumn}
                     />
+                    <div id="downloadDiv" style={{display: 'none'}} />
                 </div>
             </Modal>
         );
@@ -51,16 +50,15 @@ RepeatDataModal.propTypes = {
     visible: PropTypes.bool,
     repeatRes: PropTypes.objectOf(PropTypes.any),
     closeModal: PropTypes.func,
-    exportExcel: PropTypes.func,
     reqParams: PropTypes.objectOf(PropTypes.any)
 };
 
 RepeatDataModal.defaultProps = {
     repeatRes: {
-        resultObject: [],
-        recordsTotal: 0,
-        currentPage: 0
+        data: [],
+        total: 0,
+        pageNum: 0
     }
-}
+};
 
 export default withRouter(Form.create()(RepeatDataModal));
