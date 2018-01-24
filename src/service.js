@@ -366,7 +366,7 @@ export const getAreaGroup = (params) => http.get('/areaGroup/queryAreaGroupList'
 export const createAreaGroup = (params) => http.post('/areaGroup/insertAreaGroup', params);
 
 // 区域组名是否存在
-export const isAreaGroupExists = (params) => http.post('/areaGroup/queryStoreGroupByName', params);
+export const isAreaGroupExists = (params) => http.get('/areaGroup/queryStoreGroupByName', params);
 
 // 删除区域组
 export const deleteAreaGroup = (params) => http.post('/areaGroup/deleteAreaGroup', params);

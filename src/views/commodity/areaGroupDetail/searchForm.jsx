@@ -36,7 +36,7 @@ class SearchForm extends PureComponent {
         const { provinceId, cityId, districtId } = this.state;
         const { store } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
-            storeId: store.id,
+            idOrName: store.id,
             provinceId,
             cityId,
             districtId

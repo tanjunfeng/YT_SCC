@@ -171,7 +171,7 @@ export const getAreaGroup = params => dispatch => (
  */
 export const clearAreaGroup = () => dispatch => (dispatch({
     type: ActionType.CLEAR_AREA_GROUP,
-    payload: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] }
+    payload: { pageNum: 1, pageSize: PAGE_SIZE, totalPage: 0, data: [] }
 }));
 
 /**
@@ -264,7 +264,7 @@ export const deleteStoreFromArea = params => dispatch => (
  */
 export const clearGroupedStores = () => dispatch => (dispatch({
     type: ActionType.CLEAR_GROUPED_STORES,
-    payload: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] }
+    payload: { pageNum: 1, pageSize: PAGE_SIZE, totalPage: 0, data: [] }
 }));
 
 /**
@@ -272,7 +272,7 @@ export const clearGroupedStores = () => dispatch => (dispatch({
  */
 export const clearFreeStores = () => dispatch => (dispatch({
     type: ActionType.CLEAR_FREE_STORES,
-    payload: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] }
+    payload: { pageNum: 1, pageSize: PAGE_SIZE, totalPage: 0, data: [] }
 }));
 
 const getSitesManageListAction = data => ({
