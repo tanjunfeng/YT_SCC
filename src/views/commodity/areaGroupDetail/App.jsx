@@ -12,7 +12,12 @@ import { withRouter } from 'react-router';
 import { Form, Row, Col, Button } from 'antd';
 
 import {
-    getAreaGroup, clearAreaGroup, getGroupedStores, clearGroupedStores
+    getAreaGroup,
+    clearAreaGroup,
+    getGroupedStores,
+    clearGroupedStores,
+    getFreeStores,
+    clearFreeStores
 } from '../../../actions/commodity';
 import StoresForm from './storesForm';
 import { PAGE_SIZE } from '../../../constant/index';
@@ -22,8 +27,14 @@ const FormItem = Form.Item;
 @connect(state => ({
     areaGroup: state.toJS().commodity.areaGroup,
     groupedStores: state.toJS().commodity.groupedStores,
+    freeStores: state.toJS().commodity.groupedStores
 }), dispatch => bindActionCreators({
-    getAreaGroup, clearAreaGroup, getGroupedStores, clearGroupedStores
+    getAreaGroup,
+    clearAreaGroup,
+    getGroupedStores,
+    clearGroupedStores,
+    getFreeStores,
+    clearFreeStores
 }, dispatch))
 
 class AreaGroupDetail extends PureComponent {
@@ -41,7 +52,13 @@ class AreaGroupDetail extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
+        // 未分组的门店列表查询条件
+        this.paramsFree = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        };
         this.currentGrouped = 1;
+        this.currentFree = 1;
     }
 
     componentWillMount() {
@@ -76,15 +93,43 @@ class AreaGroupDetail extends PureComponent {
         })
     }
 
-    getFreeStoresValues = () => this.getGroupedStoresValues()
+    /**
+     * 未分组门店列表
+     */
+    getFreeStoresValues = () => {
+        const { freeStores } = this.props;
+        const { records, pageNo, pageSize, totalCount } = freeStores;
+        const { selectedFreeStores } = this.state;
+        return ({
+            title: '未分组门店',
+            records,
+            selectedStores: selectedFreeStores,
+            pageNo,
+            pageSize,
+            totalCount,
+            current: this.currentFree
+        })
+    }
 
     /**
      * 查询已有门店列表
      */
     queryGrouped = () => {
+        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/areaGroup/queryStoresFromGroup
         this.props.getGroupedStores({
             ...this.paramsGrouped,
             areaGroupId: this.areaGroupId,
+            branchCompanyId: this.branchCompanyId,
+        });
+    }
+
+    /**
+     * 查询未分组门店列表
+     */
+    queryFree = () => {
+        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/areaGroup/queryStoresFromGroup
+        this.props.getFreeStores({
+            ...this.paramsFree,
             branchCompanyId: this.branchCompanyId,
         });
     }
@@ -97,8 +142,20 @@ class AreaGroupDetail extends PureComponent {
         this.queryGrouped();
     }
 
+    handleFreeSearch = params => {
+        this.handleFreeReset();
+        Object.assign(this.paramsFree, {
+            ...params
+        });
+        this.queryFree();
+    }
+
     handleGroupedSelected = selectedStores => {
         this.setState({ selectedGroupedStores: selectedStores });
+    }
+
+    handleFreeSelected = selectedStores => {
+        this.setState({ selectedFreeStores: selectedStores });
     }
 
     handleGroupedReset = () => {
@@ -107,6 +164,14 @@ class AreaGroupDetail extends PureComponent {
             pageSize: PAGE_SIZE
         };
         this.currentGrouped = 1;
+    }
+
+    handleFreeReset = () => {
+        this.paramsFree = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        };
+        this.currentFree = 1;
     }
 
     renderTitle = info => {
@@ -170,6 +235,9 @@ class AreaGroupDetail extends PureComponent {
                     {this.renderButtonGroup()}
                     <StoresForm
                         value={this.getFreeStoresValues()}
+                        onSearch={this.handleFreeSearch}
+                        onSelect={this.handleFreeSelected}
+                        onReset={this.handleFreeReset}
                     />
                 </div>
             </div>
@@ -182,7 +250,9 @@ AreaGroupDetail.propTypes = {
     getAreaGroup: PropTypes.func,
     clearGroupedStores: PropTypes.func,
     getGroupedStores: PropTypes.func,
+    getFreeStores: PropTypes.func,
     groupedStores: PropTypes.objectOf(PropTypes.any),
+    freeStores: PropTypes.objectOf(PropTypes.any),
     areaGroup: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any)
 }

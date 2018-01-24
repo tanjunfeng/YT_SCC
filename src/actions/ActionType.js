@@ -78,6 +78,10 @@ export default {
     GET_GROUPED_STORES: 'GET_GROUPED_STORES',
     // 清除已分组门店列表
     CLEAR_GROUPED_STORES: 'CLEAR_GROUPED_STORES',
+    // 获取未分组门店列表
+    GET_FREE_STORES: 'GET_FREE_STORES',
+    // 清除未分组门店列表
+    CLEAR_FREE_STORES: 'CLEAR_FREE_STORES',
     // 跳转到修改销售价格页面
     RECEIVE_TO_UPDATE_SELL_PRICE: 'RECEIVE_TO_UPDATE_SELL_PRICE',
     // 修改销售价格

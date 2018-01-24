@@ -36,8 +36,8 @@ class Stores extends PureComponent {
     /**
      * 直营店 - 值清单
      */
-    handleChoose = (v) => {
-        this.props.onChange(v);
+    handleChoose = v => {
+        this.props.onChange(v.record);
     }
 
     query = (params) => (

@@ -175,6 +175,7 @@ export const clearAreaGroup = () => dispatch => (dispatch({
 /**
  * 查询已在区域组下的门店
  *
+ * existsAreaGroup: true
  * @param {Object} params 传参
  */
 const getGroupedStoresActionType = data => ({
@@ -195,10 +196,42 @@ export const getGroupedStores = params => dispatch => (
 );
 
 /**
+ * 查询未分组门店
+ *
+ * 重用 getGroupedStoresService
+ * existsAreaGroup: false
+ * @param {Object} params 传参
+ */
+const getFreeStoresActionType = data => ({
+    type: ActionType.GET_FREE_STORES,
+    payload: data
+});
+
+export const getFreeStores = params => dispatch => (
+    new Promise((resolve, reject) => {
+        getGroupedStoresService({
+            existsAreaGroup: false,
+            ...params
+        }).then(res => {
+            dispatch(getFreeStoresActionType(res.data));
+            resolve(res);
+        }).catch(err => reject(err))
+    })
+);
+
+/**
  * 清空已分组门店列表
  */
 export const clearGroupedStores = () => dispatch => (dispatch({
     type: ActionType.CLEAR_GROUPED_STORES,
+    payload: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] }
+}));
+
+/**
+ * 清空未分组门店列表
+ */
+export const clearFreeStores = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_FREE_STORES,
     payload: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, records: [] }
 }));
 

@@ -123,9 +123,7 @@ class SearchForm extends PureComponent {
                         <FormItem label="门店">
                             {getFieldDecorator('store', {
                                 initialValue: { id: '', name: '' }
-                            })(<Stores
-                                onChange={this.handleDirectStoresChange}
-                            />)}
+                            })(<Stores />)}
                         </FormItem>
                     </Col>
                 </Row>
