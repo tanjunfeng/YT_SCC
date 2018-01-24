@@ -118,7 +118,7 @@ class SiteManage extends PureComponent {
         const _self = this;
         confirm({
             title: '',
-            content: '数据删除不可恢复，确认删除选中的商品地点关系?',
+            content: '数据删除不可恢复，是否确定删除选中的商品地点关系?',
             onOk() {
                 removeSiteManagesByIds({ids}).then(res => {
                     if (res.success) {
