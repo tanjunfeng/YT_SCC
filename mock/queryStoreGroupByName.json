@@ -1,0 +1,19 @@
+{
+    "timestamp": 1516348328426,
+    "code": 200,
+    "message": "区域组已经存在",
+    "exception": null,
+    "data": {
+        "id": "10000014",
+        "areaGroupName": "绵阳组",
+        "branchCompanyId": null,
+        "branchCompanyName": null,
+        "createBy": "隔壁老王",
+        "createDate": 1516180909000,
+        "modifyBy": null,
+        "modifyDate": null,
+        "deleteFlag": 0,
+        "exists": true
+    },
+    "success": false
+}
