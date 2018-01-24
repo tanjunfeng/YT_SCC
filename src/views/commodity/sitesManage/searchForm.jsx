@@ -28,12 +28,9 @@ class SearchForm extends PureComponent {
         category: 0,
         isClearCategory: false
     }
+
     componentDidMount() {
-        this.props.queryList({
-            pageNum: 1,
-            branchCompanyId: '',
-            pageSize: PAGE_SIZE
-        });
+        this.queryNoCondition();
     }
 
     getQueryParams = () => {
@@ -68,6 +65,17 @@ class SearchForm extends PureComponent {
                 this.baseQueryParams[productLevel[i]] = item;
             });
         }
+    }
+
+    /**
+     * 初始数据查询
+     */
+    queryNoCondition = () => {
+        this.props.queryList({
+            pageNum: 1,
+            branchCompanyId: '',
+            pageSize: PAGE_SIZE
+        });
     }
 
     handleSearch = () => {
@@ -113,6 +121,7 @@ class SearchForm extends PureComponent {
         setFieldsValue({
             place: { reset: true }
         });
+        this.queryNoCondition();
     }
 
     handleCategorySelect = (category, selectedOptions) => {
