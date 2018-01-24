@@ -116,6 +116,17 @@ class AreaGroupDetail extends PureComponent {
     }
 
     /**
+     * 同时刷新左右两个页面
+     */
+    freshData = () => {
+        this.props.clearGroupedStores()
+            .then(() => this.props.clearFreeStores())
+            .then(() => this.queryGrouped())
+            .then(() => this.queryFree())
+            .catch(() => { });
+    }
+
+    /**
      * 查询已有门店列表
      */
     queryGrouped = () => {
@@ -185,15 +196,10 @@ class AreaGroupDetail extends PureComponent {
             areaGroupId,
             areaGroupName,
             storeIds: selectedFreeStores.join(',')
+        }).then(() => {
+            this.setState({ selectedFreeStores: [] });
+            this.freshData();
         })
-            .then(() => {
-                this.setState({ selectedFreeStores: [] });
-                return this.props.clearGroupedStores()
-            })
-            .then(() => this.props.clearFreeStores())
-            .then(() => this.queryGrouped())
-            .then(() => this.queryFree())
-            .catch(() => { });
     }
 
     renderTitle = info => {
