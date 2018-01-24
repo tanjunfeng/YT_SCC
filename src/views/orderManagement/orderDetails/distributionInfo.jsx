@@ -11,6 +11,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Form, Icon, Row, Col, Button, Table, Modal } from 'antd';
 import moment from 'moment';
+
+import Utils from '../../../util/util';
 import { DATE_FORMAT } from '../../../constant/index';
 import { distributionInformationColumns as columns } from '../columns';
 import EditableCell from './editableCell';
@@ -87,6 +89,14 @@ class DistributionInformation extends PureComponent {
         ((record.quantity * record.completedQuantity) * record.salePrice).toFixed(2)
     )
 
+    closeCanvas = () => {
+        this.setState({flowChartData: null})
+    }
+
+    showCanvas = () => {
+        const data = this.props.shippingDetailData.singedCertImg;
+        this.setState({flowChartData: data})
+    }
 
     renderQuantity = (text, record) => (
         <EditableCell
@@ -104,14 +114,6 @@ class DistributionInformation extends PureComponent {
         columns[9].render = this.calculationDiff;
     }
 
-    closeCanvas = () => {
-        this.setState({flowChartData: null})
-    }
-
-    showCanvas = () => {
-        const data = this.props.shippingDetailData.singedCertImg;
-        this.setState({flowChartData: data})
-    }
     render() {
         const { shippingDetailData, value } = this.props;
         const { data } = shippingDetailData;

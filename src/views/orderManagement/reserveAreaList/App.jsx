@@ -15,6 +15,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import { PAGE_SIZE } from '../../../constant';
 import Util from '../../../util/util';
 import SearchForm from './searchForm';
@@ -105,7 +106,7 @@ class ReserveAreaList extends PureComponent {
     }
 
     handleSelect = (record, index) => {
-        const { comleteOrCloseWishList } = this.props;
+        const closeWishList = this.props.comleteOrCloseWishList;
         const { key } = index;
         const { id } = record;
         switch (key) {
@@ -114,7 +115,7 @@ class ReserveAreaList extends PureComponent {
                     title: '到货处理',
                     content: '确认此到货处理操作？',
                     onOk: () => {
-                        comleteOrCloseWishList({wishListId: id, status: key}).then(res => {
+                        closeWishList({wishListId: id, status: key}).then(res => {
                             if (res.code === 200) message.success(res.message);
                         })
                     },
@@ -126,7 +127,7 @@ class ReserveAreaList extends PureComponent {
                     title: '无货处理',
                     content: '确认此无货处理操作？',
                     onOk: () => {
-                        comleteOrCloseWishList({wishListId: id, status: key}).then(res => {
+                        closeWishList({wishListId: id, status: key}).then(res => {
                             if (res.code === 200) message.success(res.message);
                         })
                     },

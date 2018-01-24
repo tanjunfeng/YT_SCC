@@ -292,7 +292,7 @@ class ProdModal extends Component {
     render() {
         const {
             prefixCls, form, initValue = {}, userNames,
-            isEdit, data, hasMainSupplier, getProductByIds, getProdPurchaseByIds
+            isEdit, data, hasMainSupplier, getProductByIds = {}, getProdPurchaseByIds
         } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
@@ -318,6 +318,7 @@ class ProdModal extends Component {
                 className={isEdit ? prefixCls : 'creat-prod'}
                 onOk={this.handleOk}
                 width={isEdit ? '517px' : '480px'}
+                destroyOnClose
                 onCancel={this.handleCancel}
                 maskClosable={false}
             >
@@ -331,7 +332,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchaseInsideNumber', {
                                             rules: [{ required: true, message: '采购内装数' }],
-                                            initialValue: getProductByIds.purchaseInsideNumber
+                                            initialValue: initValue.purchaseInsideNumber
                                         })(
                                             <InputNumber
                                                 min={0}
@@ -427,7 +428,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('supportReturn', {
                                             rules: [{ required: true, message: '请选择是否支持退货!' }],
-                                            initialValue: supportReturn ? String(supportReturn) : supportReturnOption.defaultValue
+                                            initialValue: isEdit ? String(supportReturn) : supportReturnOption.defaultValue
                                         })(
                                             <Select
                                                 className="sc-form-item-select"
@@ -641,6 +642,7 @@ ProdModal.propTypes = {
     handleClose: PropTypes.func,
     prodPurchase: PropTypes.objectOf(PropTypes.any),
     initValue: PropTypes.objectOf(PropTypes.any),
+    getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
     isEdit: PropTypes.bool,
     hasMainSupplier: PropTypes.bool,

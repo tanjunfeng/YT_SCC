@@ -11,10 +11,6 @@ import { Form, Row, Col, Button } from 'antd';
 import { withRouter } from 'react-router';
 import { DirectStores } from '../../../container/search';
 import Util from '../../../util/util';
-import {
-    queryDirectInfo,
-    clearDirectInfo
-} from '../../../actions/procurement';
 
 const FormItem = Form.Item;
 
@@ -48,6 +44,7 @@ class SearchForm extends PureComponent {
                 storeId: stores.record.storeId
             });
         }
+        return null;
     }
 
     /**
