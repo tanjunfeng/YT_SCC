@@ -19,6 +19,7 @@ import {
     isAreaGroupExists as isAreaGroupExistsService,
     deleteAreaGroup as deleteAreaGroupService,
     getGroupedStores as getGroupedStoresService,
+    insertStoreToGroup as insertStoreToGroupService,
     queryProdPlacePage,
     prodPlaceBulkDelete,
     prodPlacePpdate as updateSiteManageById,
@@ -214,6 +215,25 @@ export const getFreeStores = params => dispatch => (
             ...params
         }).then(res => {
             dispatch(getFreeStoresActionType(res.data));
+            resolve(res);
+        }).catch(err => reject(err))
+    })
+);
+
+/**
+ * 将未分组门店添加至区域组
+ *
+ * @param {Object} params 传参
+ */
+const insertStoreToGroupActionType = data => ({
+    type: ActionType.INSERT_STORE_TO_GROUP,
+    payload: data
+});
+
+export const insertStoreToGroup = params => dispatch => (
+    new Promise((resolve, reject) => {
+        insertStoreToGroupService(params).then(res => {
+            dispatch(insertStoreToGroupActionType(res.data));
             resolve(res);
         }).catch(err => reject(err))
     })

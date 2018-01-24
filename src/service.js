@@ -377,6 +377,9 @@ export const queryAreaStores = (params) => http.get('/store/getStoreInfo', param
 // 查询已分组的区域组门店信息
 export const getGroupedStores = (params) => http.get('/areaGroup/queryStoresFromGroup', params);
 
+// 添加未分组门店到区域组
+export const insertStoreToGroup = (params) => http.get('/areaGroup/insertStoreToGroup', params);
+
 // 修改采购价格
 export const updatePurchasePrice = (params) => http.post('/price/updatePurchasePrice', params);
 

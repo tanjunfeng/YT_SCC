@@ -17,7 +17,8 @@ import {
     getGroupedStores,
     clearGroupedStores,
     getFreeStores,
-    clearFreeStores
+    clearFreeStores,
+    insertStoreToGroup
 } from '../../../actions/commodity';
 import StoresForm from './storesForm';
 import { PAGE_SIZE } from '../../../constant/index';
@@ -34,18 +35,19 @@ const FormItem = Form.Item;
     getGroupedStores,
     clearGroupedStores,
     getFreeStores,
-    clearFreeStores
+    clearFreeStores,
+    insertStoreToGroup
 }, dispatch))
 
 class AreaGroupDetail extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            groupedStoreId: '',
             selectedGroupedStores: [],  // 选中的已有门店索引列表
             selectedFreeStores: [], // 已选中的未分组门店索引列表
         };
         this.areaGroupId = this.props.match.params.id; // 区域组编号
+        this.areaGroupName = ''
         this.branchCompanyId = ''; // 分公司编号
         // 已存在的门店列表查询条件
         this.paramsGrouped = {
@@ -64,6 +66,7 @@ class AreaGroupDetail extends PureComponent {
     componentWillMount() {
         this.props.clearAreaGroup();
         this.props.clearGroupedStores();
+        this.props.clearFreeStores();
     }
 
     componentDidMount() {
@@ -72,11 +75,12 @@ class AreaGroupDetail extends PureComponent {
             areaGroupIdOrName: id
         })
             .then(() => this.queryGrouped())
+            .then(() => this.queryFree())
             .catch(() => { });
     }
 
     /**
-     * 已分组的门店列表
+     * 已分组的门店列表显示参数
      */
     getGroupedStoresValues = () => {
         const { groupedStores } = this.props;
@@ -94,7 +98,7 @@ class AreaGroupDetail extends PureComponent {
     }
 
     /**
-     * 未分组门店列表
+     * 未分组门店列表显示参数
      */
     getFreeStoresValues = () => {
         const { freeStores } = this.props;
@@ -174,6 +178,24 @@ class AreaGroupDetail extends PureComponent {
         this.currentFree = 1;
     }
 
+    handleAddSelected = () => {
+        const { areaGroupId, areaGroupName, state } = this;
+        const { selectedFreeStores } = state;
+        this.props.insertStoreToGroup({
+            areaGroupId,
+            areaGroupName,
+            storeIds: selectedFreeStores.join(',')
+        })
+            .then(() => {
+                this.setState({ selectedFreeStores: [] });
+                return this.props.clearGroupedStores()
+            })
+            .then(() => this.props.clearFreeStores())
+            .then(() => this.queryGrouped())
+            .then(() => this.queryFree())
+            .catch(() => { });
+    }
+
     renderTitle = info => {
         const data = info || {
             id: '',
@@ -184,6 +206,7 @@ class AreaGroupDetail extends PureComponent {
         const {
             id, areaGroupName, branchCompanyId, branchCompanyName
         } = data;
+        this.areaGroupName = areaGroupName;
         this.branchCompanyId = branchCompanyId;
         return (
             <Form layout="inline">
@@ -208,10 +231,20 @@ class AreaGroupDetail extends PureComponent {
             <Button type="primary" size="default" onClick={this.handleAddAll}>
                 &lt;&lt; 添加查询结果
             </Button>
-            <Button type="primary" size="default" onClick={this.handleAddSelected}>
+            <Button
+                type="primary"
+                size="default"
+                disabled={this.state.selectedFreeStores.length === 0}
+                onClick={this.handleAddSelected}
+            >
                 &lt;&nbsp; 添加所选门店
             </Button>
-            <Button type="danger" size="default" onClick={this.handleDelSelected}>
+            <Button
+                type="danger"
+                size="default"
+                disabled={this.state.selectedGroupedStores.length === 0}
+                onClick={this.handleDelSelected}
+            >
                 删除所选门店 &nbsp;&gt;
             </Button>
             <Button type="danger" size="default" onClick={this.handleDelAll}>
@@ -250,7 +283,9 @@ AreaGroupDetail.propTypes = {
     getAreaGroup: PropTypes.func,
     clearGroupedStores: PropTypes.func,
     getGroupedStores: PropTypes.func,
+    clearFreeStores: PropTypes.func,
     getFreeStores: PropTypes.func,
+    insertStoreToGroup: PropTypes.func,
     groupedStores: PropTypes.objectOf(PropTypes.any),
     freeStores: PropTypes.objectOf(PropTypes.any),
     areaGroup: PropTypes.objectOf(PropTypes.any),
