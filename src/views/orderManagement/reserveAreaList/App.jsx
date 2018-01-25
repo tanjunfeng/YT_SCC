@@ -3,7 +3,7 @@
  * @Description: 预定专区
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-17 16:21:10
+ * @Last Modified time: 2018-01-25 16:22:18
  */
 
 import React, { PureComponent } from 'react';
@@ -154,23 +154,29 @@ class ReserveAreaList extends PureComponent {
      * @param {object} record 单行数据
     */
     renderOperation = (text, record) => {
-        const { id } = record;
+        const { id, status } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key={0}>
                     <Link target="_blank" to={`${pathname}/reserveAreaDetails/${id}`}>查看详情</Link>
                 </Menu.Item>
-                <Menu.Item key={'complete'}>
-                    <a target="_blank" rel="noopener noreferrer">
-                                到货通知
-                    </a>
-                </Menu.Item>
-                <Menu.Item key={'close'}>
-                    <a target="_blank" rel="noopener noreferrer">
-                                无货处理
-                    </a>
-                </Menu.Item>
+                {
+                    status === 'init' &&
+                    <Menu.Item key={'complete'}>
+                        <a target="_blank" rel="noopener noreferrer">
+                                    到货通知
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    status === 'init' &&
+                    <Menu.Item key={'close'}>
+                        <a target="_blank" rel="noopener noreferrer">
+                                    无货处理
+                        </a>
+                    </Menu.Item>
+                }
             </Menu>
         );
         return (
