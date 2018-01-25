@@ -85,13 +85,13 @@ class AreaGroupDetail extends PureComponent {
      */
     getGroupedStoresValues = () => {
         const { groupedStores } = this.props;
-        const { records, pageNo, pageSize, totalCount } = groupedStores;
+        const { records, pageNum, pageSize, totalCount } = groupedStores;
         const { selectedGroupedStores } = this.state;
         return ({
             title: '已有门店',
             records,
             selectedStores: selectedGroupedStores,
-            pageNo,
+            pageNum,
             pageSize,
             totalCount,
             current: this.currentGrouped
@@ -103,13 +103,13 @@ class AreaGroupDetail extends PureComponent {
      */
     getFreeStoresValues = () => {
         const { freeStores } = this.props;
-        const { records, pageNo, pageSize, totalCount } = freeStores;
+        const { records, pageNum, pageSize, totalCount } = freeStores;
         const { selectedFreeStores } = this.state;
         return ({
             title: '未分组门店',
             records,
             selectedStores: selectedFreeStores,
-            pageNo,
+            pageNum,
             pageSize,
             totalCount,
             current: this.currentFree
@@ -120,8 +120,8 @@ class AreaGroupDetail extends PureComponent {
      * 同时刷新左右两个页面
      */
     freshData = () => {
-        this.props.clearGroupedStores();
-        this.props.clearFreeStores();
+        // this.props.clearGroupedStores();
+        // this.props.clearFreeStores();
         this.queryGrouped();
         this.queryFree();
     }

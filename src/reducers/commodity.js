@@ -94,13 +94,13 @@ const initState = Immutable.fromJS({
     costPrice: null,
 
     // 区域组
-    areaGroup: { pageNum: 1, pageSize: PAGE_SIZE, totalPage: 0, data: [] },
+    areaGroup: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, data: [] },
 
     // 已分组的门店列表
-    groupedStores: { pageNum: 1, pageSize: PAGE_SIZE, totalPage: 0, data: [] },
+    groupedStores: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, data: [] },
 
     // 未分组的门店列表
-    freeStores: { pageNum: 1, pageSize: PAGE_SIZE, totalPage: 0, data: [] },
+    freeStores: { pageNum: 1, pageSize: PAGE_SIZE, total: 0, data: [] },
 
     // 商品地点关系列表
     goodsSitesManageList: {},
