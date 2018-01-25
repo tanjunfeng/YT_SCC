@@ -209,6 +209,10 @@ class ProdModal extends Component {
                 message.error('采购价格必须大于等于0');
                 return;
             }
+            if (!values.newestPrice) {
+                message.error('最新采购价必须大于等于0');
+                return;
+            }
             const subData = Util.removeInvalid({
                 id: isEdit ? initValue.id : null,
                 // 供应商id
@@ -290,7 +294,7 @@ class ProdModal extends Component {
     render() {
         const {
             prefixCls, form, initValue = {}, userNames,
-            isEdit, data, hasMainSupplier, getProductByIds, getProdPurchaseByIds
+            isEdit, data, hasMainSupplier, getProductByIds = {}, getProdPurchaseByIds
         } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
@@ -316,6 +320,7 @@ class ProdModal extends Component {
                 className={isEdit ? prefixCls : 'creat-prod'}
                 onOk={this.handleOk}
                 width={isEdit ? '517px' : '480px'}
+                destroyOnClose
                 onCancel={this.handleCancel}
                 maskClosable={false}
             >
@@ -329,7 +334,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchaseInsideNumber', {
                                             rules: [{ required: true, message: '采购内装数' }],
-                                            initialValue: getProductByIds.purchaseInsideNumber
+                                            initialValue: initValue.purchaseInsideNumber
                                         })(
                                             <InputNumber
                                                 min={0}
@@ -424,7 +429,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('supportReturn', {
                                             rules: [{ required: true, message: '请选择是否支持退货!' }],
-                                            initialValue: supportReturn ? String(supportReturn) : supportReturnOption.defaultValue
+                                            initialValue: isEdit ? String(supportReturn) : supportReturnOption.defaultValue
                                         })(
                                             <Select
                                                 className="sc-form-item-select"
@@ -600,7 +605,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>主供应商：</span>
                                     <span className={`${prefixCls}-warehouse-input`}>
                                         {getFieldDecorator('supplierType', {
-                                            initialValue: prodPurchase.salesInsideNumber
+                                            initialValue: this.state.checked
                                         })(
                                             <Checkbox
                                                 checked={this.state.checked}
@@ -638,6 +643,7 @@ ProdModal.propTypes = {
     handleClose: PropTypes.func,
     prodPurchase: PropTypes.objectOf(PropTypes.any),
     initValue: PropTypes.objectOf(PropTypes.any),
+    getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
     isEdit: PropTypes.bool,
     hasMainSupplier: PropTypes.bool,

@@ -261,15 +261,14 @@ class Cardline extends Component {
                 this.props.fetchDeleteProdPurchaseById({
                     productId: proId,
                     id,
+                }).then((res) => {
+                    if (res.code === 200) {
+                        message.success('删除成功')
+                        this.props.goto()
+                    } else {
+                        message.error(res.message)
+                    }
                 })
-                    .then(res => {
-                        if (res.code === 200) {
-                            message.success('删除成功')
-                            this.props.goto()
-                        } else {
-                            message.error(res.message)
-                        }
-                    })
             },
             onCancel() { },
         });
