@@ -378,10 +378,13 @@ export const queryAreaStores = (params) => http.get('/store/getStoreInfo', param
 export const getGroupedStores = (params) => http.get('/areaGroup/queryStoresFromGroup', params);
 
 // 添加未分组门店到区域组
-export const insertStoreToGroup = (params) => http.get('/areaGroup/insertStoreToGroup', params);
+export const insertStoreToGroup = (params) => http.post('/areaGroup/insertStoreToGroup', params);
+
+// 添加未分组门店到区域组
+export const insertAllStoresToGroup = (params) => http.post('/areaGroup/insertAllStoresToGroup', params);
 
 // 删除区域组的未分组门店
-export const deleteStoreFromArea = (params) => http.get('/areaGroup/deleteStoreFromArea', params);
+export const deleteStoreFromArea = (params) => http.post('/areaGroup/deleteStoreFromArea', params);
 
 // 修改采购价格
 export const updatePurchasePrice = (params) => http.post('/price/updatePurchasePrice', params);

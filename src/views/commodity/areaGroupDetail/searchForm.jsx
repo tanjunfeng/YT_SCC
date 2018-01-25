@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { Button, Form, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 
-import Util from '../../../util/util';
+import Utils from '../../../util/util';
 import Stores from './stores';
 import { Address } from '../../../container/cascader';
 import { ADDRESS_INDEX, REGION_TYPE } from './constant';
@@ -35,7 +35,7 @@ class SearchForm extends PureComponent {
     getFormData() {
         const { provinceId, cityId, districtId } = this.state;
         const { store } = this.props.form.getFieldsValue();
-        return Util.removeInvalid({
+        return Utils.removeInvalid({
             idOrName: store.id,
             provinceId,
             cityId,

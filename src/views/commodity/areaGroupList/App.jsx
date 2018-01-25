@@ -47,9 +47,14 @@ function showDeleteConfirm(resolve) {
 }, dispatch))
 
 class AreaGroupList extends PureComponent {
-    state = {
-        areas: [], // 选中的区域组
-        modalCreateVisible: false // 创建区域组模态框显示
+    constructor(props) {
+        super(props);
+        this.state = {
+            areas: [], // 选中的区域组
+            modalCreateVisible: false // 创建区域组模态框显示
+        };
+        this.param = {};
+        this.current = 1;
     }
 
     componentWillMount() {
@@ -73,9 +78,9 @@ class AreaGroupList extends PureComponent {
      */
     onPaginate = (pageNum = 1) => {
         Object.assign(this.param, {
-            pageNum,
-            current: pageNum
+            pageNum
         });
+        this.current = pageNum;
         this.query();
     }
 
@@ -86,14 +91,12 @@ class AreaGroupList extends PureComponent {
         });
     }
 
-    param = {}
-
     handleSearch = param => {
         this.handleReset();
         Object.assign(this.param, {
-            current: 1,
             ...param
         });
+        this.current = 1;
         this.query();
     }
 
@@ -155,7 +158,7 @@ class AreaGroupList extends PureComponent {
                     rowSelection={rowSelection}
                     bordered
                     pagination={{
-                        current: this.param.current,
+                        current: this.current,
                         pageNum,
                         pageSize,
                         total,

@@ -19,10 +19,12 @@ import {
     getFreeStores,
     clearFreeStores,
     insertStoreToGroup,
+    insertAllStoresToGroup,
     deleteStoreFromArea
 } from '../../../actions/commodity';
 import StoresForm from './storesForm';
 import { PAGE_SIZE } from '../../../constant/index';
+import Utils from '../../../util/util';
 
 const FormItem = Form.Item;
 
@@ -38,6 +40,7 @@ const FormItem = Form.Item;
     getFreeStores,
     clearFreeStores,
     insertStoreToGroup,
+    insertAllStoresToGroup,
     deleteStoreFromArea
 }, dispatch))
 
@@ -190,6 +193,21 @@ class AreaGroupDetail extends PureComponent {
     }
 
     /**
+     * 查询结果添加门店
+     */
+    handleAddAll = () => {
+        const { areaGroupId, areaGroupName, branchCompanyId } = this;
+        this.props.insertAllStoresToGroup({
+            areaGroupCode: areaGroupId,
+            areaGroupName,
+            branchCompanyId,
+            ...Utils.removeInvalid({
+
+            })
+        });
+    }
+
+    /**
      * 添加所选门店到指定区域组
      */
     handleAddSelected = () => {
@@ -308,6 +326,7 @@ AreaGroupDetail.propTypes = {
     clearFreeStores: PropTypes.func,
     getFreeStores: PropTypes.func,
     insertStoreToGroup: PropTypes.func,
+    insertAllStoresToGroup: PropTypes.func,
     deleteStoreFromArea: PropTypes.func,
     groupedStores: PropTypes.objectOf(PropTypes.any),
     freeStores: PropTypes.objectOf(PropTypes.any),
