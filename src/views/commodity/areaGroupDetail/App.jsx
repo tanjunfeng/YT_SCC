@@ -123,8 +123,8 @@ class AreaGroupDetail extends PureComponent {
      * 同时刷新左右两个页面
      */
     freshData = () => {
-        // this.props.clearGroupedStores();
-        // this.props.clearFreeStores();
+        this.props.clearGroupedStores();
+        this.props.clearFreeStores();
         this.queryGrouped();
         this.queryFree();
     }
@@ -196,13 +196,17 @@ class AreaGroupDetail extends PureComponent {
      * 查询结果添加门店
      */
     handleAddAll = () => {
-        const { areaGroupId, areaGroupName, branchCompanyId } = this;
+        const { areaGroupId, areaGroupName, branchCompanyId, paramsGrouped } = this;
+        const { provinceId, cityId, districtId, idOrName } = paramsGrouped;
         this.props.insertAllStoresToGroup({
             areaGroupCode: areaGroupId,
             areaGroupName,
             branchCompanyId,
             ...Utils.removeInvalid({
-
+                provinceId,
+                cityId,
+                districtId,
+                idOrName
             })
         });
     }
