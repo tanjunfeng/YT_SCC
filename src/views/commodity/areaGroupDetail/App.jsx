@@ -210,8 +210,11 @@ class AreaGroupDetail extends PureComponent {
                 districtId,
                 idOrName
             })
-        }).then(() => {
-            this.freshData();
+        }).then(res => {
+            if (res.code === 200) {
+                this.freshData();
+                message.success(`${res.data}条数据已执行`);
+            }
         });
     }
 
@@ -249,10 +252,13 @@ class AreaGroupDetail extends PureComponent {
             areaGroupId,
             areaGroupName,
             storeIds: selectedFreeStores.join(',')
-        }).then(() => {
-            this.setState({ selectedFreeStores: [] });
-            this.freshData();
-        })
+        }).then(res => {
+            if (res.code === 200) {
+                this.freshData();
+                this.setState({ selectedFreeStores: [] });
+                message.success(`${res.data}条数据已执行`);
+            }
+        });
     }
 
     /**
@@ -262,10 +268,13 @@ class AreaGroupDetail extends PureComponent {
         const { selectedGroupedStores } = this.state;
         this.props.deleteStoreFromArea({
             storeIds: selectedGroupedStores.join(',')
-        }).then(() => {
-            this.setState({ selectedGroupedStores: [] });
-            this.freshData();
-        })
+        }).then(res => {
+            if (res.code === 200) {
+                this.freshData();
+                this.setState({ selectedGroupedStores: [] });
+                message.success(`${res.data}条数据已执行`);
+            }
+        });
     }
 
     renderTitle = info => {
