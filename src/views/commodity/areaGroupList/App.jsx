@@ -120,7 +120,7 @@ class AreaGroupList extends PureComponent {
     }
 
     render() {
-        const { records, total, pageNum, pageSize } = this.props.areaGroup;
+        const { data, total, pageNum, pageSize } = this.props.areaGroup;
         columns[columns.length - 1].render = this.renderOperations;
         const { areas, modalCreateVisible } = this.state;
         const rowSelection = {
@@ -149,7 +149,7 @@ class AreaGroupList extends PureComponent {
                     </Button>
                 </div>
                 <Table
-                    dataSource={records}
+                    dataSource={data}
                     columns={columns}
                     rowKey="id"
                     rowSelection={rowSelection}

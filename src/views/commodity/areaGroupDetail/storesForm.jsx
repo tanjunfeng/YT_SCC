@@ -37,7 +37,7 @@ class StoresForm extends PureComponent {
 
     render() {
         const {
-            title, records, selectedStores,
+            title, data, selectedStores,
             pageNum, pageSize, totalCount, current
         } = this.props.value;
         const rowSelection = {
@@ -52,7 +52,7 @@ class StoresForm extends PureComponent {
                     onReset={this.handleReset}
                 />
                 <Table
-                    dataSource={records}
+                    dataSource={data}
                     columns={columns}
                     rowKey="id"
                     rowSelection={rowSelection}
