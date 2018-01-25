@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Form, Row, Col, Button } from 'antd';
+import { Form, Row, Col, Button, message } from 'antd';
 
 import {
     getAreaGroup,
@@ -20,6 +20,7 @@ import {
     clearFreeStores,
     insertStoreToGroup,
     insertAllStoresToGroup,
+    deleteAllStoresFromArea,
     deleteStoreFromArea
 } from '../../../actions/commodity';
 import StoresForm from './storesForm';
@@ -41,7 +42,8 @@ const FormItem = Form.Item;
     clearFreeStores,
     insertStoreToGroup,
     insertAllStoresToGroup,
-    deleteStoreFromArea
+    deleteStoreFromArea,
+    deleteAllStoresFromArea
 }, dispatch))
 
 class AreaGroupDetail extends PureComponent {
@@ -123,8 +125,8 @@ class AreaGroupDetail extends PureComponent {
      * 同时刷新左右两个页面
      */
     freshData = () => {
-        this.props.clearGroupedStores();
-        this.props.clearFreeStores();
+        // this.props.clearGroupedStores();
+        // this.props.clearFreeStores();
         this.queryGrouped();
         this.queryFree();
     }
@@ -208,6 +210,32 @@ class AreaGroupDetail extends PureComponent {
                 districtId,
                 idOrName
             })
+        }).then(() => {
+            this.freshData();
+        });
+    }
+
+    /**
+     * 查询结果删除门店
+     */
+    handleDelAll = () => {
+        const { areaGroupId, areaGroupName, branchCompanyId, paramsGrouped } = this;
+        const { provinceId, cityId, districtId, idOrName } = paramsGrouped;
+        this.props.deleteAllStoresFromArea({
+            areaGroupCode: areaGroupId,
+            areaGroupName,
+            branchCompanyId,
+            ...Utils.removeInvalid({
+                provinceId,
+                cityId,
+                districtId,
+                idOrName
+            })
+        }).then(res => {
+            if (res.code === 200) {
+                message.success(`${res.data}条数据已执行`);
+                this.freshData();
+            }
         });
     }
 
@@ -332,6 +360,7 @@ AreaGroupDetail.propTypes = {
     insertStoreToGroup: PropTypes.func,
     insertAllStoresToGroup: PropTypes.func,
     deleteStoreFromArea: PropTypes.func,
+    deleteAllStoresFromArea: PropTypes.func,
     groupedStores: PropTypes.objectOf(PropTypes.any),
     freeStores: PropTypes.objectOf(PropTypes.any),
     areaGroup: PropTypes.objectOf(PropTypes.any),

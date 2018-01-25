@@ -84,6 +84,8 @@ export default {
     INSERT_STORE_TO_GROUP: 'INSERT_STORE_TO_GROUP',
     // 添加所有未分组门店到指定区域组
     INSERT_ALL_STORE_TO_GROUP: 'INSERT_ALL_STORE_TO_GROUP',
+    // 添加所有未分组门店到指定区域组
+    DELETE_ALL_STORE_FROM_GROUP: 'DELETE_ALL_STORE_FROM_GROUP',
     // 从指定区域组删除未分组门店
     DELETE_STORE_FROM_AREA: 'DELETE_STORE_FROM_AREA',
     // 清除未分组门店列表

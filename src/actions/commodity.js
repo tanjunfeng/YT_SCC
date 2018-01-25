@@ -22,6 +22,7 @@ import {
     insertStoreToGroup as insertStoreToGroupService,
     insertAllStoresToGroup as insertAllStoresToGroupService,
     deleteStoreFromArea as deleteStoreFromAreaService,
+    deleteAllStoresFromArea as deleteAllStoresFromAreaService,
     queryProdPlacePage,
     prodPlaceBulkDelete,
     prodPlacePpdate as updateSiteManageById,
@@ -255,6 +256,25 @@ export const insertAllStoresToGroup = params => dispatch => (
     new Promise((resolve, reject) => {
         insertAllStoresToGroupService(params).then(res => {
             dispatch(insertAllStoresToGroupActionType(res.data));
+            resolve(res);
+        }).catch(err => reject(err))
+    })
+);
+
+/**
+ * 按查询条件删除区域组中所有门店
+ *
+ * @param {Object} params 传参
+ */
+const deleteAllStoresFromAreaActionType = data => ({
+    type: ActionType.DELETE_ALL_STORE_FROM_GROUP,
+    payload: data
+});
+
+export const deleteAllStoresFromArea = params => dispatch => (
+    new Promise((resolve, reject) => {
+        deleteAllStoresFromAreaService(params).then(res => {
+            dispatch(deleteAllStoresFromAreaActionType(res.data));
             resolve(res);
         }).catch(err => reject(err))
     })

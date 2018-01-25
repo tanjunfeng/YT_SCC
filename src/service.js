@@ -383,6 +383,9 @@ export const insertStoreToGroup = (params) => http.post('/areaGroup/insertStoreT
 // 添加未分组门店到区域组
 export const insertAllStoresToGroup = (params) => http.post('/areaGroup/insertAllStoresToGroup', params);
 
+// 添加区域组中所有门店
+export const deleteAllStoresFromArea = (params) => http.post('/areaGroup/deleteAllStoresFromArea', params);
+
 // 删除区域组的未分组门店
 export const deleteStoreFromArea = (params) => http.post('/areaGroup/deleteStoreFromArea', params);
 
