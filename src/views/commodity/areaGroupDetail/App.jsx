@@ -125,8 +125,8 @@ class AreaGroupDetail extends PureComponent {
      * 同时刷新左右两个页面
      */
     freshData = () => {
-        // this.props.clearGroupedStores();
-        // this.props.clearFreeStores();
+        this.props.clearGroupedStores();
+        this.props.clearFreeStores();
         this.queryGrouped();
         this.queryFree();
     }
