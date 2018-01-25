@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Button, Modal } from 'antd';
+import { Table, Form, Button, Modal, message } from 'antd';
 import { Link } from 'react-router-dom';
 
 import { PAGE_SIZE } from '../../../constant';
@@ -110,7 +110,14 @@ class AreaGroupList extends PureComponent {
     handleDelete = () => {
         const { areas } = this.state;
         showDeleteConfirm(() => {
-            this.props.deleteAreaGroup({ areaGroupCode: areas.join(',') });
+            this.props.deleteAreaGroup({
+                areaGroupCode: areas.join(',')
+            }).then(res => {
+                if (res.code === 200) {
+                    message.success(`${res.data}条数据已删除`);
+                    this.query();
+                }
+            });
         });
     }
 
