@@ -12,7 +12,6 @@ import { withRouter } from 'react-router';
 import { Form, Cascader } from 'antd';
 
 import { getCategoriesByParentId, clearCategoriesList } from '../../actions/promotion';
-import './Category.scss';
 
 @connect(state => ({
     categories: state.toJS().promotion.categories
@@ -27,7 +26,7 @@ class Category extends PureComponent {
         isLoading: false
     };
 
-    componentDidMount() {
+    getInitCategories = () => {
         this.props.getCategoriesByParentId({ parentId: '' }).then((res) => {
             this.setState({
                 options: res.data.map((treeNode, index) => ({
@@ -41,11 +40,22 @@ class Category extends PureComponent {
         });
     }
 
+    /**
+     * 清除输入框内容
+     */
+    clear = () => {
+        this.cascader.setValue([]);
+    }
+
+    componentDidMount() {
+        this.getInitCategories();
+    }
+
     componentWillReceiveProps(nextProps) {
         const { isClearCategory } = nextProps;
         if (isClearCategory && !this.props.isClearCategory) {
-            this.ref.setValue([]);
-            this.props.resetFlag();
+            this.cascader.setValue([]);
+            // this.props.resetFlag();
         }
     }
 
@@ -62,6 +72,8 @@ class Category extends PureComponent {
      */
     handleChange = (value, selectedOptions) => {
         if (selectedOptions.length === 0) {
+            this.props.resetFlag();
+            this.getInitCategories();
             this.props.onChange(null, selectedOptions);
         } else {
             const target = selectedOptions[selectedOptions.length - 1];
@@ -70,6 +82,8 @@ class Category extends PureComponent {
                 categoryName: target.label,
                 categoryLevel: target.level
             };
+
+            console.log(category);
             this.props.onChange(category, selectedOptions);
         }
     }
@@ -137,7 +151,7 @@ class Category extends PureComponent {
                 loadData={this.handleLoadData}
                 onChange={this.handleChange}
                 placeholder={'请选择'}
-                ref={ref => this.ref = ref}
+                ref={cascader => { this.cascader = cascader }}
                 changeOnSelect
             />
         );

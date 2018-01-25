@@ -23,18 +23,14 @@ const Option = Select.Option;
 
 class SearchForm extends PureComponent {
     state = {
-        classify: {},
         selectedOptions: [],
         initialPlaceValue: {},
         category: 0,
         isClearCategory: false
     }
+
     componentDidMount() {
-        this.props.queryList({
-            pageNum: 1,
-            branchCompanyId: '',
-            pageSize: PAGE_SIZE
-        });
+        this.queryNoCondition();
     }
 
     getQueryParams = () => {
@@ -49,22 +45,37 @@ class SearchForm extends PureComponent {
             place,
             placeType
         } = getFieldsValue();
+
         this.baseQueryParams = {
             internationalCode: barCode,
-            brand: brand.record ? brand.record.id : '',
+            brand: brand.record ? brand.record.name : '',
             productId: commodity.record ? commodity.record.productId : '',
             productName: commodity.record ? commodity.record.productName : '',
             logisticsModel,
             // 根据不同的值清单取place.record对应字段
             placeId: place.record ? place.record[placeFieldMap[placeType]] : '',
             placeType: parseInt(placeType, 10),
-            branchCompanyId: branchCompany.id
+            branchCompanyId: branchCompany.id ? branchCompany.id : ''
         };
         if (selectedOptions.length > 0) {
+            /**
+             * 商品类别
+             */
             selectedOptions.forEach((item, i) => {
                 this.baseQueryParams[productLevel[i]] = item;
             });
         }
+    }
+
+    /**
+     * 初始数据查询
+     */
+    queryNoCondition = () => {
+        this.props.queryList({
+            pageNum: 1,
+            branchCompanyId: '',
+            pageSize: PAGE_SIZE
+        });
     }
 
     handleSearch = () => {
@@ -84,17 +95,33 @@ class SearchForm extends PureComponent {
     }
 
     handleAdd = () => {
-        this.props.history.push('/productSiteManage/create');
+        const { pathname } = this.props.location;
+        const win = window.open(`${pathname}/create`, '_blank');
+        win.focus();
     }
 
     /**
      * 重置搜索条件
      */
     handleReset = () => {
+        const { setFieldsValue } = this.props.form;
         this.setState({
             isClearCategory: true
         });
         this.props.form.resetFields();
+        setFieldsValue({
+            branchCompany: { reset: true }
+        });
+        setFieldsValue({
+            brand: { reset: true }
+        });
+        setFieldsValue({
+            commodity: { reset: true }
+        });
+        setFieldsValue({
+            place: { reset: true }
+        });
+        this.queryNoCondition();
     }
 
     handleCategorySelect = (category, selectedOptions) => {
@@ -104,6 +131,10 @@ class SearchForm extends PureComponent {
     }
 
     handPlaceTypeChange = val => {
+        const { setFieldsValue, resetFields } = this.props.form;
+        /**
+         * 设置门店初始值
+         */
         if (parseInt(val, 10) === 1 || parseInt(val, 10) === 3) {
             this.setState({
                 initialPlaceValue: {
@@ -113,14 +144,24 @@ class SearchForm extends PureComponent {
             });
         }
 
+        /**
+         * 设置区域组初始值
+         */
         if (parseInt(val, 10) === 2) {
             this.setState({
                 initialPlaceValue: {
-                    areaGroupCode: '',
+                    id: '',
                     areaGroupName: ''
                 }
             });
         }
+
+        setTimeout(() => {
+            setFieldsValue({
+                place: { reset: true }
+            });
+            resetFields(['place']);
+        });
     }
 
     resetClearCategoryFlag = () => {
@@ -232,7 +273,8 @@ class SearchForm extends PureComponent {
                                     initialValue: initialPlaceValue
                                 })(
                                     <Sites
-                                        disabled={getFieldValue('placeType') === '0'}
+                                        branchCompanyId={getFieldValue('branchCompany').id}
+                                        disabled={getFieldValue('placeType') === ''}
                                         siteTypeCode={getFieldValue('placeType')}
                                         placeFieldMap={placeFieldMap}
                                     />
@@ -267,7 +309,7 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     queryList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any)
+    location: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(SearchForm));

@@ -21,9 +21,8 @@ class SearchForm extends PureComponent {
         selectedOptions: [],
         isClearCategory: false
     }
+
     componentDidMount() {
-        // const { queryProducts } = this.props;
-        // queryProducts();
         this.handleSearch();
     }
 
@@ -38,6 +37,7 @@ class SearchForm extends PureComponent {
             commodity,
             barCode
         } = getFieldsValue();
+
         this.queryParams = {
             internationalCode: barCode,
             brand: brand.record ? brand.record.id : '',
@@ -59,8 +59,9 @@ class SearchForm extends PureComponent {
             selectedOptions: selectedOptions.map(item => item.value)
         });
     }
+
     /**
-     * 查询
+     * 查询商品
     */
     handleSearch = () => {
         const { selectedOptions } = this.state;
@@ -76,11 +77,18 @@ class SearchForm extends PureComponent {
      * 重置
     */
     handleReset = () => {
+        const { setFieldsValue } = this.props.form;
         this.setState({
             selectedOptions: [],
             isClearCategory: true
         });
         this.props.form.resetFields();
+        setFieldsValue({
+            brand: { reset: true }
+        });
+        setFieldsValue({
+            commodity: { reset: true }
+        });
     }
 
     /**

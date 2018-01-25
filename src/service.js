@@ -17,20 +17,25 @@ const http = new Http();
  */
 http.response(
     res => {
-        if (res.data.code === 401) {
-            LoginLayout();
-            return Promise.reject(res.data);
-        } else if (res.data.code !== 200) {
-            const { code } = res.data;
-            const mess = res.data.message;
-            const errText = ERRORTEXT[code];
-            if (typeof mess === 'string' || errText) {
-                const err = errText || (mess || '未知错误')
-                message.error(err);
+        switch (res.data.code) {
+            case 200: // 请求成功
+            case 50011: // 已存在的字段
+                return Promise.resolve(res);
+            case 401: // 未登录
+                LoginLayout();
+                return Promise.reject(res.data);
+            default: {
+                // 其他默认错误
+                const { code } = res.data;
+                const mess = res.data.message;
+                const errText = ERRORTEXT[code];
+                if (typeof mess === 'string' || errText) {
+                    const err = errText || (mess || '未知错误')
+                    message.error(err);
+                }
+                return Promise.reject(res.data);
             }
-            return Promise.reject(res.data);
         }
-        return Promise.resolve(res);
     },
     err => {
         if (err.response) {
@@ -354,6 +359,30 @@ export const toAddSellPrice = (params) => http.post('/price/addSellPrice', param
 // 查询商品成本价
 export const getCostPrice = (params) => http.get('/prodPurchase/queryPurchasePriceForSellPrice', params);
 
+// 查询区域分组
+export const getAreaGroup = (params) => http.get('/areaGroup/queryAreaGroupList', params);
+
+// 新增区域组
+export const createAreaGroup = (params) => http.post('/areaGroup/insertAreaGroup', params);
+
+// 区域组名是否存在
+export const isAreaGroupExists = (params) => http.get('/areaGroup/queryStoreGroupByName', params);
+
+// 删除区域组
+export const deleteAreaGroup = (params) => http.post('/areaGroup/deleteAreaGroup', params);
+
+// 查询区域组门店信息
+export const queryAreaStores = (params) => http.get('/store/getStoreInfo', params);
+
+// 查询已分组的区域组门店信息
+export const getGroupedStores = (params) => http.get('/areaGroup/queryStoresFromGroup', params);
+
+// 添加未分组门店到区域组
+export const insertStoreToGroup = (params) => http.get('/areaGroup/insertStoreToGroup', params);
+
+// 删除区域组的未分组门店
+export const deleteStoreFromArea = (params) => http.get('/areaGroup/deleteStoreFromArea', params);
+
 // 修改采购价格
 export const updatePurchasePrice = (params) => http.post('/price/updatePurchasePrice', params);
 
@@ -646,6 +675,8 @@ export const fetchPurchaseOrderInfo = (params) => http.get('/pmPurchaseOrder/que
 
 // 门店地点值清单
 export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
+// 门店地点值清单
+export const queryStoreByCompanyId = (params) => http.get('/prodPlace/queryStoreByCompanyId', params);
 
 // 大类值清单
 export const querycategories = (params) => http.get('/category/queryCategories', params);
@@ -798,6 +829,8 @@ export const queryBranchCompanyInfo = (params) => http.get('/prodSell/queryBranc
 export const getFranchiseeInfo = (params) => http.get('/sorder/getFranchiseeInfo', params);
 // 查询可用子公司信息
 export const findCanUseCompanyInfo = (params) => http.get('/supplier/findCompanyBaseInfo', params);
+// 查询区域组信息
+export const queryAreaGroupList = (params) => http.get('/areaGroup/queryAreaGroupList', params);
 
 // 此接口用于查询各级分类（值清单）
 export const queryCategorysByLevel = (params) => http.get('/category/queryCategories', params);
@@ -990,9 +1023,7 @@ export const queryProdPriceChangeList = params => http.get('/prodSell/queryProdP
 export const prodPlaceBulkDelete = params => http.post('/prodPlace/bulkDelete', params);
 export const prodPlacePpdate = params => http.post('/prodPlace/update', params);
 export const addDistinctProductSiteRelations = params => http.post('/prodPlace/addDistinct', params);
-export const queryAreaGroupList = params => http.get('/areaGroup/queryAreaGroupList', params);
 export const queryProductSiteRelationById = (params) => http.get('/prodPlace/queryDetail', params);
-export const exportRepeatSiteRelation = (params) => http.post('/prodPlace/exportRepeatedProdAdd', params);
 export const filterSupplyInfo = (params) => http.get('/prodPlace/prodSpAdrSearchBox', params);
 
 // 预定专区

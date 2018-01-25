@@ -131,7 +131,7 @@ import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './white
 // 根据库存实时拆单
 import { splitorderbyinventory, interfaceInventory, confirmation, queryVoucherData } from './order';
 
-// 根据库存实时拆单
+// 心愿单
 import { comleteOrCloseWishList, queryReserveAreaList, queryReserAreaDetail } from './process';
 
 // 退货订单列表

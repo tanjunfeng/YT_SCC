@@ -388,6 +388,7 @@ class PromotionCreate extends PureComponent {
 
 PromotionCreate.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
     createPromotion: PropTypes.func
 }
 

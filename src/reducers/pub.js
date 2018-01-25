@@ -12,6 +12,7 @@ const initState = Immutable.fromJS({
     // 导航是否收拢
     collapsed: false,
     gegion: [],
+    region: [],
     categorys: [],
     // 所选区域列表
     companies: [],
@@ -31,6 +32,9 @@ export default (state = initState, action) => {
             gegion[type][parentCode] = data;
             return initState.set('gegion', Immutable.fromJS(gegion));
         }
+
+        case ActionType.RECEIVE_NEXT_CATEGORYS:
+            return state.set('region', action.payload);
 
         case ActionType.RECEIVE_All_CATEGORYS: {
             return state.set('categorys', action.payload);

@@ -64,16 +64,22 @@ class SiteManage extends PureComponent {
      * 分页查询商品地点关系列表
      */
     handlePaginationChange = pageIndex => {
-        this.queryParams.pageIndex = pageIndex;
-        this.queryList(this.queryParams);
+        this.queryParams.pageNum = pageIndex;
+        this.handleQueryList(this.queryParams);
     }
 
     /**
      * 查询商品地点关系列表
      */
-    queryList = queryParams => {
-        console.log(JSON.stringify(queryParams));
+    handleQueryList = queryParams => {
         this.queryParams = queryParams;
+        this.props.getSitesManageList(this.queryParams);
+    }
+
+    /**
+     * 刷新数据
+     */
+    handRefresh = () => {
         this.props.getSitesManageList(this.queryParams);
     }
 
@@ -82,11 +88,14 @@ class SiteManage extends PureComponent {
     */
     handleEdit = editId => {
         const { queryDetailById } = this.props;
-        this.setState({
-            editId,
-            visible: true
+        queryDetailById({id: editId}).then(res => {
+            if (res.success) {
+                this.setState({
+                    editId,
+                    visible: true
+                });
+            }
         });
-        queryDetailById({id: editId});
     }
 
     /**
@@ -103,18 +112,18 @@ class SiteManage extends PureComponent {
     */
     customDelete = () => {
         const { selectedRows } = this.state;
+        const queryParams = this.queryParams
         const { removeSiteManagesByIds } = this.props;
-        /**
-         * ToDo: id替换为实际字段
-         */
-        const ids = selectedRows.map(item => item.productId);
+        const ids = selectedRows.map(item => item.id);
+        const _self = this;
         confirm({
             title: '',
-            content: '数据删除不可恢复，确认删除选中的商品地点关系?',
+            content: '数据删除不可恢复，是否确定删除选中的商品地点关系?',
             onOk() {
                 removeSiteManagesByIds({ids}).then(res => {
                     if (res.success) {
                         message.success('删除成功');
+                        _self.handRefresh()
                     } else {
                         message.error('删除失败');
                     }
@@ -130,12 +139,12 @@ class SiteManage extends PureComponent {
      */
     render() {
         const { goodsSitesManageList, proSiteDetail } = this.props;
-        const { resultObject, recordsTotal, currentPage } = goodsSitesManageList;
+        const { data, total, pageNum } = goodsSitesManageList;
         const { selectedRows, editId, visible } = this.state;
         return (
             <div>
                 <SearchForm
-                    queryList={this.queryList}
+                    queryList={this.handleQueryList}
                 />
                 <div className="sites-manage-tab">
                     <div className="table-operations">
@@ -147,11 +156,11 @@ class SiteManage extends PureComponent {
                     <Table
                         rowKey={record => record.id}
                         rowSelection={this.rowSelection}
-                        dataSource={resultObject}
+                        dataSource={data}
                         columns={sitesManageColumns}
                         pagination={{
-                            current: currentPage,
-                            total: recordsTotal,
+                            current: pageNum,
+                            total: total,
                             pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.handlePaginationChange
@@ -161,6 +170,7 @@ class SiteManage extends PureComponent {
                         detail={proSiteDetail}
                         editId={String(editId)}
                         visible={visible}
+                        refresh={this.handRefresh}
                         closeModal={this.closeModal}
                         editSiteRelation={this.props.editSiteManageById}
                     />

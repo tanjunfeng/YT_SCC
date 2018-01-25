@@ -3,7 +3,7 @@
  * @Description: 预定专区
  * @CreateDate: 2018-01-06 10:31:10
  * @Last Modified by: tanjf
- * @Last Modified time: 2018-01-17 19:53:52
+ * @Last Modified time: 2018-01-17 16:21:10
  */
 
 import React, { PureComponent } from 'react';
@@ -76,7 +76,7 @@ class ReserveAreaList extends PureComponent {
      */
     query = () => {
         this.props.queryReserveAreaList(this.param).then((data) => {
-            const { pageNum, pageSize } = data;
+            const { pageNum, pageSize } = data.data;
             Object.assign(this.param, { pageNum, pageSize });
         });
     }
@@ -117,6 +117,7 @@ class ReserveAreaList extends PureComponent {
                     onOk: () => {
                         closeWishList({wishListId: id, status: key}).then(res => {
                             if (res.code === 200) message.success(res.message);
+                            this.query();
                         })
                     },
                     onCancel() { }
@@ -129,6 +130,7 @@ class ReserveAreaList extends PureComponent {
                     onOk: () => {
                         closeWishList({wishListId: id, status: key}).then(res => {
                             if (res.code === 200) message.success(res.message);
+                            this.query();
                         })
                     },
                     onCancel() { }

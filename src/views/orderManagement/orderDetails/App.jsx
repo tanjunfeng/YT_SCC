@@ -103,10 +103,9 @@ class OrderManagementDetails extends Component {
             commerceItemDatas: commerceItemList
         }).then((res) => {
             if (res.code === 200 && res.success === true) {
-                message.success(res.message)
+                message.success('删除成功')
             } else {
-                this.shippingDetailInfo();
-                message.error(res.message)
+                message.warning(res.message)
             }
         })
     }

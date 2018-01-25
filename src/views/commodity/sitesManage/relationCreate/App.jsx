@@ -10,8 +10,7 @@ import {
 import {
     queryProductsByCondition,
     createProductSiteRelations,
-    receiveAddRelationParams,
-    exportRepeatData
+    receiveAddRelationParams
 } from '../../../../actions/commodity';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../../constant';
@@ -23,12 +22,11 @@ const defaultImg = require('../../../../images/default/100x100.png');
 
 @connect(state => ({
     productsData: state.toJS().commodity.productsData,
-    addRelationParams: state.toJS().commodity.addRelationParams
+    relationAddParams: state.toJS().commodity.relationAddParams
 }), dispatch => bindActionCreators({
     queryProductsByCondition,
     createProductSiteRelations,
-    receiveAddRelationParams,
-    exportRepeatData
+    receiveAddRelationParams
 }, dispatch))
 class RelationCreate extends PureComponent {
     state = {
@@ -62,7 +60,7 @@ class RelationCreate extends PureComponent {
     /**
      * 查询商品信息
      */
-    queryProducts = queryParams => {
+    handelQueryProducts = queryParams => {
         this.queryParams = queryParams;
         this.props.queryProductsByCondition(queryParams);
     }
@@ -70,7 +68,7 @@ class RelationCreate extends PureComponent {
     /**
     * 关闭创建弹窗
     */
-    closeCreateModal = () => {
+    handleCloseCreateModal = () => {
         this.setState({
             createModalVisible: false
         });
@@ -79,7 +77,7 @@ class RelationCreate extends PureComponent {
     /**
     * 关闭重复数据弹窗
     */
-    closeRepeatModal = () => {
+    handleCloseRepeatModal = () => {
         this.setState({
             repeatModalVisible: false
         });
@@ -88,7 +86,7 @@ class RelationCreate extends PureComponent {
     /**
     * 打开创建弹窗
     */
-    openCreateModal = () => {
+    handleOpenCreateModal = () => {
         this.setState({
             createModalVisible: true
         });
@@ -151,8 +149,8 @@ class RelationCreate extends PureComponent {
         return (
             <div>
                 <SearchForm
-                    queryProducts={this.queryProducts}
-                    openModal={this.openCreateModal}
+                    queryProducts={this.handelQueryProducts}
+                    openModal={this.handleOpenCreateModal}
                     isCreateRelation={selectedIds.length > 0}
                 />
                 <Table
@@ -171,17 +169,16 @@ class RelationCreate extends PureComponent {
                 <CreateModal
                     createRelations={this.props.createProductSiteRelations}
                     visible={createModalVisible}
-                    closeModal={this.closeCreateModal}
+                    closeModal={this.handleCloseCreateModal}
                     selectedIds={selectedIds}
                     openRepeatModel={this.handleRepeat}
                     saveParams={this.props.receiveAddRelationParams}
                 />
                 <RepeatModal
-                    closeModal={this.closeRepeatModal}
-                    exportExcel={this.props.exportRepeatData}
+                    closeModal={this.handleCloseRepeatModal}
                     visible={repeatModalVisible}
                     repeatRes={repeatRes}
-                    reqParams={this.props.addRelationParams}
+                    reqParams={this.props.relationAddParams}
                 />
             </div>
         );
@@ -191,7 +188,9 @@ class RelationCreate extends PureComponent {
 RelationCreate.propTypes = {
     queryProductsByCondition: PropTypes.func,
     createProductSiteRelations: PropTypes.func,
-    productsData: PropTypes.objectOf(PropTypes.any)
+    productsData: PropTypes.objectOf(PropTypes.any),
+    receiveAddRelationParams: PropTypes.func,
+    relationAddParams: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(RelationCreate));

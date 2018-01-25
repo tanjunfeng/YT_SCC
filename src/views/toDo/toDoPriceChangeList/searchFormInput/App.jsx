@@ -74,6 +74,10 @@ class SearchFormInput extends PureComponent {
         this.props.form.setFieldsValue({
             branchCompany: { reset: true }
         });
+
+        this.props.form.setFieldsValue({
+            supplierAddr: { reset: true }
+        });
     }
     /**
      * 导出价格变更记录Excel

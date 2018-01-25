@@ -38,6 +38,12 @@
                     "authorityCode": "productSiteManage",
                     "displayName": "商品地点管理",
                     "menuList": []
+                },
+                {
+                    "authorityId": 237,
+                    "authorityCode": "areaGroupList",
+                    "displayName": "区域组管理",
+                    "menuList": []
                 }
             ]
         },
