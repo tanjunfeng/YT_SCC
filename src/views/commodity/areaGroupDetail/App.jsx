@@ -29,7 +29,7 @@ const FormItem = Form.Item;
 @connect(state => ({
     areaGroup: state.toJS().commodity.areaGroup,
     groupedStores: state.toJS().commodity.groupedStores,
-    freeStores: state.toJS().commodity.groupedStores
+    freeStores: state.toJS().commodity.freeStores
 }), dispatch => bindActionCreators({
     getAreaGroup,
     clearAreaGroup,
