@@ -53,8 +53,8 @@ class RelationCreate extends PureComponent {
      * 分页查询
      */
     handlePaginationChange = pageIndex => {
-        this.queryParams.pageIndex = pageIndex;
-        this.queryProducts(this.queryParams);
+        this.queryParams.pageNum = pageIndex;
+        this.handelQueryProducts(this.queryParams);
     }
 
     /**
