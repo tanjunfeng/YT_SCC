@@ -16,8 +16,6 @@ import Utils from '../../../util/util';
 import { DATE_FORMAT } from '../../../constant/index';
 import EditableCell from './editableCell';
 import { distributionInformationColumns as columns } from '../columns';
-import EditableCell from './editableCell';
-
 
 @connect(
     state => ({
