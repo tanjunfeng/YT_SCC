@@ -45,20 +45,20 @@ const pathListener = (location, history) => {
  * @return {Number} id > 0
  */
 const findIdByCode = (code, data) => {
-    if (!data || !code) {
-        return;
-    }
     let id = -1;
+    if (!data || !code) {
+        return id;
+    }
     data.forEach(value => {
         if (value.submenu.length > 0) {
-            return value.submenu.forEach((subMenu) => {
+            value.submenu.forEach((subMenu) => {
                 if (subMenu.code === code) {
                     id = subMenu.id;
                 }
             });
         }
-        return id;
     });
+    return id;
 }
 
 @connect(
