@@ -37,8 +37,8 @@ class StoresForm extends PureComponent {
 
     render() {
         const {
-            title, records, selectedStores,
-            pageNo, pageSize, totalCount, current
+            title, data, selectedStores,
+            pageNum, pageSize, totalCount, current
         } = this.props.value;
         const rowSelection = {
             selectedRowKeys: selectedStores,
@@ -52,14 +52,14 @@ class StoresForm extends PureComponent {
                     onReset={this.handleReset}
                 />
                 <Table
-                    dataSource={records}
+                    dataSource={data}
                     columns={columns}
                     rowKey="id"
                     rowSelection={rowSelection}
                     bordered
                     pagination={{
                         current,
-                        pageNo,
+                        pageNum,
                         pageSize,
                         totalCount,
                         showQuickJumper: true,

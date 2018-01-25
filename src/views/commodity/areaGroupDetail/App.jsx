@@ -85,13 +85,13 @@ class AreaGroupDetail extends PureComponent {
      */
     getGroupedStoresValues = () => {
         const { groupedStores } = this.props;
-        const { records, pageNo, pageSize, totalCount } = groupedStores;
+        const { data, pageNum, pageSize, totalCount } = groupedStores;
         const { selectedGroupedStores } = this.state;
         return ({
             title: '已有门店',
-            records,
+            data,
             selectedStores: selectedGroupedStores,
-            pageNo,
+            pageNum,
             pageSize,
             totalCount,
             current: this.currentGrouped
@@ -103,13 +103,13 @@ class AreaGroupDetail extends PureComponent {
      */
     getFreeStoresValues = () => {
         const { freeStores } = this.props;
-        const { records, pageNo, pageSize, totalCount } = freeStores;
+        const { data, pageNum, pageSize, totalCount } = freeStores;
         const { selectedFreeStores } = this.state;
         return ({
             title: '未分组门店',
-            records,
+            data,
             selectedStores: selectedFreeStores,
-            pageNo,
+            pageNum,
             pageSize,
             totalCount,
             current: this.currentFree
@@ -120,8 +120,8 @@ class AreaGroupDetail extends PureComponent {
      * 同时刷新左右两个页面
      */
     freshData = () => {
-        this.props.clearGroupedStores();
-        this.props.clearFreeStores();
+        // this.props.clearGroupedStores();
+        // this.props.clearFreeStores();
         this.queryGrouped();
         this.queryFree();
     }
@@ -279,7 +279,7 @@ class AreaGroupDetail extends PureComponent {
         const { areaGroup } = this.props;
         return (
             <div className="area-group-detail">
-                {this.renderTitle(areaGroup.records[0])}
+                {this.renderTitle(areaGroup.data[0])}
                 <div className="shuttle-form">
                     <StoresForm
                         value={this.getGroupedStoresValues()}

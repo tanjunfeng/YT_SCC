@@ -42,7 +42,7 @@ class Stores extends PureComponent {
 
     query = (params) => (
         this.props.pubFetchValueList(Utils.removeInvalid({
-            pageNo: params.pagination.current || 1,
+            pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize,
             id: params.value
         }), this.props.api)
