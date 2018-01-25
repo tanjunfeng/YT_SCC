@@ -61,11 +61,18 @@ export const checkUser = () => (
  * @param code
  * @param pathname
  */
-export const fetchRightsAction = (code) => dispatch => {
-    fetchRights(code)
-        .then(res => dispatch(receiveRights(res.data)))
-        .catch(err => Promise.reject(err));
-}
+export const fetchRightsAction = params => dispatch => (
+    new Promise((resolve, reject) => {
+        fetchRights(params)
+            .then(res => {
+                dispatch(
+                    receiveRights(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
 
 /**
  * 登录接口

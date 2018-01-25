@@ -14,6 +14,7 @@ import moment from 'moment';
 
 import Utils from '../../../util/util';
 import { DATE_FORMAT } from '../../../constant/index';
+import EditableCell from './editableCell';
 import { distributionInformationColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 
@@ -88,15 +89,6 @@ class DistributionInformation extends PureComponent {
     calculationDiff = (text, record) => (
         ((record.quantity * record.completedQuantity) * record.salePrice).toFixed(2)
     )
-
-    closeCanvas = () => {
-        this.setState({flowChartData: null})
-    }
-
-    showCanvas = () => {
-        const data = this.props.shippingDetailData.singedCertImg;
-        this.setState({flowChartData: data})
-    }
 
     renderQuantity = (text, record) => (
         <EditableCell

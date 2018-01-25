@@ -100,7 +100,7 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col>
-                                <FormItem label="订单日期">
+                                <FormItem label="提交日期">
                                     {getFieldDecorator('orderDate', {
                                         initialValue: []
                                     })(<RangePicker
