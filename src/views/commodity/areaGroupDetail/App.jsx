@@ -249,14 +249,15 @@ class AreaGroupDetail extends PureComponent {
         const { areaGroupId, areaGroupName, state } = this;
         const { selectedFreeStores } = state;
         this.props.insertStoreToGroup({
-            areaGroupId,
+            areaGroupCode: areaGroupId,
             areaGroupName,
             storeIds: selectedFreeStores.join(',')
         }).then(res => {
             if (res.code === 200) {
-                this.freshData();
-                this.setState({ selectedFreeStores: [] });
-                message.success(`${res.data}条数据已执行`);
+                this.setState({ selectedFreeStores: [] }, () => {
+                    this.freshData();
+                    message.success(`${res.data}条数据已执行`);
+                });
             }
         });
     }
@@ -270,9 +271,10 @@ class AreaGroupDetail extends PureComponent {
             storeIds: selectedGroupedStores.join(',')
         }).then(res => {
             if (res.code === 200) {
-                this.freshData();
-                this.setState({ selectedGroupedStores: [] });
-                message.success(`${res.data}条数据已执行`);
+                this.setState({ selectedGroupedStores: [] }, () => {
+                    message.success(`${res.data}条数据已执行`);
+                    this.freshData();
+                });
             }
         });
     }
