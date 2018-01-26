@@ -228,8 +228,9 @@ class AreaGroupDetail extends PureComponent {
             })
         }).then(res => {
             if (res.code === 200) {
-                this.freshData();
-                message.success(`${res.data}条数据已执行`);
+                message.success(`${res.data}条数据已执行`, 2, () => {
+                    this.freshData();
+                });
             }
         });
     }
@@ -252,8 +253,9 @@ class AreaGroupDetail extends PureComponent {
             })
         }).then(res => {
             if (res.code === 200) {
-                message.success(`${res.data}条数据已执行`);
-                this.freshData();
+                message.success(`${res.data}条数据已执行`, 2, () => {
+                    this.freshData();
+                });
             }
         });
     }
@@ -271,7 +273,7 @@ class AreaGroupDetail extends PureComponent {
         }).then(res => {
             if (res.code === 200) {
                 this.setState({ selectedFreeStores: [] }, () => {
-                    message.success(`${res.data}条数据已执行`, 1, () => {
+                    message.success(`${res.data}条数据已执行`, 2, () => {
                         this.freshData();
                     });
                 });
