@@ -464,11 +464,6 @@ export const deleteAreaGroup = params => dispatch => (
     })
 );
 
-// const createProductSiteRelationsAction = data => ({
-//     type: ActionType.CREATE_PRODUCT_SITE_RELATIONS,
-//     payload: data
-// });
-
 /**
  * 分页查询重复数据
  * @param {Object} data
