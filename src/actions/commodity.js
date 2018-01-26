@@ -28,7 +28,8 @@ import {
     prodPlacePpdate as updateSiteManageById,
     queryproductsbypages as searchProductsByCondition,
     addDistinctProductSiteRelations as createRelations,
-    queryProductSiteRelationById as queryDetail
+    queryProductSiteRelationById as queryDetail,
+    pageRepeatSiteRelations as pageRepeat
 } from '../service';
 
 /**
@@ -464,19 +465,34 @@ export const deleteAreaGroup = params => dispatch => (
 );
 
 /**
- * 创建商品地点关系
+ * 分页查询重复数据
  * @param {Object} data
  */
-const createProductSiteRelationsAction = data => ({
-    type: ActionType.CREATE_PRODUCT_SITE_RELATIONS,
+const pageRepeatAction = data => ({
+    type: ActionType.PAGE_REPEAT_SITE_RELATIONS,
     payload: data
 });
 
+export const pageRepeatRelation = params => dispatch => (
+    new Promise((resolve, reject) => {
+        pageRepeat(params)
+            .then(res => {
+                dispatch(pageRepeatAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 创建商品地点关系
+ * @param {Object} data
+ */
 export const createProductSiteRelations = params => dispatch => (
     new Promise((resolve, reject) => {
         createRelations(params)
             .then(res => {
-                dispatch(createProductSiteRelationsAction(res.data));
+                dispatch(pageRepeatAction(res.data));
                 resolve(res);
             })
             .catch(err => reject(err))
