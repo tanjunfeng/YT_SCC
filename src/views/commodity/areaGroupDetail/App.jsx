@@ -170,6 +170,14 @@ class AreaGroupDetail extends PureComponent {
         this.queryGrouped();
     }
 
+    handleFreePaginate = pageNum => {
+        Object.assign(this.paramsFree, {
+            pageNum
+        });
+        this.currentFree = pageNum;
+        this.queryGrouped();
+    }
+
     handleFreeSearch = params => {
         this.handleFreeReset();
         Object.assign(this.paramsFree, {
@@ -364,6 +372,7 @@ class AreaGroupDetail extends PureComponent {
                         onSearch={this.handleFreeSearch}
                         onSelect={this.handleFreeSelected}
                         onReset={this.handleFreeReset}
+                        onPaginate={this.handleFreePaginate}
                     />
                 </div>
             </div>
