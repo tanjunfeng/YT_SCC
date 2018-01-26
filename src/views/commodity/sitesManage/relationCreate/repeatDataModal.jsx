@@ -19,6 +19,14 @@ class RepeatDataModal extends PureComponent {
         Utils.exportExcel(exportRepeatSiteRelationExcel, Utils.removeInvalid(reqParams));
     }
 
+    handlePaginationChange = pageNum => {
+        const { pageRepeat, reqParams } = this.props;
+        pageRepeat({
+            ...reqParams,
+            pageNum
+        });
+    }
+
     render() {
         const { repeatRes, closeModal, visible } = this.props;
         const { data, pageNum, total } = repeatRes;
@@ -41,8 +49,9 @@ class RepeatDataModal extends PureComponent {
                         pagination={{
                             current: pageNum,
                             total,
-                            pageSize: 20,
-                            showQuickJumper: true
+                            pageSize: 10,
+                            showQuickJumper: true,
+                            onChange: this.handlePaginationChange
                         }}
                     />
                     <div id="downloadDiv" style={{display: 'none'}} />
@@ -55,8 +64,9 @@ class RepeatDataModal extends PureComponent {
 RepeatDataModal.propTypes = {
     visible: PropTypes.bool,
     repeatRes: PropTypes.objectOf(PropTypes.any),
+    reqParams: PropTypes.objectOf(PropTypes.any),
     closeModal: PropTypes.func,
-    reqParams: PropTypes.objectOf(PropTypes.any)
+    pageRepeat: PropTypes.func
 };
 
 RepeatDataModal.defaultProps = {
