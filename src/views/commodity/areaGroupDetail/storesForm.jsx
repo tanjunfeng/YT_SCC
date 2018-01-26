@@ -18,6 +18,7 @@ class StoresForm extends PureComponent {
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.onSelectChange = this.onSelectChange.bind(this);
+        this.onPaginate = this.onPaginate.bind(this);
     }
 
     /**
@@ -25,6 +26,10 @@ class StoresForm extends PureComponent {
      */
     onSelectChange(selectedStores) {
         this.props.onSelect(selectedStores);
+    }
+
+    onPaginate(pageNum = 1) {
+        this.props.onPaginate(pageNum);
     }
 
     handleReset() {
@@ -38,7 +43,7 @@ class StoresForm extends PureComponent {
     render() {
         const {
             title, data, selectedStores,
-            pageNum, pageSize, totalCount, current
+            pageNum, pageSize, total, current
         } = this.props.value;
         const rowSelection = {
             selectedRowKeys: selectedStores,
@@ -61,7 +66,7 @@ class StoresForm extends PureComponent {
                         current,
                         pageNum,
                         pageSize,
-                        totalCount,
+                        total,
                         showQuickJumper: true,
                         onChange: this.onPaginate
                     }}
@@ -75,6 +80,7 @@ StoresForm.propTypes = {
     onSearch: PropTypes.func,
     onSelect: PropTypes.func,
     onReset: PropTypes.func,
+    onPaginate: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any)
 }
 

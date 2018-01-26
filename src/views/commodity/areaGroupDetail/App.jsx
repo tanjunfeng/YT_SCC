@@ -90,7 +90,7 @@ class AreaGroupDetail extends PureComponent {
      */
     getGroupedStoresValues = () => {
         const { groupedStores } = this.props;
-        const { data, pageNum, pageSize, totalCount } = groupedStores;
+        const { data, pageNum, pageSize, total } = groupedStores;
         const { selectedGroupedStores } = this.state;
         return ({
             title: '已有门店',
@@ -98,7 +98,7 @@ class AreaGroupDetail extends PureComponent {
             selectedStores: selectedGroupedStores,
             pageNum,
             pageSize,
-            totalCount,
+            total,
             current: this.currentGrouped
         })
     }
@@ -108,7 +108,7 @@ class AreaGroupDetail extends PureComponent {
      */
     getFreeStoresValues = () => {
         const { freeStores } = this.props;
-        const { data, pageNum, pageSize, totalCount } = freeStores;
+        const { data, pageNum, pageSize, total } = freeStores;
         const { selectedFreeStores } = this.state;
         return ({
             title: '未分组门店',
@@ -116,7 +116,7 @@ class AreaGroupDetail extends PureComponent {
             selectedStores: selectedFreeStores,
             pageNum,
             pageSize,
-            totalCount,
+            total,
             current: this.currentFree
         })
     }
@@ -159,6 +159,14 @@ class AreaGroupDetail extends PureComponent {
         Object.assign(this.paramsGrouped, {
             ...params
         });
+        this.queryGrouped();
+    }
+
+    handleGroupdPaginate = pageNum => {
+        Object.assign(this.paramsGrouped, {
+            pageNum
+        });
+        this.currentGrouped = pageNum;
         this.queryGrouped();
     }
 
@@ -255,8 +263,9 @@ class AreaGroupDetail extends PureComponent {
         }).then(res => {
             if (res.code === 200) {
                 this.setState({ selectedFreeStores: [] }, () => {
-                    this.freshData();
-                    message.success(`${res.data}条数据已执行`);
+                    message.success(`${res.data}条数据已执行`, 1, () => {
+                        this.freshData();
+                    });
                 });
             }
         });
@@ -347,6 +356,7 @@ class AreaGroupDetail extends PureComponent {
                         onSearch={this.handleGroupedSearch}
                         onSelect={this.handleGroupedSelected}
                         onReset={this.handleGroupedReset}
+                        onPaginate={this.handleGroupdPaginate}
                     />
                     {this.renderButtonGroup()}
                     <StoresForm
