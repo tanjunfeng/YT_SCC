@@ -21,7 +21,7 @@ class RepeatDataModal extends PureComponent {
 
     render() {
         const { repeatRes, closeModal, visible } = this.props;
-        const { data } = repeatRes;
+        const { data, pageNum, total } = repeatRes;
         return (
             <Modal
                 title="以下商品地点已经存在商品地点关系，不能再次生成，请确认"
@@ -38,6 +38,12 @@ class RepeatDataModal extends PureComponent {
                         rowSelection={this.rowSelection}
                         dataSource={data}
                         columns={exportColumn}
+                        pagination={{
+                            current: pageNum,
+                            total,
+                            pageSize: 20,
+                            showQuickJumper: true
+                        }}
                     />
                     <div id="downloadDiv" style={{display: 'none'}} />
                 </div>

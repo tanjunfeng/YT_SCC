@@ -102,7 +102,13 @@ class Sites extends PureComponent {
         return this.props.pubFetchValueList(
             Utils.removeInvalid(conditions),
             this.getSiteQueryType(siteTypeCode)
-        );
+        ).then(res => {
+            const dataArr = res.data.data || [];
+            if (!dataArr || dataArr.length === 0) {
+                message.warning('没有可用的数据');
+            }
+            return res;
+        });
     }
 
     render() {
