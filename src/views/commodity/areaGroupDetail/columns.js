@@ -11,7 +11,7 @@ const columns = [{
     dataIndex: 'cityName',
     title: '城市'
 }, {
-    dataIndex: 'areaGroupName',
+    dataIndex: 'districtName',
     title: '区/县'
 }];
 
