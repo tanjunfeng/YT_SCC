@@ -10,7 +10,8 @@ import {
 import {
     queryProductsByCondition,
     createProductSiteRelations,
-    receiveAddRelationParams
+    receiveAddRelationParams,
+    pageRepeatRelation
 } from '../../../../actions/commodity';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../../constant';
@@ -22,16 +23,17 @@ const defaultImg = require('../../../../images/default/100x100.png');
 
 @connect(state => ({
     productsData: state.toJS().commodity.productsData,
-    relationAddParams: state.toJS().commodity.relationAddParams
+    relationAddParams: state.toJS().commodity.relationAddParams,
+    repeatRelations: state.toJS().commodity.repeatRelations
 }), dispatch => bindActionCreators({
     queryProductsByCondition,
     createProductSiteRelations,
-    receiveAddRelationParams
+    receiveAddRelationParams,
+    pageRepeatRelation
 }, dispatch))
 class RelationCreate extends PureComponent {
     state = {
         selectedRows: [],
-        repeatRes: {},
         createModalVisible: false,
         repeatModalVisible: false
     }
@@ -106,11 +108,6 @@ class RelationCreate extends PureComponent {
     */
 
     handleRepeat = repeatRes => {
-        this.repeatRes = repeatRes;
-        this.setState({
-            repeatRes
-        });
-        
         this.openRepeatModal();
     }
 
@@ -143,7 +140,8 @@ class RelationCreate extends PureComponent {
     }
     render() {
         const { data, total, pageNum } = this.props.productsData;
-        const { createModalVisible, repeatModalVisible, repeatRes } = this.state;
+        const { createModalVisible, repeatModalVisible } = this.state;
+        const repeatRes = this.props.repeatRelations;
         const selectedIds = this.state.selectedRows.map(item => item.productId);
         productListColumns[0].render = this.renderGoodsOpations;
         return (
@@ -176,6 +174,7 @@ class RelationCreate extends PureComponent {
                 />
                 <RepeatModal
                     closeModal={this.handleCloseRepeatModal}
+                    pageRepeat={this.props.pageRepeatRelation}
                     visible={repeatModalVisible}
                     repeatRes={repeatRes}
                     reqParams={this.props.relationAddParams}
@@ -188,9 +187,11 @@ class RelationCreate extends PureComponent {
 RelationCreate.propTypes = {
     queryProductsByCondition: PropTypes.func,
     createProductSiteRelations: PropTypes.func,
-    productsData: PropTypes.objectOf(PropTypes.any),
+    pageRepeatRelation: PropTypes.func,
     receiveAddRelationParams: PropTypes.func,
-    relationAddParams: PropTypes.objectOf(PropTypes.any)
+    productsData: PropTypes.objectOf(PropTypes.any),
+    relationAddParams: PropTypes.objectOf(PropTypes.any),
+    repeatRelations: PropTypes.objectOf(PropTypes.any),
 };
 
 export default withRouter(Form.create()(RelationCreate));

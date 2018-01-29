@@ -10,7 +10,6 @@ import {
 import Utils from '../../../../util/util';
 import { logisticsList, placeTypeListCreate, placeFieldMap } from '../constant';
 import Sites from '../../../../container/search/Sites';
-import { PAGE_SIZE } from '../../../../constant';
 import SupplierInfo from '../SupplierInfoFilterByPlace/index';
 
 const FormItem = Form.Item;
@@ -60,7 +59,7 @@ class CreateModal extends PureComponent {
             adrSupName: supplierAddr.providerName,
             productIds: selectedIds,
             pageNum: 1,
-            pageSize: PAGE_SIZE
+            pageSize: 10
 
         };
 
@@ -91,7 +90,7 @@ class CreateModal extends PureComponent {
                          * 有数据重复
                          */
                         if (res.data.data) {
-                            openRepeatModel(res.data);
+                            openRepeatModel();
                         } else {
                             message.success('添加商品地点关系成功');
                             this.props.closeModal();
