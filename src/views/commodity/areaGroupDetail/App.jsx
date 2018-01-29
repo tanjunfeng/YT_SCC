@@ -264,8 +264,8 @@ class AreaGroupDetail extends PureComponent {
      * 查询结果添加门店
      */
     insertAll = callback => {
-        const { areaGroupId, areaGroupName, branchCompanyId, paramsGrouped } = this;
-        const { provinceId, cityId, districtId, idOrName } = paramsGrouped;
+        const { areaGroupId, areaGroupName, branchCompanyId, paramsFree } = this;
+        const { provinceId, cityId, districtId, idOrName } = paramsFree;
         this.props.insertAllStoresToGroup({
             areaGroupCode: areaGroupId,
             areaGroupName,
