@@ -26,6 +26,7 @@ import {
 import StoresForm from './storesForm';
 import { PAGE_SIZE } from '../../../constant/index';
 import Utils from '../../../util/util';
+import { MODAL_TYPE } from './constant';
 
 const FormItem = Form.Item;
 
@@ -52,8 +53,7 @@ class AreaGroupDetail extends PureComponent {
         this.state = {
             selectedGroupedStores: [],  // 选中的已有门店索引列表
             selectedFreeStores: [], // 已选中的未分组门店索引列表
-            modalTitle: '',
-            modalText: '您确定操作全部门店吗？',
+            modalType: 'ADD',
             visible: false,
             confirmLoading: false
         };
@@ -179,7 +179,7 @@ class AreaGroupDetail extends PureComponent {
             pageNum
         });
         this.currentFree = pageNum;
-        this.queryGrouped();
+        this.queryFree();
     }
 
     handleFreeSearch = params => {
@@ -216,11 +216,10 @@ class AreaGroupDetail extends PureComponent {
 
     handleOk = () => {
         this.setState({
-            modalText: '模态框将在操作成功后关闭',
             confirmLoading: true
         });
-        switch (this.state.modalTitle) {
-            case '添加全部门店':
+        switch (this.state.modalType) {
+            case 'ADD':
                 this.insertAll(() => {
                     this.setState({
                         visible: false,
@@ -228,7 +227,7 @@ class AreaGroupDetail extends PureComponent {
                     });
                 });
                 break;
-            case '删除全部门店':
+            case 'DELETE':
                 this.deleteAll(() => {
                     this.setState({
                         visible: false,
@@ -249,14 +248,14 @@ class AreaGroupDetail extends PureComponent {
     handleAddOpenModal = () => {
         this.setState({
             visible: true,
-            modalTitle: '添加全部门店'
+            modalType: 'ADD'
         });
     }
 
     handleDelOpenModal = () => {
         this.setState({
             visible: true,
-            modalTitle: '删除全部门店'
+            modalType: 'DELETE'
         });
     }
 
@@ -264,8 +263,8 @@ class AreaGroupDetail extends PureComponent {
      * 查询结果添加门店
      */
     insertAll = callback => {
-        const { areaGroupId, areaGroupName, branchCompanyId, paramsGrouped } = this;
-        const { provinceId, cityId, districtId, idOrName } = paramsGrouped;
+        const { areaGroupId, areaGroupName, branchCompanyId, paramsFree } = this;
+        const { provinceId, cityId, districtId, idOrName } = paramsFree;
         this.props.insertAllStoresToGroup({
             areaGroupCode: areaGroupId,
             areaGroupName,
@@ -413,7 +412,7 @@ class AreaGroupDetail extends PureComponent {
 
     render() {
         const { areaGroup } = this.props;
-        const { visible, confirmLoading, modalTitle, modalText } = this.state;
+        const { visible, confirmLoading, modalType } = this.state;
         return (
             <div className="area-group-detail">
                 {this.renderTitle(areaGroup.data[0])}
@@ -434,13 +433,13 @@ class AreaGroupDetail extends PureComponent {
                         onPaginate={this.handleFreePaginate}
                     />
                     <Modal
-                        title={modalTitle}
+                        title={MODAL_TYPE[modalType].TITLE}
                         visible={visible}
                         onOk={this.handleOk}
                         confirmLoading={confirmLoading}
                         onCancel={this.handleCancel}
                     >
-                        <p>{modalText}</p>
+                        <p>{MODAL_TYPE[modalType].TEXT}</p>
                     </Modal>
                 </div>
             </div>
