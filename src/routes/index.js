@@ -347,7 +347,7 @@ const routes = [
                             exact
                             render={() => (<Bundle load={AreaGroupDetail}>
                                 {App => <App />}
-                                </Bundle>)}
+                            </Bundle>)}
                         />
                     </Switch>
                 ),
