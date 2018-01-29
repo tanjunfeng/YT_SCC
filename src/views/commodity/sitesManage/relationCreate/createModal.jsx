@@ -156,7 +156,7 @@ class CreateModal extends PureComponent {
                 onOk={this.handleCreateRelation}
                 onCancel={closeModal}
             >
-                <div className="create-modal" style={{display: 'flex', justifyContent: 'center'}} >
+                <div className="create-modal" style={{ display: 'flex', justifyContent: 'center' }} >
                     <Form>
                         <FormItem {...formItemLayout} label="地点类型" >
                             {getFieldDecorator('placeType', {
@@ -181,7 +181,7 @@ class CreateModal extends PureComponent {
                                         ))
                                     }
                                 </Select>
-                            )}
+                                )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="地点" >
                             {getFieldDecorator('place', {
@@ -199,7 +199,7 @@ class CreateModal extends PureComponent {
                                     placeFieldMap={placeFieldMap}
                                     zIndex={1001}
                                 />
-                            )}
+                                )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="供应商">
                             {getFieldDecorator('supplier', {
@@ -219,7 +219,7 @@ class CreateModal extends PureComponent {
                                         placeId: getFieldValue('place').record ? getFieldValue('place').record[placeFieldMap[getFieldValue('placeType')]] : ''
                                     }}
                                 />
-                            )}
+                                )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="供应商地点" >
                             {getFieldDecorator('supplierAddr', { initialValue: {
@@ -227,20 +227,20 @@ class CreateModal extends PureComponent {
                                 providerName: '',
                                 spAdrid: ''
                             },
-                            rules: [
-                                {
-                                    required: true
-                                }
-                            ]})(
-                                <SupplierInfo
-                                    zIndex={999}
-                                    queryType="2"
-                                    disabled={!getFieldValue('place').record}
-                                    selectedPlace={{
-                                        placeType: getFieldValue('placeType'),
-                                        placeId: getFieldValue('place').record ? getFieldValue('place').record[placeFieldMap[getFieldValue('placeType')]] : ''
-                                    }}
-                                />)}
+                                rules: [
+                                    {
+                                        required: true
+                                    }
+                                ]})(
+                                    <SupplierInfo
+                                        zIndex={999}
+                                        queryType="2"
+                                        disabled={!getFieldValue('place').record}
+                                        selectedPlace={{
+                                            placeType: getFieldValue('placeType'),
+                                            placeId: getFieldValue('place').record ? getFieldValue('place').record[placeFieldMap[getFieldValue('placeType')]] : ''
+                                        }}
+                                    />)}
                         </FormItem>
                         <FormItem {...formItemLayout} label="物流模式" >
                             {getFieldDecorator('logisticsModel', {
@@ -263,7 +263,7 @@ class CreateModal extends PureComponent {
                                         ))
                                     }
                                 </Select>
-                            )}
+                                )}
                         </FormItem>
                     </Form>
                 </div>

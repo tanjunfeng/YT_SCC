@@ -7,6 +7,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { message } from 'antd';
 import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
 import Utils from '../../util/util';
@@ -30,7 +31,7 @@ class Sites extends PureComponent {
         */
         const placeField = [placeFieldMap[siteTypeCode]];
         const { [placeField]: id } = nextProps.value;
-        if (this.props.value[placeField] !== '' &&  id === '') {
+        if (this.props.value[placeField] !== '' && id === '') {
             this.siteSearchMind.reset();
         }
         if (nextProps.value.reset && !this.props.value.reset) {
@@ -43,7 +44,7 @@ class Sites extends PureComponent {
     */
     getSiteQueryType = siteTypeCode => {
         let SiteQueryType = '';
-        if (siteTypeCode == '1') {
+        if (siteTypeCode === '1') {
             SiteQueryType = 'findCompanyBaseInfo';
             this.setState({
                 loactionColumn: {
@@ -53,7 +54,7 @@ class Sites extends PureComponent {
             });
         }
 
-        if (siteTypeCode == '2') {
+        if (siteTypeCode === '2') {
             SiteQueryType = 'queryAreaGroupList';
             this.setState({
                 loactionColumn: {
@@ -63,7 +64,7 @@ class Sites extends PureComponent {
             });
         }
 
-        if (siteTypeCode == '3') {
+        if (siteTypeCode === '3') {
             SiteQueryType = 'queryStoreByCompanyId';
             this.setState({
                 loactionColumn: {
@@ -151,8 +152,9 @@ Sites.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     initialValue: PropTypes.string,
     siteTypeCode: PropTypes.string,
-    placeFieldMap: PropTypes.object,
-    branchCompanyId: PropTypes.string
+    placeFieldMap: PropTypes.objectOf(PropTypes.any),
+    branchCompanyId: PropTypes.string,
+    zIndex: PropTypes.number
 };
 
 Sites.defaultProps = {

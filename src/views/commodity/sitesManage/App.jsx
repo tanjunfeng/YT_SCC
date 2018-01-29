@@ -87,8 +87,7 @@ class SiteManage extends PureComponent {
      * 编辑商品地点关系
     */
     handleEdit = editId => {
-        const { queryDetailById } = this.props;
-        queryDetailById({id: editId}).then(res => {
+        this.props.queryDetailById({id: editId}).then(res => {
             if (res.success) {
                 this.setState({
                     editId,
@@ -112,15 +111,14 @@ class SiteManage extends PureComponent {
     */
     customDelete = () => {
         const { selectedRows } = this.state;
-        const queryParams = this.queryParams
-        const { removeSiteManagesByIds } = this.props;
         const ids = selectedRows.map(item => item.id);
         const _self = this;
+        const removeSiteManages = this.props.removeSiteManagesByIds;
         confirm({
             title: '',
             content: '数据删除不可恢复，是否确定删除选中的商品地点关系?',
             onOk() {
-                removeSiteManagesByIds({ids}).then(res => {
+                removeSiteManages({ids}).then(res => {
                     if (res.success) {
                         message.success('删除成功');
                         _self.handRefresh()
@@ -160,7 +158,7 @@ class SiteManage extends PureComponent {
                         columns={sitesManageColumns}
                         pagination={{
                             current: pageNum,
-                            total: total,
+                            total,
                             pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.handlePaginationChange
@@ -185,7 +183,8 @@ SiteManage.propTypes = {
     editSiteManageById: PropTypes.func,
     queryDetailById: PropTypes.func,
     removeSiteManagesByIds: PropTypes.func,
-    goodsSitesManageList: PropTypes.objectOf(PropTypes.any)
+    goodsSitesManageList: PropTypes.objectOf(PropTypes.any),
+    proSiteDetail: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(SiteManage));

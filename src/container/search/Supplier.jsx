@@ -87,7 +87,9 @@ Supplier.propTypes = {
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
-    initialValue: PropTypes.string
+    initialValue: PropTypes.string,
+    zIndex: PropTypes.number,
+    defaultRaw: PropTypes.objectOf(PropTypes.any)
 };
 
 Supplier.defaultProps = {

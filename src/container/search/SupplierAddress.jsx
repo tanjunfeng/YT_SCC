@@ -7,10 +7,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { message } from 'antd';
 import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
 import './SearchMind.scss';
-import { message } from 'antd';
 
 @connect(() => ({}), dispatch => bindActionCreators({
     pubFetchValueList
@@ -95,7 +95,9 @@ SupplierAdderss.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
     initialValue: PropTypes.string,
-    pId: PropTypes.string
+    pId: PropTypes.string,
+    zIndex: PropTypes.number,
+    defaultRaw: PropTypes.objectOf(PropTypes.any)
 };
 
 SupplierAdderss.defaultProps = {

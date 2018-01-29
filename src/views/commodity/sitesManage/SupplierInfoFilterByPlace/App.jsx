@@ -12,7 +12,7 @@ import SearchMind from '../../../../components/searchMind';
 import './SearchMind.scss';
 
 const coumnsFields = {
-    1:[
+    1: [
         {
             title: '供应商编号',
             dataIndex: 'spNo',
@@ -22,7 +22,7 @@ const coumnsFields = {
             dataIndex: 'companyName',
         }
     ],
-    2:[
+    2: [
         {
             title: '供应商地点编码',
             dataIndex: 'providerNo',
@@ -56,7 +56,7 @@ class SupplierInfo extends PureComponent {
     handleClear = () => {
         this.searchMind.reset();
         let initialValue = null;
-        if ( this.props.queryType === '1') {
+        if (this.props.queryType === '1') {
             initialValue = { spId: '', spNo: '', companyName: '' };
         } else {
             initialValue = { providerNo: '', providerName: '' };
@@ -94,8 +94,8 @@ class SupplierInfo extends PureComponent {
                 addonBefore=""
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
-                renderChoosedInputRaw={data =>  queryType === '1' ? (<div>{data.spNo} - {data.companyName}</div>) :
-                (<div>{data.providerNo} - {data.providerName}</div>)}
+                renderChoosedInputRaw={data => (queryType === '1' ? (<div>{data.spNo} - {data.companyName}</div>) :
+                (<div>{data.providerNo} - {data.providerName}</div>))}
                 rowKey={compKey}
                 pageSize={5}
                 columns={coumnsFields[queryType]}
@@ -110,8 +110,10 @@ SupplierInfo.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
     initialValue: PropTypes.string,
-    selectedPlace:  PropTypes.objectOf(PropTypes.any),
-    queryType: PropTypes.string
+    selectedPlace: PropTypes.objectOf(PropTypes.any),
+    queryType: PropTypes.string,
+    defaultRaw: PropTypes.objectOf(PropTypes.any),
+    zIndex: PropTypes.number
 };
 
 SupplierInfo.defaultProps = {
