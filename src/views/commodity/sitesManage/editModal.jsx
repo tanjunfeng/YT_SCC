@@ -45,7 +45,6 @@ class EditSiteRelationModal extends PureComponent {
         const { logisticsModel, supplier, supplierAddr } = getFieldsValue();
         validateFields((err, values) => {
             if (!err) {
-                console.log(values)
                 if (!values.supplier.spId) {
                     message.error('请选择供应商');
                     return;

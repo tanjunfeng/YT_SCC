@@ -227,20 +227,20 @@ class CreateModal extends PureComponent {
                                 providerName: '',
                                 spAdrid: ''
                             },
-                            rules: [
-                                {
-                                    required: true
-                                }
-                            ]})(
-                                <SupplierInfo
-                                    zIndex={999}
-                                    queryType="2"
-                                    disabled={!getFieldValue('place').record}
-                                    selectedPlace={{
-                                        placeType: getFieldValue('placeType'),
-                                        placeId: getFieldValue('place').record ? getFieldValue('place').record[placeFieldMap[getFieldValue('placeType')]] : ''
-                                    }}
-                                />)}
+                                rules: [
+                                    {
+                                        required: true
+                                    }
+                                ]})(
+                                    <SupplierInfo
+                                        zIndex={999}
+                                        queryType="2"
+                                        disabled={!getFieldValue('place').record}
+                                        selectedPlace={{
+                                            placeType: getFieldValue('placeType'),
+                                            placeId: getFieldValue('place').record ? getFieldValue('place').record[placeFieldMap[getFieldValue('placeType')]] : ''
+                                        }}
+                                    />)}
                         </FormItem>
                         <FormItem {...formItemLayout} label="物流模式" >
                             {getFieldDecorator('logisticsModel', {

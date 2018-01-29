@@ -31,7 +31,6 @@ class Brands extends PureComponent {
      * 清除
      */
     handleClear = () => {
-        console.log('ok.....');
         this.brandSearchMind.reset();
         this.props.onChange({ id: '', name: '' });
     }
@@ -60,7 +59,7 @@ class Brands extends PureComponent {
                 compKey="id"
                 ref={ref => { this.brandSearchMind = ref }}
                 disabled={this.props.disabled}
-                fetch={ this.query }
+                fetch={this.query}
                 defaultValue={this.props.initialValue}
                 rowKey="id"
                 onChoosed={this.handleChoose}

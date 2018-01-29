@@ -107,7 +107,7 @@ class RelationCreate extends PureComponent {
      * 有重复数据打开弹窗
     */
 
-    handleRepeat = repeatRes => {
+    handleRepeat = () => {
         this.openRepeatModal();
     }
 
@@ -129,7 +129,8 @@ class RelationCreate extends PureComponent {
                     <span>{productCode}</span>
                 </div>
                 <div className="table-commodity-description">
-                    <img alt="未上传"
+                    <img
+                        alt="未上传"
                         className="table-commodity-description-img"
                         src={`${thumbnailImage || defaultImg}`}
                     />
