@@ -1,7 +1,7 @@
 .area-group-detail {
     .ant-form {
         padding: 20px 0 20px;
-        margin: 10px 0;
+        margin-bottom: 10px;
         .ant-form-item {
             float: left;
             display: block;
@@ -31,6 +31,10 @@
         .col-half {
             flex-grow: 1;
             border: 1px solid #c4c5c9;
+            h2 {
+                padding-top: 6px;
+                margin-left: 10px;
+            }
         }
         .col-center {
             display: flex;
