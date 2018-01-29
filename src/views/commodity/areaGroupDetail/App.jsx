@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Form, Row, Col, Button, message } from 'antd';
+import { Form, Row, Col, Button, message, Modal } from 'antd';
 
 import {
     getAreaGroup,
@@ -52,6 +52,10 @@ class AreaGroupDetail extends PureComponent {
         this.state = {
             selectedGroupedStores: [],  // 选中的已有门店索引列表
             selectedFreeStores: [], // 已选中的未分组门店索引列表
+            modalTitle: '',
+            modalText: '您确定操作全部门店吗？',
+            visible: false,
+            confirmLoading: false
         };
         this.areaGroupId = this.props.match.params.id; // 区域组编号
         this.areaGroupName = ''
@@ -210,10 +214,56 @@ class AreaGroupDetail extends PureComponent {
         this.currentFree = 1;
     }
 
+    handleOk = () => {
+        this.setState({
+            modalText: '模态框将在操作成功后关闭',
+            confirmLoading: true
+        });
+        switch (this.state.modalTitle) {
+            case '添加全部门店':
+                this.insertAll(() => {
+                    this.setState({
+                        visible: false,
+                        confirmLoading: false
+                    });
+                });
+                break;
+            case '删除全部门店':
+                this.deleteAll(() => {
+                    this.setState({
+                        visible: false,
+                        confirmLoading: false
+                    });
+                });
+                break;
+            default: break;
+        }
+    }
+
+    handleCancel = () => {
+        this.setState({
+            visible: false,
+        });
+    }
+
+    handleAddOpenModal = () => {
+        this.setState({
+            visible: true,
+            modalTitle: '添加全部门店'
+        });
+    }
+
+    handleDelOpenModal = () => {
+        this.setState({
+            visible: true,
+            modalTitle: '删除全部门店'
+        });
+    }
+
     /**
      * 查询结果添加门店
      */
-    handleAddAll = () => {
+    insertAll = callback => {
         const { areaGroupId, areaGroupName, branchCompanyId, paramsGrouped } = this;
         const { provinceId, cityId, districtId, idOrName } = paramsGrouped;
         this.props.insertAllStoresToGroup({
@@ -228,8 +278,11 @@ class AreaGroupDetail extends PureComponent {
             })
         }).then(res => {
             if (res.code === 200) {
-                message.success(`${res.data}条数据已执行`, 2, () => {
+                message.success(`${res.data}条数据已执行`, 4, () => {
                     this.freshData();
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
                 });
             }
         });
@@ -238,7 +291,7 @@ class AreaGroupDetail extends PureComponent {
     /**
      * 查询结果删除门店
      */
-    handleDelAll = () => {
+    deleteAll = callback => {
         const { areaGroupId, areaGroupName, branchCompanyId, paramsGrouped } = this;
         const { provinceId, cityId, districtId, idOrName } = paramsGrouped;
         this.props.deleteAllStoresFromArea({
@@ -253,8 +306,11 @@ class AreaGroupDetail extends PureComponent {
             })
         }).then(res => {
             if (res.code === 200) {
-                message.success(`${res.data}条数据已执行`, 2, () => {
+                message.success(`${res.data}条数据已执行`, 4, () => {
                     this.freshData();
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
                 });
             }
         });
@@ -330,7 +386,7 @@ class AreaGroupDetail extends PureComponent {
 
     renderButtonGroup = () => (
         <div className="col-center">
-            <Button type="primary" size="default" onClick={this.handleAddAll}>
+            <Button type="primary" size="default" onClick={this.handleAddOpenModal}>
                 &lt;&lt; 添加查询结果
             </Button>
             <Button
@@ -349,7 +405,7 @@ class AreaGroupDetail extends PureComponent {
             >
                 删除所选门店 &nbsp;&gt;
             </Button>
-            <Button type="danger" size="default" onClick={this.handleDelAll}>
+            <Button type="danger" size="default" onClick={this.handleDelOpenModal}>
                 删除查询结果 &gt;&gt;
             </Button>
         </div>
@@ -357,6 +413,7 @@ class AreaGroupDetail extends PureComponent {
 
     render() {
         const { areaGroup } = this.props;
+        const { visible, confirmLoading, modalTitle, modalText } = this.state;
         return (
             <div className="area-group-detail">
                 {this.renderTitle(areaGroup.data[0])}
@@ -376,6 +433,15 @@ class AreaGroupDetail extends PureComponent {
                         onReset={this.handleFreeReset}
                         onPaginate={this.handleFreePaginate}
                     />
+                    <Modal
+                        title={modalTitle}
+                        visible={visible}
+                        onOk={this.handleOk}
+                        confirmLoading={confirmLoading}
+                        onCancel={this.handleCancel}
+                    >
+                        <p>{modalText}</p>
+                    </Modal>
                 </div>
             </div>
         );
