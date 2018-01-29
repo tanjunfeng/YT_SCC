@@ -104,6 +104,7 @@ class CreateModal extends PureComponent {
     }
 
     handPlaceTypeChange = val => {
+        const { setFieldsValue, resetFields } = this.props.form;
         /**
          * 根据地点类型，动态设置地点初始值
         */
@@ -128,6 +129,16 @@ class CreateModal extends PureComponent {
                 }
             });
         }
+
+        /**
+         * 切换类型，清空地点
+         */
+        setTimeout(() => {
+            setFieldsValue({
+                place: { reset: true }
+            });
+            resetFields(['place']);
+        });
     }
 
     /**
