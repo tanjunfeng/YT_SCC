@@ -182,9 +182,14 @@ SiteManage.propTypes = {
     getSitesManageList: PropTypes.func,
     editSiteManageById: PropTypes.func,
     queryDetailById: PropTypes.func,
+<<<<<<< HEAD
     removeSiteManagesByIds: PropTypes.func,
     goodsSitesManageList: PropTypes.objectOf(PropTypes.any),
     proSiteDetail: PropTypes.objectOf(PropTypes.any)
+=======
+    proSiteDetail: PropTypes.objectOf(PropTypes.any),
+    goodsSitesManageList: PropTypes.objectOf(PropTypes.any)
+>>>>>>> 91fdfb3d6744f4c193ed756a734e067bf07c182c
 };
 
 export default withRouter(Form.create()(SiteManage));
