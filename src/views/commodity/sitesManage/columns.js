@@ -44,6 +44,11 @@ export const sitesManageColumns = [
         key: 'branchCompanyName',
     },
     {
+        title: '门店编码',
+        dataIndex: 'storeCode',
+        key: 'storeCode'
+    },
+    {
         title: '门店名称',
         dataIndex: 'storeName',
         key: 'storeName',
