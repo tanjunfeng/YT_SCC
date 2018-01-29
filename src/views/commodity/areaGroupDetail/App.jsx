@@ -179,7 +179,7 @@ class AreaGroupDetail extends PureComponent {
             pageNum
         });
         this.currentFree = pageNum;
-        this.queryGrouped();
+        this.queryFree();
     }
 
     handleFreeSearch = params => {
