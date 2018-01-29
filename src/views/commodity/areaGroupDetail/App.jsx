@@ -53,7 +53,7 @@ class AreaGroupDetail extends PureComponent {
             selectedGroupedStores: [],  // 选中的已有门店索引列表
             selectedFreeStores: [], // 已选中的未分组门店索引列表
             modalTitle: '',
-            modalText: '您确定操作全部门店吗？',
+            modalText: '您确定操作这些门店吗？',
             visible: false,
             confirmLoading: false
         };
