@@ -87,8 +87,7 @@ class SiteManage extends PureComponent {
      * 编辑商品地点关系
     */
     handleEdit = editId => {
-        const { queryDetailById } = this.props;
-        queryDetailById({id: editId}).then(res => {
+        this.props.queryDetailById({id: editId}).then(res => {
             if (res.success) {
                 this.setState({
                     editId,
@@ -112,8 +111,6 @@ class SiteManage extends PureComponent {
     */
     customDelete = () => {
         const { selectedRows } = this.state;
-        const queryParams = this.queryParams
-        const { removeSiteManagesByIds } = this.props;
         const ids = selectedRows.map(item => item.id);
         const _self = this;
         confirm({
@@ -160,7 +157,7 @@ class SiteManage extends PureComponent {
                         columns={sitesManageColumns}
                         pagination={{
                             current: pageNum,
-                            total: total,
+                            total,
                             pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.handlePaginationChange
@@ -184,7 +181,7 @@ SiteManage.propTypes = {
     getSitesManageList: PropTypes.func,
     editSiteManageById: PropTypes.func,
     queryDetailById: PropTypes.func,
-    removeSiteManagesByIds: PropTypes.func,
+    proSiteDetail: PropTypes.objectOf(PropTypes.any),
     goodsSitesManageList: PropTypes.objectOf(PropTypes.any)
 };
 
