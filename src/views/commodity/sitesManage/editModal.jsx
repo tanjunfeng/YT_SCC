@@ -144,7 +144,7 @@ class EditSiteRelationModal extends PureComponent {
                                     }}
                                 />)}
                         </FormItem>}
-                        <FormItem {...formItemLayout} label="物流模式" >
+                        {visible && <FormItem {...formItemLayout} label="物流模式" >
                             {getFieldDecorator('logisticsModel', {
                                 initialValue: String(detail.logisticsModel)
                             })(
@@ -160,7 +160,7 @@ class EditSiteRelationModal extends PureComponent {
                                     }
                                 </Select>
                             )}
-                        </FormItem>
+                        </FormItem>}
                     </Form>
                 </div>
             </Modal>
