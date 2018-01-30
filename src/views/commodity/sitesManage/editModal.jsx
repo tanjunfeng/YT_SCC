@@ -81,6 +81,17 @@ class EditSiteRelationModal extends PureComponent {
         });
     }
 
+     /**
+     * 供应商改变时清空供应商地址
+     */
+    handleSupplierChange = () => {
+        const { resetFields, setFieldsValue } = this.props.form;
+        resetFields(['supplierAddr']);
+        setFieldsValue({
+            supplierAddr: { reset: true }
+        });
+    }
+
     render() {
         const { visible, closeModal, detail } = this.props;
         const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -108,6 +119,7 @@ class EditSiteRelationModal extends PureComponent {
                                 initialValue: initSupplier
                             })(
                                 <SupplierInfo
+                                    onChange={this.handleSupplierChange}
                                     zIndex={1000}
                                     defaultRaw={initSupplier}
                                     queryType="1"
