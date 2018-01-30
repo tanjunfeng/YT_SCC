@@ -42,12 +42,12 @@ export const renderPayCondition = (key) => {
  */
 export const supplierOrderStatus = (key) => {
     switch (key) {
+        case 0:
+            return '未接单';
         case 1:
             return '已接单';
-        case 2:
-            return '未接单';
         default:
-            return '';
+            return '未接单';
     }
 }
 
@@ -88,6 +88,8 @@ export const businessMode = (key) => {
             return '经销';
         case 1:
             return '代销';
+        case 2:
+            return '寄售';
         default:
             return '';
     }
