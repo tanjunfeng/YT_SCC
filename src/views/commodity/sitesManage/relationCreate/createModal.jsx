@@ -156,6 +156,17 @@ class CreateModal extends PureComponent {
         });
     }
 
+     /**
+     * 供应商改变时清空供应商地址
+     */
+    handleSupplierChange = () => {
+        const { resetFields, setFieldsValue } = this.props.form;
+        resetFields(['supplierAddr']);
+        setFieldsValue({
+            supplierAddr: { reset: true }
+        });
+    }
+
     render() {
         const { visible, closeModal } = this.props;
         const { initialPlaceValue } = this.state;
@@ -223,6 +234,7 @@ class CreateModal extends PureComponent {
                             })(
                                 <SupplierInfo
                                     zIndex={1000}
+                                    onChange={this.handleSupplierChange}
                                     queryType="1"
                                     disabled={!getFieldValue('place').record}
                                     selectedPlace={{
