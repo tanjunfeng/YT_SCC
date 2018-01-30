@@ -246,7 +246,8 @@ class CreateModal extends PureComponent {
                                     <SupplierInfo
                                         zIndex={999}
                                         queryType="2"
-                                        disabled={!getFieldValue('place').record}
+                                        spId={getFieldValue('supplier').spId}
+                                        disabled={getFieldValue('supplier').spId === ''}
                                         selectedPlace={{
                                             placeType: getFieldValue('placeType'),
                                             placeId: getFieldValue('place').record ? getFieldValue('place').record[placeFieldMap[getFieldValue('placeType')]] : ''
