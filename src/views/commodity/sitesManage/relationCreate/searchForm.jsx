@@ -42,6 +42,7 @@ class SearchForm extends PureComponent {
             internationalCode: barCode,
             brand: brand.record ? brand.record.id : '',
             productName: commodity.record ? commodity.record.productName : '',
+            productCode: commodity.record ? commodity.record.productCode : '',
         };
 
         if (selectedOptions.length > 0) {
