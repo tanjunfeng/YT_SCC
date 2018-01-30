@@ -7,7 +7,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { message } from 'antd';
 import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
 import Utils from '../../util/util';
@@ -22,7 +21,8 @@ class Sites extends PureComponent {
         loactionColumn: {
             code: '',
             name: ''
-        }
+        },
+        conditionFiled: ''
     }
     componentWillReceiveProps(nextProps) {
         const { siteTypeCode, placeFieldMap } = this.props;
@@ -60,7 +60,8 @@ class Sites extends PureComponent {
                 loactionColumn: {
                     code: 'id',
                     name: 'areaGroupName'
-                }
+                },
+                conditionFiled: 'areaGroupIdOrName'
             });
         }
 
@@ -70,7 +71,8 @@ class Sites extends PureComponent {
                 loactionColumn: {
                     code: 'id',
                     name: 'name'
-                }
+                },
+                conditionFiled: 'idOrName'
             });
         }
         return SiteQueryType;
@@ -94,22 +96,21 @@ class Sites extends PureComponent {
 
     query = (params) => {
         const { siteTypeCode, branchCompanyId = '' } = this.props;
+        const { conditionFiled } = this.state;
         const conditions = {
-            param: params.value,
-            branchCompanyId,
+            [conditionFiled]: conditionFiled ? params.value : '',
+            /**
+             * 特殊处理子公司查询值清单
+             */
+            branchCompanyId: branchCompanyId || ((siteTypeCode === '1' && !isNaN(parseFloat(params.value))) ? params.value : ''),
+            branchCompanyName: (siteTypeCode === '1' && isNaN(parseFloat(params.value))) ? params.value : '',
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
         };
         return this.props.pubFetchValueList(
             Utils.removeInvalid(conditions),
             this.getSiteQueryType(siteTypeCode)
-        ).then(res => {
-            const dataArr = res.data.data || [];
-            if (!dataArr || dataArr.length === 0) {
-                message.warning('没有可用的数据');
-            }
-            return res;
-        });
+        );
     }
 
     render() {
@@ -128,6 +129,7 @@ class Sites extends PureComponent {
                 renderChoosedInputRaw={(row) => (
                     <div>{row[loactionColumn.code]}-{row[loactionColumn.name]}</div>
                 )}
+                noDataText="没有匹配的数据"
                 pageSize={6}
                 columns={[
                     {

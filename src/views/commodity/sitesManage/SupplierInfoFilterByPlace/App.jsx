@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { pubFetchValueList } from '../../../../actions/pub';
 import SearchMind from '../../../../components/searchMind';
+import Utils from '../../../../util/util';
 import './SearchMind.scss';
 
 const coumnsFields = {
@@ -72,7 +73,7 @@ class SupplierInfo extends PureComponent {
     }
 
     render() {
-        const { queryType, selectedPlace } = this.props;
+        const { queryType, selectedPlace, spId = '' } = this.props;
         const compKey = queryType === '1' ? 'spId' : 'providerNo';
         return (
             <SearchMind
@@ -80,17 +81,19 @@ class SupplierInfo extends PureComponent {
                 compKey={compKey}
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
-                    this.props.pubFetchValueList({
+                    this.props.pubFetchValueList(Utils.removeInvalid({
                         condition: params.value,
                         queryType,
+                        parentId: spId,
                         pageNum: params.pagination.current || 1,
                         pageSize: params.pagination.pageSize,
                         ...selectedPlace
-                    }, 'filterSupplyInfo')
+                    }), 'filterSupplyInfo')
                 }
                 defaultRaw={this.props.defaultRaw}
                 disabled={this.props.disabled}
                 defaultValue={this.props.initialValue}
+                noDataText="没有匹配的数据"
                 addonBefore=""
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
@@ -113,7 +116,8 @@ SupplierInfo.propTypes = {
     selectedPlace: PropTypes.objectOf(PropTypes.any),
     queryType: PropTypes.string,
     defaultRaw: PropTypes.objectOf(PropTypes.any),
-    zIndex: PropTypes.number
+    zIndex: PropTypes.number,
+    spId: PropTypes.string
 };
 
 SupplierInfo.defaultProps = {
