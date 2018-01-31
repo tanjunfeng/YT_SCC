@@ -57,7 +57,9 @@ class SiteManage extends PureComponent {
                 <a onClick={() => { this.handleEdit(record.id) }}>编辑</a>
             ),
         };
-        sitesManageColumns.push(operation);
+
+        this.columns = sitesManageColumns.slice(0);
+        this.columns.push(operation);
     }
 
      /**
@@ -155,7 +157,7 @@ class SiteManage extends PureComponent {
                         rowKey={record => record.id}
                         rowSelection={this.rowSelection}
                         dataSource={data}
-                        columns={sitesManageColumns}
+                        columns={this.columns}
                         pagination={{
                             current: pageNum,
                             total,

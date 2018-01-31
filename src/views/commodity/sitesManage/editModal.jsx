@@ -81,9 +81,20 @@ class EditSiteRelationModal extends PureComponent {
         });
     }
 
+     /**
+     * 供应商改变时清空供应商地址
+     */
+    handleSupplierChange = () => {
+        const { resetFields, setFieldsValue } = this.props.form;
+        resetFields(['supplierAddr']);
+        setFieldsValue({
+            supplierAddr: { reset: true }
+        });
+    }
+
     render() {
         const { visible, closeModal, detail } = this.props;
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
         const initSupplier = {
             spId: detail.supplierId,
             spNo: detail.supplierCode,
@@ -94,7 +105,6 @@ class EditSiteRelationModal extends PureComponent {
             providerName: detail.adrSupName,
             spAdrId: detail.adrSupId
         };
-
         return (
             <Modal
                 title="编辑地点关系"
@@ -104,11 +114,12 @@ class EditSiteRelationModal extends PureComponent {
             >
                 <div className="edit-modal-container">
                     <Form>
-                        <FormItem {...formItemLayout} label="供应商">
+                        {visible && <FormItem {...formItemLayout} label="供应商">
                             {getFieldDecorator('supplier', {
                                 initialValue: initSupplier
                             })(
                                 <SupplierInfo
+                                    onChange={this.handleSupplierChange}
                                     zIndex={1000}
                                     defaultRaw={initSupplier}
                                     queryType="1"
@@ -118,20 +129,22 @@ class EditSiteRelationModal extends PureComponent {
                                     }}
                                 />
                             )}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="供应商地点" >
+                        </FormItem>}
+                        {visible && <FormItem {...formItemLayout} label="供应商地点" >
                             {getFieldDecorator('supplierAddr', {initialValue: initSupplierAddr})(
                                 <SupplierInfo
                                     zIndex={999}
                                     queryType="2"
+                                    spId={getFieldValue('supplier').spId}
                                     defaultRaw={initSupplierAddr}
+                                    disabled={getFieldValue('supplier').spId === ''}
                                     selectedPlace={{
                                         placeType: detail.placeType,
                                         placeId: detail.placeId
                                     }}
                                 />)}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="物流模式" >
+                        </FormItem>}
+                        {visible && <FormItem {...formItemLayout} label="物流模式" >
                             {getFieldDecorator('logisticsModel', {
                                 initialValue: String(detail.logisticsModel)
                             })(
@@ -147,7 +160,7 @@ class EditSiteRelationModal extends PureComponent {
                                     }
                                 </Select>
                             )}
-                        </FormItem>
+                        </FormItem>}
                     </Form>
                 </div>
             </Modal>
