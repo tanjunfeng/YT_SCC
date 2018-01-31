@@ -279,7 +279,7 @@ class PoDetail extends PureComponent {
                             {/* 供应商接单状态 */}
                             <FormItem label="供应商接单状态">
                                 <span>
-                                    {supplierOrderStatus(basicInfo.supOrderStatus)}
+                                    {supplierOrderStatus(basicInfo.spAcceptStatus)}
                                 </span>
                             </FormItem>
                         </Col>
