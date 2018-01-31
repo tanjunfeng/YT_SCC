@@ -1,5 +1,5 @@
 /**
- * 查询直营店清单
+ * 查询门店清单
  *
  * @author taoqiyu
  */
@@ -44,7 +44,7 @@ class Stores extends PureComponent {
         this.props.pubFetchValueList(Utils.removeInvalid({
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize,
-            id: params.value
+            param: params.value
         }), this.props.api)
     )
 
