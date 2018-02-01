@@ -11,7 +11,6 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Form, Icon, Row, Col, Input, Button, Modal, message } from 'antd';
-import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import {
@@ -263,8 +262,8 @@ class OrderInformation extends PureComponent {
                                     </span>
                                 </Col>
                                 <Col className="gutter-row" span={12}>
-                                    <span className="details-info-lable">派送方:</span>
-                                    <span>{orderDetailData.distributionName}</span>
+                                    <span className="details-info-lable">配送方:</span>
+                                    <span>{orderDetailData.spName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">会员等级优惠:</span>
