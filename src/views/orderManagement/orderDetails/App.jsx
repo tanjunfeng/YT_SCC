@@ -102,10 +102,8 @@ class OrderManagementDetails extends Component {
             orderId: this.orderId,
             commerceItemDatas: commerceItemList
         }).then((res) => {
-            if (res.code === 200 && res.success === true) {
-                message.success('删除成功')
-            } else {
-                message.warning(res.message)
+            if (res.code === 200) {
+                message.success(res.message)
             }
         })
     }
