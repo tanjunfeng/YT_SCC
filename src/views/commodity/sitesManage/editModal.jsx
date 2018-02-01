@@ -27,7 +27,7 @@ const formItemLayout = {
 class EditSiteRelationModal extends PureComponent {
     state = {
         initSupplier: {},
-
+        confirmLoading: false
     }
     componentWillReceiveProps(nextProps) {
         const { visible } = nextProps;
@@ -36,11 +36,14 @@ class EditSiteRelationModal extends PureComponent {
          */
         if (!visible) {
             this.props.form.resetFields();
+            this.setState({
+                confirmLoading: false
+            });
         }
     }
 
     handleEditFetch = () => {
-        const { editSiteRelation, editId, refresh } = this.props;
+        const { editSiteRelation, editId, refresh, closeModal } = this.props;
         const { getFieldsValue, validateFields } = this.props.form;
         const { logisticsModel, supplier, supplierAddr } = getFieldsValue();
         validateFields((err, values) => {
@@ -73,6 +76,10 @@ class EditSiteRelationModal extends PureComponent {
                     if (res.success) {
                         refresh();
                         message.success('编辑成功');
+                        closeModal();
+                        this.setState({
+                            confirmLoading: true
+                        });
                     } else {
                         message.error('编辑失败');
                     }
@@ -95,6 +102,7 @@ class EditSiteRelationModal extends PureComponent {
     render() {
         const { visible, closeModal, detail } = this.props;
         const { getFieldDecorator, getFieldValue } = this.props.form;
+        const { confirmLoading } = this.state;
         const initSupplier = {
             spId: detail.supplierId,
             spNo: detail.supplierCode,
@@ -111,6 +119,7 @@ class EditSiteRelationModal extends PureComponent {
                 visible={visible}
                 onOk={this.handleEditFetch}
                 onCancel={closeModal}
+                confirmLoading={confirmLoading}
             >
                 <div className="edit-modal-container">
                     <Form>
