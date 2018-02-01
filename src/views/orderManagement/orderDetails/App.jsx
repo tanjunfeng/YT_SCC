@@ -37,8 +37,7 @@ const orderDT = 'order-details';
 
 class OrderManagementDetails extends Component {
     state = {
-        oldData: [],
-        coupData: {}
+        oldData: []
     }
 
     componentWillMount() {
@@ -66,19 +65,8 @@ class OrderManagementDetails extends Component {
     orderId = null;
 
     handleSendChange = (goodsList) => {
-        const coupData = this.state.coupData;
         this.setState({
             oldData: goodsList || this.state.oldData,
-        })
-        const commerceItemList = [];
-        goodsList.forEach((item) => {
-            commerceItemList.push({
-                commerceId: item.id,
-                completedQuantity: item.completedQuantity
-            })
-        });
-        Object.assign(coupData, {
-            commerceItemList
         })
     }
 
@@ -101,11 +89,11 @@ class OrderManagementDetails extends Component {
         this.props.confirmation({
             orderId: this.orderId,
             commerceItemDatas: commerceItemList
-        }).then((res) => {
+        }).then(res => {
             if (res.code === 200) {
                 message.success(res.message)
             }
-        })
+        }).catch(() => {});
     }
 
     render() {
