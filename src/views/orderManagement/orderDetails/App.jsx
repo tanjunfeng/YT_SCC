@@ -47,6 +47,7 @@ class OrderManagementDetails extends Component {
                 this.orderId = res.data.id;
             }
         });
+        this.props.fetchPaymentDetailInfo({ orderId: id });
         this.shippingDetailInfo();
     }
 
