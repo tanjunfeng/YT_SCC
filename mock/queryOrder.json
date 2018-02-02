@@ -28,7 +28,7 @@
                 "paymentState": "YZF",
                 "paymentStateDesc": "已支付",
                 "shippingState": "DCL",
-                "shippingStateDesc": "待处理",
+                "shippingStateDesc": "已签收待确认",
                 "discountAmount": null,
                 "channel": null,
                 "shipping": null,
