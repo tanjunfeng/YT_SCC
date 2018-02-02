@@ -36,9 +36,9 @@ class EditSiteRelationModal extends PureComponent {
          */
         if (!visible) {
             this.props.form.resetFields();
-            this.setState({
-                confirmLoading: false
-            });
+            // this.setState({
+            //     confirmLoading: false
+            // });
         }
     }
 
@@ -63,26 +63,30 @@ class EditSiteRelationModal extends PureComponent {
                     return;
                 }
 
-                editSiteRelation(Utils.removeInvalid({
-                    logisticsModel,
-                    id: editId,
-                    supplierId: supplier.spId,
-                    supplierCode: supplier.spNo,
-                    supplierName: supplier.companyName,
-                    adrSupId: supplierAddr.spAdrId,
-                    adrSupCode: supplierAddr.providerNo,
-                    adrSupName: supplierAddr.providerName
-                })).then(res => {
-                    if (res.success) {
-                        refresh();
-                        message.success('编辑成功');
-                        closeModal();
-                        this.setState({
-                            confirmLoading: true
-                        });
-                    } else {
-                        message.error('编辑失败');
-                    }
+                this.setState({
+                    confirmLoading: true
+                }, () => {
+                    editSiteRelation(Utils.removeInvalid({
+                        logisticsModel,
+                        id: editId,
+                        supplierId: supplier.spId,
+                        supplierCode: supplier.spNo,
+                        supplierName: supplier.companyName,
+                        adrSupId: supplierAddr.spAdrId,
+                        adrSupCode: supplierAddr.providerNo,
+                        adrSupName: supplierAddr.providerName
+                    })).then(res => {
+                        if (res.success) {
+                            refresh();
+                            message.success('编辑成功');
+                            closeModal();
+                            this.setState({
+                                confirmLoading: false
+                            });
+                        } else {
+                            message.error('编辑失败');
+                        }
+                    });
                 });
             }
         });
