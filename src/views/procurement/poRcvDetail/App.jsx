@@ -95,8 +95,8 @@ class PoRcvDetail extends PureComponent {
                 key: 'purchasePrice'
             }, {
                 title: '收货金额(含税)',
-                dataIndex: 'receiptPrice',
-                key: 'receiptPrice'
+                dataIndex: 'receivedPrice',
+                key: 'receivedPrice'
             },
         ];
     }

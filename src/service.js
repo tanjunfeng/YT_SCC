@@ -21,6 +21,8 @@ http.response(
             case 200: // 请求成功
             case 50011: // 已存在的字段
                 return Promise.resolve(res);
+            case 60002: // 订单状态不正确
+                return Promise.resolve(res);
             case 401: // 未登录
                 LoginLayout();
                 return Promise.reject(res.data);

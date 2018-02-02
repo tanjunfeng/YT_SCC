@@ -21,7 +21,7 @@ class SearchForm extends PureComponent {
         } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
             areaGroupIdOrName,
-            branchCompany: branchCompany.id
+            branchCompanyId: branchCompany.id
         });
     }
 
