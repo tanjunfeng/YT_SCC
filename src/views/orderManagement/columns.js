@@ -593,8 +593,11 @@ const distributionInformationColumns = [{
     key: 'skuId',
 }, {
     title: '商品条码',
-    dataIndex: 'internationalCode',
-    key: 'internationalCode',
+    dataIndex: 'internationalCodes',
+    key: 'internationalCodes',
+    render: (text, record) => (
+        <span>{text[0].internationalCode}</span>
+    )
 }, {
     title: '商品名称',
     dataIndex: 'productName',
@@ -637,8 +640,8 @@ const distributionInformationColumns = [{
     )
 }, {
     title: '签收差数',
-    dataIndex: 'completedNum',
-    key: 'completedNum',
+    dataIndex: 'completedMulQuantity',
+    key: 'completedMulQuantity',
     render: (text) => (
         <span>
             <span>{text}</span>
