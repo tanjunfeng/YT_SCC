@@ -95,8 +95,8 @@ export const poMngListColumns = [
     },
     {
         title: '供应商接单状态',
-        dataIndex: 'supOrderStatus',
-        key: 'supOrderStatus',
+        dataIndex: 'spAcceptStatus',
+        key: 'spAcceptStatus',
         render: (text) => {
             if (text === null || typeof text === 'undefined') {
                 return '-';
