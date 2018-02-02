@@ -75,7 +75,6 @@ class OrderManagementDetails extends Component {
      */
     handleReceipt = () => {
         const { oldData } = this.state;
-        const oldNumObj = {};
         const commerceItemList = [];
         oldData.forEach((item) => {
             commerceItemList.push({
@@ -83,16 +82,13 @@ class OrderManagementDetails extends Component {
                 completedQuantity: item.completedQuantity
             })
         });
-        Object.assign(oldNumObj, {
-            commerceItemList
-        })
         this.props.confirmation({
             orderId: this.orderId,
             commerceItemDatas: commerceItemList
         }).then(res => {
             if (res.code === 200) {
-                message.success(res.message);
                 this.shippingDetailInfo();
+                message.success('处理成功!');
             }
         }).catch(() => {});
     }

@@ -97,11 +97,14 @@ class DistributionInformation extends PureComponent {
         />
     )
 
-    renderColumns = () => {
+    renderColumns = shippingStateDesc => {
         // 剩余数量计算
-        columns[7].render = this.renderQuantity;
-        columns[8].render = this.getLeftQuantity;
-        columns[9].render = this.calculationDiff;
+        if (shippingStateDesc === '已签收待确认') {
+            columns[7].render = this.renderQuantity;
+            columns[8].render = this.getLeftQuantity;
+            columns[9].render = this.calculationDiff;
+        }
+        return null
     }
 
     render() {
@@ -119,9 +122,7 @@ class DistributionInformation extends PureComponent {
             distributionName,
             singedCertImg
         } = data;
-        if (shippingStateDesc === '已签收待确认') {
-            this.renderColumns();
-        }
+        this.renderColumns(shippingStateDesc);
         return (
             <div>
                 <div className="order-details-item">
