@@ -47,7 +47,6 @@ class OrderManagementDetails extends Component {
                 this.orderId = res.data.id;
             }
         });
-        this.props.fetchPaymentDetailInfo({ orderId: id });
         this.shippingDetailInfo();
     }
 
@@ -91,7 +90,8 @@ class OrderManagementDetails extends Component {
             commerceItemDatas: commerceItemList
         }).then(res => {
             if (res.code === 200) {
-                message.success(res.message)
+                message.success(res.message);
+                this.shippingDetailInfo();
             }
         }).catch(() => {});
     }

@@ -60,11 +60,12 @@ export const poMngListColumns = [
         title: '预计送货日期',
         dataIndex: 'estimatedDeliveryDate',
         key: 'estimatedDeliveryDate',
-        render: (text) => (
-            <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
-            </span>
-        )
+        render: (text) => {
+            if (text === null || typeof text === 'undefined') {
+                return '-';
+            }
+            return (<span>{moment(parseInt(text, 10)).format('YYYY-MM-DD')}</span>);
+        }
     },
     {
         title: '地点类型',
