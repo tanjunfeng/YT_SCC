@@ -326,12 +326,11 @@ class OrderManagementList extends Component {
                     </Menu.Item>
                 }
                 {
-                    shippingState !== 'DSH'
-                    && shippingState !== 'YQS'
-                    && orderState !== 'Q'
-                    && <Menu.Item key="tableCancel">
-                        <a target="_blank" rel="noopener noreferrer">取消</a>
-                    </Menu.Item>
+                    ['W', 'M', 'A'].indexOf(orderState) > -1
+                        && ['DCL', 'WCS', 'DCK', 'WJS', 'QXZ', 'CGWDH'].indexOf(shippingState) > -1
+                        ? <Menu.Item key="tableCancel">
+                            <a target="_blank" rel="noopener noreferrer">取消</a>
+                        </Menu.Item> : null
                 }
                 {
                     orderState === 'Q'
