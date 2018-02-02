@@ -595,7 +595,7 @@ const distributionInformationColumns = [{
     title: '商品条码',
     dataIndex: 'internationalCodes',
     key: 'internationalCodes',
-    render: (text, record) => (
+    render: text => (
         <span>{text[0].internationalCode}</span>
     )
 }, {
