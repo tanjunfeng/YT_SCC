@@ -216,7 +216,7 @@ class DistributionInformation extends PureComponent {
                                 dataSource={value}
                                 columns={columns}
                                 pagination={false}
-                                rowKey="skuId"
+                                rowKey="id"
                             />
                         </div>
                     </div>
