@@ -339,13 +339,13 @@ class OrderManagementList extends Component {
                     </Menu.Item>
                 }
                 {
-                    ((orderState === 'A' && paymentState === 'YZF' && shippingState === 'WCS')
-                        || (orderState === 'A' && paymentState === 'YZF' && shippingState === 'WJS')
-                        || (orderState === 'A' && paymentState === 'GSN' && shippingState === 'WCS')
-                        || (orderState === 'A' && paymentState === 'GSN' && shippingState === 'WJS'))
-                    && <Menu.Item key="tableRetransfer">
-                        <a target="_blank" rel="noopener noreferrer">重新传送</a>
-                    </Menu.Item>
+                    orderState === 'A'
+                        && ['YZF', 'GSN'].indexOf(paymentState) > -1
+                        && ['WCS', 'WJS'].indexOf(shippingState) > -1
+                        ? <Menu.Item key="tableRetransfer">
+                            <a target="_blank" rel="noopener noreferrer">重新传送</a>
+                        </Menu.Item>
+                        : null
                 }
             </Menu>
         );
