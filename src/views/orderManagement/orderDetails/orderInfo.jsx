@@ -171,6 +171,7 @@ class OrderInformation extends PureComponent {
 
     render() {
         const { orderDetailData } = this.props;
+        const { orderState, shippingState } = orderDetailData;
         return (
             <div>
                 <div className="order-details-item">
@@ -351,13 +352,13 @@ class OrderInformation extends PureComponent {
                 </div>
                 <div className="order-details-item">
                     <GoodsInfo
-                        value={this.props.orderDetailData}
+                        value={orderDetailData}
                         onChange={this.handleGoodsSplit}
-                        canBeSplit={this.props.orderDetailData.canSplitByInventory
-                            || this.props.orderDetailData.canSplitManual}
+                        canBeSplit={orderDetailData.canSplitByInventory
+                            || orderDetailData.canSplitManual}
                     />
                     <div className="order-details-split-btn" style={{ textAlign: 'right' }}>
-                        {this.props.orderDetailData.canSplitByInventory
+                        {orderDetailData.canSplitByInventory
                             ? <Button
                                 size="default"
                                 type="primary"
@@ -367,7 +368,7 @@ class OrderInformation extends PureComponent {
                                 获取实时库存后拆单
                             </Button>
                             : null}
-                        {this.props.orderDetailData.canSplitManual
+                        {orderDetailData.canSplitManual
                             ? <Button
                                 size="default"
                                 className="details-split-btns"
@@ -376,8 +377,8 @@ class OrderInformation extends PureComponent {
                                 基于界面显示库存拆单
                             </Button>
                             : null}
-                        {this.props.orderDetailData.canSplitByInventory
-                            || this.props.orderDetailData.canSplitManual
+                        {orderDetailData.canSplitByInventory
+                            || orderDetailData.canSplitManual
                             ? <Button
                                 size="default"
                                 type="default"
@@ -406,18 +407,18 @@ class OrderInformation extends PureComponent {
                                 保存
                             </Button>
                             {
-                                (orderDetailData.orderState === 'W'
-                                    || orderDetailData.orderState === 'M')
-                                && <Button
-                                    size="default"
-                                    onClick={this.handleOrderAudit}
-                                >
-                                    审核
-                                </Button>
+                                ['W', 'M'].indexOf(orderState) > -1
+                                    ? <Button
+                                        size="default"
+                                        onClick={this.handleOrderAudit}
+                                    >
+                                        审核
+                                    </Button>
+                                    : null
                             }
                             {
-                                ['W', 'M', 'A'].indexOf(orderDetailData) > -1
-                                    && ['DCL', 'WCS', 'DCK', 'WJS', 'QXZ', 'CGWDH'].indexOf(orderDetailData) > -1
+                                ['W', 'M', 'A'].indexOf(orderState) > -1
+                                    && ['DCL', 'WCS', 'DCK', 'WJS', 'QXZ', 'CGWDH'].indexOf(shippingState) > -1
                                     ? <Button
                                         size="default"
                                         onClick={this.handleOrderCancel}
