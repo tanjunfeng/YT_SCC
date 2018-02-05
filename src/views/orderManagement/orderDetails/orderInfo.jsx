@@ -416,17 +416,16 @@ class OrderInformation extends PureComponent {
                                 </Button>
                             }
                             {
-                                orderDetailData.shippingState !== 'DSH'
-                                && orderDetailData.shippingState !== 'WSD'
-                                && orderDetailData.shippingState !== 'YQS'
-                                && orderDetailData.orderState !== 'Q'
-                                && <Button
-                                    size="default"
-                                    onClick={this.handleOrderCancel}
-                                    type="danger"
-                                >
-                                    取消
-                                </Button>
+                                ['W', 'M', 'A'].indexOf(orderDetailData) > -1
+                                    && ['DCL', 'WCS', 'DCK', 'WJS', 'QXZ', 'CGWDH'].indexOf(orderDetailData) > -1
+                                    ? <Button
+                                        size="default"
+                                        onClick={this.handleOrderCancel}
+                                        type="danger"
+                                    >
+                                        取消
+                                    </Button>
+                                    : null
                             }
                             {orderDetailData.returnOrder === 1 ?
                                 <Button
