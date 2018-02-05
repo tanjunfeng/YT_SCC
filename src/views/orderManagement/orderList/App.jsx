@@ -102,10 +102,7 @@ class OrderManagementList extends Component {
         });
     }
 
-    /**
-    * 获取表单信息,并查询列表
-    */
-    getSearchData = () => {
+    getFormData = () => {
         const {
             id,
             orderType,
@@ -143,12 +140,18 @@ class OrderManagementList extends Component {
             containParent: containParent ? 1 : 0,
             franchiseeStoreId,
             shippingModes,
-            spName
-        }
-        const searchData = this.searchData;
-        searchData.page = 1;
+            spName,
+            page: 1
+        };
+    }
+
+    /**
+    * 获取表单信息,并查询列表
+    */
+    getSearchData = () => {
+        this.getFormData();
         this.props.fetchOrderList({
-            ...Utils.removeInvalid(searchData)
+            ...Utils.removeInvalid(this.searchData)
         })
     }
 
@@ -253,6 +256,7 @@ class OrderManagementList extends Component {
      */
     handleOrderOutput = () => {
         const searchData = this.searchData;
+        this.getSearchData();
         searchData.page = this.current;
         Utils.exportExcel(exportOrderList, Utils.removeInvalid(searchData));
     }
