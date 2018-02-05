@@ -85,7 +85,7 @@ class DistributionInformation extends PureComponent {
      * 签收差额
      */
     calculationDiff = (text, record) => (
-        ((record.quantity * record.completedQuantity) * record.salePrice).toFixed(2)
+        (record.completedQuantity * record.salePrice).toFixed(2)
     )
 
     renderQuantity = (text, record) => (
