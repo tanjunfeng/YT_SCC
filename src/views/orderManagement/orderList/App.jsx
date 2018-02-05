@@ -102,10 +102,7 @@ class OrderManagementList extends Component {
         });
     }
 
-    /**
-    * 获取表单信息,并查询列表
-    */
-    getSearchData = () => {
+    getFormData = () => {
         const {
             id,
             orderType,
@@ -143,12 +140,18 @@ class OrderManagementList extends Component {
             containParent: containParent ? 1 : 0,
             franchiseeStoreId,
             shippingModes,
-            spName
-        }
-        const searchData = this.searchData;
-        searchData.page = 1;
+            spName,
+            page: 1
+        };
+    }
+
+    /**
+    * 获取表单信息,并查询列表
+    */
+    getSearchData = () => {
+        this.getFormData();
         this.props.fetchOrderList({
-            ...Utils.removeInvalid(searchData)
+            ...Utils.removeInvalid(this.searchData)
         })
     }
 
@@ -252,6 +255,7 @@ class OrderManagementList extends Component {
      * 导出
      */
     handleOrderOutput = () => {
+        this.getFormData();
         const searchData = this.searchData;
         searchData.page = this.current;
         Utils.exportExcel(exportOrderList, Utils.removeInvalid(searchData));
@@ -339,13 +343,13 @@ class OrderManagementList extends Component {
                     </Menu.Item>
                 }
                 {
-                    ((orderState === 'A' && paymentState === 'YZF' && shippingState === 'WCS')
-                        || (orderState === 'A' && paymentState === 'YZF' && shippingState === 'WJS')
-                        || (orderState === 'A' && paymentState === 'GSN' && shippingState === 'WCS')
-                        || (orderState === 'A' && paymentState === 'GSN' && shippingState === 'WJS'))
-                    && <Menu.Item key="tableRetransfer">
-                        <a target="_blank" rel="noopener noreferrer">重新传送</a>
-                    </Menu.Item>
+                    orderState === 'A'
+                        && ['YZF', 'GSN'].indexOf(paymentState) > -1
+                        && ['WCS', 'WJS'].indexOf(shippingState) > -1
+                        ? <Menu.Item key="tableRetransfer">
+                            <a target="_blank" rel="noopener noreferrer">重新传送</a>
+                        </Menu.Item>
+                        : null
                 }
             </Menu>
         );
