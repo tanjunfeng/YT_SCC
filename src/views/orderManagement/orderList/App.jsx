@@ -255,8 +255,8 @@ class OrderManagementList extends Component {
      * 导出
      */
     handleOrderOutput = () => {
-        const searchData = this.searchData;
         this.getFormData();
+        const searchData = this.searchData;
         searchData.page = this.current;
         Utils.exportExcel(exportOrderList, Utils.removeInvalid(searchData));
     }
