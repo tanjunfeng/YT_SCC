@@ -4,7 +4,7 @@
  *
  * 禁用 Tree 组件的不限制层级拖拽
  */
-import Tree from 'antd/node_modules/rc-tree/lib/Tree';
+// import Tree from 'antd/node_modules/rc-tree/lib/Tree';
 /* eslint-disable */
 
 
